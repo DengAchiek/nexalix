@@ -1,0 +1,1548 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero video-hero">
+    <div class="video-wrapper">
+        <!-- Dynamic Hero Video -->
+        {% if hero %}
+        <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="{% if hero.video_poster %}{{ hero.video_poster.url }}{% else %}{% static 'images/hero-poster.jpg' %}{% endif %}">
+            {% if hero.video %}
+            <source src="{{ hero.video.url }}" type="video/mp4">
+            {% else %}
+            <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+            {% endif %}
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Dynamic Hero Content -->
+        <div class="hero-content animate-caption">
+            <h1>{{ hero.title }}</h1>
+            <p>{{ hero.subtitle }}</p>
+            <a href="{% url hero.button_link %}" class="btn btn-primary">{{ hero.button_text }}</a>
+        </div>
+        {% else %}
+        <!-- Fallback if no hero section -->
+        <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="{% static 'images/hero-poster.jpg' %}">
+            <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-content animate-caption">
+            <h1>Intelligent Solutions for a Digital Future</h1>
+            <p>Harnessing AI and technology to drive innovation and transform businesses.</p>
+            <a href="{% url 'services' %}" class="btn btn-primary">Explore Our Services</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const video = document.querySelector(".hero-video");
+
+    if (video) {
+        // Ensure muted + playsinline
+        video.muted = true;
+        video.setAttribute("playsinline", "");
+
+        // Fade-in effect
+        video.style.opacity = 0;
+        video.addEventListener('canplay', () => {
+            video.style.transition = 'opacity 1.2s ease-in';
+            video.style.opacity = 1;
+        });
+
+        // Attempt autoplay
+        video.play().catch(err => {
+            console.log("Autoplay blocked:", err);
+        });
+    }
+});
+</script>
+
+
+<!-- SERVICES OVERVIEW -->
+<section class="services-overview">
+    <div class="container">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            {% for service in services %}
+            <div class="service-card">
+                {% if service.icon %}
+                <div class="service-icon">
+                    <i class="{{ service.icon }}"></i>
+                </div>
+                {% endif %}
+                <h3>{{ service.title|default:"Our Service" }}</h3>
+                <p>{{ service.short_description|default:"Quality service tailored to your needs." }}</p>
+            </div>
+            {% empty %}
+            <!-- Fallback services -->
+            <div class="service-card">
+                <h3>AI Development</h3>
+                <p>Custom AI solutions tailored to your business needs.</p>
+            </div>
+            <div class="service-card">
+                <h3>Data Analytics</h3>
+                <p>Transform data into actionable insights.</p>
+            </div>
+            <div class="service-card">
+                <h3>Cloud Solutions</h3>
+                <p>Scalable and secure cloud infrastructure services.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'services' %}" class="btn-secondary">View All Services</a>
+    </div>
+</section>
+
+<!-- ABOUT US -->
+<section class="about-us">
+    <div class="container">
+        {% if about %}
+        <h2>{{ about.title }}</h2>
+        <p>{{ about.content }}</p>
+        <a href="{% url about.button_link %}" class="btn-secondary">{{ about.button_text }}</a>
+        {% else %}
+        <h2>About Nexalix Technologies</h2>
+        <p>Nexalix Technologies is a leading provider of AI-driven solutions, dedicated to helping businesses navigate the complexities of the digital age. Our team of experts is committed to delivering innovative technologies that empower our clients to achieve their goals.</p>
+        <a href="{% url 'about' %}" class="btn-secondary">Read More</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- PROCESS / HOW WE WORK -->
+<section class="process">
+    <div class="container">
+        <h2>Our Process</h2>
+        <div class="process-steps">
+            {% for step in process_steps %}
+            <div class="step">
+                <div class="step-number">{{ step.number }}</div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+            </div>
+            {% empty %}
+            <!-- Fallback process steps -->
+            <div class="step">
+                <div class="step-number">01</div>
+                <h3>Discovery & Analysis</h3>
+                <p>We analyze your business needs and define project requirements.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">02</div>
+                <h3>Strategy & Planning</h3>
+                <p>Developing a comprehensive roadmap and solution architecture.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">03</div>
+                <h3>Development & Testing</h3>
+                <p>Agile development with continuous integration and rigorous testing.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">04</div>
+                <h3>Deployment & Support</h3>
+                <p>Seamless deployment and ongoing maintenance with 24/7 support.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- INDUSTRIES WE SERVE -->
+<section class="industries">
+    <div class="container">
+        <h2>Industries We Transform</h2>
+        <div class="industries-grid">
+            {% for industry in industries %}
+            <div class="industry-card">
+                <div class="industry-icon">
+                    <i class="{{ industry.icon }}"></i>
+                </div>
+                <h3>{{ industry.name }}</h3>
+                <p>{{ industry.description }}</p>
+            </div>
+            {% empty %}
+            <!-- Fallback industries -->
+            <div class="industry-card">
+                <div class="industry-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3>Healthcare</h3>
+                <p>AI-powered diagnostics, patient data management, and telemedicine solutions.</p>
+            </div>
+            <div class="industry-card">
+                <div class="industry-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h3>Finance</h3>
+                <p>Fraud detection, algorithmic trading, and risk analysis systems.</p>
+            </div>
+            <div class="industry-card">
+                <div class="industry-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3>Retail & E-commerce</h3>
+                <p>Personalized recommendations, inventory optimization, and customer analytics.</p>
+            </div>
+            <div class="industry-card">
+                <div class="industry-icon">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <h3>Manufacturing</h3>
+                <p>Predictive maintenance, quality control, and supply chain optimization.</p>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'industries' %}" class="btn-secondary">View All Industries</a>
+    </div>
+</section>
+
+<!-- TECHNOLOGY STACK -->
+<section class="technology-stack">
+    <div class="container">
+        <h2>Our Technology Expertise</h2>
+        <div class="tech-grid">
+            {% for category in technology_categories %}
+            <div class="tech-category">
+                <h3>{{ category.name }}</h3>
+                <div class="tech-tags">
+                    {% for tech in category.technologies.all %}
+                    <span class="tech-tag">{{ tech.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <!-- Fallback technologies -->
+            <div class="tech-category">
+                <h3>AI & Machine Learning</h3>
+                <div class="tech-tags">
+                    <span class="tech-tag">TensorFlow</span>
+                    <span class="tech-tag">PyTorch</span>
+                    <span class="tech-tag">OpenAI</span>
+                    <span class="tech-tag">Computer Vision</span>
+                    <span class="tech-tag">NLP</span>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h3>Cloud & DevOps</h3>
+                <div class="tech-tags">
+                    <span class="tech-tag">AWS</span>
+                    <span class="tech-tag">Azure</span>
+                    <span class="tech-tag">Google Cloud</span>
+                    <span class="tech-tag">Docker</span>
+                    <span class="tech-tag">Kubernetes</span>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h3>Data & Analytics</h3>
+                <div class="tech-tags">
+                    <span class="tech-tag">Apache Spark</span>
+                    <span class="tech-tag">Snowflake</span>
+                    <span class="tech-tag">Power BI</span>
+                    <span class="tech-tag">Tableau</span>
+                    <span class="tech-tag">BigQuery</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED PROJECTS / CASE STUDIES -->
+<section class="case-studies">
+    <div class="container">
+        <h2 class="section-title">Success Stories</h2>
+        <p class="section-subtitle">See how we've helped businesses achieve their goals</p>
+        
+        <div class="case-grid">
+            {% for case in case_studies %}
+            <div class="case-card">
+                <div class="case-card-inner">
+                    {% if case.image %}
+                    <div class="case-image-wrapper">
+                        <img src="{{ case.image.url }}" alt="{{ case.title }}" class="case-image">
+                        <div class="case-overlay">
+                            <span class="case-badge">Case Study</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="case-content">
+                        <div class="case-meta">
+                            <span class="case-category">Success Story</span>
+                            <span class="case-duration">• 2 min read</span>
+                        </div>
+                        <h3 class="case-title">{{ case.title }}</h3>
+                        <p class="case-description">{{ case.description|truncatewords:30 }}</p>
+                        
+                        {% if case.results %}
+                        <div class="case-results">
+                            <i class="fas fa-chart-line"></i>
+                            <span><strong>Results:</strong> {{ case.results }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="case-footer">
+                            {% if case.link %}
+                            <a href="{{ case.link }}" class="case-link">
+                                Read Full Story
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            {% else %}
+                            <a href="#" class="case-link">
+                                Read Full Story
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Fallback case studies -->
+            <div class="case-card">
+                <div class="case-card-inner">
+                    <div class="case-image-wrapper">
+                        <img src="{% static 'images/project1.jpg' %}" alt="Retail Optimization Project" class="case-image">
+                        <div class="case-overlay">
+                            <span class="case-badge">Case Study</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-meta">
+                            <span class="case-category">Retail</span>
+                            <span class="case-duration">• 2 min read</span>
+                        </div>
+                        <h3 class="case-title">Retail Optimization with AI</h3>
+                        <p class="case-description">Increased sales by 40% for a retail chain using predictive analytics and personalized recommendations.</p>
+                        <div class="case-results">
+                            <i class="fas fa-chart-line"></i>
+                            <span><strong>Results:</strong> 40% sales increase</span>
+                        </div>
+                        <div class="case-footer">
+                            <a href="#" class="case-link">
+                                Read Full Story
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="case-card">
+                <div class="case-card-inner">
+                    <div class="case-image-wrapper">
+                        <img src="{% static 'images/project2.jpg' %}" alt="Healthcare Analytics" class="case-image">
+                        <div class="case-overlay">
+                            <span class="case-badge">Case Study</span>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <div class="case-meta">
+                            <span class="case-category">Healthcare</span>
+                            <span class="case-duration">• 3 min read</span>
+                        </div>
+                        <h3 class="case-title">Healthcare Analytics Platform</h3>
+                        <p class="case-description">Developed a patient data analysis system that reduced diagnostic time by 60% for hospital networks.</p>
+                        <div class="case-results">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Results:</strong> 60% faster diagnostics</span>
+                        </div>
+                        <div class="case-footer">
+                            <a href="#" class="case-link">
+                                Read Full Story
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="#" class="btn btn-outline-primary">
+                <i class="fas fa-book-open me-2"></i>
+                View All Case Studies
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- NEWSLETTER SIGNUP -->
+<section class="newsletter">
+    <div class="container">
+        <div class="newsletter-card">
+            <div class="newsletter-content">
+                <div class="newsletter-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                
+                {% if newsletter %}
+                <h2 class="newsletter-title">{{ newsletter.title }}</h2>
+                <p class="newsletter-subtitle">{{ newsletter.subtitle }}</p>
+                
+                <form class="newsletter-form" method="post" action="#">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
+                
+                <p class="privacy-note">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    {{ newsletter.privacy_note }}
+                </p>
+                {% else %}
+                <h2 class="newsletter-title">Stay Ahead with Tech Insights</h2>
+                <p class="newsletter-subtitle">Subscribe to our newsletter for the latest updates on AI, technology trends, and industry insights.</p>
+                
+                <form class="newsletter-form">
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
+                
+                <p class="privacy-note">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    We respect your privacy. Unsubscribe at any time.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATISTICS / METRICS -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            {% for stat in statistics %}
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="stat-number" data-count="{{ stat.value }}">0</h3>
+                <p class="stat-label">{{ stat.name }}</p>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: {{ stat.value }}%"></div>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Fallback statistics -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="stat-number" data-count="150">0</h3>
+                <p class="stat-label">Projects Completed</p>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: 85%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="stat-number" data-count="50">0</h3>
+                <p class="stat-label">Happy Clients</p>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: 90%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="stat-number" data-count="98">0</h3>
+                <p class="stat-label">Client Satisfaction</p>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: 98%"></div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="stat-number" data-count="24">0</h3>
+                <p class="stat-label">Expert Team</p>
+                <div class="stat-progress">
+                    <div class="progress-bar" style="width: 80%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- BLOG/INSIGHTS PREVIEW -->
+<section class="blog-preview">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Latest Insights</h2>
+            <p class="section-subtitle">Stay updated with the latest trends and insights</p>
+        </div>
+        
+        <div class="blog-grid">
+            {% for post in blog_posts %}
+            <article class="blog-card">
+                <div class="blog-card-inner">
+                    {% if post.image %}
+                    <div class="blog-image-wrapper">
+                        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-image">
+                        <div class="blog-overlay">
+                            <span class="blog-badge">Insight</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">
+                                <i class="far fa-calendar me-1"></i>
+                                {{ post.publish_date|date:"M d, Y" }}
+                            </span>
+                            <span class="blog-category">
+                                <i class="far fa-folder me-1"></i>
+                                Technology
+                            </span>
+                        </div>
+                        
+                        <h3 class="blog-title">{{ post.title }}</h3>
+                        <p class="blog-excerpt">{{ post.excerpt|truncatewords:25 }}</p>
+                        
+                        <div class="blog-footer">
+                            <a href="#" class="blog-link">
+                                Read Article
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                            <div class="blog-read-time">
+                                <i class="far fa-clock me-1"></i>
+                                5 min read
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <!-- Fallback blog posts -->
+            <article class="blog-card">
+                <div class="blog-card-inner">
+                    <div class="blog-image-wrapper">
+                        <div class="blog-placeholder">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="blog-overlay">
+                            <span class="blog-badge">AI</span>
+                        </div>
+                    </div>
+                    
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">
+                                <i class="far fa-calendar me-1"></i>
+                                Feb 15, 2024
+                            </span>
+                            <span class="blog-category">
+                                <i class="far fa-folder me-1"></i>
+                                Technology
+                            </span>
+                        </div>
+                        
+                        <h3 class="blog-title">The Future of AI in Business Transformation</h3>
+                        <p class="blog-excerpt">Explore how artificial intelligence is reshaping industries and creating new opportunities for growth.</p>
+                        
+                        <div class="blog-footer">
+                            <a href="#" class="blog-link">
+                                Read Article
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                            <div class="blog-read-time">
+                                <i class="far fa-clock me-1"></i>
+                                5 min read
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-card-inner">
+                    <div class="blog-image-wrapper">
+                        <div class="blog-placeholder cloud">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div class="blog-overlay">
+                            <span class="blog-badge">Cloud</span>
+                        </div>
+                    </div>
+                    
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="blog-date">
+                                <i class="far fa-calendar me-1"></i>
+                                Jan 28, 2024
+                            </span>
+                            <span class="blog-category">
+                                <i class="far fa-folder me-1"></i>
+                                Technology
+                            </span>
+                        </div>
+                        
+                        <h3 class="blog-title">Cloud Migration Best Practices for 2024</h3>
+                        <p class="blog-excerpt">Learn about the latest strategies for seamless and secure cloud migration for enterprise businesses.</p>
+                        
+                        <div class="blog-footer">
+                            <a href="#" class="blog-link">
+                                Read Article
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                            <div class="blog-read-time">
+                                <i class="far fa-clock me-1"></i>
+                                7 min read
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="#" class="btn btn-outline-primary">
+                <i class="fas fa-newspaper me-2"></i>
+                View All Articles
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- PARTNERS / CLIENTS LOGO MARQUEE -->
+<section class="partners">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Trusted By Industry Leaders</h2>
+            <p class="section-subtitle">We're proud to partner with leading organizations</p>
+        </div>
+        
+        <div class="partners-slider">
+            <div class="partners-track">
+                {% for partner in partners %}
+                <div class="partner-card">
+                    <div class="partner-logo">
+                        {% if partner.logo %}
+                        <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="partner-img">
+                        {% else %}
+                        <div class="partner-text">
+                            {{ partner.name }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="partner-info">
+                        <h4 class="partner-name">{{ partner.name }}</h4>
+                        {% if partner.website %}
+                        <a href="{{ partner.website }}" class="partner-link" target="_blank">
+                            Visit Website
+                            <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AWARDS & RECOGNITION -->
+<section class="awards">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Awards & Recognition</h2>
+            <p class="section-subtitle">Our commitment to excellence has been recognized</p>
+        </div>
+        
+        <div class="awards-grid">
+            {% for award in awards %}
+            <div class="award-card">
+                <div class="award-card-inner">
+                    <div class="award-icon">
+                        {{ award.icon }}
+                    </div>
+                    <div class="award-badge">
+                        <span class="award-year">{{ award.year }}</span>
+                    </div>
+                    <h3 class="award-title">{{ award.name }}</h3>
+                    <p class="award-description">{{ award.description }}</p>
+                    <div class="award-footer">
+                        <span class="award-category">
+                            <i class="fas fa-award me-1"></i>
+                            Excellence Award
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Fallback awards -->
+            <div class="award-card">
+                <div class="award-card-inner">
+                    <div class="award-icon">
+                        🏆
+                    </div>
+                    <div class="award-badge">
+                        <span class="award-year">2023</span>
+                    </div>
+                    <h3 class="award-title">AI Innovation Award</h3>
+                    <p class="award-description">Recognized for excellence in artificial intelligence solutions and innovation.</p>
+                    <div class="award-footer">
+                        <span class="award-category">
+                            <i class="fas fa-award me-1"></i>
+                            Innovation
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="award-card">
+                <div class="award-card-inner">
+                    <div class="award-icon">
+                        ⭐
+                    </div>
+                    <div class="award-badge">
+                        <span class="award-year">2023</span>
+                    </div>
+                    <h3 class="award-title">Top Tech Company</h3>
+                    <p class="award-description">Featured in TechTimes' annual ranking of innovative tech companies worldwide.</p>
+                    <div class="award-footer">
+                        <span class="award-category">
+                            <i class="fas fa-star me-1"></i>
+                            Excellence
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="award-card">
+                <div class="award-card-inner">
+                    <div class="award-icon">
+                        📈
+                    </div>
+                    <div class="award-badge">
+                        <span class="award-year">2023</span>
+                    </div>
+                    <h3 class="award-title">Fastest Growing Startup</h3>
+                    <p class="award-description">Awarded for exceptional growth and outstanding client satisfaction metrics.</p>
+                    <div class="award-footer">
+                        <span class="award-category">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Growth
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+/* Case Studies Cards */
+.case-studies {
+    padding: 100px 0;
+    background: #f8fafc;
+}
+
+.case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.case-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.case-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.case-card-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.case-image-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.case-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.case-card:hover .case-image {
+    transform: scale(1.05);
+}
+
+.case-overlay {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.case-badge {
+    background: #ff8c00;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.case-content {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.case-meta {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.case-category {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.case-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+.case-description {
+    color: #64748b;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.case-results {
+    background: #f0f9ff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #0369a1;
+}
+
+.case-results i {
+    color: #0ea5e9;
+}
+
+.case-footer {
+    margin-top: auto;
+}
+
+.case-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
+}
+
+.case-link:hover {
+    gap: 12px;
+    color: #1d4ed8;
+}
+
+/* Newsletter Card */
+.newsletter {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.newsletter-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 50px;
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.newsletter-icon {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.newsletter-title {
+    color: white;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 2.2rem;
+}
+
+.newsletter-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.newsletter-form .input-group {
+    max-width: 500px;
+    margin: 0 auto 20px;
+}
+
+.newsletter-form .form-control {
+    height: 55px;
+    border: none;
+    border-radius: 10px 0 0 10px;
+    padding: 0 20px;
+    font-size: 1rem;
+}
+
+.newsletter-form .btn {
+    height: 55px;
+    border-radius: 0 10px 10px 0;
+    padding: 0 30px;
+    font-weight: 600;
+    background: #ff8c00;
+    border: none;
+}
+
+.newsletter-form .btn:hover {
+    background: #e67e00;
+}
+
+.privacy-note {
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 20px;
+}
+
+/* Statistics Cards */
+.stats {
+    padding: 100px 0;
+    background: #0f172a;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 40px 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    color: #ff8c00;
+    margin-bottom: 20px;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.stat-progress {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff8c00, #ffaa33);
+    border-radius: 3px;
+}
+
+/* Blog Cards */
+.blog-preview {
+    padding: 100px 0;
+    background: #f8fafc;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.blog-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.blog-card-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-image-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.blog-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.blog-card:hover .blog-image {
+    transform: scale(1.05);
+}
+
+.blog-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: #64748b;
+}
+
+.blog-placeholder.cloud {
+    color: #3b82f6;
+}
+
+.blog-overlay {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.blog-badge {
+    background: #2563eb;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.blog-content {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.blog-date, .blog-category {
+    display: flex;
+    align-items: center;
+}
+
+.blog-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #1e293b;
+    line-height: 1.4;
+}
+
+.blog-excerpt {
+    color: #64748b;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.blog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.blog-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
+}
+
+.blog-link:hover {
+    gap: 12px;
+    color: #1d4ed8;
+}
+
+.blog-read-time {
+    color: #94a3b8;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+/* Partners Cards */
+.partners {
+    padding: 100px 0;
+    background: white;
+}
+
+.partners-slider {
+    overflow: hidden;
+    margin-top: 40px;
+    position: relative;
+}
+
+.partners-track {
+    display: flex;
+    gap: 30px;
+    animation: scroll 30s linear infinite;
+    padding: 20px 0;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.partner-card {
+    flex: 0 0 250px;
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.partner-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.partner-logo {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.partner-img {
+    max-height: 60px;
+    max-width: 150px;
+    object-fit: contain;
+}
+
+.partner-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.partner-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.partner-name {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #1e293b;
+}
+
+.partner-link {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.partner-link:hover {
+    color: #2563eb;
+}
+
+/* Awards Cards */
+.awards {
+    padding: 100px 0;
+    background: #f8fafc;
+}
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.award-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.award-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.award-card-inner {
+    padding: 30px;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.award-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.award-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #f0f9ff;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.award-year {
+    color: #0369a1;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.award-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #1e293b;
+}
+
+.award-description {
+    color: #64748b;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.award-footer {
+    margin-top: auto;
+}
+
+.award-category {
+    color: #64748b;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background: #f1f5f9;
+    border-radius: 20px;
+}
+
+/* Section Headers */
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: #1e293b;
+    margin-bottom: 15px;
+}
+
+.section-subtitle {
+    color: #64748b;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: white;
+    border: 2px solid #2563eb;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    background: transparent;
+    color: #2563eb;
+    border: 2px solid #2563eb;
+}
+
+.btn-outline-primary:hover {
+    background: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .case-grid,
+    .blog-grid,
+    .awards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .newsletter-card {
+        padding: 30px 20px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .case-image-wrapper,
+    .blog-image-wrapper {
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .partner-card {
+        flex: 0 0 200px;
+    }
+}
+</style>
+
+<script>
+// Animated counters for statistics
+document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.stat-number');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseInt(counter.getAttribute('data-count'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current > target) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current);
+                    }
+                }, 20);
+                
+                observer.unobserve(counter);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    counters.forEach(counter => observer.observe(counter));
+});
+</script>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+    <div class="container">
+        <h2>What Our Clients Say</h2>
+        {% for testimonial in testimonials %}
+        <div class="testimonial">
+            {% if testimonial.avatar %}
+            <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="testimonial-avatar">
+            {% endif %}
+            <p>"{{ testimonial.content }}"</p>
+            <span>- {{ testimonial.name }}, {{ testimonial.position }} at {{ testimonial.company }}</span>
+            <div class="rating">
+                {% for i in "12345" %}
+                <i class="fas fa-star{% if forloop.counter > testimonial.rating %}-o{% endif %}"></i>
+                {% endfor %}
+            </div>
+        </div>
+        {% empty %}
+        <!-- Fallback testimonials -->
+        <div class="testimonial">
+            <p>"Nexalix Technologies transformed our business with their innovative AI solutions. Their team is knowledgeable and easy to work with."</p>
+            <span>- Jane Doe, CEO of TechCorp</span>
+        </div>
+        <div class="testimonial">
+            <p>"The data analytics services provided by Nexalix helped us make informed decisions that significantly improved our operations."</p>
+            <span>- John Smith, COO of DataSolutions</span>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- CONTACT CTA -->
+<section class="contact-cta">
+    <div class="container">
+        {% if contact_cta %}
+        <h2>{{ contact_cta.title }}</h2>
+        <p>{{ contact_cta.content }}</p>
+        <a href="{% url 'contact' %}" class="btn-primary">{{ contact_cta.button_text }}</a>
+        {% else %}
+        <h2>Get in Touch</h2>
+        <p>Ready to transform your business with AI? Contact us today to discuss your project and discover how Nexalix Technologies can help you succeed.</p>
+        <a href="{% url 'contact' %}" class="btn-primary">Contact Us</a>
+        {% endif %}
+    </div>
+</section>
+
+
+
+
+<script>
+// Animated counters for statistics
+document.addEventListener('DOMContentLoaded', function() {
+    const counters = document.querySelectorAll('.stat-item h3');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const target = parseInt(counter.getAttribute('data-count'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current > target) {
+                        const suffix = counter.parentElement.querySelector('p').textContent.includes('Rate') ? '%' : '';
+                        counter.textContent = target + suffix;
+                        clearInterval(timer);
+                    } else {
+                        const suffix = counter.parentElement.querySelector('p').textContent.includes('Rate') ? '%' : '';
+                        counter.textContent = Math.floor(current) + suffix;
+                    }
+                }, 20);
+                
+                observer.unobserve(counter);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    counters.forEach(counter => observer.observe(counter));
+});
+</script>
+
+{% endblock %}

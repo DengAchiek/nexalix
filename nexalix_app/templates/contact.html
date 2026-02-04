@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="contact-container">
+    <h1 class="text-center">Contact Us</h1>
+    <div class="contact-form">
+        <form method="post" action="{% url 'contact' %}">
+            {% csrf_token %}
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Your full name">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Your email address">
+
+            <label for="service">Service of Interest</label>
+            <select id="service" name="service">
+                <option value="">Select a service</option>
+                <option value="data_analytics">Data Analytics</option>
+                <option value="ai_solutions">AI Solutions</option>
+                <option value="software_dev">Software Development</option>
+                <option value="cybersecurity">Cybersecurity</option>
+                <option value="cloud">Cloud & Digital Transformation</option>
+                <option value="it_consulting">IT Consulting</option>
+            </select>
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Write your message"></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+        <p class="contact-privacy">We respect your privacy. Your information will not be shared.</p>
+    </div>
+</div>
+{% endblock %}
+<!-- End of file: nexalix_site/nexalix_app/templates/contact.html -->

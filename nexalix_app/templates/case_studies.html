@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title|default:'Case Studies' }} - Nexalix Technologies{% endblock %}
+
+{% block content %}
+<section class="page-block">
+    <div class="container">
+        <h1>Case Studies</h1>
+        <p class="subheading">Examples of projects where we delivered measurable outcomes for our clients.</p>
+
+        <div class="case-grid">
+            {% for case in case_studies %}
+            <article class="case-card">
+                <div class="case-image-wrapper">
+                    {% if case.image %}
+                    <img src="{{ case.image.url }}" alt="{{ case.title }}" class="case-image">
+                    {% else %}
+                    <img src="{% static 'images/logo.jpeg' %}" alt="{{ case.title }}" class="case-image">
+                    {% endif %}
+                </div>
+                <div class="case-content" style="padding: 14px 18px 18px;">
+                    <h3 class="case-title">{{ case.title }}</h3>
+                    <p class="case-description">{{ case.description|truncatewords:28 }}</p>
+                    {% if case.results %}
+                    <div class="case-results"><i class="fas fa-chart-line"></i> {{ case.results|truncatewords:15 }}</div>
+                    {% endif %}
+                    {% if case.link %}
+                    <div class="case-footer">
+                        <a href="{{ case.link }}" class="case-link" target="_blank" rel="noopener">View Project <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% empty %}
+            <div class="about-section">
+                <h3>No case studies published yet</h3>
+                <p>We are currently preparing detailed project stories. Contact us for references relevant to your industry.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary">Contact Our Team</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

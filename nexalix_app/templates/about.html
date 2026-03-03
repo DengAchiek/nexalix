@@ -1,56 +1,135 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}About Nexalix | IT & Innovation Consulting{% endblock %}
+
 {% block content %}
-<section class="about-page">
+<section class="about-hero-modern">
+    <div class="container about-hero-grid">
+        <div>
+            <p class="section-eyebrow">About Nexalix</p>
+            <h1>Cross-Platform Technology and Innovation Consulting</h1>
+            <p class="about-hero-text">
+                {% if primary_about %}
+                    {{ primary_about.content }}
+                {% else %}
+                    Founded on strong business ethics and driven by practical engineering experience, Nexalix helps organizations design, develop, and scale digital products across web, mobile, cloud, data, and AI.
+                {% endif %}
+            </p>
+            <a href="{% url 'contact' %}" class="btn btn-primary">Work With Us</a>
+        </div>
+        <div class="about-hero-panel">
+            <h3>What We Build</h3>
+            <ul>
+                <li><i class="fas fa-check-circle"></i> Web & Mobile Applications</li>
+                <li><i class="fas fa-check-circle"></i> Custom Enterprise Platforms</li>
+                <li><i class="fas fa-check-circle"></i> AI & Data-Driven Solutions</li>
+                <li><i class="fas fa-check-circle"></i> Cloud & Process Automation</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
     <div class="container">
-        <h1>About Nexalix Technologies</h1>
-        <p class="subheading">Empowering businesses with innovative, data-driven, and secure technology solutions.</p>
-
-        <!-- Who We Are -->
-        <div class="about-section">
-            <h2>Who We Are</h2>
-            <p>Nexalix Technologies Ltd is a forward-thinking technology consulting firm specializing in Data Analytics, Machine Learning, Artificial Intelligence, Software Development, and Cybersecurity. We partner with organizations to design, build, and deploy intelligent systems that solve real-world business challenges.</p>
+        <div class="section-heading">
+            <p class="section-eyebrow">From Admin Content</p>
+            <h2>About Sections</h2>
         </div>
-
-        <!-- Vision -->
-        <div class="about-section">
-            <h2>Our Vision</h2>
-            <p>To be a leading technology partner driving intelligent, secure, and impactful digital transformation across Africa and globally.</p>
+        <div class="about-story-cards">
+            {% for section in about_sections %}
+            <article>
+                <h4>{{ section.title }}</h4>
+                <p>{{ section.content }}</p>
+            </article>
+            {% empty %}
+            <article>
+                <h4>No About Content Yet</h4>
+                <p>Add and activate records in Django Admin under About Section to populate this block dynamically.</p>
+            </article>
+            {% endfor %}
         </div>
+    </div>
+</section>
 
-        <!-- Mission -->
-        <div class="about-section">
-            <h2>Our Mission</h2>
-            <p>To empower organizations through innovative, data-driven, and secure technology solutions that enable efficiency, growth, and long-term success.</p>
+<section class="page-block">
+    <div class="container">
+        <div class="about-stats-grid">
+            <article class="about-stat-card">
+                <h3 data-count="15" data-suffix="+">0</h3>
+                <p>Years of Experience</p>
+            </article>
+            <article class="about-stat-card">
+                <h3 data-count="100" data-suffix="+">0</h3>
+                <p>Projects Delivered</p>
+            </article>
+            <article class="about-stat-card">
+                <h3 data-count="8" data-suffix="+">0</h3>
+                <p>Domain Expertise</p>
+            </article>
         </div>
+    </div>
+</section>
 
-        <!-- Values -->
-        <div class="about-section values">
-            <h2>Our Values</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <h3>Innovation</h3>
-                    <p>We continuously embrace new ideas and technologies to drive progress.</p>
-                </div>
-                <div class="value-card">
-                    <h3>Integrity</h3>
-                    <p>We conduct our business with honesty, transparency, and fairness.</p>
-                </div>
-                <div class="value-card">
-                    <h3>Excellence</h3>
-                    <p>We strive for high-quality solutions and exceptional results.</p>
-                </div>
-                <div class="value-card">
-                    <h3>Security & Trust</h3>
-                    <p>We prioritize cybersecurity and safeguard client information.</p>
-                </div>
-                <div class="value-card">
-                    <h3>Client-Centricity</h3>
-                    <p>Our solutions are tailored to meet the unique needs of each client.</p>
-                </div>
-            </div>
+<section class="page-block section-soft">
+    <div class="container about-story-grid">
+        <div>
+            <p class="section-eyebrow">Who We Are</p>
+            <h2>Living up to your creative and operational potential</h2>
+            <p>You can call us a product team, engineering team, innovation team, or technology partner. We are a consulting-led engineering company that turns ideas into scalable digital products and efficient business systems.</p>
+            <p>Our team combines strategic thinking and hands-on execution, so clients get both direction and delivery from one partner.</p>
         </div>
+        <div class="about-story-cards">
+            <article>
+                <h4><i class="fas fa-lightbulb"></i> Innovative</h4>
+                <p>We think outside the box to create practical and high-impact solutions.</p>
+            </article>
+            <article>
+                <h4><i class="fas fa-bolt"></i> Disruptive</h4>
+                <p>We modernize outdated processes and improve how information flows.</p>
+            </article>
+            <article>
+                <h4><i class="fas fa-star"></i> Excellence</h4>
+                <p>We push for quality through detail, ownership, and engineering discipline.</p>
+            </article>
+            <article>
+                <h4><i class="fas fa-arrows-rotate"></i> Agile</h4>
+                <p>We adapt quickly while maintaining consistency and delivery focus.</p>
+            </article>
+            <article>
+                <h4><i class="fas fa-handshake"></i> Committed</h4>
+                <p>We treat every engagement like a product we own and are proud of.</p>
+            </article>
+            <article>
+                <h4><i class="fas fa-scale-balanced"></i> Fair</h4>
+                <p>We build long-term trust through transparent and fair business practices.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container about-values-modern">
+        <div class="section-heading">
+            <p class="section-eyebrow">Why Teams Choose Nexalix</p>
+            <h2>Consulting Mindset. Engineering Execution.</h2>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Quality commitment across full lifecycle</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Industry-specific solution strategy</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Secure, robust, and scalable platforms</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Cost-effective and milestone-driven delivery</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Professional multi-disciplinary team</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Flexible engagement and support model</div>
+        </div>
+    </div>
+</section>
+
+<section class="about-work-cta">
+    <div class="container">
+        <h2>Work With Us</h2>
+        <p>Nexalix is a diverse group of technology and design professionals focused on high standards, continuous improvement, and measurable client value.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">Get In Touch</a>
     </div>
 </section>
 {% endblock %}

@@ -1,33 +1,83 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}How We Work - Nexalix Technologies{% endblock %}
+
 {% block content %}
-<section class="how-we-work container">
-    <h1 class="text-4xl font-bold mb-8 text-center">How We Work</h1>
-
-    <div class="work-step">
-        <h2>1. Discovery & Analysis</h2>
-        <p>We begin by understanding your goals, challenges, and business environment to tailor the perfect solution.</p>
+<section class="work-hero-modern">
+    <div class="container work-hero-inner">
+        <p class="section-eyebrow">How We Work</p>
+        <h1>A Practical Delivery Model For Digital Transformation</h1>
+        <p>Our process combines consulting clarity with disciplined engineering execution, ensuring predictable delivery and measurable outcomes.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Start Your Project</a>
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">View Services</a>
+        </div>
     </div>
+</section>
 
-    <div class="work-step">
-        <h2>2. Solution Design</h2>
-        <p>Our team creates customized, scalable, and secure technology solutions aligned with your objectives.</p>
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Our Workflow</p>
+            <h2>Step Ahead With Best Practices</h2>
+            <p class="section-subtitle">Inspired by modern consulting delivery patterns for speed, quality, and transparency.</p>
+        </div>
+
+        <div class="work-process-timeline">
+            {% for step in process_steps %}
+            <article class="work-step-card-modern">
+                <span class="work-step-index">{{ step.number }}</span>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+            </article>
+            {% empty %}
+            <article class="work-step-card-modern">
+                <span class="work-step-index">01</span>
+                <h3>No Process Steps Yet</h3>
+                <p>Add process steps in Django Admin to show the workflow dynamically here.</p>
+            </article>
+            {% endfor %}
+        </div>
     </div>
+</section>
 
-    <div class="work-step">
-        <h2>3. Implementation</h2>
-        <p>We deploy the solution efficiently, following industry best practices and ensuring security and reliability.</p>
+<section class="page-block section-soft">
+    <div class="container two-col">
+        <div>
+            <p class="section-eyebrow">Delivery Principles</p>
+            <h2>How We Keep Projects On Track</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Clear scope and milestone governance</div>
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Fast communication and transparent reporting</div>
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Security and quality embedded in lifecycle</div>
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Agile adaptation to evolving priorities</div>
+            </div>
+        </div>
+
+        <div class="industry-outcome-panel">
+            <h3>What Clients Experience</h3>
+            <div class="outcome-item">
+                <h4>Predictable Delivery</h4>
+                <p>Milestone-based execution with real visibility into progress and risks.</p>
+            </div>
+            <div class="outcome-item">
+                <h4>Higher Quality Output</h4>
+                <p>Structured QA, code quality controls, and architecture best practices.</p>
+            </div>
+            <div class="outcome-item">
+                <h4>Long-Term Scalability</h4>
+                <p>Solutions designed to grow with your operations and user demand.</p>
+            </div>
+        </div>
     </div>
+</section>
 
-    <div class="work-step">
-        <h2>4. Testing & Optimization</h2>
-        <p>All systems are rigorously tested, optimized, and fine-tuned to meet high performance and reliability standards.</p>
-    </div>
-
-    <div class="work-step">
-        <h2>5. Support & Growth</h2>
-        <p>We provide ongoing support, monitor performance, and help your organization grow with continuous improvements.</p>
+<section class="home-cta-final">
+    <div class="container">
+        <h2>Ready To Build With Nexalix?</h2>
+        <p>Share your goals and we’ll propose a practical roadmap for delivery.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">Talk To Our Team</a>
     </div>
 </section>
 {% endblock %}

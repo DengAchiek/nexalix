@@ -1,31 +1,92 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
-<section class="why-choose-us container">
-    <h1 class="text-4xl font-bold mb-8 text-center">Why Choose Nexalix Technologies</h1>
+{% block title %}Why Choose Us - Nexalix Technologies{% endblock %}
 
-    <div class="advantages">
-        <div class="advantage">
-            <h2>Comprehensive End-to-End Services</h2>
-            <p>From strategy to deployment and support, we cover all your technology needs under one roof.</p>
+{% block content %}
+<section class="why-hero-modern">
+    <div class="container why-hero-inner">
+        <p class="section-eyebrow">Why Nexalix</p>
+        <h1>Your IT and Innovation Consulting Partner</h1>
+        <p>We combine deep technical expertise, strong business alignment, and disciplined delivery to produce outcomes that matter.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Engage Nexalix</a>
+            <a href="{% url 'how_we_work' %}" class="btn btn-outline-primary">See Our Process</a>
         </div>
-        <div class="advantage">
-            <h2>Skilled Experts in AI, Data & Security</h2>
-            <p>Our team has deep expertise in advanced technologies and cybersecurity to drive measurable results.</p>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Our Advantage</p>
+            <h2>What Makes Us Different</h2>
         </div>
-        <div class="advantage">
-            <h2>Flexible Engagement Models</h2>
-            <p>We tailor our engagement according to your project scope, budget, and timeline.</p>
+
+        <div class="why-modern-grid">
+            <article class="why-modern-card">
+                <h3><i class="fas fa-layer-group"></i> End-to-End Delivery</h3>
+                <p>From discovery and architecture to development, launch, and support, we provide complete lifecycle ownership.</p>
+            </article>
+
+            <article class="why-modern-card">
+                <h3><i class="fas fa-brain"></i> Deep Technical Expertise</h3>
+                <p>Strong capability in AI, software engineering, cloud, integration, and data systems for complex projects.</p>
+            </article>
+
+            <article class="why-modern-card">
+                <h3><i class="fas fa-shield-halved"></i> Security-First Mindset</h3>
+                <p>Security and reliability are baked into architecture and delivery from day one, not retrofitted later.</p>
+            </article>
+
+            <article class="why-modern-card">
+                <h3><i class="fas fa-people-group"></i> Collaborative Engagement</h3>
+                <p>We work as an extension of your team with transparent communication and practical decision support.</p>
+            </article>
+
+            <article class="why-modern-card">
+                <h3><i class="fas fa-signal"></i> Measurable Outcomes</h3>
+                <p>We prioritize operational efficiency, user value, and business impact with clear success metrics.</p>
+            </article>
+
+            <article class="why-modern-card">
+                <h3><i class="fas fa-arrows-rotate"></i> Flexible Delivery Model</h3>
+                <p>Project-based or ongoing support, adapted to your stage, scale, and internal team structure.</p>
+            </article>
         </div>
-        <div class="advantage">
-            <h2>Security-First & Ethical Approach</h2>
-            <p>We prioritize data protection, compliance, and ethical practices in all projects.</p>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Why Teams Stay With Us</p>
+            <h2>Execution Quality You Can Rely On</h2>
         </div>
-        <div class="advantage">
-            <h2>Measurable Business Impact</h2>
-            <p>Our solutions are designed to drive real business value, efficiency, and growth.</p>
+
+        <div class="stats-ribbon">
+            <div class="stat-chip"><h3 data-count="15" data-suffix="+">0</h3><p>Years Experience</p></div>
+            <div class="stat-chip"><h3 data-count="100" data-suffix="+">0</h3><p>Projects Delivered</p></div>
+            <div class="stat-chip"><h3 data-count="8" data-suffix="+">0</h3><p>Industry Domains</p></div>
+            <div class="stat-chip"><h3 data-count="24" data-suffix="/7">0</h3><p>Support Model</p></div>
         </div>
+
+        <div class="benefits-grid">
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Clear planning and milestone management</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Practical architecture and technology choices</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> High engineering quality and QA discipline</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Long-term support and optimization</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Transparent collaboration and accountability</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Cost-effective and scalable delivery options</div>
+        </div>
+    </div>
+</section>
+
+<section class="home-cta-final">
+    <div class="container">
+        <h2>Let’s Build A High-Impact Solution Together</h2>
+        <p>Partner with Nexalix to move from strategy to successful implementation faster.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">Get Started</a>
     </div>
 </section>
 {% endblock %}

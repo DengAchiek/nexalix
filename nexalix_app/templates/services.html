@@ -5,1079 +5,244 @@
 {% block meta_description %}{{ meta_description }}{% endblock %}
 
 {% block content %}
-<div class="services-page nexalix-theme">
-    <!-- Hero Section -->
-    <section class="services-hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Our Services</h1>
-                <p class="lead">Comprehensive technology solutions to transform your business</p>
-                <p>We offer a wide range of professional services to help you achieve digital excellence.</p>
-            </div>
+<section class="services-hero-modern">
+    <div class="container services-hero-inner">
+        <p class="section-eyebrow">Nexalix Services</p>
+        <h1>Digital Consulting and Engineering Services</h1>
+        <p>From strategy to delivery, we design and implement scalable technology solutions tailored to your business goals.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
+            <a href="#servicesCatalog" class="btn btn-outline-primary">View Service Catalog</a>
         </div>
-    </section>
-
-    <!-- Services Grid by Category -->
-    <div class="container py-5">
-        {% for category, category_services in services_by_category.items %}
-        <section class="service-category mb-5">
-            <h2 class="category-title mb-4">{{ category }}</h2>
-            <div class="services-grid">
-                {% for service in category_services %}
-                <div class="service-card">
-                    <div class="service-card-inner">
-                        <!-- Service Icon -->
-                        {% if service.icon %}
-                        <div class="service-icon">
-                            <i class="{{ service.icon }}"></i>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Service Image (if available) -->
-                        {% if service.featured_image %}
-                        <div class="service-image">
-                            <img src="{{ service.featured_image.url }}" alt="{{ service.title }}">
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Service Content -->
-                        <div class="service-content">
-                            <h3 class="service-title">{{ service.title }}</h3>
-                            <p class="service-description">{{ service.short_description }}</p>
-                            
-                            <!-- Key Features (if available) -->
-                            {% if service.get_key_features_list %}
-                            <ul class="service-features">
-                                {% for feature in service.get_key_features_list|slice:":3" %}
-                                <li>
-                                    <i class="fas fa-check-circle"></i>
-                                    {{ feature }}
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                            
-                            <!-- Technologies (if available) -->
-                            {% if service.get_technologies_list %}
-                            <div class="service-technologies">
-                                {% for tech in service.get_technologies_list|slice:":3" %}
-                                <span class="tech-tag">{{ tech }}</span>
-                                {% endfor %}
-                                {% if service.get_technologies_list|length > 3 %}
-                                <span class="tech-tag-more">+{{ service.get_technologies_list|length|add:"-3" }} more</span>
-                                {% endif %}
-                            </div>
-                            {% endif %}
-                            
-                            <!-- Action Buttons -->
-                            <div class="service-actions">
-                                <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary">
-                                    Learn More
-                                    <i class="fas fa-arrow-right ms-2"></i>
-                                </a>
-                                <a href="{% url 'contact' %}" class="btn btn-outline-primary">
-                                    Get Quote
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-        {% endfor %}
     </div>
+</section>
 
-    <!-- PRICING PLANS SECTION -->
-    <section class="pricing-section py-5">
-        <div class="container">
-            <div class="section-header text-center mb-5">
-                <span class="section-subtitle">INVESTMENT</span>
-                <h2 class="section-title">Flexible Pricing Plans</h2>
-                <p class="section-description">Choose the perfect package for your business needs</p>
-            </div>
-            
-            <div class="pricing-plans-grid">
-                {% for plan in pricing_plans %}
-                <div class="pricing-plan-card {% if plan.most_popular %}popular-plan{% endif %}">
-                    {% if plan.most_popular %}
-                    <div class="popular-badge">Most Popular</div>
-                    {% endif %}
-                    
-                    <div class="plan-header">
-                        <h3 class="plan-title">{{ plan.name }}</h3>
-                        <div class="plan-price">
-                            {% if plan.price == "Custom" or plan.price == "custom" %}
-                            <span class="custom-price">Custom Quote</span>
-                            {% else %}
-                            <span class="price-amount">${{ plan.price }}</span>
-                            <span class="price-period">/{{ plan.period }}</span>
+<section class="page-block section-soft" id="servicesCatalog">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Our Core Model</p>
+            <h2>Design. Code. Support.</h2>
+            <p class="section-subtitle">A consulting-led execution model inspired by high-performing product engineering teams.</p>
+        </div>
+        <div class="pillars-grid">
+            <article class="pillar-card">
+                <div class="pillar-icon"><i class="fas fa-compass-drafting"></i></div>
+                <h3>Design</h3>
+                <p>We decompose large objectives into clear modules and delivery milestones to reduce rework and risk.</p>
+            </article>
+            <article class="pillar-card">
+                <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Code</h3>
+                <p>We convert validated designs into high-quality applications with clean architecture and robust QA.</p>
+            </article>
+            <article class="pillar-card">
+                <div class="pillar-icon"><i class="fas fa-headset"></i></div>
+                <h3>Support</h3>
+                <p>We support your deployment and scale journey with optimization, monitoring, and iterative improvements.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Service Categories</p>
+            <h2>Comprehensive Offerings</h2>
+        </div>
+
+        <div class="service-category-filter" id="serviceCategoryFilter">
+            <button class="btn btn-outline-primary active" type="button" data-category="all">All</button>
+            {% for category, category_services in services_by_category.items %}
+            <button class="btn btn-outline-primary" type="button" data-category="{{ category|slugify }}">{{ category }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="service-sections-wrap" id="serviceSectionsWrap">
+            {% for category, category_services in services_by_category.items %}
+            <section class="service-category-block" data-category="{{ category|slugify }}">
+                <h3 class="category-title-modern">{{ category }}</h3>
+                <div class="services-grid">
+                    {% for service in category_services %}
+                    <article class="service-card" data-service-name="{{ service.title|lower }}">
+                        <div class="service-card-inner">
+                            {% if service.featured_image %}
+                            <div class="service-image">
+                                <img src="{{ service.featured_image.url }}" alt="{{ service.title }}">
+                            </div>
                             {% endif %}
-                        </div>
-                        {% if plan.short_description %}
-                        <p class="plan-description">{{ plan.short_description }}</p>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="plan-features">
-                        {% if plan.features %}
-                        <ul class="features-list">
-                            {% for feature in plan.get_features_list %}
-                            <li>
-                                <i class="fas fa-check"></i>
-                                <span>{{ feature }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="plan-footer">
-                        <a href="{% url 'contact' %}?plan={{ plan.name|slugify }}" class="btn {% if plan.most_popular %}btn-primary{% else %}btn-outline-primary{% endif %} w-100">
-                            {% if plan.price == "Custom" or plan.price == "custom" %}
-                            Get Custom Quote
-                            {% else %}
-                            Get Started
-                            {% endif %}
-                        </a>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="no-plans text-center py-5">
-                    <i class="fas fa-tags fa-3x mb-3"></i>
-                    <h4>Flexible Pricing Available</h4>
-                    <p class="mb-4">Contact us for a personalized quote based on your specific requirements.</p>
-                    <a href="{% url 'contact' %}" class="btn btn-primary">
-                        <i class="fas fa-calendar-alt me-2"></i>
-                        Request Quote
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-            
-            <div class="custom-solution-card mt-5">
-                <div class="row align-items-center">
-                    <div class="col-lg-8">
-                        <h4 class="mb-3">Need a Custom Solution?</h4>
-                        <p class="mb-0">We can create a tailored package specifically for your unique business requirements. Perfect for enterprise solutions, complex integrations, or specialized projects.</p>
-                    </div>
-                    <div class="col-lg-4 text-lg-end">
-                        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">
-                            <i class="fas fa-comments me-2"></i>
-                            Discuss Custom Solution
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="services-cta py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h2 class="cta-title">Need a Custom Solution?</h2>
-                    <p class="cta-text">We can tailor our services to meet your specific business requirements.</p>
-                </div>
-                <div class="col-lg-4 text-lg-end">
-                    <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-calendar-check me-2"></i>
-                        Schedule Consultation
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+                            <div class="service-content">
+                                {% if service.icon %}
+                                <div class="service-icon"><i class="{{ service.icon }}"></i></div>
+                                {% endif %}
+                                <h4 class="service-title">{{ service.title }}</h4>
+                                <p class="service-description">{{ service.short_description }}</p>
 
-    <!-- Process Section -->
-    <section class="services-process py-5">
-        <div class="container">
-            <div class="section-header text-center mb-5">
-                <span class="section-subtitle">WORKFLOW</span>
-                <h2 class="section-title">Our Service Process</h2>
-                <p class="section-description">A structured approach to delivering exceptional results</p>
-            </div>
-            
-            <div class="process-steps">
-                <!-- Step 1 -->
-                <div class="process-step">
-                    <div class="step-card">
-                        <div class="step-number-wrapper">
-                            <div class="step-number">01</div>
-                            <div class="step-connector">
-                                <div class="connector-line"></div>
-                                <div class="connector-arrow">
-                                    <i class="fas fa-arrow-right"></i>
+                                {% if service.get_key_features_list %}
+                                <ul class="service-features">
+                                    {% for feature in service.get_key_features_list|slice:":3" %}
+                                    <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+
+                                {% if service.get_technologies_list %}
+                                <div class="service-technologies">
+                                    {% for tech in service.get_technologies_list|slice:":4" %}
+                                    <span class="tech-tag">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <div class="service-actions">
+                                    <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary">Learn More</a>
+                                    <a href="{% url 'contact' %}" class="btn btn-outline-primary">Get Quote</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="step-icon">
-                            <div class="icon-wrapper">
-                                <i class="fas fa-search"></i>
-                            </div>
-                        </div>
-                        <h3 class="step-title">Discovery</h3>
-                        <p class="step-description">We analyze your requirements, challenges, and objectives to define the project scope and success metrics.</p>
-                        <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> Requirements Gathering</li>
-                            <li><i class="fas fa-check-circle"></i> Stakeholder Interviews</li>
-                            <li><i class="fas fa-check-circle"></i> Feasibility Analysis</li>
-                        </ul>
-                    </div>
+                    </article>
+                    {% endfor %}
                 </div>
-                
-                <!-- Step 2 -->
-                <div class="process-step">
-                    <div class="step-card">
-                        <div class="step-number-wrapper">
-                            <div class="step-number">02</div>
-                            <div class="step-connector">
-                                <div class="connector-line"></div>
-                                <div class="connector-arrow">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="step-icon">
-                            <div class="icon-wrapper">
-                                <i class="fas fa-project-diagram"></i>
-                            </div>
-                        </div>
-                        <h3 class="step-title">Planning</h3>
-                        <p class="step-description">We create a detailed roadmap, architecture design, and project timeline with clear milestones.</p>
-                        <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> Solution Architecture</li>
-                            <li><i class="fas fa-check-circle"></i> Timeline & Milestones</li>
-                            <li><i class="fas fa-check-circle"></i> Resource Allocation</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Step 3 -->
-                <div class="process-step">
-                    <div class="step-card">
-                        <div class="step-number-wrapper">
-                            <div class="step-number">03</div>
-                            <div class="step-connector">
-                                <div class="connector-line"></div>
-                                <div class="connector-arrow">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="step-icon">
-                            <div class="icon-wrapper">
-                                <i class="fas fa-code"></i>
-                            </div>
-                        </div>
-                        <h3 class="step-title">Development</h3>
-                        <p class="step-description">Our expert team builds your solution using agile methodology with regular updates and demos.</p>
-                        <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> Agile Development</li>
-                            <li><i class="fas fa-check-circle"></i> Quality Assurance</li>
-                            <li><i class="fas fa-check-circle"></i> Weekly Updates</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Step 4 -->
-                <div class="process-step">
-                    <div class="step-card">
-                        <div class="step-number-wrapper">
-                            <div class="step-number">04</div>
-                            <div class="step-connector">
-                                <div class="connector-line"></div>
-                                <div class="connector-arrow">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="step-icon">
-                            <div class="icon-wrapper">
-                                <i class="fas fa-headset"></i>
-                            </div>
-                        </div>
-                        <h3 class="step-title">Support</h3>
-                        <p class="step-description">We provide ongoing maintenance, monitoring, and support to ensure optimal performance.</p>
-                        <ul class="step-features">
-                            <li><i class="fas fa-check-circle"></i> 24/7 Monitoring</li>
-                            <li><i class="fas fa-check-circle"></i> Performance Optimization</li>
-                            <li><i class="fas fa-check-circle"></i> Continuous Updates</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Timeline visual for mobile -->
-            <div class="process-timeline-mobile">
-                <div class="timeline-line"></div>
-                <div class="timeline-dots">
-                    <span class="timeline-dot active"></span>
-                    <span class="timeline-dot"></span>
-                    <span class="timeline-dot"></span>
-                    <span class="timeline-dot"></span>
-                </div>
-            </div>
+            </section>
+            {% endfor %}
         </div>
-    </section>
-</div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Why Choose Nexalix</p>
+            <h2>We Bring Experience and Execution Excellence</h2>
+        </div>
+        <div class="stats-ribbon">
+            <div class="stat-chip"><h3 data-count="15" data-suffix="+">0</h3><p>Years Experience</p></div>
+            <div class="stat-chip"><h3 data-count="100" data-suffix="+">0</h3><p>Projects</p></div>
+            <div class="stat-chip"><h3 data-count="8" data-suffix="+">0</h3><p>Industries</p></div>
+            <div class="stat-chip"><h3 data-count="24" data-suffix="/7">0</h3><p>Support</p></div>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Quality commitment with measurable outcomes</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Industry specific implementation strategy</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Robust and secure applications</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> On-time milestone delivery</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Cost-effective delivery model</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Professional and responsive team</div>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Knowledge Base</p>
+            <h2>Technology Coverage</h2>
+        </div>
+        <div class="tech-cloud">
+            <span class="tech-cloud-item">Python</span>
+            <span class="tech-cloud-item">Django</span>
+            <span class="tech-cloud-item">JavaScript</span>
+            <span class="tech-cloud-item">React</span>
+            <span class="tech-cloud-item">Node.js</span>
+            <span class="tech-cloud-item">AWS</span>
+            <span class="tech-cloud-item">Azure</span>
+            <span class="tech-cloud-item">Docker</span>
+            <span class="tech-cloud-item">Kubernetes</span>
+            <span class="tech-cloud-item">PostgreSQL</span>
+            <span class="tech-cloud-item">Flutter</span>
+            <span class="tech-cloud-item">TensorFlow</span>
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Our Process</p>
+            <h2>Step Ahead With Best Practices</h2>
+        </div>
+        <div class="process-flow">
+            <article class="process-node"><span class="process-index">01</span><h3>Requirement Gathering</h3><p>Align business goals, scope, and critical constraints.</p></article>
+            <article class="process-node"><span class="process-index">02</span><h3>Research & Analysis</h3><p>Assess technology options and execution approach.</p></article>
+            <article class="process-node"><span class="process-index">03</span><h3>Design & Development</h3><p>Build in modular phases with quality checkpoints.</p></article>
+            <article class="process-node"><span class="process-index">04</span><h3>QA & Delivery</h3><p>Validate, deploy, and support production operations.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="pricing-section page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Pricing</p>
+            <h2>Flexible Pricing Plans</h2>
+            <p class="section-description">Choose the engagement model that best fits your needs.</p>
+        </div>
+
+        <div class="pricing-plans-grid">
+            {% for plan in pricing_plans %}
+            <article class="pricing-plan-card {% if plan.is_popular %}popular-plan{% endif %}">
+                {% if plan.is_popular %}<span class="popular-badge">Most Popular</span>{% endif %}
+                <div class="plan-header">
+                    <h3 class="plan-title">{{ plan.name }}</h3>
+                    <div class="plan-price">
+                        <span class="price-amount">${{ plan.price }}</span>
+                        <span class="price-period">/{{ plan.period }}</span>
+                    </div>
+                </div>
+                <div class="plan-features">
+                    <ul class="features-list">
+                        {% for feature in plan.get_features_list %}
+                        <li><i class="fas fa-check"></i><span>{{ feature }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="plan-footer">
+                    <a href="{% url 'contact' %}?plan={{ plan.name|slugify }}" class="btn {% if plan.is_popular %}btn-primary{% else %}btn-outline-primary{% endif %} w-100">Get Started</a>
+                </div>
+            </article>
+            {% empty %}
+            <div class="no-plans text-center py-5">
+                <h4>Custom Pricing Available</h4>
+                <p>Contact us for a proposal tailored to your requirements.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary">Request Quote</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="home-cta-final">
+    <div class="container">
+        <h2>Need a Custom Service Mix?</h2>
+        <p>We can combine consulting, design, development, and support into a plan aligned to your delivery timeline and budget.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">Discuss Your Project</a>
+    </div>
+</section>
 {% endblock %}
 
-{% block extra_css %}
-<style>
-:root {
-  --nx-primary: #0b1c2d;
-  --nx-secondary: #0f2a44;
-  --nx-accent: #1e90ff;
-  --nx-accent-soft: rgba(30, 144, 255, 0.15);
-  --nx-bg-dark: #071321;
-  --nx-bg-light: #f5f7fa;
-  --nx-card-bg: #0e2238;
-  --nx-text-main: #ffffff;
-  --nx-text-muted: #b6c2d1;
-  --nx-border: rgba(255, 255, 255, 0.08);
-  --nx-radius: 14px;
-  --nx-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-}
-
-/* ===============================
-   PAGE WRAPPER
-================================ */
-.services-page {
-  background: linear-gradient(180deg, var(--nx-bg-dark), #000);
-  color: var(--nx-text-main);
-  min-height: 100vh;
-}
-
-/* ===============================
-   HERO SECTION
-================================ */
-.services-hero {
-  padding: 110px 0 90px;
-  background:
-    radial-gradient(circle at top right, rgba(30,144,255,0.15), transparent 60%),
-    linear-gradient(135deg, var(--nx-primary), var(--nx-secondary));
-}
-
-.services-hero h1 {
-  font-size: 3.2rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.services-hero .lead {
-  font-size: 1.3rem;
-  color: var(--nx-text-muted);
-  margin-top: 1rem;
-}
-
-/* ===============================
-   CATEGORY TITLES
-================================ */
-.category-title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.category-title::after {
-  content: "";
-  display: block;
-  width: 70px;
-  height: 4px;
-  background: linear-gradient(90deg, var(--nx-accent), transparent);
-  margin-top: 10px;
-}
-
-/* ===============================
-   SERVICES GRID
-================================ */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-}
-
-/* ===============================
-   SERVICE CARD
-================================ */
-.service-card {
-  background: linear-gradient(180deg, var(--nx-card-bg), #081524);
-  border-radius: var(--nx-radius);
-  border: 1px solid var(--nx-border);
-  overflow: hidden;
-  transition: all 0.35s ease;
-  box-shadow: var(--nx-shadow);
-}
-
-.service-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--nx-accent);
-}
-
-/* ===============================
-   CARD CONTENT
-================================ */
-.service-card-inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.service-icon {
-  font-size: 2.2rem;
-  color: var(--nx-accent);
-  padding: 1.5rem 1.5rem 0;
-}
-
-.service-image img {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-}
-
-.service-content {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.service-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.service-description {
-  color: var(--nx-text-muted);
-  margin: 0.75rem 0 1rem;
-}
-
-/* ===============================
-   FEATURES LIST
-================================ */
-.service-features {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.service-features li {
-  display: flex;
-  align-items: center;
-  font-size: 0.95rem;
-  margin-bottom: 0.4rem;
-}
-
-.service-features i {
-  color: var(--nx-accent);
-  margin-right: 8px;
-}
-
-/* ===============================
-   TECHNOLOGY TAGS
-================================ */
-.service-technologies {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.2rem;
-}
-
-.tech-tag,
-.tech-tag-more {
-  font-size: 0.75rem;
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: var(--nx-accent-soft);
-  color: var(--nx-accent);
-}
-
-/* ===============================
-   ACTION BUTTONS
-================================ */
-.service-actions {
-  margin-top: auto;
-  display: flex;
-  gap: 0.75rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--nx-accent), #00b4ff);
-  border: none;
-  font-weight: 600;
-  padding: 10px 18px;
-}
-
-.btn-outline-primary {
-  border: 1px solid var(--nx-accent);
-  color: var(--nx-accent);
-}
-
-.btn-outline-primary:hover {
-  background: var(--nx-accent);
-  color: #fff;
-}
-
-/* ===============================
-   CTA SECTION
-================================ */
-.services-cta {
-  background: linear-gradient(135deg, #081524, #000);
-  border-top: 1px solid var(--nx-border);
-}
-
-.cta-title {
-  font-size: 2.2rem;
-  font-weight: 800;
-}
-
-/* ===============================
-   PRICING SECTION
-================================ */
-.pricing-section {
-    background: linear-gradient(135deg, #0a1725 0%, #071321 100%);
-    position: relative;
-    overflow: hidden;
-}
-
-.pricing-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(30, 144, 255, 0.3), transparent);
-}
-
-.pricing-plans-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.pricing-plan-card {
-    background: linear-gradient(145deg, rgba(20, 40, 65, 0.8), rgba(10, 25, 45, 0.9));
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 2.5rem;
-    position: relative;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-.pricing-plan-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(30, 144, 255, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.popular-plan {
-    border-color: var(--nx-accent);
-    position: relative;
-    z-index: 2;
-}
-
-.popular-badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--nx-accent), #00b4ff);
-    color: white;
-    padding: 6px 20px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
-}
-
-.plan-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    flex-grow: 0;
-}
-
-.plan-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: white;
-}
-
-.plan-price {
-    margin-bottom: 1rem;
-}
-
-.price-amount {
-    font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #fff, #b6c2d1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-}
-
-.custom-price {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--nx-accent);
-}
-
-.price-period {
-    color: #94a3b8;
-    font-size: 1.2rem;
-    margin-left: 5px;
-}
-
-.plan-description {
-    color: #94a3b8;
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
-}
-
-.plan-features {
-    flex-grow: 1;
-    margin-bottom: 2rem;
-}
-
-.features-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.features-list li {
-    color: #b6c2d1;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-}
-
-.features-list li:last-child {
-    border-bottom: none;
-}
-
-.features-list i {
-    color: var(--nx-accent);
-    margin-right: 10px;
-    font-size: 0.9rem;
-}
-
-.plan-footer {
-    flex-grow: 0;
-}
-
-.no-plans {
-    grid-column: 1 / -1;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 3rem;
-}
-
-.no-plans i {
-    color: var(--nx-accent);
-}
-
-.custom-solution-card {
-    background: linear-gradient(145deg, rgba(30, 144, 255, 0.1), rgba(30, 144, 255, 0.05));
-    border-radius: 20px;
-    border: 1px solid rgba(30, 144, 255, 0.2);
-    padding: 2.5rem;
-    margin-top: 3rem;
-}
-
-/* ===============================
-   PROCESS SECTION
-================================ */
-.services-process {
-    background: #020b14;
-}
-
-.process-step {
-    text-align: center;
-    padding: 1.5rem;
-}
-
-.step-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--nx-accent);
-    opacity: 0.25;
-}
-
-.services-process {
-    background: linear-gradient(135deg, #0a1725 0%, #071321 100%);
-    position: relative;
-    overflow: hidden;
-}
-
-.services-process::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(30, 144, 255, 0.3), transparent);
-}
-
-/* Section Header */
-.section-header {
-    position: relative;
-}
-
-.section-subtitle {
-    display: inline-block;
-    color: #1e90ff;
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    background: rgba(30, 144, 255, 0.1);
-    padding: 6px 15px;
-    border-radius: 20px;
-}
-
-.section-title {
-    font-size: 2.8rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #b6c2d1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
-}
-
-.section-description {
-    color: #94a3b8;
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Process Steps Grid */
-.process-steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    position: relative;
-    z-index: 2;
-}
-
-/* Step Card */
-.step-card {
-    background: linear-gradient(145deg, rgba(20, 40, 65, 0.8), rgba(10, 25, 45, 0.9));
-    border-radius: 20px;
-    padding: 2.5rem 2rem;
-    height: 100%;
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-}
-
-.step-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #1e90ff, #00b4ff);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-}
-
-.step-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(30, 144, 255, 0.3);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.step-card:hover::before {
-    transform: scaleX(1);
-}
-
-/* Step Number */
-.step-number-wrapper {
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-.step-number {
-    font-size: 4rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, rgba(30, 144, 255, 0.1), rgba(30, 144, 255, 0.05));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-    position: relative;
-    z-index: 1;
-}
-
-/* Connector for desktop */
-.step-connector {
-    position: absolute;
-    top: 50%;
-    left: 100%;
-    transform: translateY(-50%);
-    width: calc(100% + 2rem);
-    z-index: 1;
-    display: flex;
-    align-items: center;
-}
-
-.connector-line {
-    flex: 1;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(30, 144, 255, 0.3), rgba(30, 144, 255, 0.1));
-}
-
-.connector-arrow {
-    color: #1e90ff;
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
-}
-
-.step-card:hover .connector-arrow {
-    opacity: 1;
-    animation: pulse 2s infinite;
-}
-
-/* Remove connector from last step */
-.process-step:last-child .step-connector {
-    display: none;
-}
-
-/* Step Icon */
-.step-icon {
-    margin-bottom: 1.5rem;
-}
-
-.icon-wrapper {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, #1e90ff, #00b4ff);
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    color: white;
-    box-shadow: 0 10px 20px rgba(30, 144, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.step-card:hover .icon-wrapper {
-    transform: rotateY(180deg);
-    background: linear-gradient(135deg, #00b4ff, #1e90ff);
-}
-
-/* Step Content */
-.step-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 1rem;
-}
-
-.step-description {
-    color: #94a3b8;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
-
-/* Step Features */
-.step-features {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.step-features li {
-    color: #b6c2d1;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-}
-
-.step-features i {
-    color: #1e90ff;
-    margin-right: 8px;
-    font-size: 0.8rem;
-}
-
-/* Mobile Timeline */
-.process-timeline-mobile {
-    display: none;
-    position: relative;
-    margin: 2rem auto;
-    max-width: 300px;
-}
-
-.timeline-line {
-    position: absolute;
-    top: 8px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(30, 144, 255, 0.3), transparent);
-}
-
-.timeline-dots {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    z-index: 2;
-}
-
-.timeline-dot {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: rgba(30, 144, 255, 0.2);
-    border: 3px solid #0a1725;
-    transition: all 0.3s ease;
-}
-
-.timeline-dot.active {
-    background: #1e90ff;
-    box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.2);
-}
-
-/* Animation */
-@keyframes pulse {
-    0%, 100% {
-        opacity: 0.3;
-        transform: translateX(0);
-    }
-    50% {
-        opacity: 1;
-        transform: translateX(5px);
-    }
-}
-
-/* ===============================
-   RESPONSIVE DESIGN
-================================ */
-@media (max-width: 1200px) {
-    .process-steps {
-        gap: 1.5rem;
-    }
-    
-    .step-card {
-        padding: 2rem 1.5rem;
-    }
-    
-    .pricing-plans-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    }
-}
-
-@media (max-width: 992px) {
-    .process-steps {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-    }
-    
-    .step-connector {
-        display: none;
-    }
-    
-    .process-timeline-mobile {
-        display: block;
-    }
-    
-    .section-title {
-        font-size: 2.4rem;
-    }
-    
-    .pricing-plans-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .services-process {
-        padding: 3rem 0;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    .section-description {
-        font-size: 1rem;
-    }
-    
-    .process-steps {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .step-card {
-        padding: 2rem;
-    }
-    
-    .step-number {
-        font-size: 3.5rem;
-    }
-    
-    .pricing-plans-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .pricing-plan-card {
-        padding: 2rem;
-    }
-    
-    .price-amount {
-        font-size: 3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .section-title {
-        font-size: 1.8rem;
-    }
-    
-    .step-card {
-        padding: 1.5rem;
-    }
-    
-    .icon-wrapper {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
-    }
-    
-    .step-title {
-        font-size: 1.3rem;
-    }
-    
-    .pricing-plan-card {
-        padding: 1.5rem;
-    }
-    
-    .price-amount {
-        font-size: 2.5rem;
-    }
-    
-    .services-hero h1 {
-        font-size: 2.5rem;
-    }
-}
-</style>
+{% block extra_js %}
+<script>
+(function () {
+    const filterWrap = document.getElementById("serviceCategoryFilter");
+    const sectionsWrap = document.getElementById("serviceSectionsWrap");
+    if (!filterWrap || !sectionsWrap) return;
+
+    const buttons = Array.from(filterWrap.querySelectorAll("button[data-category]"));
+    const sections = Array.from(sectionsWrap.querySelectorAll(".service-category-block"));
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const target = btn.dataset.category;
+            buttons.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            sections.forEach((section) => {
+                const show = target === "all" || section.dataset.category === target;
+                section.style.display = show ? "block" : "none";
+            });
+        });
+    });
+})();
+</script>
 {% endblock %}

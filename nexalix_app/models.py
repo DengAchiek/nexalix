@@ -303,3 +303,36 @@ class ContactCTA(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class ContactMessage(models.Model):
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    service = models.CharField(max_length=100, blank=True)
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    admin_notified = models.BooleanField(default=False)
+    admin_notified_at = models.DateTimeField(null=True, blank=True)
+    user_confirmation_sent = models.BooleanField(default=False)
+    user_confirmation_sent_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-submitted_at']
+        verbose_name = "Contact Message"
+        verbose_name_plural = "Contact Messages"
+    
+    def __str__(self):
+        return f"{self.full_name} - {self.email}"
+    
+    def mark_admin_notified(self):
+        from django.utils import timezone
+        self.admin_notified = True
+        self.admin_notified_at = timezone.now()
+        self.save()
+    
+    def mark_user_confirmation_sent(self):
+        from django.utils import timezone
+        self.user_confirmation_sent = True
+        self.user_confirmation_sent_at = timezone.now()
+        self.save()

@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: nexalix-site
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+    startCommand: gunicorn nexalix_site.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "yourdomain.com,www.yourdomain.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://yourdomain.com,https://www.yourdomain.com"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nexalix-db
+          property: connectionString
+      - key: SITE_URL
+        value: "https://yourdomain.com"
+
+databases:
+  - name: nexalix-db
+    databaseName: nexalix
+    user: nexalix

@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.text import slugify
 from .models import (
     HeroSection, Service, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
-    ServiceFeature, ServiceTechnology, PricingPlan
+    ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage
 )
 # If you have these models, import them:
 # from .models import AboutPage, CompanyValue, ContactInfo, ContactMessage
@@ -33,7 +34,7 @@ def home(request):
     # Get technology categories with their technologies
     technology_categories = TechnologyCategory.objects.prefetch_related('technologies').all()
     
-    # Get case studies
+    # Get case studies for home page
     case_studies = CaseStudy.objects.filter(is_active=True).order_by('order')[:2]
     
     # Get newsletter section
@@ -75,13 +76,13 @@ def home(request):
 
 def about(request):
     """About page view"""
-    # If you have AboutPage model, use it:
-    # about_page = AboutPage.objects.first()
-    # values = CompanyValue.objects.all()
-    # return render(request, "about.html", {"about": about_page, "values": values})
-    
-    # Otherwise, just render the template:
-    return render(request, "about.html")
+    about_sections = AboutSection.objects.filter(is_active=True)
+    primary_about = about_sections.first()
+    context = {
+        "about_sections": about_sections,
+        "primary_about": primary_about,
+    }
+    return render(request, "about.html", context)
 
 def services(request):
     """Services list page view"""
@@ -125,52 +126,167 @@ def service_detail(request, slug):
 
 def industries(request):
     """Industries page view"""
-    return render(request, 'industries.html')
+    industries_list = Industry.objects.filter(is_active=True).order_by('order')
+    return render(request, 'industries.html', {"industries": industries_list})
 
 def how_we_work(request):
     """How We Work page view"""
-    return render(request, 'how_we_work.html')
+    steps = ProcessStep.objects.all().order_by('order')
+    return render(request, 'how_we_work.html', {"process_steps": steps})
 
 def why_choose_us(request):
     """Why Choose Us page view"""
     return render(request, 'why_choose_us.html')
 
+
+
 def contact(request):
     """Contact page view"""
-   
+    success_message = None
+    error_message = None
     
     if request.method == "POST":
-        full_name = request.POST.get("full_name")
-        email = request.POST.get("email")
-        service = request.POST.get("service")
-        message = request.POST.get("message")
+        full_name = request.POST.get("full_name", "").strip()
+        email = request.POST.get("email", "").strip()
+        service = request.POST.get("service", "").strip()
+        message = request.POST.get("message", "").strip()
+        
+        # Basic validation
+        if not all([full_name, email, message]):
+            error_message = "Please fill in all required fields (Name, Email, and Message)."
+        elif '@' not in email or '.' not in email:
+            error_message = "Please enter a valid email address."
+        else:
+            try:
+                # Save to database
+                contact_msg = ContactMessage.objects.create(
+                    full_name=full_name,
+                    email=email,
+                    service=service,
+                    message=message
+                )
+                
+                # Send email notification to admin
+                admin_email_sent = send_admin_notification(contact_msg)
+                
+                # Send confirmation to user
+                user_email_sent = send_user_confirmation(contact_msg)
+                
+                if admin_email_sent:
+                    success_message = "Thank you for your message! We've received it and will get back to you soon. A confirmation email has been sent to you."
+                else:
+                    success_message = "Thank you for your message! We've received it (email notification failed, but your message was saved)."
+                
+            except Exception as e:
+                print(f"Error saving contact: {e}")
+                error_message = "Sorry, there was an error submitting your message. Please try again."
+    
+    return render(request, "contact.html", {
+        'success_message': success_message,
+        'error_message': error_message,
+    })
 
-       
-        try:
-            send_mail(
-                subject=f"New Contact Message – {service}",
-                message=f"""
-Name: {full_name}
-Email: {email}
-Service: {service}
+
+def send_admin_notification(contact_message):
+    """Send email notification to admin about new contact message"""
+    try:
+        # Get admin email(s)
+        admin_emails = [settings.DEFAULT_FROM_EMAIL]
+        
+        # You can add specific admin emails in settings
+        if hasattr(settings, 'ADMIN_EMAILS'):
+            admin_emails = settings.ADMIN_EMAILS
+        
+        # Create email subject
+        subject = f"📧 New Contact Form Submission: {contact_message.service or 'General Inquiry'}"
+        
+        # Get site URL for admin link
+        site_url = getattr(settings, 'SITE_URL', 'http://localhost:8000')
+        admin_url = f"{site_url}/admin/nexalix_app/contactmessage/{contact_message.id}/change/"
+        
+        # Create email content
+        context = {
+            'contact': contact_message,
+            'admin_url': admin_url,
+            'site_url': site_url,
+        }
+        
+        # Plain text version
+        message_text = f"""
+NEW CONTACT FORM SUBMISSION
+
+Name: {contact_message.full_name}
+Email: {contact_message.email}
+Service: {contact_message.service or 'Not specified'}
+Time: {contact_message.submitted_at.strftime('%Y-%m-%d %H:%M:%S')}
 
 Message:
-{message}
-                """,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[settings.CONTACT_EMAIL] if hasattr(settings, 'CONTACT_EMAIL') else [settings.DEFAULT_FROM_EMAIL],
-                fail_silently=True,
-            )
-        except Exception as e:
-            print(f"Email error: {e}")
+{contact_message.message}
+
+---
+View in Admin: {admin_url}
+Reply to: {contact_message.email}
+        """
         
-        return redirect("contact")
-    
-    # If you have contact_info, pass it:
-    # return render(request, "contact.html", {"contact_info": contact_info})
-    return render(request, "contact.html")
+        # Send email
+        send_mail(
+            subject=subject,
+            message=message_text,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=admin_emails,
+            fail_silently=False,
+        )
+        
+        # Mark as notified after successful send
+        contact_message.mark_admin_notified()
+        return True
+        
+    except Exception as e:
+        print(f"Error sending admin notification: {e}")
+        return False
 
 
+def send_user_confirmation(contact_message):
+    """Send auto-reply confirmation to the user"""
+    try:
+        subject = "Thank you for contacting Nexalix Technologies"
+        
+        message = f"""
+Dear {contact_message.full_name},
+
+Thank you for reaching out to Nexalix Technologies!
+
+We have received your message regarding "{contact_message.service or 'our services'}".
+
+Our team will review your inquiry and get back to you within 24-48 hours.
+
+For reference, here's a summary of your submission:
+- Name: {contact_message.full_name}
+- Email: {contact_message.email}
+- Service: {contact_message.service or 'Not specified'}
+- Submitted: {contact_message.submitted_at.strftime('%Y-%m-%d %H:%M')}
+
+If you have any urgent questions, please don't hesitate to contact us directly.
+
+Best regards,
+The Nexalix Technologies Team
+        """
+        
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[contact_message.email],
+            fail_silently=True,  # Don't fail if user email fails
+        )
+        
+        # Mark confirmation sent
+        contact_message.mark_user_confirmation_sent()
+        return True
+        
+    except Exception as e:
+        print(f"Error sending user confirmation: {e}")
+        return False
 
 def web_dev(request):
     """Legacy web development service page"""
@@ -235,3 +351,41 @@ def ai_training(request):
         return service_detail(request, 'ai-training')
     except Service.DoesNotExist:
         return render(request, 'services/ai_training.html')
+
+
+# ========================================
+# CASE STUDIES VIEWS
+# ========================================
+
+def case_studies_list(request):
+    """Display all case studies"""
+    case_studies_all = CaseStudy.objects.filter(is_active=True).order_by('order')
+
+    context = {
+        'case_studies': case_studies_all,
+        'page_title': 'Case Studies - Success Stories',
+        'meta_description': 'Explore our portfolio of successful projects and client success stories.',
+    }
+    return render(request, 'case_studies.html', context)
+
+
+def case_study_detail(request, slug):
+    """Display single case study detail"""
+    case_study = None
+    for item in CaseStudy.objects.filter(is_active=True):
+        if slugify(item.title) == slug:
+            case_study = item
+            break
+
+    if not case_study:
+        return redirect('case_studies')
+
+    related_cases = CaseStudy.objects.filter(is_active=True).exclude(id=case_study.id).order_by('order')[:3]
+    
+    context = {
+        'case_study': case_study,
+        'related_cases': related_cases,
+        'page_title': case_study.title,
+        'meta_description': case_study.description[:160] if len(case_study.description) > 160 else case_study.description,
+    }
+    return render(request, 'case_study_detail.html', context)

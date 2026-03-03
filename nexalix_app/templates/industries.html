@@ -1,52 +1,82 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Industries - Nexalix Technologies{% endblock %}
+
 {% block content %}
+<section class="industries-hero-modern">
+    <div class="container industries-hero-inner">
+        <p class="section-eyebrow">Industries We Serve</p>
+        <h1>Sector-Focused Consulting and Digital Delivery</h1>
+        <p>We combine domain understanding with practical engineering to solve industry-specific operational and growth challenges.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Discuss Your Industry Needs</a>
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore Services</a>
+        </div>
+    </div>
+</section>
 
-<section class="industries">
+<section class="page-block">
     <div class="container">
-        <h1>Industries We Serve</h1>
-        <p class="subheading">We deliver tailored technology solutions across multiple sectors to meet industry-specific challenges.</p>
+        <div class="section-heading">
+            <p class="section-eyebrow">Our Coverage</p>
+            <h2>Industries We Transform</h2>
+            <p class="section-subtitle">Inspired by modern IT consulting layouts, focused on clarity of outcomes and capabilities.</p>
+        </div>
 
-        <div class="industries-grid">
-            <!-- Industry 1 -->
-            <div class="industry-card">
-                <h2>Financial Services</h2>
-                <p>Data-driven solutions, AI analytics, and secure systems for banks, insurance firms, and fintech startups.</p>
+        <div class="industry-modern-grid">
+            {% for industry in industries %}
+            <article class="industry-modern-card">
+                <h3><i class="{{ industry.icon|default:'fas fa-briefcase' }}"></i> {{ industry.name }}</h3>
+                <p>{{ industry.description }}</p>
+            </article>
+            {% empty %}
+            <article class="industry-modern-card">
+                <h3><i class="fas fa-circle-info"></i> No Industries Yet</h3>
+                <p>Add and activate industries in Django Admin to populate this section dynamically.</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container two-col">
+        <div>
+            <p class="section-eyebrow">Engagement Approach</p>
+            <h2>How We Deliver Across Industries</h2>
+            <p>Every industry has unique regulatory, operational, and customer constraints. Our teams align delivery strategy, architecture, and rollout planning to those realities from the start.</p>
+            <div class="benefits-grid">
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Domain-first discovery and planning</div>
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Compliance-aware engineering practices</div>
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Scalable architecture and integrations</div>
+                <div class="benefit-item"><i class="fas fa-check-circle"></i> Continuous optimization and support</div>
             </div>
+        </div>
 
-            <!-- Industry 2 -->
-            <div class="industry-card">
-                <h2>Education & Training</h2>
-                <p>Transform learning experiences with e-learning platforms, analytics dashboards, and AI-powered educational tools.</p>
+        <div class="industry-outcome-panel">
+            <h3>Typical Outcomes</h3>
+            <div class="outcome-item">
+                <h4>Faster Operations</h4>
+                <p>Reduced cycle times through workflow automation and better system interoperability.</p>
             </div>
-
-            <!-- Industry 3 -->
-            <div class="industry-card">
-                <h2>Healthcare & NGOs</h2>
-                <p>Secure software solutions, predictive analytics, and AI-driven health monitoring for hospitals and NGOs.</p>
+            <div class="outcome-item">
+                <h4>Better Decisions</h4>
+                <p>Improved visibility through real-time dashboards and reliable business intelligence.</p>
             </div>
-
-            <!-- Industry 4 -->
-            <div class="industry-card">
-                <h2>Government & Public Sector</h2>
-                <p>Modern digital services, cybersecurity, and analytics solutions to improve public administration efficiency.</p>
-            </div>
-
-            <!-- Industry 5 -->
-            <div class="industry-card">
-                <h2>Startups & Technology Firms</h2>
-                <p>Support for innovative products, AI solutions, cloud infrastructure, and scalable software development.</p>
-            </div>
-
-            <!-- Industry 6 -->
-            <div class="industry-card">
-                <h2>Enterprises</h2>
-                <p>End-to-end digital transformation, system integration, and AI-driven insights for large-scale businesses.</p>
+            <div class="outcome-item">
+                <h4>Stronger User Experience</h4>
+                <p>Modern and intuitive products for staff, customers, and stakeholders.</p>
             </div>
         </div>
     </div>
 </section>
 
+<section class="home-cta-final">
+    <div class="container">
+        <h2>Need an Industry-Specific Solution?</h2>
+        <p>Tell us your domain, constraints, and goals. We will propose an implementation roadmap tailored to your organization.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">Talk To Nexalix</a>
+    </div>
+</section>
 {% endblock %}
-<!-- End of file: nexalix_site/nexalix_app/templates/industries.html --> -->

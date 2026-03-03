@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Nexalix Technologies{% endblock %}
+
+{% block content %}
+<section class="page-block">
+    <div class="container">
+        <article class="about-section">
+            <h1>{{ case_study.title }}</h1>
+            {% if case_study.image %}
+            <div class="case-image-wrapper" style="padding: 0; margin-bottom: 18px;">
+                <img src="{{ case_study.image.url }}" alt="{{ case_study.title }}" class="case-image">
+            </div>
+            {% endif %}
+
+            <p>{{ case_study.description }}</p>
+
+            {% if case_study.results %}
+            <h2>Results</h2>
+            <p>{{ case_study.results }}</p>
+            {% endif %}
+
+            {% if case_study.link %}
+            <a href="{{ case_study.link }}" target="_blank" rel="noopener" class="btn btn-primary">Visit Project</a>
+            {% endif %}
+        </article>
+
+        {% if related_cases %}
+        <section class="page-block" style="padding-bottom: 0;">
+            <h2>Related Case Studies</h2>
+            <div class="case-grid">
+                {% for case in related_cases %}
+                <article class="case-card">
+                    <div class="case-content" style="padding: 18px;">
+                        <h3>{{ case.title }}</h3>
+                        <p>{{ case.description|truncatewords:18 }}</p>
+                        <a href="{% url 'case_study_detail' case.title|slugify %}" class="case-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

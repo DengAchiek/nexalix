@@ -1,11 +1,13 @@
 # admin.py
 from django.contrib import admin
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.utils.html import format_html
 from .models import (
     HeroSection, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, Technology, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
-    Service, ServiceFeature, ServiceTechnology, PricingPlan
+    Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage
 )
 
 # ========== EXISTING MODELS (NON-SERVICE) ==========
@@ -88,7 +90,7 @@ class AwardAdmin(admin.ModelAdmin):
 class ContactCTAAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_active']
 
-# ========== SERVICE MODELS (ONE TIME ONLY) ==========
+
 class ServiceFeatureInline(admin.TabularInline):
     model = ServiceFeature
     extra = 1
@@ -153,3 +155,119 @@ class PricingPlanAdmin(admin.ModelAdmin):
     list_filter = ['service', 'is_popular']
     list_editable = ['price', 'period', 'is_popular', 'order']
     search_fields = ['name', 'features']
+
+
+def send_admin_notification(contact_message):
+    try:
+        admin_emails = getattr(settings, 'ADMIN_EMAILS', [settings.DEFAULT_FROM_EMAIL])
+
+        subject = f"New Contact Form Submission: {contact_message.service or 'General Inquiry'}"
+
+        body = f"""
+Name: {contact_message.full_name}
+Email: {contact_message.email}
+Service: {contact_message.service or 'Not specified'}
+
+Message:
+{contact_message.message}
+        """
+
+        email = EmailMessage(
+            subject=subject,
+            body=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=admin_emails,
+            reply_to=[contact_message.email],
+        )
+
+        email.send(fail_silently=False)  # 🚀 REAL-TIME SEND
+
+        contact_message.mark_admin_notified()
+        return True
+
+    except Exception as e:
+        print("ADMIN EMAIL ERROR:", e)
+        return False
+
+def send_user_confirmation(contact_message):
+    try:
+        subject = "We’ve received your message – Nexalix Technologies"
+
+        body = f"""
+Hi {contact_message.full_name},
+
+Thanks for contacting Nexalix Technologies.
+
+We’ve received your message and will respond within 24–48 hours.
+
+Summary:
+Service: {contact_message.service or 'General'}
+Message:
+{contact_message.message}
+
+Regards,
+Nexalix Team
+        """
+
+        email = EmailMessage(
+            subject=subject,
+            body=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[contact_message.email],
+        )
+
+        email.send(fail_silently=False)  
+
+        contact_message.mark_user_confirmation_sent()
+        return True
+
+    except Exception as e:
+        print("USER EMAIL ERROR:", e)
+        return False
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'service', 'submitted_at', 'is_read', 'admin_notified')
+    list_filter = ('is_read', 'admin_notified', 'submitted_at', 'service')
+    search_fields = ('full_name', 'email', 'message')
+    readonly_fields = ('submitted_at', 'admin_notified_at', 'user_confirmation_sent_at')
+    list_per_page = 20
+    
+    fieldsets = (
+        ('Contact Information', {
+            'fields': ('full_name', 'email', 'service')
+        }),
+        ('Message', {
+            'fields': ('message',)
+        }),
+        ('Status', {
+            'fields': ('is_read', 'admin_notified', 'admin_notified_at', 
+                      'user_confirmation_sent', 'user_confirmation_sent_at')
+        }),
+        ('Timestamps', {
+            'fields': ('submitted_at',),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['mark_as_read', 'mark_as_unread', 'resend_admin_notification']
+    
+    def mark_as_read(self, request, queryset):
+        queryset.update(is_read=True)
+    mark_as_read.short_description = "Mark selected messages as read"
+    
+    def mark_as_unread(self, request, queryset):
+        queryset.update(is_read=False)
+    mark_as_unread.short_description = "Mark selected messages as unread"
+    
+    def resend_admin_notification(self, request, queryset):
+        from .views import send_admin_notification
+        count = 0
+        for message in queryset:
+            if send_admin_notification(message):
+                count += 1
+        self.message_user(request, f"Resent notifications for {count} messages.")
+    resend_admin_notification.short_description = "Resend admin notification email"
+
+

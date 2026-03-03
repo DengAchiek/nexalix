@@ -6,11 +6,16 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('services/', views.services, name='services'),
-     path("services/<slug:slug>/", views.service_detail, name="service_detail"),
+    path("services/<slug:slug>/", views.service_detail, name="service_detail"),
     path('industries/', views.industries, name='industries'),
     path('how_we_work/', views.how_we_work, name='how_we_work'),
     path('why_choose_us/', views.why_choose_us, name='why_choose_us'),
     path('contact/', views.contact, name='contact'),
+    
+   
+    path('case-studies/', views.case_studies_list, name='case_studies'),
+    path('case-studies/<slug:slug>/', views.case_study_detail, name='case_study_detail'),
+    # Service pages
     path('web_dev/', views.web_dev, name='web_dev'),
     path('mobile_app/', views.mobile_app, name='mobile_app'),
     path('digital_marketing/', views.digital_marketing, name='digital_marketing'),

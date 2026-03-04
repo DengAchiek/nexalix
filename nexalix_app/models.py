@@ -207,6 +207,11 @@ class CaseStudy(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     image = models.ImageField(upload_to='case_studies/')
+    tags = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Comma-separated tags, e.g. Fintech, AI, Automation"
+    )
     results = models.TextField(blank=True)
     link = models.URLField(blank=True)
     is_active = models.BooleanField(default=True)
@@ -219,6 +224,11 @@ class CaseStudy(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_tags_list(self):
+        if self.tags:
+            return [tag.strip() for tag in self.tags.split(',') if tag.strip()]
+        return []
 
 
 class NewsletterSignup(models.Model):
@@ -268,6 +278,10 @@ class BlogPost(models.Model):
 
 class Partner(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(
+        blank=True,
+        help_text="Brief description shown on the homepage partner card"
+    )
     logo = models.ImageField(upload_to='partners/', blank=True, null=True)
     website = models.URLField(blank=True)
     order = models.IntegerField(default=0)

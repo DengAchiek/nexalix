@@ -140,6 +140,18 @@
                 <div class="project-completed-content">
                     <h3>{{ project.title }}</h3>
                     <p>{{ project.description|truncatewords:18 }}</p>
+                    {% if project.get_tags_list %}
+                    <div class="project-tags">
+                        {% for tag in project.get_tags_list %}
+                        <span class="project-tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if project.link %}
+                    <a href="{{ project.link }}" target="_blank" rel="noopener" class="project-link-btn">
+                        View Project <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                    {% endif %}
                 </div>
             </article>
             {% empty %}
@@ -147,6 +159,69 @@
                 <div class="project-completed-content">
                     <h3>No Completed Projects Yet</h3>
                     <p>Add case studies in Django Admin to populate this section dynamically.</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Partners</p>
+            <h2>Trusted By Our Partners</h2>
+            <p class="section-subtitle">A growing network of organizations collaborating with Nexalix on digital transformation and innovation.</p>
+        </div>
+        <div class="partners-home-grid">
+            {% for partner in partners %}
+                {% if partner.website %}
+                <a href="{{ partner.website }}" class="partner-home-card" target="_blank" rel="noopener">
+                    <div class="partner-home-logo-wrap">
+                        {% if partner.logo %}
+                        <img src="{{ partner.logo.url }}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        {% else %}
+                        <img src="{% static 'images/logo.jpeg' %}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        {% endif %}
+                    </div>
+                    <div class="partner-home-content">
+                        <h3>{{ partner.name }}</h3>
+                        <p>
+                            {% if partner.description %}
+                            {{ partner.description|truncatewords:20 }}
+                            {% else %}
+                            Strategic delivery partner working with Nexalix on innovation and enterprise technology solutions.
+                            {% endif %}
+                        </p>
+                        <span class="partner-home-link">Visit Partner <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                {% else %}
+                <article class="partner-home-card partner-home-card-static">
+                    <div class="partner-home-logo-wrap">
+                        {% if partner.logo %}
+                        <img src="{{ partner.logo.url }}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        {% else %}
+                        <img src="{% static 'images/logo.jpeg' %}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        {% endif %}
+                    </div>
+                    <div class="partner-home-content">
+                        <h3>{{ partner.name }}</h3>
+                        <p>
+                            {% if partner.description %}
+                            {{ partner.description|truncatewords:20 }}
+                            {% else %}
+                            Strategic delivery partner working with Nexalix on innovation and enterprise technology solutions.
+                            {% endif %}
+                        </p>
+                    </div>
+                </article>
+                {% endif %}
+            {% empty %}
+            <article class="partner-home-card partner-home-card-static">
+                <div class="partner-home-content">
+                    <h3>No Partners Added Yet</h3>
+                    <p>Add partners in Django Admin to automatically populate this section with logos, descriptions, and links.</p>
                 </div>
             </article>
             {% endfor %}

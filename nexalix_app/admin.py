@@ -51,9 +51,10 @@ class TechnologyCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(CaseStudy)
 class CaseStudyAdmin(admin.ModelAdmin):
-    list_display = ['title', 'order', 'is_active', 'created_at']
+    list_display = ['title', 'tags', 'order', 'is_active', 'created_at']
     list_editable = ['order', 'is_active']
     list_filter = ['is_active']
+    search_fields = ['title', 'description', 'tags']
     ordering = ['order']
 
 @admin.register(NewsletterSignup)
@@ -75,8 +76,9 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'order', 'is_active']
+    list_display = ['name', 'website', 'order', 'is_active']
     list_editable = ['order', 'is_active']
+    search_fields = ['name', 'description', 'website']
     ordering = ['order']
 
 @admin.register(Award)
@@ -269,5 +271,4 @@ class ContactMessageAdmin(admin.ModelAdmin):
                 count += 1
         self.message_user(request, f"Resent notifications for {count} messages.")
     resend_admin_notification.short_description = "Resend admin notification email"
-
 

@@ -33,6 +33,7 @@ EMAIL_HOST_USER=you@example.com
 EMAIL_HOST_PASSWORD=app-password
 DEFAULT_FROM_EMAIL=Nexalix Technologies <you@example.com>
 ADMIN_EMAILS=you@example.com
+CONTACT_NOTIFICATION_EMAIL=dachiek4@gmail.com
 CONTACT_EMAIL=you@example.com
 ```
 

@@ -194,12 +194,27 @@ def contact(request):
 def send_admin_notification(contact_message):
     """Send email notification to admin about new contact message"""
     try:
-        # Get admin email(s)
-        admin_emails = [settings.DEFAULT_FROM_EMAIL]
-        
-        # You can add specific admin emails in settings
-        if hasattr(settings, 'ADMIN_EMAILS'):
-            admin_emails = settings.ADMIN_EMAILS
+        # Resolve recipients from settings and always include contact notification inbox.
+        configured_recipients = getattr(settings, "ADMIN_EMAILS", [])
+        if isinstance(configured_recipients, str):
+            configured_recipients = [
+                email.strip()
+                for email in configured_recipients.split(",")
+                if email.strip()
+            ]
+
+        admin_emails = list(configured_recipients)
+        contact_notification_email = getattr(
+            settings,
+            "CONTACT_NOTIFICATION_EMAIL",
+            "dachiek4@gmail.com",
+        ).strip()
+
+        if contact_notification_email and contact_notification_email not in admin_emails:
+            admin_emails.append(contact_notification_email)
+
+        if not admin_emails:
+            admin_emails = ["dachiek4@gmail.com"]
         
         # Create email subject
         subject = f"📧 New Contact Form Submission: {contact_message.service or 'General Inquiry'}"

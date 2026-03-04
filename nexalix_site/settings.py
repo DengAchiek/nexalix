@@ -125,17 +125,26 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() in {"1", "true", "yes
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Nexalix Technologies <noreply@nexalix.com>")
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    f"Nexalix Technologies <{EMAIL_HOST_USER or 'noreply@nexalix.com'}>",
+)
+
+# Primary inbox for contact form notifications.
+CONTACT_NOTIFICATION_EMAIL = os.getenv("CONTACT_NOTIFICATION_EMAIL", "dachiek4@gmail.com").strip()
 
 ADMIN_EMAILS = [
     email.strip()
-    for email in os.getenv("ADMIN_EMAILS", "admin@nexalix.com").split(",")
+    for email in os.getenv("ADMIN_EMAILS", CONTACT_NOTIFICATION_EMAIL).split(",")
     if email.strip()
 ]
 
+if CONTACT_NOTIFICATION_EMAIL and CONTACT_NOTIFICATION_EMAIL not in ADMIN_EMAILS:
+    ADMIN_EMAILS.append(CONTACT_NOTIFICATION_EMAIL)
+
 SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
 
-CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", EMAIL_HOST_USER or "admin@nexalix.com")
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", EMAIL_HOST_USER or CONTACT_NOTIFICATION_EMAIL)
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "True").lower() in {"1", "true", "yes", "on"}

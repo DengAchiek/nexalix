@@ -38,6 +38,7 @@ If you use contact email notifications:
 - `EMAIL_HOST_PASSWORD`
 - `DEFAULT_FROM_EMAIL`
 - `ADMIN_EMAILS`
+- `CONTACT_NOTIFICATION_EMAIL` (set this to `dachiek4@gmail.com`)
 - `CONTACT_EMAIL`
 
 Use `.env.example` as reference.

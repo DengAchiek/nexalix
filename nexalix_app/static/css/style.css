@@ -317,6 +317,7 @@ a {
 .mobile-search-shell {
     width: 100%;
     margin-bottom: 18px;
+    display: block;
 }
 
 .mobile-menu-links {
@@ -395,6 +396,10 @@ a {
 @media (max-width: 1280px) {
     .search-shell {
         display: none;
+    }
+
+    .mobile-menu .mobile-search-shell {
+        display: block;
     }
 }
 
@@ -1224,6 +1229,70 @@ a {
     font-size: 0.85rem;
 }
 
+.projects-completed-summary {
+    margin-bottom: 14px;
+}
+
+.project-total-card {
+    display: inline-block;
+    background: linear-gradient(135deg, #0f5db8, #0f7eb8);
+    color: #fff;
+    border-radius: 14px;
+    padding: 16px 22px;
+}
+
+.project-total-card h3 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+}
+
+.project-total-card p {
+    margin: 4px 0 0;
+    color: #dbeeff;
+    font-weight: 700;
+}
+
+.projects-completed-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.project-completed-card {
+    background: #fff;
+    border: 1px solid #d7e5f2;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--nx-shadow);
+}
+
+.project-completed-media {
+    padding: 10px 10px 0;
+}
+
+.project-completed-media img {
+    width: 100%;
+    height: 185px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.project-completed-content {
+    padding: 12px 14px 16px;
+}
+
+.project-completed-content h3 {
+    margin: 0 0 8px;
+    font-size: 1.06rem;
+    line-height: 1.25;
+}
+
+.project-completed-content p {
+    margin: 0;
+    color: #5a738b;
+}
+
 .home-cta-final {
     background: linear-gradient(135deg, #0f2c4c, #173e67);
     color: #e2eefb;
@@ -1243,7 +1312,8 @@ a {
     .pillars-grid,
     .portfolio-grid,
     .process-flow,
-    .stats-ribbon {
+    .stats-ribbon,
+    .projects-completed-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -1259,7 +1329,8 @@ a {
     .stats-ribbon,
     .testimonial-strip,
     .benefits-grid,
-    .strength-grid {
+    .strength-grid,
+    .projects-completed-grid {
         grid-template-columns: 1fr;
     }
 

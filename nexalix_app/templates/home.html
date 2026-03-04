@@ -115,6 +115,48 @@
 <section class="page-block section-soft">
     <div class="container">
         <div class="section-heading">
+            <p class="section-eyebrow">Our Track Record</p>
+            <h2>Projects Completed</h2>
+            <p class="section-subtitle">Successful implementations delivered across industries and technology domains.</p>
+        </div>
+
+        <div class="projects-completed-summary">
+            <div class="project-total-card">
+                <h3 data-count="{{ completed_projects_count|default:0 }}" data-suffix="+">0</h3>
+                <p>Total Completed Projects</p>
+            </div>
+        </div>
+
+        <div class="projects-completed-grid">
+            {% for project in completed_projects %}
+            <article class="project-completed-card">
+                <div class="project-completed-media">
+                    {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    {% else %}
+                    <img src="{% static 'images/logo.jpeg' %}" alt="{{ project.title }}">
+                    {% endif %}
+                </div>
+                <div class="project-completed-content">
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description|truncatewords:18 }}</p>
+                </div>
+            </article>
+            {% empty %}
+            <article class="project-completed-card">
+                <div class="project-completed-content">
+                    <h3>No Completed Projects Yet</h3>
+                    <p>Add case studies in Django Admin to populate this section dynamically.</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
             <p class="section-eyebrow">Knowledge Base</p>
             <h2>Well-Versed In Modern Technologies</h2>
             <p class="section-subtitle">Use the toggle to expand the technology stack.</p>

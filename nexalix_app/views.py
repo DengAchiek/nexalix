@@ -36,6 +36,8 @@ def home(request):
     
     # Get case studies for home page
     case_studies = CaseStudy.objects.filter(is_active=True).order_by('order')[:2]
+    completed_projects = CaseStudy.objects.filter(is_active=True).order_by('-created_at', 'order')[:6]
+    completed_projects_count = CaseStudy.objects.filter(is_active=True).count()
     
     # Get newsletter section
     newsletter = NewsletterSignup.objects.filter(is_active=True).first()
@@ -64,6 +66,8 @@ def home(request):
         'industries': industries,
         'technology_categories': technology_categories,
         'case_studies': case_studies,
+        'completed_projects': completed_projects,
+        'completed_projects_count': completed_projects_count,
         'newsletter': newsletter,
         'statistics': statistics,
         'blog_posts': blog_posts,

@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+    if (window.__nexalixMainInitialized) return;
+    window.__nexalixMainInitialized = true;
+
     const body = document.body;
     const siteHeader = document.getElementById("siteHeader");
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");

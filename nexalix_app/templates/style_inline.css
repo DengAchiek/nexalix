@@ -1,15 +1,15 @@
 :root {
-    --nx-bg: #f4f6ff;
-    --nx-bg-deep: #121a5f;
+    --nx-bg: #f5f6ff;
+    --nx-bg-deep: #101a66;
     --nx-surface: #ffffff;
     --nx-surface-alt: #eef2ff;
     --nx-text: #131f4b;
     --nx-text-soft: #5f6795;
-    --nx-primary: #2f63ff;
-    --nx-primary-dark: #1f46d0;
-    --nx-accent: #b13be8;
+    --nx-primary: #2966ff;
+    --nx-primary-dark: #1f43cb;
+    --nx-accent: #a530e8;
     --nx-border: #d5def8;
-    --nx-shadow: 0 16px 40px rgba(25, 39, 110, 0.14);
+    --nx-shadow: 0 16px 40px rgba(29, 34, 119, 0.15);
     --nx-radius: 16px;
 }
 
@@ -24,7 +24,7 @@ html, body {
 
 body {
     font-family: "Manrope", "Segoe UI", sans-serif;
-    background: radial-gradient(circle at 8% -5%, #dfe6ff 0, transparent 40%), var(--nx-bg);
+    background: radial-gradient(circle at 8% -5%, #e0e7ff 0, transparent 40%), var(--nx-bg);
     color: var(--nx-text);
     line-height: 1.65;
 }
@@ -48,7 +48,7 @@ a {
 }
 
 .topbar {
-    background: linear-gradient(90deg, #0b1f73, #5a1fb0);
+    background: linear-gradient(90deg, #0c1f7a, #6a1eb7);
     color: #e2e8ff;
     font-size: 0.9rem;
 }
@@ -135,7 +135,7 @@ a {
     bottom: 2px;
     width: 100%;
     height: 2px;
-    background: var(--nx-primary);
+    background: linear-gradient(90deg, var(--nx-primary), var(--nx-accent));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.2s ease;
@@ -985,7 +985,7 @@ a {
 }
 
 .section-soft {
-    background: linear-gradient(180deg, #f7fbff, #eff5fd);
+    background: linear-gradient(180deg, #eff3ff, #edf1ff);
 }
 
 .section-heading {

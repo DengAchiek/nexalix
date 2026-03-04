@@ -92,7 +92,8 @@ a {
     min-height: 82px;
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .brand {
@@ -107,7 +108,7 @@ a {
 }
 
 .brand img {
-    width: clamp(175px, 18vw, 280px);
+    width: clamp(165px, 15vw, 240px);
     height: auto;
     border-radius: 0;
     object-fit: contain;
@@ -121,14 +122,15 @@ a {
     min-width: 0;
     justify-content: center;
     align-items: center;
-    gap: clamp(6px, 0.8vw, 14px);
+    gap: clamp(8px, 0.85vw, 14px);
+    margin-inline: clamp(12px, 1.8vw, 30px);
     white-space: nowrap;
 }
 
 .nav-links a {
     color: #1d3856;
     font-weight: 700;
-    font-size: clamp(0.8rem, 0.78vw, 0.92rem);
+    font-size: clamp(0.82rem, 0.76vw, 0.92rem);
     padding: 8px 2px;
     position: relative;
 }
@@ -160,12 +162,12 @@ a {
     display: flex;
     flex: 0 0 auto;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .search-shell {
     position: relative;
-    width: clamp(170px, 13vw, 220px);
+    width: clamp(190px, 14vw, 250px);
 }
 
 .search-shell i {
@@ -385,7 +387,7 @@ a {
     padding-inline: 14px;
 }
 
-@media (max-width: 1480px) {
+@media (max-width: 1320px) {
     .search-shell {
         display: none;
     }
@@ -876,7 +878,7 @@ a {
     transform: translateY(0);
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1120px) {
     .nav-links {
         display: none;
     }

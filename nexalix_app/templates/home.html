@@ -136,10 +136,9 @@
                         src="{{ project.image.url }}"
                         alt="{{ project.title }}"
                         loading="lazy"
-                        onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
                     >
                     {% else %}
-                    <img src="{% static 'images/logo1.png' %}" alt="{{ project.title }}" loading="lazy">
+                    <div class="project-completed-placeholder">No image uploaded</div>
                     {% endif %}
                 </div>
                 <div class="project-completed-content">
@@ -189,10 +188,9 @@
                             alt="{{ partner.name }} logo"
                             class="partner-home-logo"
                             loading="lazy"
-                            onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
                         >
                         {% else %}
-                        <img src="{% static 'images/logo1.png' %}" alt="{{ partner.name }} logo" class="partner-home-logo" loading="lazy">
+                        <div class="partner-home-logo-placeholder">{{ partner.name|slice:":1"|upper }}</div>
                         {% endif %}
                     </div>
                     <div class="partner-home-content">
@@ -216,10 +214,9 @@
                             alt="{{ partner.name }} logo"
                             class="partner-home-logo"
                             loading="lazy"
-                            onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
                         >
                         {% else %}
-                        <img src="{% static 'images/logo1.png' %}" alt="{{ partner.name }} logo" class="partner-home-logo" loading="lazy">
+                        <div class="partner-home-logo-placeholder">{{ partner.name|slice:":1"|upper }}</div>
                         {% endif %}
                     </div>
                     <div class="partner-home-content">
@@ -315,10 +312,9 @@
                         alt="{{ case.title }}"
                         class="portfolio-image"
                         loading="lazy"
-                        onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
                     >
                     {% else %}
-                    <img src="{% static 'images/logo1.png' %}" alt="{{ case.title }}" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-image-placeholder">No image uploaded</div>
                     {% endif %}
                 </div>
                 <div class="portfolio-content">

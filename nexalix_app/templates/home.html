@@ -132,9 +132,14 @@
             <article class="project-completed-card">
                 <div class="project-completed-media">
                     {% if project.image %}
-                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    <img
+                        src="{{ project.image.url }}"
+                        alt="{{ project.title }}"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
+                    >
                     {% else %}
-                    <img src="{% static 'images/logo1.png' %}" alt="{{ project.title }}">
+                    <img src="{% static 'images/logo1.png' %}" alt="{{ project.title }}" loading="lazy">
                     {% endif %}
                 </div>
                 <div class="project-completed-content">
@@ -179,9 +184,15 @@
                 <a href="{{ partner.website }}" class="partner-home-card" target="_blank" rel="noopener">
                     <div class="partner-home-logo-wrap">
                         {% if partner.logo %}
-                        <img src="{{ partner.logo.url }}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        <img
+                            src="{{ partner.logo.url }}"
+                            alt="{{ partner.name }} logo"
+                            class="partner-home-logo"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
+                        >
                         {% else %}
-                        <img src="{% static 'images/logo1.png' %}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        <img src="{% static 'images/logo1.png' %}" alt="{{ partner.name }} logo" class="partner-home-logo" loading="lazy">
                         {% endif %}
                     </div>
                     <div class="partner-home-content">
@@ -200,9 +211,15 @@
                 <article class="partner-home-card partner-home-card-static">
                     <div class="partner-home-logo-wrap">
                         {% if partner.logo %}
-                        <img src="{{ partner.logo.url }}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        <img
+                            src="{{ partner.logo.url }}"
+                            alt="{{ partner.name }} logo"
+                            class="partner-home-logo"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
+                        >
                         {% else %}
-                        <img src="{% static 'images/logo1.png' %}" alt="{{ partner.name }} logo" class="partner-home-logo">
+                        <img src="{% static 'images/logo1.png' %}" alt="{{ partner.name }} logo" class="partner-home-logo" loading="lazy">
                         {% endif %}
                     </div>
                     <div class="partner-home-content">
@@ -293,9 +310,15 @@
             <article class="portfolio-card">
                 <div class="portfolio-image-wrap">
                     {% if case.image %}
-                    <img src="{{ case.image.url }}" alt="{{ case.title }}" class="portfolio-image">
+                    <img
+                        src="{{ case.image.url }}"
+                        alt="{{ case.title }}"
+                        class="portfolio-image"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
+                    >
                     {% else %}
-                    <img src="{% static 'images/logo1.png' %}" alt="{{ case.title }}" class="portfolio-image">
+                    <img src="{% static 'images/logo1.png' %}" alt="{{ case.title }}" class="portfolio-image" loading="lazy">
                     {% endif %}
                 </div>
                 <div class="portfolio-content">

@@ -41,6 +41,11 @@ If you use contact email notifications:
 - `CONTACT_NOTIFICATION_EMAIL` (set this to `dachiek4@gmail.com`)
 - `CONTACT_EMAIL`
 
+For persistent media uploads (partner logos, project images, etc.), enable Cloudinary:
+
+- `USE_CLOUDINARY_MEDIA=True`
+- `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>`
+
 Use `.env.example` as reference.
 
 ## 3. Database

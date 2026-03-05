@@ -35,6 +35,8 @@ DEFAULT_FROM_EMAIL=Nexalix Technologies <you@example.com>
 ADMIN_EMAILS=you@example.com
 CONTACT_NOTIFICATION_EMAIL=dachiek4@gmail.com
 CONTACT_EMAIL=you@example.com
+USE_CLOUDINARY_MEDIA=True
+CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>
 ```
 
 Load env vars in Bash session before migrations:

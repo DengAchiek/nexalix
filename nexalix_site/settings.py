@@ -113,6 +113,26 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+USE_CLOUDINARY_MEDIA = os.getenv("USE_CLOUDINARY_MEDIA", "False").lower() in {"1", "true", "yes", "on"}
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL", "").strip()
+
+# Django 5+/6 storage settings.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+if USE_CLOUDINARY_MEDIA and CLOUDINARY_URL:
+    # Use Cloudinary for uploaded media files in production.
+    INSTALLED_APPS += ["cloudinary_storage", "cloudinary"]
+    STORAGES["default"] = {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    }
+
 # --------------------
 # EMAIL (REAL TIME SMTP)
 # --------------------
@@ -153,4 +173,6 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+    STORAGES["staticfiles"] = {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    }

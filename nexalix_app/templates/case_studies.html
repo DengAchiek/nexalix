@@ -14,9 +14,15 @@
             <article class="case-card">
                 <div class="case-image-wrapper">
                     {% if case.image %}
-                    <img src="{{ case.image.url }}" alt="{{ case.title }}" class="case-image">
+                    <img
+                        src="{{ case.image.url }}"
+                        alt="{{ case.title }}"
+                        class="case-image"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/logo1.png' %}';"
+                    >
                     {% else %}
-                    <img src="{% static 'images/logo1.png' %}" alt="{{ case.title }}" class="case-image">
+                    <img src="{% static 'images/logo1.png' %}" alt="{{ case.title }}" class="case-image" loading="lazy">
                     {% endif %}
                 </div>
                 <div class="case-content" style="padding: 14px 18px 18px;">

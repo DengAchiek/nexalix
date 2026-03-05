@@ -48,8 +48,8 @@ a {
 }
 
 .topbar {
-    background: linear-gradient(90deg, #0a306f, #156fbc);
-    color: #deeeff;
+    background: linear-gradient(90deg, #082a62, #0f5da2);
+    color: #e5f2ff;
     font-size: 0.9rem;
 }
 
@@ -78,14 +78,14 @@ a {
     top: 0;
     z-index: 1000;
     backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.86);
-    border-bottom: 1px solid rgba(209, 224, 238, 0.9);
+    background: linear-gradient(180deg, rgba(229, 241, 255, 0.95), rgba(214, 231, 248, 0.95));
+    border-bottom: 1px solid rgba(176, 202, 229, 0.95);
     transition: box-shadow 0.25s ease, background 0.25s ease;
 }
 
 .site-header.scrolled {
-    box-shadow: 0 8px 20px rgba(17, 53, 97, 0.14);
-    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 8px 20px rgba(14, 52, 92, 0.18);
+    background: linear-gradient(180deg, rgba(220, 236, 252, 0.98), rgba(204, 225, 246, 0.98));
 }
 
 .header-row {

@@ -46,6 +46,10 @@ For persistent media uploads (partner logos, project images, etc.), enable Cloud
 - `USE_CLOUDINARY_MEDIA=True`
 - `CLOUDINARY_URL=cloudinary://<api_key>:<api_secret>@<cloud_name>`
 
+Important:
+- After enabling Cloudinary, re-upload images in Django admin for existing records.
+- Files uploaded previously to local `/media` are not persistent on Render and may show as broken.
+
 Use `.env.example` as reference.
 
 ## 3. Database

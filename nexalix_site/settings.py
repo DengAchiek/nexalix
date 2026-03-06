@@ -113,8 +113,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-USE_CLOUDINARY_MEDIA = os.getenv("USE_CLOUDINARY_MEDIA", "False").lower() in {"1", "true", "yes", "on"}
 CLOUDINARY_URL = os.getenv("CLOUDINARY_URL", "").strip()
+use_cloudinary_media_raw = os.getenv("USE_CLOUDINARY_MEDIA")
+if use_cloudinary_media_raw is None:
+    # Auto-enable Cloudinary when CLOUDINARY_URL is present.
+    USE_CLOUDINARY_MEDIA = bool(CLOUDINARY_URL)
+else:
+    USE_CLOUDINARY_MEDIA = use_cloudinary_media_raw.lower() in {"1", "true", "yes", "on"}
 
 # Django 5+/6 storage settings.
 STORAGES = {
@@ -131,6 +136,9 @@ if USE_CLOUDINARY_MEDIA and CLOUDINARY_URL:
     INSTALLED_APPS += ["cloudinary_storage", "cloudinary"]
     STORAGES["default"] = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    }
+    CLOUDINARY_STORAGE = {
+        "SECURE": True,
     }
 
 # --------------------

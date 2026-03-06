@@ -136,6 +136,7 @@
                         src="{{ project.image.url }}"
                         alt="{{ project.title }}"
                         loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
                     >
                     {% else %}
                     <div class="project-completed-placeholder">No image uploaded</div>
@@ -188,6 +189,7 @@
                             alt="{{ partner.name }} logo"
                             class="partner-home-logo"
                             loading="lazy"
+                            onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
                         >
                         {% else %}
                         <div class="partner-home-logo-placeholder">{{ partner.name|slice:":1"|upper }}</div>
@@ -214,6 +216,7 @@
                             alt="{{ partner.name }} logo"
                             class="partner-home-logo"
                             loading="lazy"
+                            onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
                         >
                         {% else %}
                         <div class="partner-home-logo-placeholder">{{ partner.name|slice:":1"|upper }}</div>
@@ -312,6 +315,7 @@
                         alt="{{ case.title }}"
                         class="portfolio-image"
                         loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
                     >
                     {% else %}
                     <div class="portfolio-image-placeholder">No image uploaded</div>

@@ -19,6 +19,7 @@
                         alt="{{ case.title }}"
                         class="case-image"
                         loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
                     >
                     {% else %}
                     <div class="case-image-placeholder">No image uploaded</div>

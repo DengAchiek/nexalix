@@ -1,0 +1,46 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+#header {
+    background: linear-gradient(120deg, #0d2f57, #0f5fae);
+}
+
+#branding #site-name a {
+    color: #fff;
+}
+
+#nav-global .nx-dashboard-link {
+    display: inline-block;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 999px;
+    color: #fff;
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+#nav-global .nx-dashboard-link:hover {
+    background: #fff;
+    color: #0f4f8d;
+}
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></div>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}
+{% if user.is_authenticated and user.is_staff %}
+<a class="nx-dashboard-link" href="{% url 'activity_dashboard' %}">Activity Dashboard</a>
+{% endif %}
+{% endblock %}

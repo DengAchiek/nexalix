@@ -1,29 +1,122 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
+{% block extrastyle %}
+{{ block.super }}
+<style>
+.nx-admin-hero {
+    background: linear-gradient(120deg, #0f3f73, #1269b7);
+    border-radius: 14px;
+    padding: 18px;
+    color: #f7fbff;
+    margin: 0 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nx-admin-hero h2 {
+    margin: 0 0 4px;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+.nx-admin-hero p {
+    margin: 0;
+    color: #d6e8fb;
+}
+
+.nx-admin-hero a {
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 700;
+    color: #0f4880;
+    background: #fff;
+    border: 1px solid #fff;
+}
+
+.nx-admin-hero a:hover {
+    background: #e8f3ff;
+}
+
+.nx-dashboard-module {
+    border: 1px solid #d9e5f1;
+    border-radius: 12px;
+    background: #fff;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.nx-dashboard-head {
+    padding: 12px 14px;
+    border-bottom: 1px solid #e5edf5;
+    background: #f7fbff;
+}
+
+.nx-dashboard-head h3 {
+    margin: 0;
+    color: #1c4a76;
+}
+
+.nx-dashboard-row {
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nx-dashboard-row p {
+    margin: 0;
+    color: #587796;
+}
+
+.nx-dashboard-row a {
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 8px 13px;
+    font-weight: 700;
+    border: 1px solid #cadced;
+    background: #fff;
+    color: #1f4f7c;
+}
+
+.nx-dashboard-row a:hover {
+    background: #0f5fb0;
+    color: #fff;
+    border-color: #0f5fb0;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div id="content-main">
+    <section class="nx-admin-hero">
+        <div>
+            <h2>Nexalix Operations Dashboard</h2>
+            <p>Track client interactions, quote pipeline, and admin activity in one place.</p>
+        </div>
+        <a href="{% url 'activity_dashboard' %}">Open Activity Dashboard</a>
+    </section>
+
+    <section class="nx-dashboard-module">
+        <div class="nx-dashboard-head">
+            <h3>Quick Dashboard Access</h3>
+        </div>
+        <div class="nx-dashboard-row">
+            <p>Use the custom dashboard for live trend monitoring and recent activity feed.</p>
+            <a href="{% url 'activity_dashboard' %}">Go to Dashboard</a>
+        </div>
+    </section>
+
     {% if app_list %}
         {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
     {% else %}
         <p>{% translate "You don’t have permission to view or edit anything." %}</p>
     {% endif %}
-
-    <div class="app-nexalix module">
-        <table>
-            <caption>
-                <span class="section" title="Dashboards">Dashboards</span>
-            </caption>
-            <tbody>
-                <tr class="model-dashboard">
-                    <th scope="row">
-                        <a href="{% url 'activity_dashboard' %}">Site Activity Dashboard</a>
-                    </th>
-                    <td>Custom analytics for contacts, quotes, and admin actions.</td>
-                    <td><a href="{% url 'activity_dashboard' %}" class="viewlink">Open</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
 {% endblock %}

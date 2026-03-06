@@ -6,341 +6,523 @@
 {{ block.super }}
 <style>
 :root {
-    --nx-bg: #f4f7fc;
-    --nx-surface: #ffffff;
-    --nx-border: #dce5f0;
-    --nx-title: #14395e;
-    --nx-text: #345572;
-    --nx-accent: #1368bf;
-    --nx-accent-soft: #edf5ff;
-    --nx-violet: #8c31c6;
-    --nx-success: #0c8f50;
+    --mk-bg: #f4f6fd;
+    --mk-surface: #ffffff;
+    --mk-line: #dde5f2;
+    --mk-text: #1d3960;
+    --mk-soft: #6f86a4;
+    --mk-blue: #3f63f3;
+    --mk-blue-dark: #2f4fdf;
+    --mk-yellow: #f8b742;
+    --mk-green: #33d6a5;
+    --mk-violet: #7d63f0;
+    --mk-pink: #ff5f90;
 }
 
 #content {
-    background: var(--nx-bg);
-    padding: 24px;
-}
-
-.nx-shell {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: 16px;
-}
-
-.nx-card {
-    background: var(--nx-surface);
-    border: 1px solid var(--nx-border);
-    border-radius: 14px;
-    box-shadow: 0 10px 24px rgba(13, 47, 87, 0.08);
-}
-
-.nx-side {
-    padding: 16px;
-    position: sticky;
-    top: 14px;
-    align-self: start;
-    display: grid;
-    gap: 14px;
-}
-
-.nx-side h2 {
     margin: 0;
-    color: var(--nx-title);
-    font-size: 1.2rem;
+    padding: 0;
+    background: var(--mk-bg);
 }
 
-.nx-side p {
-    margin: 4px 0 0;
-    color: #5b7591;
+#content-main {
+    padding: 0;
+}
+
+.mk-shell {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    min-height: calc(100vh - 92px);
+}
+
+.mk-sidebar {
+    background: #fff;
+    border-right: 1px solid var(--mk-line);
+    padding: 20px 14px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 18px;
+}
+
+.mk-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+}
+
+.mk-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #48beff, #7d63f0);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
     font-size: 0.9rem;
 }
 
-.nx-period {
+.mk-brand h2 {
+    margin: 0;
+    color: var(--mk-text);
+    font-size: 1.3rem;
+}
+
+.mk-period {
     display: grid;
     gap: 8px;
 }
 
-.nx-period a {
+.mk-period a {
     text-decoration: none;
-    border: 1px solid var(--nx-border);
-    background: #fff;
-    color: #26496a;
+    border: 1px solid var(--mk-line);
     border-radius: 10px;
     padding: 8px 10px;
+    font-size: 0.84rem;
     font-weight: 700;
-    font-size: 0.86rem;
+    color: #35557b;
+    background: #f8fbff;
 }
 
-.nx-period a.active,
-.nx-period a:hover {
-    background: linear-gradient(135deg, var(--nx-accent), #1e90e8);
+.mk-period a.active,
+.mk-period a:hover {
+    background: linear-gradient(135deg, var(--mk-blue), var(--mk-blue-dark));
     border-color: transparent;
     color: #fff;
 }
 
-.nx-links {
+.mk-nav {
     display: grid;
     gap: 8px;
+    align-content: start;
 }
 
-.nx-links a {
+.mk-nav a {
     text-decoration: none;
-    border: 1px solid #d4e2ef;
     border-radius: 10px;
-    padding: 8px 10px;
-    color: #285176;
+    border: 1px solid var(--mk-line);
+    padding: 9px 10px;
     font-weight: 600;
-    font-size: 0.85rem;
-    background: #f9fbfe;
+    color: #3a5a7f;
+    background: #fff;
+    font-size: 0.84rem;
 }
 
-.nx-links a:hover {
-    border-color: #b9d4ee;
-    color: #0f5da8;
+.mk-nav a:hover {
+    border-color: #c4d8f4;
+    color: #125ea8;
+    background: #f5faff;
 }
 
-.nx-main {
+.mk-nav a.current {
+    border-color: #c9dbf4;
+    background: #eef5ff;
+    color: #165fa7;
+}
+
+.mk-sidebar-foot {
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8fbff;
+}
+
+.mk-sidebar-foot p {
+    margin: 0;
+    color: #5c7696;
+    font-size: 0.82rem;
+}
+
+.mk-main {
     display: grid;
-    gap: 14px;
+    grid-template-rows: auto 1fr;
 }
 
-.nx-top {
+.mk-top {
+    background: linear-gradient(120deg, var(--mk-blue), #4f73ff);
+    padding: 18px 22px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.nx-top h1 {
-    margin: 0;
-    color: var(--nx-title);
-    font-size: 1.45rem;
-}
-
-.nx-top p {
-    margin: 4px 0 0;
-    color: #597491;
-}
-
-.nx-top a {
-    text-decoration: none;
-    border-radius: 999px;
-    padding: 9px 14px;
-    border: 1px solid #c5d9ed;
-    color: #1f4d77;
-    font-weight: 700;
-    background: #fff;
-}
-
-.nx-top a:hover {
-    color: #fff;
-    background: linear-gradient(135deg, #0f67bd, #1b88db);
-    border-color: transparent;
-}
-
-.nx-kpis {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.nx-kpi {
-    padding: 14px;
-}
-
-.nx-kpi h3 {
-    margin: 0 0 4px;
-    font-size: 1.8rem;
-    color: #0f4f91;
-}
-
-.nx-kpi p {
-    margin: 0;
-    color: #2a4e70;
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-.nx-kpi small {
-    color: #607b97;
-}
-
-.nx-grid {
-    display: grid;
+    align-items: center;
     gap: 12px;
 }
 
-.nx-panel {
+.mk-search {
+    position: relative;
+    width: min(430px, 100%);
+}
+
+.mk-search input {
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    height: 42px;
+    padding: 0 14px 0 42px;
+    color: #ebf1ff;
+    background: rgba(255, 255, 255, 0.17);
+}
+
+.mk-search input::placeholder {
+    color: #d2dfff;
+}
+
+.mk-search input:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.mk-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e2ecff;
+    font-style: normal;
+}
+
+.mk-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+}
+
+.mk-pill {
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.45);
+    padding: 7px 11px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #fff;
+}
+
+.mk-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.25);
+    font-weight: 800;
+}
+
+.mk-content {
+    padding: 18px 20px;
+    display: grid;
+    gap: 14px;
+}
+
+.mk-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.mk-kpi {
+    background: #fff;
+    border: 1px solid var(--mk-line);
+    border-radius: 12px;
     padding: 14px;
+    box-shadow: 0 8px 18px rgba(16, 44, 86, 0.07);
 }
 
-.nx-panel h2 {
+.mk-kpi-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+}
+
+.mk-kpi h3 {
     margin: 0;
-    font-size: 1.1rem;
-    color: #1a4369;
+    color: var(--mk-soft);
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
-.nx-panel .sub {
-    margin: 4px 0 12px;
-    color: #607e9a;
-    font-size: 0.88rem;
+.mk-tag {
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    color: #fff;
 }
 
-.nx-trend {
+.mk-tag.blue { background: var(--mk-blue); }
+.mk-tag.yellow { background: var(--mk-yellow); color: #593d00; }
+.mk-tag.green { background: var(--mk-green); color: #0f553f; }
+.mk-tag.violet { background: var(--mk-violet); }
+
+.mk-kpi strong {
+    display: block;
+    color: #1b3b63;
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.mk-kpi small {
+    color: #6d85a3;
+}
+
+.mk-progress {
+    margin-top: 10px;
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: #eaf0f8;
+    overflow: hidden;
+}
+
+.mk-progress span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+}
+
+.mk-progress .blue { background: linear-gradient(90deg, #56abff, #3479de); }
+.mk-progress .yellow { background: linear-gradient(90deg, #ffd37b, #f0af2f); }
+.mk-progress .green { background: linear-gradient(90deg, #7cefd0, #2fcf9f); }
+.mk-progress .violet { background: linear-gradient(90deg, #b7a7ff, #7b61f0); }
+
+.mk-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+    gap: 12px;
+}
+
+.mk-panel {
+    background: #fff;
+    border: 1px solid var(--mk-line);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 18px rgba(16, 44, 86, 0.07);
+}
+
+.mk-panel h2 {
+    margin: 0;
+    color: #224768;
+    font-size: 1.08rem;
+}
+
+.mk-sub {
+    margin: 4px 0 10px;
+    color: #7289a7;
+    font-size: 0.85rem;
+}
+
+.mk-chart {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
-    gap: 4px;
-    min-height: 154px;
     align-items: end;
+    gap: 6px;
+    min-height: 190px;
+    padding-top: 8px;
 }
 
-.nx-col {
+.mk-col {
     display: grid;
     justify-items: center;
     gap: 6px;
 }
 
-.nx-bars {
+.mk-bars {
     display: flex;
     align-items: end;
-    gap: 3px;
-    height: 116px;
+    gap: 4px;
+    height: 140px;
 }
 
-.nx-bar {
-    width: 8px;
+.mk-bar {
+    width: 10px;
     border-radius: 8px 8px 2px 2px;
 }
 
-.nx-bar.c { background: linear-gradient(180deg, #4ea6ff, #0d6ac6); }
-.nx-bar.q { background: linear-gradient(180deg, #d776fb, #8b31c6); }
+.mk-bar.contacts { background: linear-gradient(180deg, #4daaff, #2f6de2); }
+.mk-bar.quotes { background: linear-gradient(180deg, #ff88ae, #7e65ec); }
 
-.nx-col small {
-    color: #63809b;
-    font-size: 11px;
+.mk-col small {
+    color: #7089a8;
+    font-size: 0.7rem;
 }
 
-.nx-activity {
+.mk-stat-box {
     display: grid;
+    gap: 10px;
+}
+
+.mk-mini {
+    border: 1px solid #e2eaf4;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fafcff;
+}
+
+.mk-mini strong {
+    display: block;
+    color: #1d3f67;
+    font-size: 1.45rem;
+    line-height: 1.1;
+}
+
+.mk-mini span {
+    color: #6f87a5;
+    font-size: 0.82rem;
+}
+
+.mk-bottom {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.mk-activity-list {
+    display: grid;
+    gap: 8px;
+    max-height: 360px;
+    overflow: auto;
+    padding-right: 2px;
+}
+
+.mk-activity {
+    border: 1px solid #e0e9f4;
+    border-left: 4px solid #3475dc;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fbfdff;
+    display: flex;
+    justify-content: space-between;
     gap: 8px;
 }
 
-.nx-item {
-    border: 1px solid #dfe8f2;
-    border-left: 4px solid var(--nx-accent);
-    border-radius: 11px;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    background: #fbfdff;
+.mk-activity.quote {
+    border-left-color: #8c5bf1;
 }
 
-.nx-item.quote {
-    border-left-color: var(--nx-violet);
+.mk-activity strong {
+    color: #1d4267;
 }
 
-.nx-item strong {
-    color: #1c4468;
-}
-
-.nx-item p {
+.mk-activity p {
     margin: 4px 0 0;
-    color: #5f7a96;
-    font-size: 0.88rem;
+    color: #6a82a2;
+    font-size: 0.82rem;
 }
 
-.nx-meta {
+.mk-meta {
     text-align: right;
     display: grid;
     gap: 2px;
 }
 
-.nx-meta time {
-    font-size: 12px;
-    color: #66829d;
+.mk-meta time {
+    color: #738ba8;
+    font-size: 0.74rem;
 }
 
-.nx-meta a {
-    font-size: 12px;
-}
-
-.nx-chip {
-    font-size: 11px;
+.mk-meta a {
+    font-size: 0.74rem;
     font-weight: 700;
-    border: 1px solid #cfe0f2;
+}
+
+.mk-chip {
+    display: inline-block;
     border-radius: 999px;
+    border: 1px solid #d4e3f3;
     padding: 2px 7px;
-    background: var(--nx-accent-soft);
-    color: #1a5385;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #235986;
+    background: #edf5ff;
 }
 
-.nx-table-wrap {
-    overflow-x: auto;
+.mk-table-wrap {
+    overflow: auto;
+    max-height: 360px;
 }
 
-.nx-table {
+.mk-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 680px;
+    min-width: 540px;
 }
 
-.nx-table th,
-.nx-table td {
+.mk-table th,
+.mk-table td {
+    padding: 8px;
     border-bottom: 1px solid #e5edf6;
-    padding: 9px;
     text-align: left;
-    color: #315372;
-    font-size: 0.86rem;
+    color: #335575;
+    font-size: 0.8rem;
 }
 
-.nx-table th {
+.mk-table th {
     background: #f7fbff;
-    color: #1d4569;
+    color: #21486d;
 }
 
-.nx-badge {
-    display: inline-block;
-    padding: 2px 7px;
+.mk-badge {
     border-radius: 999px;
-    font-size: 11px;
+    font-size: 0.67rem;
     font-weight: 700;
+    padding: 2px 7px;
+    display: inline-block;
 }
 
-.nx-badge.added { background: #e5f9ed; color: var(--nx-success); }
-.nx-badge.updated { background: #e8f3ff; color: #1a609f; }
-.nx-badge.deleted { background: #ffe9e8; color: #b22f2f; }
+.mk-badge.added { background: #e6f8ef; color: #0a7b47; }
+.mk-badge.updated { background: #ebf3ff; color: #1e65aa; }
+.mk-badge.deleted { background: #ffeceb; color: #b63232; }
 
-@media (max-width: 1180px) {
-    .nx-shell {
+@media (max-width: 1220px) {
+    .mk-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-grid,
+    .mk-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 980px) {
+    .mk-shell {
         grid-template-columns: 1fr;
     }
 
-    .nx-side {
-        position: static;
-    }
-
-    .nx-kpis {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .mk-sidebar {
+        grid-template-rows: auto auto auto auto;
     }
 }
 
 @media (max-width: 760px) {
-    #content {
+    .mk-top {
         padding: 14px;
     }
 
-    .nx-kpis {
+    .mk-content {
+        padding: 12px;
+    }
+
+    .mk-kpis {
         grid-template-columns: 1fr;
     }
 
-    .nx-item {
+    .mk-search {
+        width: 100%;
+    }
+
+    .mk-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .mk-activity {
         flex-direction: column;
     }
 
-    .nx-meta {
+    .mk-meta {
         text-align: left;
     }
 }
@@ -355,143 +537,198 @@
 {% endblock %}
 
 {% block content %}
-<div class="nx-shell">
-    <aside class="nx-side nx-card">
-        <div>
-            <h2>Site Activity</h2>
-            <p>Unified monitoring for contacts, quotes, and content changes.</p>
+{% widthratio kpis.contacts_window kpis.contacts_total 100 as contacts_pct %}
+{% widthratio kpis.quotes_window kpis.quotes_total 100 as quotes_pct %}
+{% widthratio kpis.contacts_unread kpis.contacts_total 100 as unread_pct %}
+{% widthratio kpis.quotes_new kpis.quotes_total 100 as new_quotes_pct %}
+{% firstof request.user.first_name request.user.username as dashboard_user_name %}
+
+<div class="mk-shell">
+    <aside class="mk-sidebar">
+        <div class="mk-brand">
+            <div class="mk-logo">NX</div>
+            <h2>Nexalix</h2>
         </div>
 
-        <div>
-            <h3>Time Window</h3>
-            <div class="nx-period">
-                <a href="{% url 'activity_dashboard' %}?period=7" class="{% if period_days == 7 %}active{% endif %}">Last 7 days</a>
-                <a href="{% url 'activity_dashboard' %}?period=30" class="{% if period_days == 30 %}active{% endif %}">Last 30 days</a>
-                <a href="{% url 'activity_dashboard' %}?period=90" class="{% if period_days == 90 %}active{% endif %}">Last 90 days</a>
-            </div>
+        <div class="mk-period">
+            <a class="{% if period_days == 7 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=7">Last 7 days</a>
+            <a class="{% if period_days == 30 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=30">Last 30 days</a>
+            <a class="{% if period_days == 90 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=90">Last 90 days</a>
         </div>
 
-        <div>
-            <h3>Quick Access</h3>
-            <div class="nx-links">
-                <a href="{% url 'admin:nexalix_app_contactmessage_changelist' %}">Contact Messages</a>
-                <a href="{% url 'admin:nexalix_app_quoterequest_changelist' %}">Quote Requests</a>
-                <a href="{% url 'admin:nexalix_app_partner_changelist' %}">Partners</a>
-                <a href="{% url 'admin:nexalix_app_casestudy_changelist' %}">Case Studies</a>
-                <a href="{% url 'admin:index' %}">Back to Admin Home</a>
-            </div>
+        <nav class="mk-nav">
+            <a class="current" href="{% url 'activity_dashboard' %}">Dashboard Overview</a>
+            <a href="{% url 'admin:nexalix_app_contactmessage_changelist' %}">Contact Messages</a>
+            <a href="{% url 'admin:nexalix_app_quoterequest_changelist' %}">Quote Requests</a>
+            <a href="{% url 'admin:nexalix_app_partner_changelist' %}">Partners</a>
+            <a href="{% url 'admin:nexalix_app_casestudy_changelist' %}">Case Studies</a>
+            <a href="{% url 'admin:index' %}">Django Admin Home</a>
+        </nav>
+
+        <div class="mk-sidebar-foot">
+            <p>Live monitoring for leads, quote activity, and admin operations.</p>
         </div>
     </aside>
 
-    <section class="nx-main">
-        <div class="nx-top nx-card" style="padding:14px;">
-            <div>
-                <h1>Site Activity Dashboard</h1>
-                <p>Live operational visibility for Nexalix website interactions.</p>
+    <section class="mk-main">
+        <header class="mk-top">
+            <div class="mk-search">
+                <i>Q</i>
+                <input type="search" placeholder="Search records, contacts, quotes..." readonly>
             </div>
-            <a href="{% url 'activity_dashboard' %}?period={{ period_days }}">Refresh Data</a>
-        </div>
+            <div class="mk-actions">
+                <a class="mk-pill" href="{% url 'activity_dashboard' %}?period={{ period_days }}">Refresh</a>
+                <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
+                <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
+            </div>
+        </header>
 
-        <div class="nx-kpis">
-            <article class="nx-kpi nx-card">
-                <h3>{{ kpis.contacts_window }}</h3>
-                <p>Contacts ({{ period_days }}d)</p>
-                <small>{{ kpis.contacts_unread }} unread overall</small>
-            </article>
-            <article class="nx-kpi nx-card">
-                <h3>{{ kpis.quotes_window }}</h3>
-                <p>Quotes ({{ period_days }}d)</p>
-                <small>{{ kpis.quotes_new }} new in pipeline</small>
-            </article>
-            <article class="nx-kpi nx-card">
-                <h3>{{ kpis.contacts_total }}</h3>
-                <p>Total Contact Messages</p>
-                <small>All records</small>
-            </article>
-            <article class="nx-kpi nx-card">
-                <h3>{{ kpis.quotes_total }}</h3>
-                <p>Total Quote Requests</p>
-                <small>All records</small>
-            </article>
-        </div>
-
-        <div class="nx-grid">
-            <article class="nx-panel nx-card">
-                <h2>Activity Trend</h2>
-                <p class="sub">Daily contact vs quote activity across the selected time window.</p>
-                <div class="nx-trend">
-                    {% for point in trend_data %}
-                    <div class="nx-col">
-                        <div class="nx-bars">
-                            <span class="nx-bar c" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }}"></span>
-                            <span class="nx-bar q" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }}"></span>
-                        </div>
-                        <small>{{ point.label }}</small>
+        <div class="mk-content">
+            <div class="mk-kpis">
+                <article class="mk-kpi">
+                    <div class="mk-kpi-head">
+                        <h3>Contact Messages</h3>
+                        <span class="mk-tag blue">This Period</span>
                     </div>
-                    {% endfor %}
-                </div>
-            </article>
+                    <strong>{{ kpis.contacts_window }}</strong>
+                    <small>{{ kpis.contacts_total }} total records</small>
+                    <div class="mk-progress"><span class="blue" style="width: {% if contacts_pct > 100 %}100{% else %}{{ contacts_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
 
-            <article class="nx-panel nx-card">
-                <h2>Recent Client Activity</h2>
-                <p class="sub">Latest contact and quote submissions.</p>
-                <div class="nx-activity">
-                    {% for item in client_activities %}
-                    <div class="nx-item {% if item.type == 'quote' %}quote{% endif %}">
-                        <div>
-                            <strong>{{ item.title }}</strong>
-                            <p>{{ item.subtitle }} · {{ item.detail }}</p>
+                <article class="mk-kpi">
+                    <div class="mk-kpi-head">
+                        <h3>Quote Requests</h3>
+                        <span class="mk-tag yellow">This Period</span>
+                    </div>
+                    <strong>{{ kpis.quotes_window }}</strong>
+                    <small>{{ kpis.quotes_total }} total records</small>
+                    <div class="mk-progress"><span class="yellow" style="width: {% if quotes_pct > 100 %}100{% else %}{{ quotes_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+
+                <article class="mk-kpi">
+                    <div class="mk-kpi-head">
+                        <h3>Unread Contacts</h3>
+                        <span class="mk-tag green">Queue</span>
+                    </div>
+                    <strong>{{ kpis.contacts_unread }}</strong>
+                    <small>Pending review</small>
+                    <div class="mk-progress"><span class="green" style="width: {% if unread_pct > 100 %}100{% else %}{{ unread_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+
+                <article class="mk-kpi">
+                    <div class="mk-kpi-head">
+                        <h3>New Quotes</h3>
+                        <span class="mk-tag violet">Pipeline</span>
+                    </div>
+                    <strong>{{ kpis.quotes_new }}</strong>
+                    <small>Need follow-up</small>
+                    <div class="mk-progress"><span class="violet" style="width: {% if new_quotes_pct > 100 %}100{% else %}{{ new_quotes_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+            </div>
+
+            <div class="mk-grid">
+                <article class="mk-panel">
+                    <h2>Payment History Style Trend</h2>
+                    <p class="mk-sub">Contacts and quotes visualized in dashboard-style grouped bars.</p>
+                    <div class="mk-chart">
+                        {% for point in trend_data %}
+                        <div class="mk-col">
+                            <div class="mk-bars">
+                                <span class="mk-bar contacts" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }}"></span>
+                                <span class="mk-bar quotes" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }}"></span>
+                            </div>
+                            <small>{{ point.label }}</small>
                         </div>
-                        <div class="nx-meta">
-                            <span class="nx-chip">{{ item.status }}</span>
-                            <time>{{ item.timestamp|date:"M d, Y H:i" }}</time>
-                            <a href="{{ item.admin_url }}">Open</a>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel">
+                    <h2>Quick Snapshot</h2>
+                    <p class="mk-sub">Key operational indicators</p>
+                    <div class="mk-stat-box">
+                        <div class="mk-mini">
+                            <strong>{{ kpis.contacts_total }}</strong>
+                            <span>All contact messages</span>
+                        </div>
+                        <div class="mk-mini">
+                            <strong>{{ kpis.quotes_total }}</strong>
+                            <span>All quote requests</span>
+                        </div>
+                        <div class="mk-mini">
+                            <strong>{{ kpis.contacts_unread }}</strong>
+                            <span>Unread contacts</span>
+                        </div>
+                        <div class="mk-mini">
+                            <strong>{{ kpis.quotes_new }}</strong>
+                            <span>New quote opportunities</span>
                         </div>
                     </div>
-                    {% empty %}
-                    <p>No client activity recorded yet.</p>
-                    {% endfor %}
-                </div>
-            </article>
+                </article>
+            </div>
 
-            <article class="nx-panel nx-card">
-                <h2>Admin Change Log</h2>
-                <p class="sub">Recent model actions from Django admin.</p>
-                <div class="nx-table-wrap">
-                    <table class="nx-table">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Model</th>
-                                <th>Object</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for log in admin_logs %}
-                            <tr>
-                                <td>{{ log.time|date:"M d, H:i" }}</td>
-                                <td>{{ log.user }}</td>
-                                <td><span class="nx-badge {{ log.style }}">{{ log.action }}</span></td>
-                                <td>{{ log.model }}</td>
-                                <td>
-                                    {% if log.link %}
-                                    <a href="{{ log.link }}">{{ log.object_label }}</a>
-                                    {% else %}
-                                    {{ log.object_label }}
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5">No admin actions found.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </article>
+            <div class="mk-bottom">
+                <article class="mk-panel">
+                    <h2>Recent Client Activity</h2>
+                    <p class="mk-sub">Latest quote and contact submissions.</p>
+                    <div class="mk-activity-list">
+                        {% for item in client_activities %}
+                        <div class="mk-activity {% if item.type == 'quote' %}quote{% endif %}">
+                            <div>
+                                <strong>{{ item.title }}</strong>
+                                <p>{{ item.subtitle }} · {{ item.detail }}</p>
+                            </div>
+                            <div class="mk-meta">
+                                <span class="mk-chip">{{ item.status }}</span>
+                                <time>{{ item.timestamp|date:"M d, Y H:i" }}</time>
+                                <a href="{{ item.admin_url }}">Open</a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>No client activity yet.</p>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel">
+                    <h2>Admin Change Log</h2>
+                    <p class="mk-sub">Recent model actions in Django admin.</p>
+                    <div class="mk-table-wrap">
+                        <table class="mk-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Model</th>
+                                    <th>Object</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in admin_logs %}
+                                <tr>
+                                    <td>{{ log.time|date:"M d, H:i" }}</td>
+                                    <td>{{ log.user }}</td>
+                                    <td><span class="mk-badge {{ log.style }}">{{ log.action }}</span></td>
+                                    <td>{{ log.model }}</td>
+                                    <td>
+                                        {% if log.link %}
+                                        <a href="{{ log.link }}">{{ log.object_label }}</a>
+                                        {% else %}
+                                        {{ log.object_label }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5">No admin actions found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
         </div>
     </section>
 </div>

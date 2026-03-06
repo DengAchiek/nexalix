@@ -1,0 +1,167 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Site Activity Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+.dashboard-toolbar { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+.period-links { display:flex; gap:8px; flex-wrap:wrap; }
+.period-links a { padding:6px 10px; border:1px solid #ccd6e2; border-radius:999px; text-decoration:none; color:#1f4a73; font-weight:600; }
+.period-links a.active, .period-links a:hover { background:#0b5cab; color:#fff; border-color:#0b5cab; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:16px; }
+.kpi-card { border:1px solid #dde6f0; border-radius:10px; background:#fff; padding:14px; }
+.kpi-card h3 { margin:0 0 4px; font-size:28px; color:#0b4c8a; }
+.kpi-card p { margin:0; font-weight:600; color:#2e4763; }
+.kpi-card small { color:#677d94; }
+.dashboard-grid { display:grid; gap:14px; }
+.panel { border:1px solid #dde6f0; border-radius:10px; background:#fff; padding:14px; }
+.panel h2 { margin:0 0 4px; font-size:20px; }
+.panel p { margin:0 0 12px; color:#637a92; }
+.trend-chart { display:grid; grid-template-columns:repeat(auto-fit,minmax(32px,1fr)); gap:4px; align-items:end; min-height:150px; }
+.trend-col { display:grid; justify-items:center; gap:6px; }
+.trend-bars { height:120px; display:flex; align-items:end; gap:3px; }
+.trend-bar { width:8px; border-radius:8px 8px 2px 2px; }
+.trend-bar.contacts { background:#1d7fd0; }
+.trend-bar.quotes { background:#8933be; }
+.trend-col small { font-size:11px; color:#6b8098; }
+.activity-list { display:grid; gap:8px; }
+.activity-item { border:1px solid #e3ebf3; border-radius:10px; padding:10px; display:flex; justify-content:space-between; gap:10px; }
+.activity-main strong { color:#1f456a; }
+.activity-main p { margin:4px 0 0; color:#607b96; }
+.activity-meta { text-align:right; display:grid; gap:2px; }
+.activity-meta time { font-size:12px; color:#627a93; }
+.activity-meta a { font-size:12px; }
+.status-chip { display:inline-block; font-size:11px; font-weight:700; padding:2px 7px; border-radius:999px; background:#edf5ff; color:#1f5589; border:1px solid #ceddf0; }
+.activity-table { width:100%; border-collapse:collapse; }
+.activity-table th,.activity-table td { border-bottom:1px solid #e6edf5; padding:9px; text-align:left; }
+.activity-table th { background:#f6f9fc; }
+.log-badge { font-size:11px; font-weight:700; border-radius:999px; padding:2px 7px; display:inline-block; }
+.log-badge.added { background:#e6f7eb; color:#0b6a36; }
+.log-badge.updated { background:#e8f2ff; color:#1d5f9e; }
+.log-badge.deleted { background:#ffe8e7; color:#a42a2a; }
+.back-link { text-decoration:none; font-weight:600; }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; Site Activity Dashboard
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="dashboard-toolbar">
+        <div class="period-links">
+            <a href="{% url 'activity_dashboard' %}?period=7" class="{% if period_days == 7 %}active{% endif %}">Last 7 days</a>
+            <a href="{% url 'activity_dashboard' %}?period=30" class="{% if period_days == 30 %}active{% endif %}">Last 30 days</a>
+            <a href="{% url 'activity_dashboard' %}?period=90" class="{% if period_days == 90 %}active{% endif %}">Last 90 days</a>
+        </div>
+        <a class="back-link" href="{% url 'admin:index' %}">&larr; Back to Django Admin</a>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <h3>{{ kpis.contacts_window }}</h3>
+            <p>Contact Messages ({{ period_days }}d)</p>
+            <small>{{ kpis.contacts_unread }} unread overall</small>
+        </div>
+        <div class="kpi-card">
+            <h3>{{ kpis.quotes_window }}</h3>
+            <p>Quote Requests ({{ period_days }}d)</p>
+            <small>{{ kpis.quotes_new }} new in pipeline</small>
+        </div>
+        <div class="kpi-card">
+            <h3>{{ kpis.contacts_total }}</h3>
+            <p>Total Contact Submissions</p>
+            <small>All time</small>
+        </div>
+        <div class="kpi-card">
+            <h3>{{ kpis.quotes_total }}</h3>
+            <p>Total Quote Requests</p>
+            <small>All time</small>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="panel">
+            <h2>Activity Trend</h2>
+            <p>Daily contacts and quote requests over the selected period.</p>
+            <div class="trend-chart">
+                {% for point in trend_data %}
+                <div class="trend-col">
+                    <div class="trend-bars">
+                        <span class="trend-bar contacts" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }}"></span>
+                        <span class="trend-bar quotes" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }}"></span>
+                    </div>
+                    <small>{{ point.label }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Recent Client Activity</h2>
+            <p>Latest contact and quote submissions.</p>
+            <div class="activity-list">
+                {% for item in client_activities %}
+                <div class="activity-item">
+                    <div class="activity-main">
+                        <strong>{{ item.title }}</strong>
+                        <p>{{ item.subtitle }} · {{ item.detail }}</p>
+                    </div>
+                    <div class="activity-meta">
+                        <span class="status-chip">{{ item.status }}</span>
+                        <time>{{ item.timestamp|date:"M d, Y H:i" }}</time>
+                        <a href="{{ item.admin_url }}">Open</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No client activity recorded yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Admin Change Log</h2>
+            <p>Recent updates performed in Django admin.</p>
+            <div style="overflow-x:auto;">
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Model</th>
+                            <th>Object</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in admin_logs %}
+                        <tr>
+                            <td>{{ log.time|date:"M d, H:i" }}</td>
+                            <td>{{ log.user }}</td>
+                            <td><span class="log-badge {{ log.style }}">{{ log.action }}</span></td>
+                            <td>{{ log.model }}</td>
+                            <td>
+                                {% if log.link %}
+                                <a href="{{ log.link }}">{{ log.object_label }}</a>
+                                {% else %}
+                                {{ log.object_label }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No admin actions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

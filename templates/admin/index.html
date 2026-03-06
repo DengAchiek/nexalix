@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="content-main">
+    {% if app_list %}
+        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    {% else %}
+        <p>{% translate "You don’t have permission to view or edit anything." %}</p>
+    {% endif %}
+
+    <div class="app-nexalix module">
+        <table>
+            <caption>
+                <span class="section" title="Dashboards">Dashboards</span>
+            </caption>
+            <tbody>
+                <tr class="model-dashboard">
+                    <th scope="row">
+                        <a href="{% url 'activity_dashboard' %}">Site Activity Dashboard</a>
+                    </th>
+                    <td>Custom analytics for contacts, quotes, and admin actions.</td>
+                    <td><a href="{% url 'activity_dashboard' %}" class="viewlink">Open</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

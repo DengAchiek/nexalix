@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { title: "About", description: "Vision, mission, and core values", url: "/about/", category: "Page" },
         { title: "Services", description: "Technology and consulting offerings", url: "/services/", category: "Page" },
         { title: "Auto Quote", description: "Generate a live project cost estimate", url: "/quote-generator/", category: "Page" },
-        { title: "Activity Dashboard", description: "Staff analytics and activity monitor", url: "/activity-dashboard/", category: "Admin" },
         { title: "Industries", description: "Sector-focused transformation work", url: "/industries/", category: "Page" },
         { title: "How We Work", description: "Delivery process and methodology", url: "/how_we_work/", category: "Page" },
         { title: "Why Choose Us", description: "Differentiators and value proposition", url: "/why_choose_us/", category: "Page" },
@@ -174,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ".about-section", ".value-card", ".work-step", ".advantage", ".industry-card",
             ".service-card", ".case-card", ".blog-card", ".stat-card", ".partner-card",
             ".award-card", ".pricing-plan-card", ".step-card", ".contact-form",
-            ".quote-form-card", ".quote-summary-card", ".dashboard-panel", ".kpi-card"
+            ".quote-form-card", ".quote-summary-card"
         ];
 
         const elements = document.querySelectorAll(selectors.join(","));

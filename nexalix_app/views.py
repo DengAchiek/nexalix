@@ -327,7 +327,7 @@ def activity_dashboard(request):
             "link": entry.get_admin_url(),
         })
 
-    return render(request, "activity_dashboard.html", {
+    return render(request, "admin/activity_dashboard.html", {
         "kpis": kpis,
         "period_days": period_days,
         "client_activities": client_activities,

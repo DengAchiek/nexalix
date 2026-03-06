@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
+from nexalix_app import views as app_views
 
 urlpatterns = [
     path(
@@ -54,6 +55,7 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
+    path("admin/activity-dashboard/", app_views.activity_dashboard, name="activity_dashboard"),
     path("admin/", admin.site.urls),
     path('', include('nexalix_app.urls')),
 ]

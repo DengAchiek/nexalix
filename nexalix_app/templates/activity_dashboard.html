@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Activity Dashboard - Nexalix Technologies{% endblock %}
+
+{% block content %}
+<section class="page-block activity-dashboard-page">
+    <div class="container">
+        <div class="section-heading dashboard-heading">
+            <p class="section-eyebrow">Staff Dashboard</p>
+            <h1>Site Activity Overview</h1>
+            <p class="subheading">Monitor client requests, quote pipeline, and recent admin changes from one dashboard.</p>
+        </div>
+
+        <div class="dashboard-toolbar">
+            <div class="period-tabs">
+                <a href="{% url 'activity_dashboard' %}?period=7" class="period-tab {% if period_days == 7 %}active{% endif %}">Last 7 days</a>
+                <a href="{% url 'activity_dashboard' %}?period=30" class="period-tab {% if period_days == 30 %}active{% endif %}">Last 30 days</a>
+                <a href="{% url 'activity_dashboard' %}?period=90" class="period-tab {% if period_days == 90 %}active{% endif %}">Last 90 days</a>
+            </div>
+            <div class="dashboard-toolbar-actions">
+                <a class="btn btn-outline-primary" href="{% url 'admin:index' %}">Open Django Admin</a>
+                <a class="btn btn-primary" href="{% url 'activity_dashboard' %}?period={{ period_days }}">Refresh</a>
+            </div>
+        </div>
+
+        <div class="dashboard-kpis">
+            <article class="kpi-card">
+                <h3>{{ kpis.contacts_window }}</h3>
+                <p>Contact Messages ({{ period_days }}d)</p>
+                <small>{{ kpis.contacts_unread }} unread overall</small>
+            </article>
+            <article class="kpi-card">
+                <h3>{{ kpis.quotes_window }}</h3>
+                <p>Quote Requests ({{ period_days }}d)</p>
+                <small>{{ kpis.quotes_new }} new in pipeline</small>
+            </article>
+            <article class="kpi-card">
+                <h3>{{ kpis.contacts_total }}</h3>
+                <p>Total Contact Submissions</p>
+                <small>From all time</small>
+            </article>
+            <article class="kpi-card">
+                <h3>{{ kpis.quotes_total }}</h3>
+                <p>Total Quote Requests</p>
+                <small>From all time</small>
+            </article>
+        </div>
+
+        <div class="dashboard-panels">
+            <article class="dashboard-panel trend-panel">
+                <div class="panel-head">
+                    <h2>Activity Trend</h2>
+                    <p>Client submissions over the selected period</p>
+                </div>
+                <div class="trend-legend">
+                    <span><i class="dot contacts"></i> Contacts</span>
+                    <span><i class="dot quotes"></i> Quotes</span>
+                </div>
+                <div class="trend-chart">
+                    {% for point in trend_data %}
+                    <div class="trend-column">
+                        <div class="bars">
+                            <span class="bar contacts" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }}"></span>
+                            <span class="bar quotes" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }}"></span>
+                        </div>
+                        <small>{{ point.label }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="dashboard-panel activity-panel">
+                <div class="panel-head">
+                    <h2>Recent Client Activity</h2>
+                    <p>Latest quote and contact submissions</p>
+                </div>
+
+                <div class="activity-list">
+                    {% for item in client_activities %}
+                    <div class="activity-item type-{{ item.type }}">
+                        <div class="activity-main">
+                            <strong>{{ item.title }}</strong>
+                            <p>{{ item.subtitle }}<span> · {{ item.detail }}</span></p>
+                        </div>
+                        <div class="activity-meta">
+                            <span class="status-chip">{{ item.status }}</span>
+                            <time>{{ item.timestamp|date:"M d, Y H:i" }}</time>
+                            <a href="{{ item.admin_url }}">Open</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="empty-state">No client activity recorded yet.</p>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="dashboard-panel logs-panel">
+                <div class="panel-head">
+                    <h2>Admin Change Log</h2>
+                    <p>Recent model updates from Django admin</p>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Model</th>
+                                <th>Object</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in admin_logs %}
+                            <tr>
+                                <td>{{ log.time|date:"M d, H:i" }}</td>
+                                <td>{{ log.user }}</td>
+                                <td><span class="log-badge {{ log.style }}">{{ log.action }}</span></td>
+                                <td>{{ log.model }}</td>
+                                <td>
+                                    {% if log.link %}
+                                    <a href="{{ log.link }}">{{ log.object_label }}</a>
+                                    {% else %}
+                                    {{ log.object_label }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="empty-row">No admin actions found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+{% endblock %}

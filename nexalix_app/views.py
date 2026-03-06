@@ -2,6 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.text import slugify
+from django.utils import timezone
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+from django.urls import reverse
+from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 import math
 from .models import (
@@ -49,6 +56,10 @@ SUPPORT_MULTIPLIERS = {
 
 def _money(value):
     return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def is_staff_user(user):
+    return user.is_authenticated and user.is_staff
 
 
 def calculate_quote_estimate(service, complexity, timeline, support_plan, addons):
@@ -213,6 +224,116 @@ def how_we_work(request):
 def why_choose_us(request):
     """Why Choose Us page view"""
     return render(request, 'why_choose_us.html')
+
+
+@user_passes_test(is_staff_user, login_url="/admin/login/")
+def activity_dashboard(request):
+    """Custom staff dashboard showing site activity."""
+    requested_period = request.GET.get("period", "7")
+    valid_periods = {"7": 7, "30": 30, "90": 90}
+    period_days = valid_periods.get(requested_period, 7)
+
+    now = timezone.now()
+    window_start = now - timedelta(days=period_days)
+
+    all_contacts = ContactMessage.objects.all()
+    all_quotes = QuoteRequest.objects.all()
+
+    recent_contacts = all_contacts.filter(submitted_at__gte=window_start)
+    recent_quotes = all_quotes.filter(created_at__gte=window_start)
+
+    kpis = {
+        "contacts_total": all_contacts.count(),
+        "contacts_unread": all_contacts.filter(is_read=False).count(),
+        "contacts_window": recent_contacts.count(),
+        "quotes_total": all_quotes.count(),
+        "quotes_new": all_quotes.filter(status="new").count(),
+        "quotes_window": recent_quotes.count(),
+    }
+
+    contacts_daily_raw = recent_contacts.annotate(day=TruncDate("submitted_at")).values("day").annotate(total=Count("id"))
+    quotes_daily_raw = recent_quotes.annotate(day=TruncDate("created_at")).values("day").annotate(total=Count("id"))
+    contacts_daily = {item["day"]: item["total"] for item in contacts_daily_raw}
+    quotes_daily = {item["day"]: item["total"] for item in quotes_daily_raw}
+
+    trend_days = [window_start.date() + timedelta(days=i) for i in range(period_days)]
+    max_count = max(
+        max(contacts_daily.values(), default=0),
+        max(quotes_daily.values(), default=0),
+        1,
+    )
+    trend_data = []
+    for day in trend_days:
+        contact_count = contacts_daily.get(day, 0)
+        quote_count = quotes_daily.get(day, 0)
+        trend_data.append({
+            "label": day.strftime("%b %d"),
+            "contacts": contact_count,
+            "quotes": quote_count,
+            "contacts_height": max(6, int((contact_count / max_count) * 120)) if contact_count else 4,
+            "quotes_height": max(6, int((quote_count / max_count) * 120)) if quote_count else 4,
+        })
+
+    client_activities = []
+    for message in all_contacts.order_by("-submitted_at")[:30]:
+        client_activities.append({
+            "type": "contact",
+            "title": f"Contact from {message.full_name}",
+            "subtitle": message.service or "General inquiry",
+            "detail": message.email,
+            "timestamp": message.submitted_at,
+            "status": "Unread" if not message.is_read else "Read",
+            "admin_url": reverse("admin:nexalix_app_contactmessage_change", args=[message.id]),
+        })
+
+    for quote in all_quotes.select_related("service").order_by("-created_at")[:30]:
+        client_activities.append({
+            "type": "quote",
+            "title": f"Quote request {quote.quote_reference}",
+            "subtitle": quote.service.title if quote.service else "Service not selected",
+            "detail": quote.email,
+            "timestamp": quote.created_at,
+            "status": quote.get_status_display(),
+            "admin_url": reverse("admin:nexalix_app_quoterequest_change", args=[quote.id]),
+        })
+
+    client_activities.sort(key=lambda item: item["timestamp"], reverse=True)
+    client_activities = client_activities[:35]
+
+    action_labels = {
+        ADDITION: "Added",
+        CHANGE: "Updated",
+        DELETION: "Deleted",
+    }
+    action_styles = {
+        ADDITION: "added",
+        CHANGE: "updated",
+        DELETION: "deleted",
+    }
+    admin_logs = []
+    for entry in LogEntry.objects.select_related("user", "content_type").order_by("-action_time")[:25]:
+        model_name = "Unknown"
+        if entry.content_type:
+            model_class = entry.content_type.model_class()
+            if model_class:
+                model_name = model_class._meta.verbose_name.title()
+        admin_logs.append({
+            "time": entry.action_time,
+            "user": entry.user.get_username(),
+            "action": action_labels.get(entry.action_flag, "Changed"),
+            "style": action_styles.get(entry.action_flag, "updated"),
+            "object_label": entry.object_repr,
+            "model": model_name,
+            "link": entry.get_admin_url(),
+        })
+
+    return render(request, "activity_dashboard.html", {
+        "kpis": kpis,
+        "period_days": period_days,
+        "client_activities": client_activities,
+        "admin_logs": admin_logs,
+        "trend_data": trend_data,
+    })
 
 
 def quote_generator(request):

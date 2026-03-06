@@ -45,6 +45,9 @@
                 <a href="{% url 'how_we_work' %}">How We Work</a>
                 <a href="{% url 'why_choose_us' %}">Why Us</a>
                 <a href="{% url 'contact' %}">Contact</a>
+                {% if request.user.is_authenticated and request.user.is_staff %}
+                <a href="{% url 'activity_dashboard' %}">Dashboard</a>
+                {% endif %}
             </nav>
 
             <div class="header-tools">
@@ -79,6 +82,9 @@
                 <a href="{% url 'how_we_work' %}"><i class="fas fa-list-check"></i> How We Work</a>
                 <a href="{% url 'why_choose_us' %}"><i class="fas fa-star"></i> Why Us</a>
                 <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a>
+                {% if request.user.is_authenticated and request.user.is_staff %}
+                <a href="{% url 'activity_dashboard' %}"><i class="fas fa-chart-line"></i> Dashboard</a>
+                {% endif %}
             </nav>
         </div>
     </header>

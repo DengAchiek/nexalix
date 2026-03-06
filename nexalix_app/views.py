@@ -4,10 +4,12 @@ from django.conf import settings
 from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db.models.functions import TruncDate
 from django.urls import reverse
+from urllib.parse import urlencode
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 import math
@@ -229,30 +231,73 @@ def why_choose_us(request):
 @user_passes_test(is_staff_user, login_url="/admin/login/")
 def activity_dashboard(request):
     """Custom staff dashboard showing site activity."""
-    requested_period = request.GET.get("period", "7")
+    requested_period = request.GET.get("period") or request.POST.get("period", "7")
     valid_periods = {"7": 7, "30": 30, "90": 90}
     period_days = valid_periods.get(requested_period, 7)
+    search_query = (request.GET.get("q") or request.POST.get("q") or "").strip()
+    activity_filter = (request.GET.get("activity") or request.POST.get("activity") or "all").strip().lower()
+    if activity_filter not in {"all", "contact", "quote"}:
+        activity_filter = "all"
+
+    if request.method == "POST" and request.POST.get("action") == "update_profile":
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        email = request.POST.get("email", "").strip()
+
+        if email and "@" not in email:
+            messages.error(request, "Please provide a valid email address.")
+        else:
+            request.user.first_name = first_name
+            request.user.last_name = last_name
+            request.user.email = email
+            request.user.save(update_fields=["first_name", "last_name", "email"])
+            messages.success(request, "Admin profile updated successfully.")
+
+        query_params = {"period": str(period_days)}
+        if search_query:
+            query_params["q"] = search_query
+        if activity_filter != "all":
+            query_params["activity"] = activity_filter
+        return redirect(f"{reverse('activity_dashboard')}?{urlencode(query_params)}")
 
     now = timezone.now()
     window_start = now - timedelta(days=period_days)
 
-    all_contacts = ContactMessage.objects.all()
-    all_quotes = QuoteRequest.objects.all()
+    contacts_queryset = ContactMessage.objects.all()
+    quotes_queryset = QuoteRequest.objects.select_related("service")
 
-    recent_contacts = all_contacts.filter(submitted_at__gte=window_start)
-    recent_quotes = all_quotes.filter(created_at__gte=window_start)
+    recent_contacts_all = contacts_queryset.filter(submitted_at__gte=window_start)
+    recent_quotes_all = quotes_queryset.filter(created_at__gte=window_start)
 
     kpis = {
-        "contacts_total": all_contacts.count(),
-        "contacts_unread": all_contacts.filter(is_read=False).count(),
-        "contacts_window": recent_contacts.count(),
-        "quotes_total": all_quotes.count(),
-        "quotes_new": all_quotes.filter(status="new").count(),
-        "quotes_window": recent_quotes.count(),
+        "contacts_total": contacts_queryset.count(),
+        "contacts_unread": contacts_queryset.filter(is_read=False).count(),
+        "contacts_window": recent_contacts_all.count(),
+        "quotes_total": quotes_queryset.count(),
+        "quotes_new": quotes_queryset.filter(status="new").count(),
+        "quotes_window": recent_quotes_all.count(),
     }
 
-    contacts_daily_raw = recent_contacts.annotate(day=TruncDate("submitted_at")).values("day").annotate(total=Count("id"))
-    quotes_daily_raw = recent_quotes.annotate(day=TruncDate("created_at")).values("day").annotate(total=Count("id"))
+    filtered_contacts = recent_contacts_all
+    filtered_quotes = recent_quotes_all
+    if search_query:
+        filtered_contacts = filtered_contacts.filter(
+            Q(full_name__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(service__icontains=search_query)
+            | Q(message__icontains=search_query)
+        )
+        filtered_quotes = filtered_quotes.filter(
+            Q(quote_reference__icontains=search_query)
+            | Q(full_name__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(company__icontains=search_query)
+            | Q(project_summary__icontains=search_query)
+            | Q(service__title__icontains=search_query)
+        )
+
+    contacts_daily_raw = filtered_contacts.annotate(day=TruncDate("submitted_at")).values("day").annotate(total=Count("id"))
+    quotes_daily_raw = filtered_quotes.annotate(day=TruncDate("created_at")).values("day").annotate(total=Count("id"))
     contacts_daily = {item["day"]: item["total"] for item in contacts_daily_raw}
     quotes_daily = {item["day"]: item["total"] for item in quotes_daily_raw}
 
@@ -275,7 +320,7 @@ def activity_dashboard(request):
         })
 
     client_activities = []
-    for message in all_contacts.order_by("-submitted_at")[:30]:
+    for message in filtered_contacts.order_by("-submitted_at")[:50]:
         client_activities.append({
             "type": "contact",
             "title": f"Contact from {message.full_name}",
@@ -284,9 +329,10 @@ def activity_dashboard(request):
             "timestamp": message.submitted_at,
             "status": "Unread" if not message.is_read else "Read",
             "admin_url": reverse("admin:nexalix_app_contactmessage_change", args=[message.id]),
+            "search_text": f"{message.full_name} {message.email} {message.service or ''} {message.message}".lower(),
         })
 
-    for quote in all_quotes.select_related("service").order_by("-created_at")[:30]:
+    for quote in filtered_quotes.order_by("-created_at")[:50]:
         client_activities.append({
             "type": "quote",
             "title": f"Quote request {quote.quote_reference}",
@@ -295,10 +341,13 @@ def activity_dashboard(request):
             "timestamp": quote.created_at,
             "status": quote.get_status_display(),
             "admin_url": reverse("admin:nexalix_app_quoterequest_change", args=[quote.id]),
+            "search_text": f"{quote.quote_reference} {quote.full_name} {quote.email} {quote.company or ''} {quote.project_summary}".lower(),
         })
 
     client_activities.sort(key=lambda item: item["timestamp"], reverse=True)
-    client_activities = client_activities[:35]
+    if activity_filter in {"contact", "quote"}:
+        client_activities = [item for item in client_activities if item["type"] == activity_filter]
+    client_activities = client_activities[:60]
 
     action_labels = {
         ADDITION: "Added",
@@ -310,8 +359,17 @@ def activity_dashboard(request):
         CHANGE: "updated",
         DELETION: "deleted",
     }
+    logs_queryset = LogEntry.objects.select_related("user", "content_type").order_by("-action_time")
+    if search_query:
+        logs_queryset = logs_queryset.filter(
+            Q(object_repr__icontains=search_query)
+            | Q(user__username__icontains=search_query)
+            | Q(change_message__icontains=search_query)
+            | Q(content_type__model__icontains=search_query)
+        )
+
     admin_logs = []
-    for entry in LogEntry.objects.select_related("user", "content_type").order_by("-action_time")[:25]:
+    for entry in logs_queryset[:40]:
         model_name = "Unknown"
         if entry.content_type:
             model_class = entry.content_type.model_class()
@@ -325,6 +383,7 @@ def activity_dashboard(request):
             "object_label": entry.object_repr,
             "model": model_name,
             "link": entry.get_admin_url(),
+            "search_text": f"{entry.user.get_username()} {model_name} {entry.object_repr} {entry.change_message}".lower(),
         })
 
     return render(request, "admin/activity_dashboard.html", {
@@ -333,6 +392,8 @@ def activity_dashboard(request):
         "client_activities": client_activities,
         "admin_logs": admin_logs,
         "trend_data": trend_data,
+        "search_query": search_query,
+        "activity_filter": activity_filter,
     })
 
 

@@ -1,4 +1,5 @@
 {% extends "admin/base_site.html" %}
+{% load static %}
 
 {% block title %}Site Activity Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
@@ -16,7 +17,7 @@
     --mk-yellow: #f8b742;
     --mk-green: #33d6a5;
     --mk-violet: #7d63f0;
-    --mk-pink: #ff5f90;
+    --mk-danger: #ff5f90;
 }
 
 #content {
@@ -31,7 +32,7 @@
 
 .mk-shell {
     display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
+    grid-template-columns: 260px minmax(0, 1fr);
     min-height: calc(100vh - 92px);
 }
 
@@ -45,28 +46,31 @@
 }
 
 .mk-brand {
-    display: flex;
-    align-items: center;
+    display: grid;
     gap: 10px;
-    padding: 6px 8px;
 }
 
-.mk-logo {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #48beff, #7d63f0);
-    color: #fff;
+.mk-brand-logo {
+    background: linear-gradient(150deg, #f2f8ff, #ecf3ff);
+    border: 1px solid #d9e5f1;
+    border-radius: 14px;
+    padding: 10px;
     display: grid;
     place-items: center;
-    font-weight: 800;
-    font-size: 0.9rem;
+}
+
+.mk-brand-logo img {
+    width: 168px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
 .mk-brand h2 {
     margin: 0;
     color: var(--mk-text);
-    font-size: 1.3rem;
+    font-size: 1.18rem;
+    text-align: center;
 }
 
 .mk-period {
@@ -126,12 +130,23 @@
     border-radius: 10px;
     padding: 10px;
     background: #f8fbff;
+    display: grid;
+    gap: 8px;
 }
 
 .mk-sidebar-foot p {
     margin: 0;
     color: #5c7696;
-    font-size: 0.82rem;
+    font-size: 0.79rem;
+}
+
+.mk-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #395879;
+    font-weight: 700;
 }
 
 .mk-main {
@@ -146,11 +161,26 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
 }
 
 .mk-search {
     position: relative;
-    width: min(430px, 100%);
+    width: min(500px, 100%);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.mk-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e2ecff;
+    font-style: normal;
+    font-size: 0.9rem;
+    pointer-events: none;
 }
 
 .mk-search input {
@@ -158,7 +188,7 @@
     border: 0;
     border-radius: 999px;
     height: 42px;
-    padding: 0 14px 0 42px;
+    padding: 0 14px 0 40px;
     color: #ebf1ff;
     background: rgba(255, 255, 255, 0.17);
 }
@@ -171,13 +201,19 @@
     outline: 2px solid rgba(255, 255, 255, 0.5);
 }
 
-.mk-search i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #e2ecff;
-    font-style: normal;
+.mk-search button {
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.45);
+    background: transparent;
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.mk-search button:hover {
+    background: rgba(255,255,255,0.15);
 }
 
 .mk-actions {
@@ -213,6 +249,26 @@
     gap: 14px;
 }
 
+.mk-msg {
+    border-radius: 10px;
+    border: 1px solid;
+    padding: 10px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.mk-msg.success {
+    background: #e7f8ef;
+    border-color: #b8e9cf;
+    color: #0e6b3f;
+}
+
+.mk-msg.error {
+    background: #ffeceb;
+    border-color: #ffc8c5;
+    color: #a72826;
+}
+
 .mk-kpis {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -225,6 +281,7 @@
     border-radius: 12px;
     padding: 14px;
     box-shadow: 0 8px 18px rgba(16, 44, 86, 0.07);
+    cursor: pointer;
 }
 
 .mk-kpi-head {
@@ -289,7 +346,7 @@
 
 .mk-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+    grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.55fr);
     gap: 12px;
 }
 
@@ -311,6 +368,15 @@
     margin: 4px 0 10px;
     color: #7289a7;
     font-size: 0.85rem;
+}
+
+.mk-chart-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #5f7898;
+    font-size: 0.78rem;
+    font-weight: 700;
 }
 
 .mk-chart {
@@ -372,10 +438,94 @@
     font-size: 0.82rem;
 }
 
+.mk-profile-form {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.mk-profile-form label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #406082;
+}
+
+.mk-profile-form input {
+    border: 1px solid #d6e4f1;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.84rem;
+}
+
+.mk-profile-form input:focus {
+    outline: none;
+    border-color: #74a9de;
+    box-shadow: 0 0 0 3px rgba(86, 165, 245, 0.18);
+}
+
+.mk-profile-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.mk-profile-actions button,
+.mk-profile-actions a {
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mk-profile-actions button {
+    border: 0;
+    color: #fff;
+    background: linear-gradient(135deg, #2f6de2, #4f73ff);
+}
+
+.mk-profile-actions a {
+    border: 1px solid #d0deec;
+    color: #35597f;
+    background: #fff;
+}
+
 .mk-bottom {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+}
+
+.mk-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.mk-filter-tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.mk-filter-tabs button {
+    border: 1px solid #d3e0ee;
+    border-radius: 999px;
+    background: #fff;
+    color: #436383;
+    padding: 4px 9px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mk-filter-tabs button.active {
+    background: #eff5ff;
+    color: #1a5ba2;
+    border-color: #bfd5ee;
 }
 
 .mk-activity-list {
@@ -436,6 +586,16 @@
     font-weight: 700;
     color: #235986;
     background: #edf5ff;
+}
+
+.mk-empty {
+    border: 1px dashed #d7e3ef;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    color: #7089a8;
+    font-size: 0.84rem;
+    background: #fbfdff;
 }
 
 .mk-table-wrap {
@@ -546,18 +706,20 @@
 <div class="mk-shell">
     <aside class="mk-sidebar">
         <div class="mk-brand">
-            <div class="mk-logo">NX</div>
-            <h2>Nexalix</h2>
+            <div class="mk-brand-logo">
+                <img src="{% static 'images/nexalix-logo.png' %}" alt="Nexalix logo">
+            </div>
+            <h2>Operations Suite</h2>
         </div>
 
         <div class="mk-period">
-            <a class="{% if period_days == 7 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=7">Last 7 days</a>
-            <a class="{% if period_days == 30 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=30">Last 30 days</a>
-            <a class="{% if period_days == 90 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=90">Last 90 days</a>
+            <a class="{% if period_days == 7 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=7{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Last 7 days</a>
+            <a class="{% if period_days == 30 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=30{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Last 30 days</a>
+            <a class="{% if period_days == 90 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=90{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Last 90 days</a>
         </div>
 
         <nav class="mk-nav">
-            <a class="current" href="{% url 'activity_dashboard' %}">Dashboard Overview</a>
+            <a class="current" href="{% url 'activity_dashboard' %}?period={{ period_days }}">Dashboard Overview</a>
             <a href="{% url 'admin:nexalix_app_contactmessage_changelist' %}">Contact Messages</a>
             <a href="{% url 'admin:nexalix_app_quoterequest_changelist' %}">Quote Requests</a>
             <a href="{% url 'admin:nexalix_app_partner_changelist' %}">Partners</a>
@@ -566,26 +728,40 @@
         </nav>
 
         <div class="mk-sidebar-foot">
-            <p>Live monitoring for leads, quote activity, and admin operations.</p>
+            <label class="mk-switch">
+                <input type="checkbox" id="autoRefreshToggle">
+                Auto-refresh every 60s
+            </label>
+            <p id="autoRefreshStatus">Auto-refresh is off.</p>
+            <p>Last rendered: {% now "M d, Y H:i" %}</p>
         </div>
     </aside>
 
     <section class="mk-main">
         <header class="mk-top">
-            <div class="mk-search">
-                <i>Q</i>
-                <input type="search" placeholder="Search records, contacts, quotes..." readonly>
-            </div>
+            <form class="mk-search" id="dashboardSearchForm" method="get" action="{% url 'activity_dashboard' %}">
+                <input type="hidden" name="period" value="{{ period_days }}">
+                <input type="hidden" name="activity" value="{{ activity_filter }}" id="activityHiddenInput">
+                <i>🔎</i>
+                <input type="search" name="q" id="dashboardSearchInput" value="{{ search_query }}" placeholder="Search contacts, quotes, admin logs..." autocomplete="off">
+                <button type="submit">Search</button>
+            </form>
             <div class="mk-actions">
-                <a class="mk-pill" href="{% url 'activity_dashboard' %}?period={{ period_days }}">Refresh</a>
+                <a class="mk-pill" href="{% url 'activity_dashboard' %}?period={{ period_days }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Refresh</a>
                 <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
                 <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
             </div>
         </header>
 
         <div class="mk-content">
-            <div class="mk-kpis">
-                <article class="mk-kpi">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mk-msg {% if message.tags == 'error' %}error{% else %}success{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="mk-kpis" id="kpiCards">
+                <article class="mk-kpi" data-kpi-filter="contact">
                     <div class="mk-kpi-head">
                         <h3>Contact Messages</h3>
                         <span class="mk-tag blue">This Period</span>
@@ -595,7 +771,7 @@
                     <div class="mk-progress"><span class="blue" style="width: {% if contacts_pct > 100 %}100{% else %}{{ contacts_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
 
-                <article class="mk-kpi">
+                <article class="mk-kpi" data-kpi-filter="quote">
                     <div class="mk-kpi-head">
                         <h3>Quote Requests</h3>
                         <span class="mk-tag yellow">This Period</span>
@@ -605,7 +781,7 @@
                     <div class="mk-progress"><span class="yellow" style="width: {% if quotes_pct > 100 %}100{% else %}{{ quotes_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
 
-                <article class="mk-kpi">
+                <article class="mk-kpi" data-kpi-filter="contact">
                     <div class="mk-kpi-head">
                         <h3>Unread Contacts</h3>
                         <span class="mk-tag green">Queue</span>
@@ -615,7 +791,7 @@
                     <div class="mk-progress"><span class="green" style="width: {% if unread_pct > 100 %}100{% else %}{{ unread_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
 
-                <article class="mk-kpi">
+                <article class="mk-kpi" data-kpi-filter="quote">
                     <div class="mk-kpi-head">
                         <h3>New Quotes</h3>
                         <span class="mk-tag violet">Pipeline</span>
@@ -628,9 +804,13 @@
 
             <div class="mk-grid">
                 <article class="mk-panel">
-                    <h2>Payment History Style Trend</h2>
-                    <p class="mk-sub">Contacts and quotes visualized in dashboard-style grouped bars.</p>
-                    <div class="mk-chart">
+                    <h2>Activity Trend</h2>
+                    <p class="mk-sub">Contacts and quotes visualized as grouped bars.</p>
+                    <div class="mk-chart-controls">
+                        <label><input type="checkbox" id="toggleContacts" checked> Contacts</label>
+                        <label><input type="checkbox" id="toggleQuotes" checked> Quotes</label>
+                    </div>
+                    <div class="mk-chart" id="trendChart">
                         {% for point in trend_data %}
                         <div class="mk-col">
                             <div class="mk-bars">
@@ -644,36 +824,54 @@
                 </article>
 
                 <article class="mk-panel">
-                    <h2>Quick Snapshot</h2>
-                    <p class="mk-sub">Key operational indicators</p>
+                    <h2>Admin Profile</h2>
+                    <p class="mk-sub">Update your profile directly from this dashboard.</p>
                     <div class="mk-stat-box">
                         <div class="mk-mini">
-                            <strong>{{ kpis.contacts_total }}</strong>
-                            <span>All contact messages</span>
-                        </div>
-                        <div class="mk-mini">
-                            <strong>{{ kpis.quotes_total }}</strong>
-                            <span>All quote requests</span>
-                        </div>
-                        <div class="mk-mini">
-                            <strong>{{ kpis.contacts_unread }}</strong>
-                            <span>Unread contacts</span>
-                        </div>
-                        <div class="mk-mini">
-                            <strong>{{ kpis.quotes_new }}</strong>
-                            <span>New quote opportunities</span>
+                            <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                            <span>{{ request.user.email|default:"No email set" }}</span>
                         </div>
                     </div>
+                    <form class="mk-profile-form" method="post" action="{% url 'activity_dashboard' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="update_profile">
+                        <input type="hidden" name="period" value="{{ period_days }}">
+                        <input type="hidden" name="q" value="{{ search_query }}">
+                        <input type="hidden" name="activity" value="{{ activity_filter }}">
+
+                        <label for="profile_first_name">First Name</label>
+                        <input id="profile_first_name" type="text" name="first_name" value="{{ request.user.first_name }}">
+
+                        <label for="profile_last_name">Last Name</label>
+                        <input id="profile_last_name" type="text" name="last_name" value="{{ request.user.last_name }}">
+
+                        <label for="profile_email">Email</label>
+                        <input id="profile_email" type="email" name="email" value="{{ request.user.email }}">
+
+                        <div class="mk-profile-actions">
+                            <button type="submit">Save Profile</button>
+                            <a href="{% url 'admin:password_change' %}">Change Password</a>
+                        </div>
+                    </form>
                 </article>
             </div>
 
             <div class="mk-bottom">
                 <article class="mk-panel">
-                    <h2>Recent Client Activity</h2>
-                    <p class="mk-sub">Latest quote and contact submissions.</p>
-                    <div class="mk-activity-list">
+                    <div class="mk-panel-head">
+                        <div>
+                            <h2>Recent Client Activity</h2>
+                            <p class="mk-sub">Latest contact and quote submissions.</p>
+                        </div>
+                        <div class="mk-filter-tabs" id="activityFilterTabs">
+                            <button type="button" data-filter="all" class="{% if activity_filter == 'all' %}active{% endif %}">All</button>
+                            <button type="button" data-filter="contact" class="{% if activity_filter == 'contact' %}active{% endif %}">Contacts</button>
+                            <button type="button" data-filter="quote" class="{% if activity_filter == 'quote' %}active{% endif %}">Quotes</button>
+                        </div>
+                    </div>
+                    <div class="mk-activity-list" id="activityList">
                         {% for item in client_activities %}
-                        <div class="mk-activity {% if item.type == 'quote' %}quote{% endif %}">
+                        <div class="mk-activity {% if item.type == 'quote' %}quote{% endif %}" data-type="{{ item.type }}" data-search="{{ item.search_text }}">
                             <div>
                                 <strong>{{ item.title }}</strong>
                                 <p>{{ item.subtitle }} · {{ item.detail }}</p>
@@ -684,17 +882,16 @@
                                 <a href="{{ item.admin_url }}">Open</a>
                             </div>
                         </div>
-                        {% empty %}
-                        <p>No client activity yet.</p>
                         {% endfor %}
                     </div>
+                    <div class="mk-empty" id="activityEmpty" {% if client_activities %}style="display:none;"{% endif %}>No client activity matches your current filters.</div>
                 </article>
 
                 <article class="mk-panel">
                     <h2>Admin Change Log</h2>
                     <p class="mk-sub">Recent model actions in Django admin.</p>
                     <div class="mk-table-wrap">
-                        <table class="mk-table">
+                        <table class="mk-table" id="adminLogTable">
                             <thead>
                                 <tr>
                                     <th>Time</th>
@@ -706,7 +903,7 @@
                             </thead>
                             <tbody>
                                 {% for log in admin_logs %}
-                                <tr>
+                                <tr data-search="{{ log.search_text }}">
                                     <td>{{ log.time|date:"M d, H:i" }}</td>
                                     <td>{{ log.user }}</td>
                                     <td><span class="mk-badge {{ log.style }}">{{ log.action }}</span></td>
@@ -719,17 +916,129 @@
                                         {% endif %}
                                     </td>
                                 </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="5">No admin actions found.</td>
-                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
+                    <div class="mk-empty" id="logEmpty" {% if admin_logs %}style="display:none;"{% endif %}>No admin log entries match your search.</div>
                 </article>
             </div>
         </div>
     </section>
 </div>
+
+<script>
+(function () {
+    const searchInput = document.getElementById("dashboardSearchInput");
+    const activityHiddenInput = document.getElementById("activityHiddenInput");
+    const activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
+    const logRows = Array.from(document.querySelectorAll("#adminLogTable tbody tr"));
+    const tabs = Array.from(document.querySelectorAll("#activityFilterTabs button"));
+    const activityEmpty = document.getElementById("activityEmpty");
+    const logEmpty = document.getElementById("logEmpty");
+    const toggleContacts = document.getElementById("toggleContacts");
+    const toggleQuotes = document.getElementById("toggleQuotes");
+    const autoRefreshToggle = document.getElementById("autoRefreshToggle");
+    const autoRefreshStatus = document.getElementById("autoRefreshStatus");
+
+    let activeType = activityHiddenInput ? activityHiddenInput.value : "all";
+    if (!["all", "contact", "quote"].includes(activeType)) {
+        activeType = "all";
+    }
+
+    function applyActivityFilterAndSearch() {
+        const term = (searchInput ? searchInput.value : "").trim().toLowerCase();
+        let visibleActivity = 0;
+        let visibleLogs = 0;
+
+        activityItems.forEach((item) => {
+            const matchType = activeType === "all" || item.dataset.type === activeType;
+            const matchSearch = !term || (item.dataset.search || "").includes(term);
+            const show = matchType && matchSearch;
+            item.style.display = show ? "" : "none";
+            if (show) visibleActivity += 1;
+        });
+
+        logRows.forEach((row) => {
+            const show = !term || (row.dataset.search || "").includes(term);
+            row.style.display = show ? "" : "none";
+            if (show) visibleLogs += 1;
+        });
+
+        if (activityEmpty) activityEmpty.style.display = visibleActivity ? "none" : "block";
+        if (logEmpty) logEmpty.style.display = visibleLogs ? "none" : "block";
+    }
+
+    function setActiveTab(filter) {
+        activeType = filter;
+        if (activityHiddenInput) activityHiddenInput.value = filter;
+        tabs.forEach((btn) => btn.classList.toggle("active", btn.dataset.filter === filter));
+        applyActivityFilterAndSearch();
+    }
+
+    tabs.forEach((btn) => {
+        btn.addEventListener("click", () => setActiveTab(btn.dataset.filter || "all"));
+    });
+
+    if (searchInput) {
+        searchInput.addEventListener("input", applyActivityFilterAndSearch);
+    }
+
+    function applyTrendVisibility() {
+        const showContacts = !toggleContacts || toggleContacts.checked;
+        const showQuotes = !toggleQuotes || toggleQuotes.checked;
+
+        document.querySelectorAll(".mk-bar.contacts").forEach((bar) => {
+            bar.style.display = showContacts ? "block" : "none";
+        });
+        document.querySelectorAll(".mk-bar.quotes").forEach((bar) => {
+            bar.style.display = showQuotes ? "block" : "none";
+        });
+    }
+
+    if (toggleContacts) toggleContacts.addEventListener("change", applyTrendVisibility);
+    if (toggleQuotes) toggleQuotes.addEventListener("change", applyTrendVisibility);
+
+    const refreshKey = "nexalix_dashboard_auto_refresh";
+    let refreshTimer = null;
+
+    function startAutoRefresh() {
+        if (refreshTimer) clearInterval(refreshTimer);
+        refreshTimer = setInterval(() => {
+            window.location.reload();
+        }, 60000);
+        if (autoRefreshStatus) autoRefreshStatus.textContent = "Auto-refresh is on (every 60s).";
+    }
+
+    function stopAutoRefresh() {
+        if (refreshTimer) clearInterval(refreshTimer);
+        refreshTimer = null;
+        if (autoRefreshStatus) autoRefreshStatus.textContent = "Auto-refresh is off.";
+    }
+
+    if (autoRefreshToggle) {
+        const persisted = localStorage.getItem(refreshKey) === "1";
+        autoRefreshToggle.checked = persisted;
+        if (persisted) startAutoRefresh();
+
+        autoRefreshToggle.addEventListener("change", () => {
+            const enabled = autoRefreshToggle.checked;
+            localStorage.setItem(refreshKey, enabled ? "1" : "0");
+            if (enabled) startAutoRefresh();
+            else stopAutoRefresh();
+        });
+    }
+
+    document.querySelectorAll("#kpiCards .mk-kpi[data-kpi-filter]").forEach((card) => {
+        card.addEventListener("click", () => {
+            setActiveTab(card.dataset.kpiFilter || "all");
+            const activityPanel = document.getElementById("activityList");
+            if (activityPanel) activityPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    });
+
+    setActiveTab(activeType);
+    applyTrendVisibility();
+})();
+</script>
 {% endblock %}

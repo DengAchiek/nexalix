@@ -41,55 +41,6 @@
 .nx-admin-hero a:hover {
     background: #e8f3ff;
 }
-
-.nx-dashboard-module {
-    border: 1px solid #d9e5f1;
-    border-radius: 12px;
-    background: #fff;
-    margin-bottom: 16px;
-    overflow: hidden;
-}
-
-.nx-dashboard-head {
-    padding: 12px 14px;
-    border-bottom: 1px solid #e5edf5;
-    background: #f7fbff;
-}
-
-.nx-dashboard-head h3 {
-    margin: 0;
-    color: #1c4a76;
-}
-
-.nx-dashboard-row {
-    padding: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.nx-dashboard-row p {
-    margin: 0;
-    color: #587796;
-}
-
-.nx-dashboard-row a {
-    text-decoration: none;
-    border-radius: 999px;
-    padding: 8px 13px;
-    font-weight: 700;
-    border: 1px solid #cadced;
-    background: #fff;
-    color: #1f4f7c;
-}
-
-.nx-dashboard-row a:hover {
-    background: #0f5fb0;
-    color: #fff;
-    border-color: #0f5fb0;
-}
 </style>
 {% endblock %}
 
@@ -101,16 +52,6 @@
             <p>Track client interactions, quote pipeline, and admin activity in one place.</p>
         </div>
         <a href="{% url 'activity_dashboard' %}">Open Activity Dashboard</a>
-    </section>
-
-    <section class="nx-dashboard-module">
-        <div class="nx-dashboard-head">
-            <h3>Quick Dashboard Access</h3>
-        </div>
-        <div class="nx-dashboard-row">
-            <p>Use the custom dashboard for live trend monitoring and recent activity feed.</p>
-            <a href="{% url 'activity_dashboard' %}">Go to Dashboard</a>
-        </div>
     </section>
 
     {% if app_list %}

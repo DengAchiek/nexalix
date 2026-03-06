@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Auto Quote Generator - Nexalix Technologies{% endblock %}
+
+{% block content %}
+<section class="quote-page page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Auto Quote Generator</p>
+            <h1>Get an Instant Project Estimate</h1>
+            <p class="subheading">Configure your requirements and receive a real-time estimate range. Submit the quote request to lock a consultation follow-up.</p>
+        </div>
+
+        <div class="quote-layout">
+            <div class="quote-form-card contact-form">
+                {% if success_message %}
+                <div class="form-message success">{{ success_message }}</div>
+                {% endif %}
+                {% if error_message %}
+                <div class="form-message error">{{ error_message }}</div>
+                {% endif %}
+
+                <form method="post" id="quoteForm" action="{% url 'quote_generator' %}">
+                    {% csrf_token %}
+
+                    <div class="field-row">
+                        <div>
+                            <label for="full_name">Full Name *</label>
+                            <input type="text" id="full_name" name="full_name" value="{{ form_data.full_name }}" required>
+                        </div>
+                        <div>
+                            <label for="email">Work Email *</label>
+                            <input type="email" id="email" name="email" value="{{ form_data.email }}" required>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <div>
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" value="{{ form_data.company }}">
+                        </div>
+                        <div>
+                            <label for="phone">Phone</label>
+                            <input type="text" id="phone" name="phone" value="{{ form_data.phone }}">
+                        </div>
+                    </div>
+
+                    <label for="service">Service Scope *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select service</option>
+                        {% for service in quote_services %}
+                        <option
+                            value="{{ service.id }}"
+                            data-base-price="{{ service.quote_base_price }}"
+                            data-weeks="{{ service.quote_delivery_weeks }}"
+                            {% if form_data.service == service.id|stringformat:"s" %}selected{% endif %}
+                        >
+                            {{ service.title }} (from ${{ service.quote_base_price|floatformat:0 }})
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="field-row">
+                        <div>
+                            <label for="complexity">Complexity</label>
+                            <select id="complexity" name="complexity">
+                                {% for option in complexity_options %}
+                                <option
+                                    value="{{ option.value }}"
+                                    data-multiplier="{{ option.multiplier }}"
+                                    data-weeks-multiplier="{{ option.weeks_multiplier }}"
+                                    {% if form_data.complexity == option.value %}selected{% endif %}
+                                >
+                                    {{ option.label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label for="timeline">Timeline</label>
+                            <select id="timeline" name="timeline">
+                                {% for option in timeline_options %}
+                                <option
+                                    value="{{ option.value }}"
+                                    data-multiplier="{{ option.multiplier }}"
+                                    data-weeks-multiplier="{{ option.weeks_multiplier }}"
+                                    {% if form_data.timeline == option.value %}selected{% endif %}
+                                >
+                                    {{ option.label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <label for="support_plan">Support Plan</label>
+                    <select id="support_plan" name="support_plan">
+                        {% for option in support_options %}
+                        <option
+                            value="{{ option.value }}"
+                            data-rate="{{ option.multiplier }}"
+                            {% if form_data.support_plan == option.value %}selected{% endif %}
+                        >
+                            {{ option.label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    {% if quote_addons %}
+                    <label>Add-ons</label>
+                    <div class="addon-grid" id="addonGrid">
+                        {% for addon in quote_addons %}
+                        <label class="addon-item">
+                            <input
+                                type="checkbox"
+                                name="addons"
+                                value="{{ addon.id }}"
+                                data-addon-price="{{ addon.price }}"
+                                {% if addon.id|stringformat:"s" in form_data.addons %}checked{% endif %}
+                            >
+                            <span>
+                                <strong>{{ addon.name }}</strong>
+                                {% if addon.description %}<small>{{ addon.description }}</small>{% endif %}
+                            </span>
+                            <em>+${{ addon.price|floatformat:0 }}</em>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <label for="project_summary">Project Summary *</label>
+                    <textarea id="project_summary" name="project_summary" rows="5" placeholder="Describe key goals, platforms, integrations, and expected outcomes" required>{{ form_data.project_summary }}</textarea>
+
+                    <button type="submit">Generate and Submit Quote</button>
+                </form>
+            </div>
+
+            <aside class="quote-summary-card" id="quoteSummaryCard">
+                <h3>Estimate Preview</h3>
+                <p class="quote-summary-note">This is an initial estimate. Final pricing is refined after requirements review.</p>
+
+                <dl class="quote-breakdown">
+                    <div>
+                        <dt>Core Build</dt>
+                        <dd id="quoteBase">$0</dd>
+                    </div>
+                    <div>
+                        <dt>Add-ons</dt>
+                        <dd id="quoteAddons">$0</dd>
+                    </div>
+                    <div>
+                        <dt>Support</dt>
+                        <dd id="quoteSupport">$0</dd>
+                    </div>
+                    <div class="quote-total-row">
+                        <dt>Estimated Total</dt>
+                        <dd id="quoteTotal">$0</dd>
+                    </div>
+                    <div>
+                        <dt>Budget Range</dt>
+                        <dd id="quoteRange">$0 - $0</dd>
+                    </div>
+                    <div>
+                        <dt>Delivery Window</dt>
+                        <dd id="quoteWeeks">~0 weeks</dd>
+                    </div>
+                </dl>
+
+                {% if generated_quote %}
+                <div class="quote-reference-box">
+                    <h4>Quote Saved</h4>
+                    <p><strong>Reference:</strong> {{ generated_quote.reference }}</p>
+                    <p><strong>Total:</strong> ${{ generated_quote.total|floatformat:2 }}</p>
+                    <p><strong>Range:</strong> ${{ generated_quote.min_estimate|floatformat:2 }} - ${{ generated_quote.max_estimate|floatformat:2 }}</p>
+                    <p><strong>Timeline:</strong> ~{{ generated_quote.estimated_weeks }} weeks</p>
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

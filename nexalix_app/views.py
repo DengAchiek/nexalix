@@ -2,14 +2,86 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.text import slugify
+from decimal import Decimal, ROUND_HALF_UP
+import math
 from .models import (
     HeroSection, Service, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
-    ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage
+    ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
+    QuoteAddon, QuoteRequest
 )
 # If you have these models, import them:
 # from .models import AboutPage, CompanyValue, ContactInfo, ContactMessage
+
+COMPLEXITY_MULTIPLIERS = {
+    "starter": Decimal("1.00"),
+    "growth": Decimal("1.25"),
+    "advanced": Decimal("1.60"),
+    "enterprise": Decimal("2.10"),
+}
+
+COMPLEXITY_DURATION = {
+    "starter": Decimal("0.90"),
+    "growth": Decimal("1.00"),
+    "advanced": Decimal("1.15"),
+    "enterprise": Decimal("1.35"),
+}
+
+TIMELINE_MULTIPLIERS = {
+    "standard": Decimal("1.00"),
+    "accelerated": Decimal("1.18"),
+    "urgent": Decimal("1.35"),
+}
+
+TIMELINE_DURATION = {
+    "standard": Decimal("1.00"),
+    "accelerated": Decimal("0.75"),
+    "urgent": Decimal("0.55"),
+}
+
+SUPPORT_MULTIPLIERS = {
+    "none": Decimal("0.00"),
+    "standard": Decimal("0.08"),
+    "premium": Decimal("0.15"),
+}
+
+
+def _money(value):
+    return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def calculate_quote_estimate(service, complexity, timeline, support_plan, addons):
+    base_price = Decimal(service.quote_base_price or 0)
+    complexity_multiplier = COMPLEXITY_MULTIPLIERS.get(complexity, Decimal("1.00"))
+    timeline_multiplier = TIMELINE_MULTIPLIERS.get(timeline, Decimal("1.00"))
+    support_multiplier = SUPPORT_MULTIPLIERS.get(support_plan, Decimal("0.00"))
+
+    subtotal = base_price * complexity_multiplier * timeline_multiplier
+    addons_total = sum((Decimal(addon.price) for addon in addons), Decimal("0.00"))
+    support_total = subtotal * support_multiplier
+    total = subtotal + addons_total + support_total
+    min_estimate = total * Decimal("0.90")
+    max_estimate = total * Decimal("1.10")
+
+    weeks_base = Decimal(service.quote_delivery_weeks or 8)
+    estimated_weeks = math.ceil(
+        float(
+            weeks_base
+            * COMPLEXITY_DURATION.get(complexity, Decimal("1.00"))
+            * TIMELINE_DURATION.get(timeline, Decimal("1.00"))
+        )
+    )
+
+    return {
+        "subtotal": _money(subtotal),
+        "addons_total": _money(addons_total),
+        "support_total": _money(support_total),
+        "total": _money(total),
+        "min_estimate": _money(min_estimate),
+        "max_estimate": _money(max_estimate),
+        "estimated_weeks": max(2, estimated_weeks),
+    }
 
 def home(request):
     """Home page view"""
@@ -141,6 +213,226 @@ def how_we_work(request):
 def why_choose_us(request):
     """Why Choose Us page view"""
     return render(request, 'why_choose_us.html')
+
+
+def quote_generator(request):
+    """Auto Quote Generator page view"""
+    quote_services = Service.objects.filter(
+        is_active=True,
+        show_in_quote_generator=True
+    ).order_by("order", "title")
+    quote_addons = QuoteAddon.objects.filter(is_active=True).order_by("order", "name")
+
+    success_message = None
+    error_message = None
+    generated_quote = None
+    form_data = {
+        "full_name": "",
+        "email": "",
+        "company": "",
+        "phone": "",
+        "service": "",
+        "complexity": "growth",
+        "timeline": "standard",
+        "support_plan": "none",
+        "project_summary": "",
+        "addons": [],
+    }
+
+    if request.method == "POST":
+        form_data = {
+            "full_name": request.POST.get("full_name", "").strip(),
+            "email": request.POST.get("email", "").strip(),
+            "company": request.POST.get("company", "").strip(),
+            "phone": request.POST.get("phone", "").strip(),
+            "service": request.POST.get("service", "").strip(),
+            "complexity": request.POST.get("complexity", "growth").strip(),
+            "timeline": request.POST.get("timeline", "standard").strip(),
+            "support_plan": request.POST.get("support_plan", "none").strip(),
+            "project_summary": request.POST.get("project_summary", "").strip(),
+            "addons": request.POST.getlist("addons"),
+        }
+
+        if not form_data["full_name"] or not form_data["email"] or not form_data["service"] or not form_data["project_summary"]:
+            error_message = "Please fill in all required fields to generate your quote."
+        else:
+            service = Service.objects.filter(
+                id=form_data["service"],
+                is_active=True,
+                show_in_quote_generator=True
+            ).first()
+
+            if not service:
+                error_message = "Selected service is unavailable. Please choose another option."
+            else:
+                selected_addons = list(quote_addons.filter(id__in=form_data["addons"]))
+                estimate = calculate_quote_estimate(
+                    service=service,
+                    complexity=form_data["complexity"],
+                    timeline=form_data["timeline"],
+                    support_plan=form_data["support_plan"],
+                    addons=selected_addons,
+                )
+
+                quote_request = QuoteRequest.objects.create(
+                    full_name=form_data["full_name"],
+                    email=form_data["email"],
+                    company=form_data["company"],
+                    phone=form_data["phone"],
+                    service=service,
+                    complexity=form_data["complexity"],
+                    timeline=form_data["timeline"],
+                    support_plan=form_data["support_plan"],
+                    project_summary=form_data["project_summary"],
+                    currency="USD",
+                    estimated_subtotal=estimate["subtotal"],
+                    addons_total=estimate["addons_total"],
+                    support_total=estimate["support_total"],
+                    estimated_total=estimate["total"],
+                    estimated_min=estimate["min_estimate"],
+                    estimated_max=estimate["max_estimate"],
+                    estimated_weeks=estimate["estimated_weeks"],
+                )
+                quote_request.selected_addons.set(selected_addons)
+
+                send_quote_notifications(quote_request)
+
+                generated_quote = {
+                    "reference": quote_request.quote_reference,
+                    "subtotal": quote_request.estimated_subtotal,
+                    "addons_total": quote_request.addons_total,
+                    "support_total": quote_request.support_total,
+                    "total": quote_request.estimated_total,
+                    "min_estimate": quote_request.estimated_min,
+                    "max_estimate": quote_request.estimated_max,
+                    "estimated_weeks": quote_request.estimated_weeks,
+                }
+
+                success_message = f"Quote generated successfully. Reference: {quote_request.quote_reference}."
+                form_data = {
+                    "full_name": "",
+                    "email": "",
+                    "company": "",
+                    "phone": "",
+                    "service": "",
+                    "complexity": "growth",
+                    "timeline": "standard",
+                    "support_plan": "none",
+                    "project_summary": "",
+                    "addons": [],
+                }
+
+    complexity_options = []
+    for value, label in QuoteRequest.COMPLEXITY_CHOICES:
+        complexity_options.append({
+            "value": value,
+            "label": label,
+            "multiplier": str(COMPLEXITY_MULTIPLIERS.get(value, Decimal("1.00"))),
+            "weeks_multiplier": str(COMPLEXITY_DURATION.get(value, Decimal("1.00"))),
+        })
+
+    timeline_options = []
+    for value, label in QuoteRequest.TIMELINE_CHOICES:
+        timeline_options.append({
+            "value": value,
+            "label": label,
+            "multiplier": str(TIMELINE_MULTIPLIERS.get(value, Decimal("1.00"))),
+            "weeks_multiplier": str(TIMELINE_DURATION.get(value, Decimal("1.00"))),
+        })
+
+    support_options = []
+    for value, label in QuoteRequest.SUPPORT_CHOICES:
+        support_options.append({
+            "value": value,
+            "label": label,
+            "multiplier": str(SUPPORT_MULTIPLIERS.get(value, Decimal("0.00"))),
+        })
+
+    return render(request, "quote_generator.html", {
+        "quote_services": quote_services,
+        "quote_addons": quote_addons,
+        "complexity_options": complexity_options,
+        "timeline_options": timeline_options,
+        "support_options": support_options,
+        "success_message": success_message,
+        "error_message": error_message,
+        "generated_quote": generated_quote,
+        "form_data": form_data,
+    })
+
+
+def send_quote_notifications(quote_request):
+    try:
+        configured_recipients = getattr(settings, "ADMIN_EMAILS", [])
+        if isinstance(configured_recipients, str):
+            configured_recipients = [
+                email.strip()
+                for email in configured_recipients.split(",")
+                if email.strip()
+            ]
+
+        admin_emails = list(configured_recipients)
+        contact_notification_email = getattr(
+            settings,
+            "CONTACT_NOTIFICATION_EMAIL",
+            "dachiek4@gmail.com",
+        ).strip()
+        if contact_notification_email and contact_notification_email not in admin_emails:
+            admin_emails.append(contact_notification_email)
+        if not admin_emails:
+            admin_emails = ["dachiek4@gmail.com"]
+
+        selected_addons = ", ".join(
+            quote_request.selected_addons.values_list("name", flat=True)
+        ) or "None"
+        subject = f"New Auto Quote Request: {quote_request.quote_reference}"
+        body = f"""
+Quote Reference: {quote_request.quote_reference}
+Name: {quote_request.full_name}
+Email: {quote_request.email}
+Company: {quote_request.company or 'Not provided'}
+Phone: {quote_request.phone or 'Not provided'}
+Service: {quote_request.service.title if quote_request.service else 'Not selected'}
+Complexity: {quote_request.get_complexity_display()}
+Timeline: {quote_request.get_timeline_display()}
+Support Plan: {quote_request.get_support_plan_display()}
+Add-ons: {selected_addons}
+Estimated Total: {quote_request.currency} {quote_request.estimated_total}
+Range: {quote_request.currency} {quote_request.estimated_min} - {quote_request.currency} {quote_request.estimated_max}
+Estimated Delivery: ~{quote_request.estimated_weeks} weeks
+
+Project Summary:
+{quote_request.project_summary}
+        """
+        send_mail(
+            subject=subject,
+            message=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=admin_emails,
+            fail_silently=True,
+        )
+
+        user_subject = f"Your Nexalix Quote ({quote_request.quote_reference})"
+        user_body = f"""
+Hi {quote_request.full_name},
+
+Thank you for using our Auto Quote Generator.
+
+Quote Reference: {quote_request.quote_reference}
+Estimated Budget: {quote_request.currency} {quote_request.estimated_min} - {quote_request.currency} {quote_request.estimated_max}
+Estimated Timeline: ~{quote_request.estimated_weeks} weeks
+
+Our team will review your request and follow up with a detailed proposal.
+        """
+        send_mail(
+            subject=user_subject,
+            message=user_body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[quote_request.email],
+            fail_silently=True,
+        )
+    except Exception as exc:
+        print(f"Error sending quote notifications: {exc}")
 
 
 

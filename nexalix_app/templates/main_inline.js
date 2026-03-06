@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { title: "Home", description: "Company overview and featured solutions", url: "/", category: "Page" },
         { title: "About", description: "Vision, mission, and core values", url: "/about/", category: "Page" },
         { title: "Services", description: "Technology and consulting offerings", url: "/services/", category: "Page" },
+        { title: "Auto Quote", description: "Generate a live project cost estimate", url: "/quote-generator/", category: "Page" },
         { title: "Industries", description: "Sector-focused transformation work", url: "/industries/", category: "Page" },
         { title: "How We Work", description: "Delivery process and methodology", url: "/how_we_work/", category: "Page" },
         { title: "Why Choose Us", description: "Differentiators and value proposition", url: "/why_choose_us/", category: "Page" },
@@ -171,7 +172,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const selectors = [
             ".about-section", ".value-card", ".work-step", ".advantage", ".industry-card",
             ".service-card", ".case-card", ".blog-card", ".stat-card", ".partner-card",
-            ".award-card", ".pricing-plan-card", ".step-card", ".contact-form"
+            ".award-card", ".pricing-plan-card", ".step-card", ".contact-form",
+            ".quote-form-card", ".quote-summary-card"
         ];
 
         const elements = document.querySelectorAll(selectors.join(","));
@@ -292,6 +294,80 @@ document.addEventListener("DOMContentLoaded", () => {
         }, { once: true });
     }
 
+    function wireQuoteCalculator() {
+        const form = document.getElementById("quoteForm");
+        if (!form) return;
+
+        const serviceSelect = document.getElementById("service");
+        const complexitySelect = document.getElementById("complexity");
+        const timelineSelect = document.getElementById("timeline");
+        const supportSelect = document.getElementById("support_plan");
+        const addonInputs = form.querySelectorAll("input[name='addons']");
+
+        const quoteBase = document.getElementById("quoteBase");
+        const quoteAddons = document.getElementById("quoteAddons");
+        const quoteSupport = document.getElementById("quoteSupport");
+        const quoteTotal = document.getElementById("quoteTotal");
+        const quoteRange = document.getElementById("quoteRange");
+        const quoteWeeks = document.getElementById("quoteWeeks");
+
+        if (!serviceSelect || !complexitySelect || !timelineSelect || !supportSelect) return;
+
+        const formatUSD = (value) => {
+            return new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0
+            }).format(value);
+        };
+
+        const toNumber = (value) => {
+            const numeric = Number.parseFloat(value);
+            return Number.isFinite(numeric) ? numeric : 0;
+        };
+
+        const calculate = () => {
+            const selectedService = serviceSelect.options[serviceSelect.selectedIndex];
+            const selectedComplexity = complexitySelect.options[complexitySelect.selectedIndex];
+            const selectedTimeline = timelineSelect.options[timelineSelect.selectedIndex];
+            const selectedSupport = supportSelect.options[supportSelect.selectedIndex];
+
+            const basePrice = toNumber(selectedService?.dataset.basePrice || "0");
+            const baseWeeks = toNumber(selectedService?.dataset.weeks || "0");
+            const complexityMultiplier = toNumber(selectedComplexity?.dataset.multiplier || "1");
+            const complexityWeeksMultiplier = toNumber(selectedComplexity?.dataset.weeksMultiplier || "1");
+            const timelineMultiplier = toNumber(selectedTimeline?.dataset.multiplier || "1");
+            const timelineWeeksMultiplier = toNumber(selectedTimeline?.dataset.weeksMultiplier || "1");
+            const supportRate = toNumber(selectedSupport?.dataset.rate || "0");
+
+            const coreBuild = basePrice * complexityMultiplier * timelineMultiplier;
+            const addonsTotal = Array.from(addonInputs).reduce((sum, input) => {
+                if (!input.checked) return sum;
+                return sum + toNumber(input.dataset.addonPrice || "0");
+            }, 0);
+            const supportTotal = coreBuild * supportRate;
+            const total = coreBuild + addonsTotal + supportTotal;
+            const minEstimate = total * 0.9;
+            const maxEstimate = total * 1.1;
+
+            let weeks = 0;
+            if (baseWeeks > 0) {
+                weeks = Math.max(2, Math.ceil(baseWeeks * complexityWeeksMultiplier * timelineWeeksMultiplier));
+            }
+
+            if (quoteBase) quoteBase.textContent = formatUSD(coreBuild);
+            if (quoteAddons) quoteAddons.textContent = formatUSD(addonsTotal);
+            if (quoteSupport) quoteSupport.textContent = formatUSD(supportTotal);
+            if (quoteTotal) quoteTotal.textContent = formatUSD(total);
+            if (quoteRange) quoteRange.textContent = `${formatUSD(minEstimate)} - ${formatUSD(maxEstimate)}`;
+            if (quoteWeeks) quoteWeeks.textContent = weeks ? `~${weeks} weeks` : "~0 weeks";
+        };
+
+        form.addEventListener("input", calculate);
+        form.addEventListener("change", calculate);
+        calculate();
+    }
+
     setActiveNavLink();
     handleHeaderScroll();
     wireMobileMenu();
@@ -304,6 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
     wireTechToggle();
     wireContactEnhancements();
     wireHeroVideo();
+    wireQuoteCalculator();
 
     window.addEventListener("scroll", handleHeaderScroll);
 });

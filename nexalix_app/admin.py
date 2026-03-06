@@ -7,7 +7,8 @@ from .models import (
     HeroSection, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, Technology, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
-    Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage
+    Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
+    QuoteAddon, QuoteRequest
 )
 
 # ========== EXISTING MODELS (NON-SERVICE) ==========
@@ -108,7 +109,7 @@ class PricingPlanInline(admin.TabularInline):
 # ONLY ONE ServiceAdmin class - this is the correct one with all features
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'order', 'is_active', 'created_at', 'icon_preview']
+    list_display = ['title', 'category', 'quote_base_price', 'order', 'is_active', 'created_at', 'icon_preview']
     list_filter = ['category', 'is_active', 'created_at']
     search_fields = ['title', 'short_description', 'full_description']
     list_editable = ['order', 'is_active']
@@ -122,7 +123,14 @@ class ServiceAdmin(admin.ModelAdmin):
             'fields': ('icon', 'featured_image', 'icon_preview')
         }),
         ('Details', {
-            'fields': ('key_features', 'technologies', 'pricing_info')
+            'fields': (
+                'key_features',
+                'technologies',
+                'pricing_info',
+                'quote_base_price',
+                'quote_delivery_weeks',
+                'show_in_quote_generator',
+            )
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),
@@ -157,6 +165,74 @@ class PricingPlanAdmin(admin.ModelAdmin):
     list_filter = ['service', 'is_popular']
     list_editable = ['price', 'period', 'is_popular', 'order']
     search_fields = ['name', 'features']
+
+
+@admin.register(QuoteAddon)
+class QuoteAddonAdmin(admin.ModelAdmin):
+    list_display = ["name", "price", "order", "is_active"]
+    list_editable = ["price", "order", "is_active"]
+    list_filter = ["is_active"]
+    search_fields = ["name", "description"]
+    ordering = ["order", "name"]
+
+
+@admin.register(QuoteRequest)
+class QuoteRequestAdmin(admin.ModelAdmin):
+    list_display = [
+        "quote_reference",
+        "full_name",
+        "email",
+        "service",
+        "estimated_total",
+        "currency",
+        "status",
+        "created_at",
+    ]
+    list_filter = ["status", "service", "complexity", "timeline", "support_plan", "created_at"]
+    search_fields = ["quote_reference", "full_name", "email", "company", "project_summary"]
+    readonly_fields = [
+        "quote_reference",
+        "estimated_subtotal",
+        "addons_total",
+        "support_total",
+        "estimated_total",
+        "estimated_min",
+        "estimated_max",
+        "estimated_weeks",
+        "created_at",
+    ]
+    filter_horizontal = ["selected_addons"]
+    fieldsets = (
+        ("Request Info", {
+            "fields": (
+                "quote_reference",
+                "full_name",
+                "email",
+                "company",
+                "phone",
+                "service",
+                "project_summary",
+                "status",
+                "admin_notes",
+                "created_at",
+            )
+        }),
+        ("Configuration", {
+            "fields": ("complexity", "timeline", "support_plan", "selected_addons")
+        }),
+        ("Estimated Breakdown", {
+            "fields": (
+                "currency",
+                "estimated_subtotal",
+                "addons_total",
+                "support_total",
+                "estimated_total",
+                "estimated_min",
+                "estimated_max",
+                "estimated_weeks",
+            )
+        }),
+    )
 
 
 def send_admin_notification(contact_message):
@@ -271,4 +347,3 @@ class ContactMessageAdmin(admin.ModelAdmin):
                 count += 1
         self.message_user(request, f"Resent notifications for {count} messages.")
     resend_admin_notification.short_description = "Resend admin notification email"
-

@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
+import uuid
 
 
 
@@ -58,6 +59,20 @@ class Service(models.Model):
     key_features = models.TextField(blank=True, help_text="One feature per line")
     technologies = models.TextField(blank=True, help_text="Technologies used (comma-separated)")
     pricing_info = models.TextField(blank=True, help_text="Pricing information")
+    quote_base_price = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=3500.00,
+        help_text="Base starting price used by the Auto Quote Generator."
+    )
+    quote_delivery_weeks = models.PositiveIntegerField(
+        default=8,
+        help_text="Typical delivery timeline in weeks for this service."
+    )
+    show_in_quote_generator = models.BooleanField(
+        default=True,
+        help_text="Make this service selectable in the Auto Quote Generator."
+    )
     
     class Meta:
         ordering = ['order', 'title']
@@ -274,6 +289,86 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class QuoteAddon(models.Model):
+    name = models.CharField(max_length=120)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+
+class QuoteRequest(models.Model):
+    COMPLEXITY_CHOICES = [
+        ("starter", "Starter / MVP"),
+        ("growth", "Growth"),
+        ("advanced", "Advanced"),
+        ("enterprise", "Enterprise"),
+    ]
+
+    TIMELINE_CHOICES = [
+        ("standard", "Standard Timeline"),
+        ("accelerated", "Accelerated Timeline"),
+        ("urgent", "Urgent Timeline"),
+    ]
+
+    SUPPORT_CHOICES = [
+        ("none", "No Ongoing Support"),
+        ("standard", "Standard Support"),
+        ("premium", "Premium Support"),
+    ]
+
+    STATUS_CHOICES = [
+        ("new", "New"),
+        ("reviewed", "Reviewed"),
+        ("sent", "Quote Sent"),
+        ("won", "Won"),
+        ("lost", "Lost"),
+    ]
+
+    quote_reference = models.CharField(max_length=32, unique=True, blank=True)
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    company = models.CharField(max_length=200, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    service = models.ForeignKey(Service, on_delete=models.SET_NULL, null=True, blank=True)
+    complexity = models.CharField(max_length=20, choices=COMPLEXITY_CHOICES, default="growth")
+    timeline = models.CharField(max_length=20, choices=TIMELINE_CHOICES, default="standard")
+    support_plan = models.CharField(max_length=20, choices=SUPPORT_CHOICES, default="none")
+    selected_addons = models.ManyToManyField(QuoteAddon, blank=True, related_name="quote_requests")
+    project_summary = models.TextField()
+    currency = models.CharField(max_length=8, default="USD")
+    estimated_subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    addons_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    support_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    estimated_total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    estimated_min = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    estimated_max = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    estimated_weeks = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new")
+    admin_notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.quote_reference:
+            self.quote_reference = self.generate_quote_reference()
+        super().save(*args, **kwargs)
+
+    def generate_quote_reference(self):
+        return f"NQ-{timezone.now().strftime('%Y%m%d')}-{uuid.uuid4().hex[:6].upper()}"
+
+    def __str__(self):
+        return f"{self.quote_reference} - {self.full_name}"
 
 
 class Partner(models.Model):

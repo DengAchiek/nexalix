@@ -7,6 +7,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('services/', views.services, name='services'),
     path("services/<slug:slug>/", views.service_detail, name="service_detail"),
+    path('quote-generator/', views.quote_generator, name='quote_generator'),
     path('industries/', views.industries, name='industries'),
     path('how_we_work/', views.how_we_work, name='how_we_work'),
     path('why_choose_us/', views.why_choose_us, name='why_choose_us'),

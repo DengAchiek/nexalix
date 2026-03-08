@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}{{ page_title }} - Nexalix Technologies{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
@@ -68,7 +68,7 @@
                         <div class="service-card-inner">
                             {% if service.featured_image %}
                             <div class="service-image">
-                                <img src="{{ service.featured_image.url }}" alt="{{ service.title }}">
+                                <img src="{{ service.featured_image.url|optimized_media:'card' }}" alt="{{ service.title }}" loading="lazy" decoding="async">
                             </div>
                             {% endif %}
 

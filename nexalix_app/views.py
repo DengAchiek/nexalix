@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
+from django.core.cache import cache
 from django.conf import settings
 from django.utils.text import slugify
 from django.utils import timezone
@@ -13,6 +14,10 @@ from urllib.parse import urlencode
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
 import math
+from .cache_utils import (
+    HOME_CONTEXT_CACHE_KEY,
+    get_dashboard_aggregate_cache_key,
+)
 from .models import (
     HeroSection, Service, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
@@ -54,6 +59,9 @@ SUPPORT_MULTIPLIERS = {
     "standard": Decimal("0.08"),
     "premium": Decimal("0.15"),
 }
+
+HOME_CONTEXT_CACHE_TTL = int(getattr(settings, "HOME_CACHE_TIMEOUT", 300))
+DASHBOARD_AGGREGATES_CACHE_TTL = int(getattr(settings, "DASHBOARD_CACHE_TIMEOUT", 120))
 
 
 def _money(value):
@@ -98,69 +106,28 @@ def calculate_quote_estimate(service, complexity, timeline, support_plan, addons
 
 def home(request):
     """Home page view"""
-    # Get active hero section
-    hero = HeroSection.objects.filter(is_active=True).first()
-    
-    # Get featured services
-    services = Service.objects.filter(is_featured=True).order_by('order')[:3]
-    
-    # Get testimonials
-    testimonials = Testimonial.objects.filter(is_active=True).order_by('-created_at')[:2]
-    
-    # Get about section
-    about = AboutSection.objects.filter(is_active=True).first()
-    
-    # Get process steps
-    process_steps = ProcessStep.objects.all().order_by('order')
-    
-    # Get industries
-    industries = Industry.objects.filter(is_active=True).order_by('order')[:4]
-    
-    # Get technology categories with their technologies
-    technology_categories = TechnologyCategory.objects.prefetch_related('technologies').all()
-    
-    # Get case studies for home page
-    case_studies = CaseStudy.objects.filter(is_active=True).order_by('order')[:2]
-    completed_projects = CaseStudy.objects.filter(is_active=True).order_by('-created_at', 'order')[:6]
-    completed_projects_count = CaseStudy.objects.filter(is_active=True).count()
-    
-    # Get newsletter section
-    newsletter = NewsletterSignup.objects.filter(is_active=True).first()
-    
-    # Get statistics
-    statistics = Statistic.objects.filter(is_active=True).order_by('order')[:4]
-    
-    # Get blog posts
-    blog_posts = BlogPost.objects.filter(is_published=True).order_by('-publish_date')[:2]
-    
-    # Get partners
-    partners = Partner.objects.filter(is_active=True).order_by('order')
-    
-    # Get awards
-    awards = Award.objects.filter(is_active=True).order_by('-year', 'order')[:3]
-    
-    # Get contact CTA
-    contact_cta = ContactCTA.objects.filter(is_active=True).first()
-    
-    context = {
-        'hero': hero,
-        'services': services,
-        'testimonials': testimonials,
-        'about': about,
-        'process_steps': process_steps,
-        'industries': industries,
-        'technology_categories': technology_categories,
-        'case_studies': case_studies,
-        'completed_projects': completed_projects,
-        'completed_projects_count': completed_projects_count,
-        'newsletter': newsletter,
-        'statistics': statistics,
-        'blog_posts': blog_posts,
-        'partners': partners,
-        'awards': awards,
-        'contact_cta': contact_cta,
-    }
-    
+    context = cache.get(HOME_CONTEXT_CACHE_KEY)
+    if context is None:
+        context = {
+            "hero": HeroSection.objects.filter(is_active=True).first(),
+            "services": list(Service.objects.filter(is_featured=True).order_by("order")[:3]),
+            "testimonials": list(Testimonial.objects.filter(is_active=True).order_by("-created_at")[:2]),
+            "about": AboutSection.objects.filter(is_active=True).first(),
+            "process_steps": list(ProcessStep.objects.all().order_by("order")),
+            "industries": list(Industry.objects.filter(is_active=True).order_by("order")[:4]),
+            "technology_categories": list(TechnologyCategory.objects.prefetch_related("technologies").all()),
+            "case_studies": list(CaseStudy.objects.filter(is_active=True).order_by("order")[:2]),
+            "completed_projects": list(CaseStudy.objects.filter(is_active=True).order_by("-created_at", "order")[:6]),
+            "completed_projects_count": CaseStudy.objects.filter(is_active=True).count(),
+            "newsletter": NewsletterSignup.objects.filter(is_active=True).first(),
+            "statistics": list(Statistic.objects.filter(is_active=True).order_by("order")[:4]),
+            "blog_posts": list(BlogPost.objects.filter(is_published=True).order_by("-publish_date")[:2]),
+            "partners": list(Partner.objects.filter(is_active=True).order_by("order")),
+            "awards": list(Award.objects.filter(is_active=True).order_by("-year", "order")[:3]),
+            "contact_cta": ContactCTA.objects.filter(is_active=True).first(),
+        }
+        cache.set(HOME_CONTEXT_CACHE_KEY, context, HOME_CONTEXT_CACHE_TTL)
+
     return render(request, "home.html", context)
 
 def about(request):
@@ -269,14 +236,79 @@ def activity_dashboard(request):
     recent_contacts_all = contacts_queryset.filter(submitted_at__gte=window_start)
     recent_quotes_all = quotes_queryset.filter(created_at__gte=window_start)
 
-    kpis = {
-        "contacts_total": contacts_queryset.count(),
-        "contacts_unread": contacts_queryset.filter(is_read=False).count(),
-        "contacts_window": recent_contacts_all.count(),
-        "quotes_total": quotes_queryset.count(),
-        "quotes_new": quotes_queryset.filter(status="new").count(),
-        "quotes_window": recent_quotes_all.count(),
-    }
+    aggregates_cache_key = get_dashboard_aggregate_cache_key(period_days)
+    cached_aggregates = cache.get(aggregates_cache_key) if not search_query else None
+
+    if cached_aggregates:
+        kpis = cached_aggregates["kpis"]
+        trend_data = cached_aggregates["trend_data"]
+    else:
+        contacts_totals = contacts_queryset.aggregate(
+            total=Count("id"),
+            unread=Count("id", filter=Q(is_read=False)),
+            window=Count("id", filter=Q(submitted_at__gte=window_start)),
+        )
+        quotes_totals = quotes_queryset.aggregate(
+            total=Count("id"),
+            new=Count("id", filter=Q(status="new")),
+            window=Count("id", filter=Q(created_at__gte=window_start)),
+        )
+        kpis = {
+            "contacts_total": contacts_totals["total"],
+            "contacts_unread": contacts_totals["unread"],
+            "contacts_window": contacts_totals["window"],
+            "quotes_total": quotes_totals["total"],
+            "quotes_new": quotes_totals["new"],
+            "quotes_window": quotes_totals["window"],
+        }
+
+        trend_contacts = recent_contacts_all
+        trend_quotes = recent_quotes_all
+        if search_query:
+            trend_contacts = trend_contacts.filter(
+                Q(full_name__icontains=search_query)
+                | Q(email__icontains=search_query)
+                | Q(service__icontains=search_query)
+                | Q(message__icontains=search_query)
+            )
+            trend_quotes = trend_quotes.filter(
+                Q(quote_reference__icontains=search_query)
+                | Q(full_name__icontains=search_query)
+                | Q(email__icontains=search_query)
+                | Q(company__icontains=search_query)
+                | Q(project_summary__icontains=search_query)
+                | Q(service__title__icontains=search_query)
+            )
+
+        contacts_daily_raw = trend_contacts.annotate(day=TruncDate("submitted_at")).values("day").annotate(total=Count("id"))
+        quotes_daily_raw = trend_quotes.annotate(day=TruncDate("created_at")).values("day").annotate(total=Count("id"))
+        contacts_daily = {item["day"]: item["total"] for item in contacts_daily_raw}
+        quotes_daily = {item["day"]: item["total"] for item in quotes_daily_raw}
+
+        trend_days = [window_start.date() + timedelta(days=i) for i in range(period_days)]
+        max_count = max(
+            max(contacts_daily.values(), default=0),
+            max(quotes_daily.values(), default=0),
+            1,
+        )
+        trend_data = []
+        for day in trend_days:
+            contact_count = contacts_daily.get(day, 0)
+            quote_count = quotes_daily.get(day, 0)
+            trend_data.append({
+                "label": day.strftime("%b %d"),
+                "contacts": contact_count,
+                "quotes": quote_count,
+                "contacts_height": max(6, int((contact_count / max_count) * 120)) if contact_count else 4,
+                "quotes_height": max(6, int((quote_count / max_count) * 120)) if quote_count else 4,
+            })
+
+        if not search_query:
+            cache.set(
+                aggregates_cache_key,
+                {"kpis": kpis, "trend_data": trend_data},
+                DASHBOARD_AGGREGATES_CACHE_TTL,
+            )
 
     filtered_contacts = recent_contacts_all
     filtered_quotes = recent_quotes_all
@@ -295,29 +327,6 @@ def activity_dashboard(request):
             | Q(project_summary__icontains=search_query)
             | Q(service__title__icontains=search_query)
         )
-
-    contacts_daily_raw = filtered_contacts.annotate(day=TruncDate("submitted_at")).values("day").annotate(total=Count("id"))
-    quotes_daily_raw = filtered_quotes.annotate(day=TruncDate("created_at")).values("day").annotate(total=Count("id"))
-    contacts_daily = {item["day"]: item["total"] for item in contacts_daily_raw}
-    quotes_daily = {item["day"]: item["total"] for item in quotes_daily_raw}
-
-    trend_days = [window_start.date() + timedelta(days=i) for i in range(period_days)]
-    max_count = max(
-        max(contacts_daily.values(), default=0),
-        max(quotes_daily.values(), default=0),
-        1,
-    )
-    trend_data = []
-    for day in trend_days:
-        contact_count = contacts_daily.get(day, 0)
-        quote_count = quotes_daily.get(day, 0)
-        trend_data.append({
-            "label": day.strftime("%b %d"),
-            "contacts": contact_count,
-            "quotes": quote_count,
-            "contacts_height": max(6, int((contact_count / max_count) * 120)) if contact_count else 4,
-            "quotes_height": max(6, int((quote_count / max_count) * 120)) if quote_count else 4,
-        })
 
     client_activities = []
     for message in filtered_contacts.order_by("-submitted_at")[:50]:

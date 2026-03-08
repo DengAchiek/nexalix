@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}{{ page_title|default:'Case Studies' }} - Nexalix Technologies{% endblock %}
 
@@ -15,7 +15,7 @@
                 <div class="case-image-wrapper">
                     {% if case.image %}
                     <img
-                        src="{{ case.image.url }}"
+                        src="{{ case.image.url|optimized_media:'card' }}"
                         alt="{{ case.title }}"
                         class="case-image"
                         loading="lazy"

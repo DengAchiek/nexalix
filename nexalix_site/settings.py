@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "nexalix_app",
+    "nexalix_app.apps.NexalixAppConfig",
 ]
 
 # --------------------
@@ -94,6 +94,34 @@ if DATABASE_URL and dj_database_url:
         conn_max_age=600,
         ssl_require=not DEBUG,
     )
+
+# --------------------
+# CACHE (Redis if available)
+# --------------------
+REDIS_URL = os.getenv("REDIS_URL", "").strip()
+CACHE_DEFAULT_TIMEOUT = int(os.getenv("CACHE_DEFAULT_TIMEOUT", "300"))
+
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": REDIS_URL,
+            "TIMEOUT": CACHE_DEFAULT_TIMEOUT,
+            "OPTIONS": {
+                "socket_connect_timeout": 3,
+                "socket_timeout": 3,
+                "retry_on_timeout": True,
+            },
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "nexalix-local-cache",
+            "TIMEOUT": CACHE_DEFAULT_TIMEOUT,
+        }
+    }
 
 # --------------------
 # INTERNATIONALIZATION

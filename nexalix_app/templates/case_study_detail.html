@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load media_optimization %}
 {% load static %}
 
 {% block title %}{{ page_title }} - Nexalix Technologies{% endblock %}
@@ -10,7 +11,7 @@
             <h1>{{ case_study.title }}</h1>
             {% if case_study.image %}
             <div class="case-image-wrapper" style="padding: 0; margin-bottom: 18px;">
-                <img src="{{ case_study.image.url }}" alt="{{ case_study.title }}" class="case-image">
+                <img src="{{ case_study.image.url|optimized_media:'case_detail' }}" alt="{{ case_study.title }}" class="case-image" loading="eager" fetchpriority="high" decoding="async">
             </div>
             {% endif %}
 

@@ -1,14 +1,24 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}Nexalix Technologies | IT & Innovation Consulting{% endblock %}
 
 {% block content %}
 <section class="home-hero">
     <div class="home-hero-media">
-        <video id="homeHeroVideo" class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto">
+        <video
+            id="homeHeroVideo"
+            class="hero-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            webkit-playsinline
+            preload="metadata"
+            {% if hero and hero.video_poster %}poster="{{ hero.video_poster.url|optimized_media:'hero_poster' }}"{% endif %}
+        >
             {% if hero and hero.video %}
-            <source src="{{ hero.video.url }}" type="video/mp4">
+            <source src="{{ hero.video.url|optimized_media:'video' }}" type="video/mp4">
             {% else %}
             <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
             {% endif %}
@@ -133,7 +143,7 @@
                 <div class="project-completed-media">
                     {% if project.image %}
                     <img
-                        src="{{ project.image.url }}"
+                        src="{{ project.image.url|optimized_media:'card' }}"
                         alt="{{ project.title }}"
                         loading="lazy"
                         onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
@@ -185,7 +195,7 @@
                     <div class="partner-home-logo-wrap">
                         {% if partner.logo %}
                         <img
-                            src="{{ partner.logo.url }}"
+                            src="{{ partner.logo.url|optimized_media:'thumb' }}"
                             alt="{{ partner.name }} logo"
                             class="partner-home-logo"
                             loading="lazy"
@@ -212,7 +222,7 @@
                     <div class="partner-home-logo-wrap">
                         {% if partner.logo %}
                         <img
-                            src="{{ partner.logo.url }}"
+                            src="{{ partner.logo.url|optimized_media:'thumb' }}"
                             alt="{{ partner.name }} logo"
                             class="partner-home-logo"
                             loading="lazy"
@@ -311,7 +321,7 @@
                 <div class="portfolio-image-wrap">
                     {% if case.image %}
                     <img
-                        src="{{ case.image.url }}"
+                        src="{{ case.image.url|optimized_media:'card' }}"
                         alt="{{ case.title }}"
                         class="portfolio-image"
                         loading="lazy"

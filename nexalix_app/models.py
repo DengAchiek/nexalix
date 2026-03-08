@@ -352,9 +352,9 @@ class QuoteRequest(models.Model):
     estimated_min = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     estimated_max = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     estimated_weeks = models.PositiveIntegerField(default=0)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new", db_index=True)
     admin_notes = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -419,8 +419,8 @@ class ContactMessage(models.Model):
     email = models.EmailField()
     service = models.CharField(max_length=100, blank=True)
     message = models.TextField()
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    is_read = models.BooleanField(default=False, db_index=True)
     admin_notified = models.BooleanField(default=False)
     admin_notified_at = models.DateTimeField(null=True, blank=True)
     user_confirmation_sent = models.BooleanField(default=False)

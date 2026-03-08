@@ -33,7 +33,7 @@
     <header class="site-header" id="siteHeader">
         <div class="container header-row">
             <a href="{% url 'home' %}" class="brand" aria-label="Nexalix home">
-                <img src="{% static 'images/logo1.png' %}?v=20260304j" alt="Nexalix logo" class="brand-logo">
+                <img src="{% static 'images/logo1.png' %}?v=20260304j" alt="Nexalix logo" class="brand-logo" loading="eager" fetchpriority="high" decoding="async">
             </a>
 
             <nav class="nav-links" aria-label="Primary navigation">

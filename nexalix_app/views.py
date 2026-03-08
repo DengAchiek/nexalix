@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.core.cache import cache
 from django.conf import settings
+from django.http import HttpResponse
 from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib.auth.decorators import user_passes_test
@@ -11,8 +12,9 @@ from django.db.models import Count, Q
 from django.db.models.functions import TruncDate
 from django.urls import reverse
 from urllib.parse import urlencode
-from datetime import timedelta
+from datetime import timedelta, date
 from decimal import Decimal, ROUND_HALF_UP
+import csv
 import json
 import math
 from .cache_utils import (
@@ -24,7 +26,7 @@ from .models import (
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
-    QuoteAddon, QuoteRequest
+    QuoteAddon, QuoteRequest, DashboardSavedFilter
 )
 # If you have these models, import them:
 # from .models import AboutPage, CompanyValue, ContactInfo, ContactMessage
@@ -187,6 +189,52 @@ def _seo_context(
 
 def is_staff_user(user):
     return user.is_authenticated and user.is_staff
+
+
+ROLE_LABELS = {
+    "all": "All Views",
+    "sales": "Sales View",
+    "ops": "Ops View",
+}
+
+
+def _safe_parse_iso_date(value):
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _allowed_role_views(user):
+    if not user.is_authenticated:
+        return ["all"]
+    if user.is_superuser:
+        return ["all", "sales", "ops"]
+
+    group_names = {name.lower() for name in user.groups.values_list("name", flat=True)}
+    allowed = []
+    if "sales" in group_names:
+        allowed.append("sales")
+    if "ops" in group_names or "operations" in group_names:
+        allowed.append("ops")
+    if not allowed:
+        return ["all"]
+    return ["all", *allowed]
+
+
+def _dashboard_query_string(period_days, activity_filter, search_query, role_view, day_value=""):
+    params = {"period": str(period_days)}
+    if search_query:
+        params["q"] = search_query
+    if activity_filter and activity_filter != "all":
+        params["activity"] = activity_filter
+    if role_view and role_view != "all":
+        params["role"] = role_view
+    if day_value:
+        params["day"] = day_value
+    return urlencode(params)
 
 
 def calculate_quote_estimate(service, complexity, timeline, support_plan, addons):
@@ -403,39 +451,104 @@ def activity_dashboard(request):
     activity_filter = (request.GET.get("activity") or request.POST.get("activity") or "all").strip().lower()
     if activity_filter not in {"all", "contact", "quote"}:
         activity_filter = "all"
+    role_view = (request.GET.get("role") or request.POST.get("role") or "all").strip().lower()
+    selected_day_str = (request.GET.get("day") or request.POST.get("day") or "").strip()
+    selected_day = _safe_parse_iso_date(selected_day_str)
+    if selected_day is None:
+        selected_day_str = ""
 
-    if request.method == "POST" and request.POST.get("action") == "update_profile":
-        first_name = request.POST.get("first_name", "").strip()
-        last_name = request.POST.get("last_name", "").strip()
-        email = request.POST.get("email", "").strip()
+    allowed_roles = _allowed_role_views(request.user)
+    if role_view not in allowed_roles:
+        role_view = allowed_roles[0]
 
-        if email and "@" not in email:
-            messages.error(request, "Please provide a valid email address.")
-        else:
-            request.user.first_name = first_name
-            request.user.last_name = last_name
-            request.user.email = email
-            request.user.save(update_fields=["first_name", "last_name", "email"])
-            messages.success(request, "Admin profile updated successfully.")
+    if request.GET.get("saved_filter"):
+        saved_filter = DashboardSavedFilter.objects.filter(
+            id=request.GET.get("saved_filter"),
+            user=request.user,
+        ).first()
+        if saved_filter:
+            return redirect(
+                f"{reverse('activity_dashboard')}?{_dashboard_query_string(saved_filter.period_days, saved_filter.activity_filter, saved_filter.search_query, saved_filter.role_view)}"
+            )
+        messages.error(request, "Saved filter not found.")
+        return redirect(f"{reverse('activity_dashboard')}?{_dashboard_query_string(period_days, activity_filter, search_query, role_view, selected_day_str)}")
 
-        query_params = {"period": str(period_days)}
-        if search_query:
-            query_params["q"] = search_query
-        if activity_filter != "all":
-            query_params["activity"] = activity_filter
-        return redirect(f"{reverse('activity_dashboard')}?{urlencode(query_params)}")
+    if request.method == "POST":
+        action = (request.POST.get("action") or "").strip()
+        post_period_days = valid_periods.get(request.POST.get("period", str(period_days)), period_days)
+        post_search = (request.POST.get("q", search_query) or "").strip()
+        post_activity = (request.POST.get("activity", activity_filter) or "all").strip().lower()
+        if post_activity not in {"all", "contact", "quote"}:
+            post_activity = "all"
+        post_role = (request.POST.get("role", role_view) or "all").strip().lower()
+        if post_role not in allowed_roles:
+            post_role = allowed_roles[0]
+        post_day = (request.POST.get("day", selected_day_str) or "").strip()
+        if _safe_parse_iso_date(post_day) is None:
+            post_day = ""
+
+        if action == "update_profile":
+            first_name = request.POST.get("first_name", "").strip()
+            last_name = request.POST.get("last_name", "").strip()
+            email = request.POST.get("email", "").strip()
+
+            if email and "@" not in email:
+                messages.error(request, "Please provide a valid email address.")
+            else:
+                request.user.first_name = first_name
+                request.user.last_name = last_name
+                request.user.email = email
+                request.user.save(update_fields=["first_name", "last_name", "email"])
+                messages.success(request, "Admin profile updated successfully.")
+
+        elif action == "save_filter":
+            filter_name = (request.POST.get("filter_name") or "").strip()
+            if not filter_name:
+                messages.error(request, "Enter a name for the saved filter.")
+            else:
+                DashboardSavedFilter.objects.update_or_create(
+                    user=request.user,
+                    name=filter_name[:80],
+                    defaults={
+                        "period_days": post_period_days,
+                        "activity_filter": post_activity,
+                        "role_view": post_role,
+                        "search_query": post_search[:200],
+                    },
+                )
+                messages.success(request, f'Saved filter "{filter_name[:80]}" updated.')
+
+        elif action == "delete_saved_filter":
+            saved_filter_id = request.POST.get("saved_filter_id")
+            deleted, _ = DashboardSavedFilter.objects.filter(
+                id=saved_filter_id,
+                user=request.user,
+            ).delete()
+            if deleted:
+                messages.success(request, "Saved filter deleted.")
+            else:
+                messages.error(request, "Saved filter was not found.")
+
+        return redirect(
+            f"{reverse('activity_dashboard')}?{_dashboard_query_string(post_period_days, post_activity, post_search, post_role, post_day)}"
+        )
 
     now = timezone.now()
     window_start = now - timedelta(days=period_days)
 
     contacts_queryset = ContactMessage.objects.all()
     quotes_queryset = QuoteRequest.objects.select_related("service")
+    if role_view == "ops":
+        contacts_queryset = contacts_queryset.filter(is_read=False)
+        quotes_queryset = quotes_queryset.filter(status__in=["new", "reviewed", "sent"])
+    elif role_view == "sales":
+        quotes_queryset = quotes_queryset.exclude(status="lost")
 
-    recent_contacts_all = contacts_queryset.filter(submitted_at__gte=window_start)
-    recent_quotes_all = quotes_queryset.filter(created_at__gte=window_start)
+    recent_contacts_period = contacts_queryset.filter(submitted_at__gte=window_start)
+    recent_quotes_period = quotes_queryset.filter(created_at__gte=window_start)
 
     aggregates_cache_key = get_dashboard_aggregate_cache_key(period_days)
-    cached_aggregates = cache.get(aggregates_cache_key) if not search_query else None
+    cached_aggregates = cache.get(aggregates_cache_key) if not search_query and role_view == "all" else None
 
     if cached_aggregates:
         kpis = cached_aggregates["kpis"]
@@ -460,8 +573,8 @@ def activity_dashboard(request):
             "quotes_window": quotes_totals["window"],
         }
 
-        trend_contacts = recent_contacts_all
-        trend_quotes = recent_quotes_all
+        trend_contacts = recent_contacts_period
+        trend_quotes = recent_quotes_period
         if search_query:
             trend_contacts = trend_contacts.filter(
                 Q(full_name__icontains=search_query)
@@ -495,21 +608,22 @@ def activity_dashboard(request):
             quote_count = quotes_daily.get(day, 0)
             trend_data.append({
                 "label": day.strftime("%b %d"),
+                "date": day.isoformat(),
                 "contacts": contact_count,
                 "quotes": quote_count,
                 "contacts_height": max(6, int((contact_count / max_count) * 120)) if contact_count else 4,
                 "quotes_height": max(6, int((quote_count / max_count) * 120)) if quote_count else 4,
             })
 
-        if not search_query:
+        if not search_query and role_view == "all":
             cache.set(
                 aggregates_cache_key,
                 {"kpis": kpis, "trend_data": trend_data},
                 DASHBOARD_AGGREGATES_CACHE_TTL,
             )
 
-    filtered_contacts = recent_contacts_all
-    filtered_quotes = recent_quotes_all
+    filtered_contacts = recent_contacts_period
+    filtered_quotes = recent_quotes_period
     if search_query:
         filtered_contacts = filtered_contacts.filter(
             Q(full_name__icontains=search_query)
@@ -525,6 +639,9 @@ def activity_dashboard(request):
             | Q(project_summary__icontains=search_query)
             | Q(service__title__icontains=search_query)
         )
+    if selected_day:
+        filtered_contacts = filtered_contacts.filter(submitted_at__date=selected_day)
+        filtered_quotes = filtered_quotes.filter(created_at__date=selected_day)
 
     client_activities = []
     for message in filtered_contacts.order_by("-submitted_at")[:50]:
@@ -551,6 +668,12 @@ def activity_dashboard(request):
             "search_text": f"{quote.quote_reference} {quote.full_name} {quote.email} {quote.company or ''} {quote.project_summary}".lower(),
         })
 
+    if role_view == "ops":
+        client_activities = [
+            item for item in client_activities
+            if item["type"] == "contact" or item["status"] in {"New", "Reviewed", "Quote Sent"}
+        ]
+
     client_activities.sort(key=lambda item: item["timestamp"], reverse=True)
     if activity_filter in {"contact", "quote"}:
         client_activities = [item for item in client_activities if item["type"] == activity_filter]
@@ -566,14 +689,18 @@ def activity_dashboard(request):
         CHANGE: "updated",
         DELETION: "deleted",
     }
-    logs_queryset = LogEntry.objects.select_related("user", "content_type").order_by("-action_time")
-    if search_query:
-        logs_queryset = logs_queryset.filter(
-            Q(object_repr__icontains=search_query)
-            | Q(user__username__icontains=search_query)
-            | Q(change_message__icontains=search_query)
-            | Q(content_type__model__icontains=search_query)
-        )
+    logs_queryset = LogEntry.objects.none()
+    if role_view != "sales":
+        logs_queryset = LogEntry.objects.select_related("user", "content_type").order_by("-action_time")
+        if search_query:
+            logs_queryset = logs_queryset.filter(
+                Q(object_repr__icontains=search_query)
+                | Q(user__username__icontains=search_query)
+                | Q(change_message__icontains=search_query)
+                | Q(content_type__model__icontains=search_query)
+            )
+        if selected_day:
+            logs_queryset = logs_queryset.filter(action_time__date=selected_day)
 
     admin_logs = []
     for entry in logs_queryset[:40]:
@@ -593,6 +720,72 @@ def activity_dashboard(request):
             "search_text": f"{entry.user.get_username()} {model_name} {entry.object_repr} {entry.change_message}".lower(),
         })
 
+    if request.GET.get("export") == "csv":
+        dataset = (request.GET.get("dataset") or "activity").strip().lower()
+        response = HttpResponse(content_type="text/csv")
+        ts = timezone.now().strftime("%Y%m%d_%H%M")
+        response["Content-Disposition"] = f'attachment; filename="nexalix_{dataset}_{ts}.csv"'
+        writer = csv.writer(response)
+        if dataset == "logs":
+            writer.writerow(["Time", "User", "Action", "Model", "Object"])
+            for log in admin_logs:
+                writer.writerow([
+                    timezone.localtime(log["time"]).strftime("%Y-%m-%d %H:%M"),
+                    log["user"],
+                    log["action"],
+                    log["model"],
+                    log["object_label"],
+                ])
+        else:
+            writer.writerow(["Type", "Timestamp", "Title", "Subtitle", "Detail", "Status", "Admin URL"])
+            for item in client_activities:
+                writer.writerow([
+                    item["type"],
+                    timezone.localtime(item["timestamp"]).strftime("%Y-%m-%d %H:%M"),
+                    item["title"],
+                    item["subtitle"],
+                    item["detail"],
+                    item["status"],
+                    request.build_absolute_uri(item["admin_url"]),
+                ])
+        return response
+
+    saved_filters = DashboardSavedFilter.objects.filter(user=request.user)
+    saved_filter_entries = []
+    for saved in saved_filters:
+        saved_filter_entries.append({
+            "id": saved.id,
+            "name": saved.name,
+            "period_days": saved.period_days,
+            "activity_filter": saved.activity_filter,
+            "role_view": saved.role_view,
+            "search_query": saved.search_query,
+            "apply_query": _dashboard_query_string(
+                saved.period_days,
+                saved.activity_filter,
+                saved.search_query,
+                saved.role_view,
+            ),
+        })
+
+    period_options = [
+        {
+            "days": day_count,
+            "query": _dashboard_query_string(day_count, activity_filter, search_query, role_view, selected_day_str),
+            "active": period_days == day_count,
+        }
+        for day_count in (7, 30, 90)
+    ]
+    role_switches = [
+        {
+            "key": value,
+            "label": ROLE_LABELS.get(value, value.title()),
+            "query": _dashboard_query_string(period_days, activity_filter, search_query, value, selected_day_str),
+        }
+        for value in allowed_roles
+    ]
+    current_query = _dashboard_query_string(period_days, activity_filter, search_query, role_view, selected_day_str)
+
     return render(request, "admin/activity_dashboard.html", {
         "kpis": kpis,
         "period_days": period_days,
@@ -601,6 +794,19 @@ def activity_dashboard(request):
         "trend_data": trend_data,
         "search_query": search_query,
         "activity_filter": activity_filter,
+        "role_view": role_view,
+        "period_options": period_options,
+        "role_switches": role_switches,
+        "saved_filters": saved_filter_entries,
+        "current_query": current_query,
+        "selected_day": selected_day,
+        "selected_day_str": selected_day_str,
+        "selected_day_label": selected_day.strftime("%b %d, %Y") if selected_day else "",
+        "csv_activity_query": f"{current_query}&export=csv&dataset=activity",
+        "csv_logs_query": f"{current_query}&export=csv&dataset=logs",
+        "clear_day_query": _dashboard_query_string(period_days, activity_filter, search_query, role_view),
+        "sales_mode": role_view == "sales",
+        "ops_mode": role_view == "ops",
     })
 
 

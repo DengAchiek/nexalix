@@ -1,5 +1,6 @@
 # nexalix_app/models.py
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.utils.text import slugify
 import uuid
@@ -445,3 +446,38 @@ class ContactMessage(models.Model):
         self.user_confirmation_sent = True
         self.user_confirmation_sent_at = timezone.now()
         self.save()
+
+
+class DashboardSavedFilter(models.Model):
+    ROLE_CHOICES = [
+        ("all", "All Views"),
+        ("sales", "Sales"),
+        ("ops", "Ops"),
+    ]
+    ACTIVITY_CHOICES = [
+        ("all", "All"),
+        ("contact", "Contacts"),
+        ("quote", "Quotes"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="dashboard_saved_filters",
+    )
+    name = models.CharField(max_length=80)
+    period_days = models.PositiveSmallIntegerField(default=7)
+    activity_filter = models.CharField(max_length=16, choices=ACTIVITY_CHOICES, default="all")
+    role_view = models.CharField(max_length=16, choices=ROLE_CHOICES, default="all")
+    search_query = models.CharField(max_length=200, blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+        unique_together = ("user", "name")
+        verbose_name = "Dashboard Saved Filter"
+        verbose_name_plural = "Dashboard Saved Filters"
+
+    def __str__(self):
+        return f"{self.user} · {self.name}"

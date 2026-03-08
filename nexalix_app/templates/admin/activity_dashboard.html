@@ -78,6 +78,29 @@
     gap: 8px;
 }
 
+.mk-role-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.mk-role-strip a {
+    text-decoration: none;
+    border-radius: 999px;
+    border: 1px solid #d1deed;
+    background: #f8fbff;
+    color: #3e6289;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 6px 10px;
+}
+
+.mk-role-strip a.active {
+    background: #eef5ff;
+    border-color: #bdd2ec;
+    color: #145ea5;
+}
+
 .mk-period a {
     text-decoration: none;
     border: 1px solid var(--mk-line);
@@ -138,6 +161,91 @@
     margin: 0;
     color: #5c7696;
     font-size: 0.79rem;
+}
+
+.mk-saved-filters {
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    display: grid;
+    gap: 8px;
+}
+
+.mk-saved-filters h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #284a6f;
+}
+
+.mk-save-filter-form {
+    display: flex;
+    gap: 6px;
+}
+
+.mk-save-filter-form input {
+    border: 1px solid #d4e2ef;
+    border-radius: 8px;
+    padding: 7px 9px;
+    font-size: 0.78rem;
+    width: 100%;
+}
+
+.mk-save-filter-form button {
+    border: 0;
+    border-radius: 8px;
+    background: #2f6de2;
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.mk-saved-list {
+    display: grid;
+    gap: 6px;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.mk-saved-item {
+    border: 1px solid #dde8f4;
+    border-radius: 8px;
+    padding: 7px;
+    display: grid;
+    gap: 4px;
+    background: #fbfdff;
+}
+
+.mk-saved-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.mk-saved-item-head a {
+    color: #1f5f9f;
+    text-decoration: none;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.mk-saved-item-head button {
+    border: 0;
+    border-radius: 6px;
+    background: #ffe8e8;
+    color: #a03434;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 7px;
+    cursor: pointer;
+}
+
+.mk-saved-meta {
+    font-size: 0.69rem;
+    color: #6d84a0;
 }
 
 .mk-switch {
@@ -221,6 +329,13 @@
     align-items: center;
     gap: 8px;
     color: #fff;
+}
+
+.mk-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .mk-pill {
@@ -404,6 +519,13 @@
 .mk-bar {
     width: 10px;
     border-radius: 8px 8px 2px 2px;
+    cursor: pointer;
+    border: 0;
+}
+
+.mk-bar:focus-visible {
+    outline: 2px solid #1d5fa6;
+    outline-offset: 2px;
 }
 
 .mk-bar.contacts { background: linear-gradient(180deg, #4daaff, #2f6de2); }
@@ -598,6 +720,25 @@
     background: #fbfdff;
 }
 
+.mk-drill-banner {
+    border: 1px solid #c7dbf3;
+    border-radius: 10px;
+    padding: 9px 11px;
+    background: #edf6ff;
+    color: #234d77;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.82rem;
+}
+
+.mk-drill-banner a {
+    color: #1e65aa;
+    text-decoration: none;
+    font-weight: 700;
+}
+
 .mk-table-wrap {
     overflow: auto;
     max-height: 360px;
@@ -713,19 +854,63 @@
         </div>
 
         <div class="mk-period">
-            <a class="{% if period_days == 7 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=7{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Last 7 days</a>
-            <a class="{% if period_days == 30 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=30{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Last 30 days</a>
-            <a class="{% if period_days == 90 %}active{% endif %}" href="{% url 'activity_dashboard' %}?period=90{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Last 90 days</a>
+            {% for option in period_options %}
+            <a class="{% if option.active %}active{% endif %}" href="{% url 'activity_dashboard' %}?{{ option.query }}">Last {{ option.days }} days</a>
+            {% endfor %}
+        </div>
+
+        <div class="mk-role-strip">
+            {% for role_item in role_switches %}
+            <a class="{% if role_view == role_item.key %}active{% endif %}" href="{% url 'activity_dashboard' %}?{{ role_item.query }}">{{ role_item.label }}</a>
+            {% endfor %}
         </div>
 
         <nav class="mk-nav">
-            <a class="current" href="{% url 'activity_dashboard' %}?period={{ period_days }}">Dashboard Overview</a>
+            <a class="current" href="{% url 'activity_dashboard' %}?{{ current_query }}">Dashboard Overview</a>
             <a href="{% url 'admin:nexalix_app_contactmessage_changelist' %}">Contact Messages</a>
             <a href="{% url 'admin:nexalix_app_quoterequest_changelist' %}">Quote Requests</a>
             <a href="{% url 'admin:nexalix_app_partner_changelist' %}">Partners</a>
             <a href="{% url 'admin:nexalix_app_casestudy_changelist' %}">Case Studies</a>
             <a href="{% url 'admin:index' %}">Django Admin Home</a>
         </nav>
+
+        <div class="mk-saved-filters">
+            <h3>Saved Filters</h3>
+            <form class="mk-save-filter-form" method="post" action="{% url 'activity_dashboard' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_filter">
+                <input type="hidden" name="period" value="{{ period_days }}">
+                <input type="hidden" name="q" value="{{ search_query }}">
+                <input type="hidden" name="activity" value="{{ activity_filter }}">
+                <input type="hidden" name="role" value="{{ role_view }}">
+                <input type="hidden" name="day" value="{{ selected_day_str }}">
+                <input type="text" name="filter_name" maxlength="80" placeholder="Save current view">
+                <button type="submit">Save</button>
+            </form>
+            <div class="mk-saved-list">
+                {% for saved in saved_filters %}
+                <div class="mk-saved-item">
+                    <div class="mk-saved-item-head">
+                        <a href="{% url 'activity_dashboard' %}?saved_filter={{ saved.id }}">{{ saved.name }}</a>
+                        <form method="post" action="{% url 'activity_dashboard' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete_saved_filter">
+                            <input type="hidden" name="saved_filter_id" value="{{ saved.id }}">
+                            <input type="hidden" name="period" value="{{ period_days }}">
+                            <input type="hidden" name="q" value="{{ search_query }}">
+                            <input type="hidden" name="activity" value="{{ activity_filter }}">
+                            <input type="hidden" name="role" value="{{ role_view }}">
+                            <input type="hidden" name="day" value="{{ selected_day_str }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                    <div class="mk-saved-meta">{{ saved.period_days }}d · {{ saved.role_view|title }} · {{ saved.activity_filter|title }}</div>
+                </div>
+                {% empty %}
+                <div class="mk-saved-meta">No saved filters yet.</div>
+                {% endfor %}
+            </div>
+        </div>
 
         <div class="mk-sidebar-foot">
             <label class="mk-switch">
@@ -742,13 +927,22 @@
             <form class="mk-search" id="dashboardSearchForm" method="get" action="{% url 'activity_dashboard' %}">
                 <input type="hidden" name="period" value="{{ period_days }}">
                 <input type="hidden" name="activity" value="{{ activity_filter }}" id="activityHiddenInput">
+                <input type="hidden" name="role" value="{{ role_view }}" id="roleHiddenInput">
+                <input type="hidden" name="day" value="{{ selected_day_str }}" id="dayHiddenInput">
                 <i>🔎</i>
                 <input type="search" name="q" id="dashboardSearchInput" value="{{ search_query }}" placeholder="Search contacts, quotes, admin logs..." autocomplete="off">
                 <button type="submit">Search</button>
             </form>
             <div class="mk-actions">
-                <a class="mk-pill" href="{% url 'activity_dashboard' %}?period={{ period_days }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}{% if activity_filter != 'all' %}&activity={{ activity_filter }}{% endif %}">Refresh</a>
-                <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
+                <div class="mk-toolbar">
+                    <span class="mk-pill">{{ role_view|title }} Mode</span>
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ current_query }}">Refresh</a>
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ csv_activity_query }}">Export Activity CSV</a>
+                    {% if not sales_mode %}
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ csv_logs_query }}">Export Logs CSV</a>
+                    {% endif %}
+                    <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
+                </div>
                 <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
             </div>
         </header>
@@ -758,6 +952,13 @@
                 {% for message in messages %}
                     <div class="mk-msg {% if message.tags == 'error' %}error{% else %}success{% endif %}">{{ message }}</div>
                 {% endfor %}
+            {% endif %}
+
+            {% if selected_day %}
+            <div class="mk-drill-banner">
+                <span>Drill-down active for <strong>{{ selected_day_label }}</strong>.</span>
+                <a href="{% url 'activity_dashboard' %}?{{ clear_day_query }}">Clear drill-down</a>
+            </div>
             {% endif %}
 
             <div class="mk-kpis" id="kpiCards">
@@ -805,7 +1006,7 @@
             <div class="mk-grid">
                 <article class="mk-panel">
                     <h2>Activity Trend</h2>
-                    <p class="mk-sub">Contacts and quotes visualized as grouped bars.</p>
+                    <p class="mk-sub">Contacts and quotes visualized as grouped bars. Click a bar to drill into that day.</p>
                     <div class="mk-chart-controls">
                         <label><input type="checkbox" id="toggleContacts" checked> Contacts</label>
                         <label><input type="checkbox" id="toggleQuotes" checked> Quotes</label>
@@ -814,8 +1015,8 @@
                         {% for point in trend_data %}
                         <div class="mk-col">
                             <div class="mk-bars">
-                                <span class="mk-bar contacts" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }}"></span>
-                                <span class="mk-bar quotes" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }}"></span>
+                                <button type="button" class="mk-bar contacts" data-kind="contact" data-day="{{ point.date }}" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }} on {{ point.label }}"></button>
+                                <button type="button" class="mk-bar quotes" data-kind="quote" data-day="{{ point.date }}" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }} on {{ point.label }}"></button>
                             </div>
                             <small>{{ point.label }}</small>
                         </div>
@@ -838,6 +1039,8 @@
                         <input type="hidden" name="period" value="{{ period_days }}">
                         <input type="hidden" name="q" value="{{ search_query }}">
                         <input type="hidden" name="activity" value="{{ activity_filter }}">
+                        <input type="hidden" name="role" value="{{ role_view }}">
+                        <input type="hidden" name="day" value="{{ selected_day_str }}">
 
                         <label for="profile_first_name">First Name</label>
                         <input id="profile_first_name" type="text" name="first_name" value="{{ request.user.first_name }}">
@@ -861,7 +1064,13 @@
                     <div class="mk-panel-head">
                         <div>
                             <h2>Recent Client Activity</h2>
-                            <p class="mk-sub">Latest contact and quote submissions.</p>
+                            <p class="mk-sub">
+                                {% if ops_mode %}
+                                Operational queue focus: unread contacts and active quote pipeline.
+                                {% else %}
+                                Latest contact and quote submissions.
+                                {% endif %}
+                            </p>
                         </div>
                         <div class="mk-filter-tabs" id="activityFilterTabs">
                             <button type="button" data-filter="all" class="{% if activity_filter == 'all' %}active{% endif %}">All</button>
@@ -887,6 +1096,7 @@
                     <div class="mk-empty" id="activityEmpty" {% if client_activities %}style="display:none;"{% endif %}>No client activity matches your current filters.</div>
                 </article>
 
+                {% if not sales_mode %}
                 <article class="mk-panel">
                     <h2>Admin Change Log</h2>
                     <p class="mk-sub">Recent model actions in Django admin.</p>
@@ -922,6 +1132,13 @@
                     </div>
                     <div class="mk-empty" id="logEmpty" {% if admin_logs %}style="display:none;"{% endif %}>No admin log entries match your search.</div>
                 </article>
+                {% else %}
+                <article class="mk-panel">
+                    <h2>Ops-Only Logs</h2>
+                    <p class="mk-sub">Switch to Ops View or All Views to inspect change logs and operational audit data.</p>
+                    <div class="mk-empty">Admin logs are hidden in Sales View for a focused workflow.</div>
+                </article>
+                {% endif %}
             </div>
         </div>
     </section>
@@ -929,8 +1146,10 @@
 
 <script>
 (function () {
+    const searchForm = document.getElementById("dashboardSearchForm");
     const searchInput = document.getElementById("dashboardSearchInput");
     const activityHiddenInput = document.getElementById("activityHiddenInput");
+    const dayHiddenInput = document.getElementById("dayHiddenInput");
     const activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
     const logRows = Array.from(document.querySelectorAll("#adminLogTable tbody tr"));
     const tabs = Array.from(document.querySelectorAll("#activityFilterTabs button"));
@@ -1034,6 +1253,20 @@
             setActiveTab(card.dataset.kpiFilter || "all");
             const activityPanel = document.getElementById("activityList");
             if (activityPanel) activityPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    });
+
+    document.querySelectorAll("#trendChart .mk-bar[data-day][data-kind]").forEach((bar) => {
+        bar.addEventListener("click", () => {
+            const kind = bar.dataset.kind || "all";
+            const day = bar.dataset.day || "";
+            if (activityHiddenInput) activityHiddenInput.value = kind;
+            if (dayHiddenInput) dayHiddenInput.value = day;
+            if (searchForm) {
+                searchForm.submit();
+                return;
+            }
+            setActiveTab(kind);
         });
     });
 

@@ -8,7 +8,7 @@ from .models import (
     Industry, TechnologyCategory, Technology, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
-    QuoteAddon, QuoteRequest
+    QuoteAddon, QuoteRequest, DashboardSavedFilter
 )
 
 # ========== EXISTING MODELS (NON-SERVICE) ==========
@@ -347,3 +347,10 @@ class ContactMessageAdmin(admin.ModelAdmin):
                 count += 1
         self.message_user(request, f"Resent notifications for {count} messages.")
     resend_admin_notification.short_description = "Resend admin notification email"
+
+
+@admin.register(DashboardSavedFilter)
+class DashboardSavedFilterAdmin(admin.ModelAdmin):
+    list_display = ("name", "user", "period_days", "role_view", "activity_filter", "updated_at")
+    list_filter = ("role_view", "activity_filter", "period_days")
+    search_fields = ("name", "user__username", "search_query")

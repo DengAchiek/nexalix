@@ -1182,11 +1182,11 @@ def _validate_chat_message(message):
 
 
 def _validate_lead_payload(payload):
-    name = (payload.get("name") or "").strip()
+    name = (payload.get("name") or payload.get("full_name") or "").strip()
     email = (payload.get("email") or "").strip().lower()
     phone = (payload.get("phone") or "").strip()
     company = (payload.get("company") or "").strip()
-    project_needs = (payload.get("project_needs") or "").strip()
+    project_needs = (payload.get("project_needs") or payload.get("project_description") or "").strip()
     source_page = (payload.get("source_page") or "").strip()
     service_interest = payload.get("service_interest") or ""
     assistant_summary = (payload.get("assistant_summary") or "").strip()
@@ -1221,6 +1221,8 @@ def _validate_lead_payload(payload):
             str(item).strip() for item in service_interest if str(item).strip()
         )
     service_interest = str(service_interest).strip()[:250]
+    if not service_interest:
+        return None, "Please select a service of interest."
 
     allowed_channels = {"none", "whatsapp", "contact", "email"}
     if escalate_channel not in allowed_channels:

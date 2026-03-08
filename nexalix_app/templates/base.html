@@ -200,7 +200,16 @@
                 <input type="text" id="nxLeadPhone" placeholder="Phone (optional)" maxlength="50">
                 <input type="text" id="nxLeadCompany" placeholder="Company (optional)" maxlength="200">
             </div>
-            <textarea id="nxLeadNeeds" rows="3" maxlength="3000" placeholder="Project needs, timeline, and goals" required></textarea>
+            <select id="nxLeadServiceInterest" required>
+                <option value="">Service of interest</option>
+                <option value="Software Development">Software Development</option>
+                <option value="AI Solutions">AI Solutions</option>
+                <option value="Machine Learning">Machine Learning</option>
+                <option value="Data Analytics">Data Analytics</option>
+                <option value="Automation Systems">Automation Systems</option>
+                <option value="Technology Consulting">Technology Consulting</option>
+            </select>
+            <textarea id="nxLeadNeeds" rows="3" maxlength="3000" placeholder="Project description" required></textarea>
             <button type="submit" id="nxLeadSubmit">Submit details</button>
         </form>
     </div>

@@ -152,6 +152,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (data.collect_lead || data.escalate_to_human) {
                     showLeadForm(true);
+                    const serviceSelect = document.getElementById("nxLeadServiceInterest");
+                    if (serviceSelect && state.recommendedServices.length && !serviceSelect.value) {
+                        const first = state.recommendedServices[0];
+                        const hasOption = Array.from(serviceSelect.options).some((opt) => opt.value === first);
+                        if (hasOption) serviceSelect.value = first;
+                    }
                 }
             } catch (error) {
                 appendMessage(error.message || "Could not send your message right now.", "assistant");
@@ -169,11 +175,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const payload = {
                 name: (document.getElementById("nxLeadName")?.value || "").trim(),
+                full_name: (document.getElementById("nxLeadName")?.value || "").trim(),
                 email: (document.getElementById("nxLeadEmail")?.value || "").trim(),
                 phone: (document.getElementById("nxLeadPhone")?.value || "").trim(),
                 company: (document.getElementById("nxLeadCompany")?.value || "").trim(),
                 project_needs: (document.getElementById("nxLeadNeeds")?.value || "").trim(),
-                service_interest: state.recommendedServices,
+                project_description: (document.getElementById("nxLeadNeeds")?.value || "").trim(),
+                service_interest:
+                    (document.getElementById("nxLeadServiceInterest")?.value || "").trim()
+                    || state.recommendedServices,
                 assistant_summary: state.lastAssistantMessage,
                 source_page: window.location.pathname,
                 escalation_channel: "contact",

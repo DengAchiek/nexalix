@@ -177,6 +177,7 @@
 }
 
 .nx-lead-form input,
+.nx-lead-form select,
 .nx-lead-form textarea {
     width: 100%;
     border: 1px solid #cfe2f2;

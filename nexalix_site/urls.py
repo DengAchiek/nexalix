@@ -56,6 +56,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("admin/activity-dashboard/", app_views.activity_dashboard, name="activity_dashboard"),
+    path("admin/seo-topic-generator/", app_views.seo_topic_generator, name="seo_topic_generator"),
     path("admin/", admin.site.urls),
     path('', include('nexalix_app.urls')),
 ]

@@ -21,6 +21,12 @@ from .cache_utils import (
     HOME_CONTEXT_CACHE_KEY,
     get_dashboard_aggregate_cache_key,
 )
+from .seo_topics import (
+    DEFAULT_SEO_KEYWORDS,
+    build_draft_content,
+    generate_seo_topics,
+    parse_keywords,
+)
 from .models import (
     HeroSection, Service, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
@@ -808,6 +814,81 @@ def activity_dashboard(request):
         "sales_mode": role_view == "sales",
         "ops_mode": role_view == "ops",
     })
+
+
+@user_passes_test(is_staff_user, login_url="/admin/login/")
+def seo_topic_generator(request):
+    """Staff tool to generate SEO blog topic ideas and optionally save drafts."""
+    default_keywords_text = "\n".join(DEFAULT_SEO_KEYWORDS)
+    keywords_text = default_keywords_text
+    topics_per_keyword = 5
+    generated_topics = []
+
+    if request.method == "POST":
+        keywords_text = request.POST.get("keywords", default_keywords_text)
+        raw_per_keyword = request.POST.get("topics_per_keyword", "5")
+        action = (request.POST.get("action") or "generate").strip().lower()
+        try:
+            topics_per_keyword = int(raw_per_keyword)
+        except (TypeError, ValueError):
+            topics_per_keyword = 5
+        topics_per_keyword = max(1, min(topics_per_keyword, 8))
+
+        parsed_keywords = parse_keywords(keywords_text)
+        if not parsed_keywords:
+            messages.error(request, "Please provide at least one keyword.")
+        else:
+            generated_topics = generate_seo_topics(parsed_keywords, topics_per_keyword)
+
+            if action == "save":
+                created_count = 0
+                skipped_count = 0
+                today = timezone.now().date()
+
+                for topic in generated_topics:
+                    title = topic["title"]
+                    if BlogPost.objects.filter(title=title).exists():
+                        skipped_count += 1
+                        continue
+
+                    base_slug = slugify(title)[:44] or "nexalix-seo-topic"
+                    candidate_slug = base_slug
+                    suffix = 2
+                    while BlogPost.objects.filter(slug=candidate_slug).exists():
+                        token = f"-{suffix}"
+                        candidate_slug = f"{base_slug[:50 - len(token)]}{token}"
+                        suffix += 1
+
+                    BlogPost.objects.create(
+                        title=title,
+                        slug=candidate_slug,
+                        excerpt=topic["meta_description"],
+                        content=build_draft_content(topic),
+                        publish_date=today,
+                        is_published=False,
+                    )
+                    created_count += 1
+
+                if created_count:
+                    messages.success(
+                        request,
+                        f"Created {created_count} draft blog posts from generated topics.",
+                    )
+                if skipped_count:
+                    messages.warning(
+                        request,
+                        f"Skipped {skipped_count} topics because matching titles already exist.",
+                    )
+
+    return render(
+        request,
+        "admin/seo_topic_generator.html",
+        {
+            "keywords_text": keywords_text,
+            "topics_per_keyword": topics_per_keyword,
+            "generated_topics": generated_topics,
+        },
+    )
 
 
 def quote_generator(request):

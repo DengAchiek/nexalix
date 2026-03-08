@@ -7,3 +7,4 @@ Pillow==10.4.0
 cloudinary==1.41.0
 django-cloudinary-storage==0.3.0
 redis==5.2.1
+openai==1.109.1

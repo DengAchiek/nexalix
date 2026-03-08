@@ -2,9 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import send_mail
 from django.core.cache import cache
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils.text import slugify
 from django.utils import timezone
+from django.views.decorators.http import require_POST
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
@@ -14,13 +17,16 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from datetime import timedelta, date
 from decimal import Decimal, ROUND_HALF_UP
+import logging
 import csv
 import json
 import math
+import re
 from .cache_utils import (
     HOME_CONTEXT_CACHE_KEY,
     get_dashboard_aggregate_cache_key,
 )
+from .chatbot import generate_chatbot_response
 from .seo_topics import (
     DEFAULT_SEO_KEYWORDS,
     build_draft_content,
@@ -32,7 +38,7 @@ from .models import (
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
-    QuoteAddon, QuoteRequest, DashboardSavedFilter
+    QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead
 )
 # If you have these models, import them:
 # from .models import AboutPage, CompanyValue, ContactInfo, ContactMessage
@@ -71,6 +77,10 @@ SUPPORT_MULTIPLIERS = {
 
 HOME_CONTEXT_CACHE_TTL = int(getattr(settings, "HOME_CACHE_TIMEOUT", 300))
 DASHBOARD_AGGREGATES_CACHE_TTL = int(getattr(settings, "DASHBOARD_CACHE_TIMEOUT", 120))
+CHATBOT_HISTORY_SESSION_KEY = "chatbot_history"
+CHATBOT_HISTORY_MAX_ITEMS = int(getattr(settings, "CHATBOT_SESSION_HISTORY_LIMIT", 16))
+
+logger = logging.getLogger("nexalix_app.views")
 
 
 def _money(value):
@@ -1116,6 +1126,293 @@ Our team will review your request and follow up with a detailed proposal.
     except Exception as exc:
         print(f"Error sending quote notifications: {exc}")
 
+
+
+def _ensure_session_key(request):
+    if not request.session.session_key:
+        request.session.create()
+    return request.session.session_key or ""
+
+
+def _get_client_ip(request):
+    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR", "unknown")
+
+
+def _rate_limit_hit(scope, request, max_requests, window_seconds):
+    session_key = _ensure_session_key(request) or "anonymous"
+    ip_address = _get_client_ip(request)
+    cache_key = f"chatbot:{scope}:{session_key}:{ip_address}"
+
+    current = cache.get(cache_key, 0)
+    if current >= max_requests:
+        return True
+
+    cache.set(cache_key, current + 1, timeout=window_seconds)
+    return False
+
+
+def _load_chatbot_history(request):
+    history = request.session.get(CHATBOT_HISTORY_SESSION_KEY, [])
+    if not isinstance(history, list):
+        return []
+    cleaned = []
+    for item in history[-CHATBOT_HISTORY_MAX_ITEMS:]:
+        role = item.get("role") if isinstance(item, dict) else ""
+        content = item.get("content") if isinstance(item, dict) else ""
+        if role in {"user", "assistant"} and isinstance(content, str) and content.strip():
+            cleaned.append({"role": role, "content": content.strip()[:1800]})
+    return cleaned
+
+
+def _save_chatbot_history(request, history):
+    request.session[CHATBOT_HISTORY_SESSION_KEY] = history[-CHATBOT_HISTORY_MAX_ITEMS:]
+    request.session.modified = True
+
+
+def _validate_chat_message(message):
+    message = (message or "").strip()
+    if len(message) < 2:
+        return "", "Please provide a little more detail in your message."
+    if len(message) > 1200:
+        return "", "Message is too long. Please keep it under 1200 characters."
+    return message, ""
+
+
+def _validate_lead_payload(payload):
+    name = (payload.get("name") or "").strip()
+    email = (payload.get("email") or "").strip().lower()
+    phone = (payload.get("phone") or "").strip()
+    company = (payload.get("company") or "").strip()
+    project_needs = (payload.get("project_needs") or "").strip()
+    source_page = (payload.get("source_page") or "").strip()
+    service_interest = payload.get("service_interest") or ""
+    assistant_summary = (payload.get("assistant_summary") or "").strip()
+    escalate_channel = (payload.get("escalation_channel") or "none").strip().lower()
+
+    if not name or len(name) < 2:
+        return None, "Please provide a valid full name."
+    if len(name) > 200:
+        return None, "Full name is too long."
+
+    email_validator = EmailValidator()
+    try:
+        email_validator(email)
+    except ValidationError:
+        return None, "Please provide a valid email address."
+
+    if phone:
+        phone_pattern = re.compile(r"^[0-9+()\\-\\s]{7,25}$")
+        if not phone_pattern.match(phone):
+            return None, "Please provide a valid phone number."
+
+    if company and len(company) > 200:
+        return None, "Company name is too long."
+
+    if not project_needs or len(project_needs) < 10:
+        return None, "Please provide project details (at least 10 characters)."
+    if len(project_needs) > 3000:
+        return None, "Project details are too long. Keep them under 3000 characters."
+
+    if isinstance(service_interest, list):
+        service_interest = ", ".join(
+            str(item).strip() for item in service_interest if str(item).strip()
+        )
+    service_interest = str(service_interest).strip()[:250]
+
+    allowed_channels = {"none", "whatsapp", "contact", "email"}
+    if escalate_channel not in allowed_channels:
+        escalate_channel = "none"
+
+    sanitized = {
+        "name": name,
+        "email": email,
+        "phone": phone[:50],
+        "company": company,
+        "project_needs": project_needs,
+        "source_page": source_page[:255],
+        "interested_services": service_interest,
+        "assistant_summary": assistant_summary[:1200],
+        "escalation_channel": escalate_channel,
+    }
+    return sanitized, ""
+
+
+def _resolve_admin_recipients():
+    configured_recipients = getattr(settings, "ADMIN_EMAILS", [])
+    if isinstance(configured_recipients, str):
+        configured_recipients = [email.strip() for email in configured_recipients.split(",") if email.strip()]
+
+    recipients = list(configured_recipients)
+    contact_notification_email = getattr(
+        settings,
+        "CONTACT_NOTIFICATION_EMAIL",
+        "dachiek4@gmail.com",
+    ).strip()
+    if contact_notification_email and contact_notification_email not in recipients:
+        recipients.append(contact_notification_email)
+    if not recipients:
+        recipients = ["dachiek4@gmail.com"]
+    return recipients
+
+
+def _send_chatbot_lead_notification(lead):
+    subject = f"New Chatbot Lead: {lead.full_name}"
+    body = f"""
+New lead captured from Nexalix chatbot
+
+Name: {lead.full_name}
+Email: {lead.email}
+Phone: {lead.phone or 'Not provided'}
+Company: {lead.company or 'Not provided'}
+Interested Services: {lead.interested_services or 'Not provided'}
+Escalation: {lead.escalation_channel}
+Submitted: {lead.created_at.strftime('%Y-%m-%d %H:%M:%S')}
+Source Page: {lead.source_page or 'Unknown'}
+
+Project Needs:
+{lead.project_needs}
+
+Assistant Summary:
+{lead.assistant_summary or 'Not provided'}
+    """.strip()
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=_resolve_admin_recipients(),
+        fail_silently=False,
+    )
+
+
+@require_POST
+def chatbot_message_api(request):
+    max_requests = int(getattr(settings, "CHATBOT_RATE_LIMIT_COUNT", 20))
+    window_seconds = int(getattr(settings, "CHATBOT_RATE_LIMIT_WINDOW_SECONDS", 600))
+
+    if _rate_limit_hit("message", request, max_requests, window_seconds):
+        return JsonResponse(
+            {"ok": False, "error": "Too many requests. Please wait before sending another message."},
+            status=429,
+        )
+
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({"ok": False, "error": "Invalid request payload."}, status=400)
+
+    message, error = _validate_chat_message(payload.get("message"))
+    if error:
+        return JsonResponse({"ok": False, "error": error}, status=400)
+
+    history = _load_chatbot_history(request)
+    services = Service.objects.filter(is_active=True).order_by("order", "title")[:20]
+
+    quote_url = request.build_absolute_uri(reverse("quote_generator"))
+    contact_url = request.build_absolute_uri(reverse("contact"))
+    whatsapp_url = getattr(settings, "CHATBOT_WHATSAPP_URL", "https://wa.me/254768774232")
+
+    response_payload = generate_chatbot_response(
+        user_message=message,
+        history=history,
+        services=services,
+        quote_url=quote_url,
+        contact_url=contact_url,
+        whatsapp_url=whatsapp_url,
+    )
+
+    assistant_message = (response_payload.get("answer") or "").strip()
+    if not assistant_message:
+        assistant_message = (
+            "I can help with Nexalix services, pricing flow, and project guidance. "
+            "Share your use case and I’ll recommend the right next step."
+        )
+
+    history.append({"role": "user", "content": message})
+    history.append({"role": "assistant", "content": assistant_message})
+    _save_chatbot_history(request, history)
+
+    logger.info("Chatbot response generated for session=%s", _ensure_session_key(request))
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "answer": assistant_message,
+            "recommended_services": response_payload.get("recommended_services", []),
+            "collect_lead": bool(response_payload.get("collect_lead")),
+            "escalate_to_human": bool(response_payload.get("escalate_to_human")),
+            "escalation_message": response_payload.get("escalation_message", ""),
+            "contact_url": contact_url,
+            "quote_url": quote_url,
+            "whatsapp_url": whatsapp_url,
+        }
+    )
+
+
+@require_POST
+def chatbot_lead_api(request):
+    max_requests = int(getattr(settings, "CHATBOT_LEAD_RATE_LIMIT_COUNT", 6))
+    window_seconds = int(getattr(settings, "CHATBOT_LEAD_RATE_LIMIT_WINDOW_SECONDS", 600))
+
+    if _rate_limit_hit("lead", request, max_requests, window_seconds):
+        return JsonResponse(
+            {"ok": False, "error": "Too many lead submissions. Please wait a few minutes and try again."},
+            status=429,
+        )
+
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({"ok": False, "error": "Invalid request payload."}, status=400)
+
+    validated, error = _validate_lead_payload(payload)
+    if error:
+        return JsonResponse({"ok": False, "error": error}, status=400)
+
+    session_key = _ensure_session_key(request)
+
+    lead = ChatbotLead.objects.create(
+        session_key=session_key,
+        full_name=validated["name"],
+        email=validated["email"],
+        phone=validated["phone"],
+        company=validated["company"],
+        project_needs=validated["project_needs"],
+        interested_services=validated["interested_services"],
+        assistant_summary=validated["assistant_summary"],
+        source_page=validated["source_page"],
+        escalation_channel=validated["escalation_channel"],
+        is_escalated=validated["escalation_channel"] != "none",
+        metadata={
+            "ip_address": _get_client_ip(request),
+            "user_agent": request.META.get("HTTP_USER_AGENT", "")[:500],
+            "referrer": request.META.get("HTTP_REFERER", "")[:400],
+            "source": "website_chatbot",
+        },
+    )
+
+    email_sent = True
+    try:
+        _send_chatbot_lead_notification(lead)
+    except Exception as exc:
+        email_sent = False
+        logger.exception("Failed to send chatbot lead email notification: %s", exc)
+
+    logger.info("Chatbot lead created id=%s email=%s", lead.id, lead.email)
+
+    return JsonResponse(
+        {
+            "ok": True,
+            "message": (
+                "Thanks. Your details were captured and our team will contact you."
+                if email_sent
+                else "Thanks. Your details were captured. Our team will still follow up shortly."
+            ),
+            "lead_id": lead.id,
+        }
+    )
 
 
 def contact(request):

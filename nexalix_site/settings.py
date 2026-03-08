@@ -202,6 +202,24 @@ SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
 
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", EMAIL_HOST_USER or CONTACT_NOTIFICATION_EMAIL)
 
+# --------------------
+# CHATBOT SETTINGS
+# --------------------
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini").strip()
+OPENAI_CHAT_TEMPERATURE = float(os.getenv("OPENAI_CHAT_TEMPERATURE", "0.3"))
+OPENAI_CHAT_MAX_TOKENS = int(os.getenv("OPENAI_CHAT_MAX_TOKENS", "500"))
+CHATBOT_SESSION_HISTORY_LIMIT = int(os.getenv("CHATBOT_SESSION_HISTORY_LIMIT", "16"))
+
+CHATBOT_RATE_LIMIT_COUNT = int(os.getenv("CHATBOT_RATE_LIMIT_COUNT", "20"))
+CHATBOT_RATE_LIMIT_WINDOW_SECONDS = int(os.getenv("CHATBOT_RATE_LIMIT_WINDOW_SECONDS", "600"))
+
+CHATBOT_LEAD_RATE_LIMIT_COUNT = int(os.getenv("CHATBOT_LEAD_RATE_LIMIT_COUNT", "6"))
+CHATBOT_LEAD_RATE_LIMIT_WINDOW_SECONDS = int(os.getenv("CHATBOT_LEAD_RATE_LIMIT_WINDOW_SECONDS", "600"))
+
+CHATBOT_WIDGET_ENABLED = os.getenv("CHATBOT_WIDGET_ENABLED", "True").lower() in {"1", "true", "yes", "on"}
+CHATBOT_WHATSAPP_URL = os.getenv("CHATBOT_WHATSAPP_URL", "https://wa.me/254768774232")
+
 if not DEBUG:
     SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "True").lower() in {"1", "true", "yes", "on"}
     SESSION_COOKIE_SECURE = True
@@ -212,3 +230,32 @@ if not DEBUG:
     STORAGES["staticfiles"] = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     }
+
+# --------------------
+# LOGGING
+# --------------------
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name}: {message}",
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "loggers": {
+        "nexalix_app": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        }
+    },
+}

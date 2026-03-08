@@ -448,6 +448,46 @@ class ContactMessage(models.Model):
         self.save()
 
 
+class ChatbotLead(models.Model):
+    STATUS_CHOICES = [
+        ("new", "New"),
+        ("contacted", "Contacted"),
+        ("qualified", "Qualified"),
+        ("closed", "Closed"),
+    ]
+
+    ESCALATION_CHOICES = [
+        ("none", "None"),
+        ("whatsapp", "WhatsApp"),
+        ("contact", "Contact Form"),
+        ("email", "Email"),
+    ]
+
+    session_key = models.CharField(max_length=64, db_index=True)
+    full_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    phone = models.CharField(max_length=50, blank=True)
+    company = models.CharField(max_length=200, blank=True)
+    project_needs = models.TextField()
+    interested_services = models.CharField(max_length=250, blank=True, help_text="Comma-separated service names.")
+    assistant_summary = models.TextField(blank=True)
+    source_page = models.CharField(max_length=255, blank=True)
+    lead_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new", db_index=True)
+    escalation_channel = models.CharField(max_length=20, choices=ESCALATION_CHOICES, default="none")
+    is_escalated = models.BooleanField(default=False)
+    metadata = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Chatbot Lead"
+        verbose_name_plural = "Chatbot Leads"
+
+    def __str__(self):
+        return f"{self.full_name} ({self.email})"
+
+
 class DashboardSavedFilter(models.Model):
     ROLE_CHOICES = [
         ("all", "All Views"),

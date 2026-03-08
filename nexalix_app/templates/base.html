@@ -38,6 +38,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260304j">
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}?v=20260308a">
     <style>{% include "style_inline.css" %}</style>
 
     <title>{% block title %}{{ meta_title|default:'Nexalix Technologies' }}{% endblock %}</title>
@@ -153,8 +154,61 @@
     </footer>
 </div>
 
+<section class="nx-chatbot" id="nxChatbot"
+    data-message-url="{% url 'chatbot_message_api' %}"
+    data-lead-url="{% url 'chatbot_lead_api' %}"
+    data-contact-url="{% url 'contact' %}"
+    data-quote-url="{% url 'quote_generator' %}">
+    <button type="button" class="nx-chatbot-launcher" id="nxChatLauncher" aria-label="Open Nexalix assistant">
+        <i class="fas fa-comments"></i>
+        <span>Chat with Nexalix</span>
+    </button>
+
+    <div class="nx-chatbot-panel" id="nxChatPanel" aria-hidden="true">
+        <header class="nx-chatbot-header">
+            <div>
+                <h3>Nexalix Assistant</h3>
+                <p>Ask about services, pricing, and project planning.</p>
+            </div>
+            <button type="button" id="nxChatClose" aria-label="Close chat">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </header>
+
+        <div class="nx-chatbot-messages" id="nxChatMessages">
+            <article class="nx-chat-msg nx-chat-msg-assistant">
+                Hello. I can help you choose Nexalix services, explain the quote process, and connect you with our team.
+            </article>
+        </div>
+
+        <form class="nx-chatbot-form" id="nxChatForm">
+            <input type="text" id="nxChatInput" maxlength="1200" placeholder="Type your question..." required>
+            <button type="submit" id="nxChatSend">Send</button>
+        </form>
+
+        <div class="nx-chatbot-actions" id="nxChatActions">
+            <a class="nx-chat-link" href="{% url 'quote_generator' %}">Get Auto Quote</a>
+            <a class="nx-chat-link" href="{% url 'contact' %}">Contact Team</a>
+            <a class="nx-chat-link" href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+
+        <form class="nx-lead-form" id="nxLeadForm">
+            <h4>Share your project details</h4>
+            <div class="nx-lead-grid">
+                <input type="text" id="nxLeadName" placeholder="Full name" maxlength="200" required>
+                <input type="email" id="nxLeadEmail" placeholder="Email" maxlength="254" required>
+                <input type="text" id="nxLeadPhone" placeholder="Phone (optional)" maxlength="50">
+                <input type="text" id="nxLeadCompany" placeholder="Company (optional)" maxlength="200">
+            </div>
+            <textarea id="nxLeadNeeds" rows="3" maxlength="3000" placeholder="Project needs, timeline, and goals" required></textarea>
+            <button type="submit" id="nxLeadSubmit">Submit details</button>
+        </form>
+    </div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/main.js' %}?v=20260304a"></script>
+<script src="{% static 'js/chatbot.js' %}?v=20260308a"></script>
 <script>{% include "main_inline.js" %}</script>
 {% block extra_js %}{% endblock %}
 </body>

@@ -8,7 +8,7 @@ from .models import (
     Industry, TechnologyCategory, Technology, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
-    QuoteAddon, QuoteRequest, DashboardSavedFilter
+    QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead
 )
 
 # ========== EXISTING MODELS (NON-SERVICE) ==========
@@ -354,3 +354,19 @@ class DashboardSavedFilterAdmin(admin.ModelAdmin):
     list_display = ("name", "user", "period_days", "role_view", "activity_filter", "updated_at")
     list_filter = ("role_view", "activity_filter", "period_days")
     search_fields = ("name", "user__username", "search_query")
+
+
+@admin.register(ChatbotLead)
+class ChatbotLeadAdmin(admin.ModelAdmin):
+    list_display = (
+        "full_name",
+        "email",
+        "company",
+        "lead_status",
+        "is_escalated",
+        "escalation_channel",
+        "created_at",
+    )
+    list_filter = ("lead_status", "is_escalated", "escalation_channel", "created_at")
+    search_fields = ("full_name", "email", "phone", "company", "project_needs", "interested_services")
+    readonly_fields = ("session_key", "created_at", "updated_at")

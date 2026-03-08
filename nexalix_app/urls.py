@@ -12,6 +12,8 @@ urlpatterns = [
     path('how_we_work/', views.how_we_work, name='how_we_work'),
     path('why_choose_us/', views.why_choose_us, name='why_choose_us'),
     path('contact/', views.contact, name='contact'),
+    path("api/chatbot/message/", views.chatbot_message_api, name="chatbot_message_api"),
+    path("api/chatbot/lead/", views.chatbot_lead_api, name="chatbot_lead_api"),
     
    
     path('case-studies/', views.case_studies_list, name='case_studies'),

@@ -4,9 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.">
-    <meta name="keywords" content="technology consulting, AI solutions, software development, cloud services, cybersecurity">
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{{ meta_keywords|default:'technology consulting, AI solutions, software development, cloud services, cybersecurity' }}{% endblock %}">
     <meta name="author" content="Nexalix Technologies">
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
+
+    <meta property="og:site_name" content="Nexalix Technologies">
+    <meta property="og:title" content="{{ og_title|default:meta_title|default:'Nexalix Technologies' }}">
+    <meta property="og:description" content="{{ og_description|default:meta_description|default:'Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.' }}">
+    <meta property="og:type" content="{{ og_type|default:'website' }}">
+    <meta property="og:url" content="{{ og_url|default:canonical_url|default:request.build_absolute_uri }}">
+    {% if og_image %}
+    <meta property="og:image" content="{{ og_image }}">
+    {% else %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo1.png' %}">
+    {% endif %}
+
+    <meta name="twitter:card" content="{{ twitter_card|default:'summary_large_image' }}">
+    <meta name="twitter:title" content="{{ og_title|default:meta_title|default:'Nexalix Technologies' }}">
+    <meta name="twitter:description" content="{{ og_description|default:meta_description|default:'Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.' }}">
+    {% if og_image %}
+    <meta name="twitter:image" content="{{ og_image }}">
+    {% else %}
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo1.png' %}">
+    {% endif %}
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +40,13 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260304j">
     <style>{% include "style_inline.css" %}</style>
 
-    <title>{% block title %}Nexalix Technologies{% endblock %}</title>
+    <title>{% block title %}{{ meta_title|default:'Nexalix Technologies' }}{% endblock %}</title>
     {% block extra_css %}{% endblock %}
+    {% if structured_data_json %}
+        {% for schema in structured_data_json %}
+    <script type="application/ld+json">{{ schema|safe }}</script>
+        {% endfor %}
+    {% endif %}
     {% block extra_head %}{% endblock %}
 </head>
 <body>

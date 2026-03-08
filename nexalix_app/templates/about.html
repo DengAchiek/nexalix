@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}About Nexalix | IT & Innovation Consulting{% endblock %}
+{% block title %}{{ meta_title|default:'About Nexalix | IT & Innovation Consulting' }}{% endblock %}
 
 {% block content %}
 <section class="about-hero-modern">

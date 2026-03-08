@@ -2,7 +2,7 @@
 {% load media_optimization %}
 {% load static %}
 
-{% block title %}{{ page_title }} - Nexalix Technologies{% endblock %}
+{% block title %}{{ meta_title|default:page_title|default:'Case Study - Nexalix Technologies' }}{% endblock %}
 
 {% block content %}
 <section class="page-block">

@@ -13,6 +13,7 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from datetime import timedelta
 from decimal import Decimal, ROUND_HALF_UP
+import json
 import math
 from .cache_utils import (
     HOME_CONTEXT_CACHE_KEY,
@@ -66,6 +67,122 @@ DASHBOARD_AGGREGATES_CACHE_TTL = int(getattr(settings, "DASHBOARD_CACHE_TIMEOUT"
 
 def _money(value):
     return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+def _text_excerpt(value, limit=160):
+    text = (value or "").strip()
+    if len(text) <= limit:
+        return text
+    return f"{text[:limit - 1].rstrip()}…"
+
+
+def _absolute_url(request, path_or_url):
+    if not path_or_url:
+        return ""
+    if str(path_or_url).startswith(("http://", "https://")):
+        return str(path_or_url)
+    return request.build_absolute_uri(path_or_url)
+
+
+def _organization_schema(request):
+    logo_url = _absolute_url(request, "/static/images/logo1.png")
+    site_url = _absolute_url(request, "/")
+    return {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": f"{site_url}#organization",
+        "name": "Nexalix Technologies",
+        "url": site_url,
+        "logo": logo_url,
+        "email": "info@nexalixtech.com",
+        "telephone": "+254768774232",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "KE",
+        },
+    }
+
+
+def _service_schema(request, service, position=None):
+    service_slug = service.slug or slugify(service.title)
+    if service_slug:
+        service_url = _absolute_url(request, reverse("service_detail", args=[service_slug]))
+    else:
+        service_url = _absolute_url(request, reverse("services"))
+    data = {
+        "@type": "Service",
+        "name": service.title,
+        "url": service_url,
+        "description": _text_excerpt(service.meta_description or service.short_description, limit=260),
+        "provider": {
+            "@type": "Organization",
+            "name": "Nexalix Technologies",
+            "url": _absolute_url(request, "/"),
+        },
+    }
+    if service.featured_image:
+        data["image"] = _absolute_url(request, service.featured_image.url)
+    if position is not None:
+        return {"@type": "ListItem", "position": position, "url": service_url, "item": data}
+    return data
+
+
+def _case_study_schema(request, case_study, position=None):
+    case_url = _absolute_url(request, reverse("case_study_detail", args=[slugify(case_study.title)]))
+    data = {
+        "@type": "CreativeWork",
+        "name": case_study.title,
+        "url": case_url,
+        "description": _text_excerpt(case_study.description, limit=260),
+    }
+    if case_study.image:
+        data["image"] = _absolute_url(request, case_study.image.url)
+    if case_study.tags:
+        data["keywords"] = [tag.strip() for tag in case_study.tags.split(",") if tag.strip()]
+    if position is not None:
+        return {"@type": "ListItem", "position": position, "url": case_url, "item": data}
+    return data
+
+
+def _seo_context(
+    request,
+    *,
+    title,
+    description,
+    keywords="technology consulting, AI solutions, software development, cloud services, cybersecurity",
+    og_type="website",
+    image_url="",
+    schemas=None,
+):
+    canonical_url = request.build_absolute_uri(request.path)
+    resolved_image = _absolute_url(request, image_url or "/static/images/logo1.png")
+
+    schema_payloads = [
+        _organization_schema(request),
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": title,
+            "url": canonical_url,
+            "description": _text_excerpt(description, limit=260),
+        },
+    ]
+    if schemas:
+        schema_payloads.extend(schemas)
+
+    return {
+        "meta_title": title,
+        "meta_description": _text_excerpt(description, limit=160),
+        "meta_keywords": keywords,
+        "canonical_url": canonical_url,
+        "og_title": title,
+        "og_description": _text_excerpt(description, limit=200),
+        "og_type": og_type,
+        "og_url": canonical_url,
+        "og_image": resolved_image,
+        "twitter_card": "summary_large_image",
+        "structured_data_json": [json.dumps(schema, ensure_ascii=False) for schema in schema_payloads],
+    }
 
 
 def is_staff_user(user):
@@ -127,8 +244,30 @@ def home(request):
             "contact_cta": ContactCTA.objects.filter(is_active=True).first(),
         }
         cache.set(HOME_CONTEXT_CACHE_KEY, context, HOME_CONTEXT_CACHE_TTL)
+    hero = context.get("hero")
+    hero_title = hero.title if hero else "Living Up To Your Creative Potential"
+    hero_subtitle = hero.subtitle if hero else "We are an engineering and consulting partner for digital products, data platforms, automation, and enterprise transformation."
+    home_schemas = []
+    featured_services = context.get("services", [])
+    if featured_services:
+        home_schemas.append({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Featured Services",
+            "itemListElement": [_service_schema(request, service, index + 1) for index, service in enumerate(featured_services)],
+        })
 
-    return render(request, "home.html", context)
+    page_context = {
+        **context,
+        **_seo_context(
+            request,
+            title=f"{hero_title} | Nexalix Technologies",
+            description=hero_subtitle,
+            image_url=(hero.video_poster.url if hero and hero.video_poster else ""),
+            schemas=home_schemas,
+        ),
+    }
+    return render(request, "home.html", page_context)
 
 def about(request):
     """About page view"""
@@ -138,12 +277,22 @@ def about(request):
         "about_sections": about_sections,
         "primary_about": primary_about,
     }
+    about_title = "About Nexalix | IT & Innovation Consulting"
+    about_description = _text_excerpt(
+        primary_about.content if primary_about else "Learn about Nexalix Technologies, our mission, and how we deliver enterprise-grade IT and innovation consulting.",
+        limit=160,
+    )
+    context.update(_seo_context(
+        request,
+        title=about_title,
+        description=about_description,
+    ))
     return render(request, "about.html", context)
 
 def services(request):
     """Services list page view"""
     # Get all active services, ordered by order field
-    services_list = Service.objects.filter(is_active=True).order_by('order')
+    services_list = list(Service.objects.filter(is_active=True).order_by('order'))
     
     # Group services by category
     services_by_category = {}
@@ -156,13 +305,33 @@ def services(request):
     
     pricing_plans = PricingPlan.objects.all().order_by('order')
     
+    dynamic_description = "Explore our comprehensive range of technology consulting and engineering services."
+    if services_list:
+        dynamic_description = (
+            f"Explore {len(services_list)} consulting and engineering services from Nexalix, including "
+            + ", ".join([service.title for service in services_list[:4]])
+            + "."
+        )
+    services_schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Nexalix Service Catalog",
+        "itemListElement": [_service_schema(request, service, index + 1) for index, service in enumerate(services_list)],
+    }
+
     context = {
         'services': services_list,
         'services_by_category': services_by_category,
         'pricing_plans': pricing_plans,  # This will work now
         'page_title': 'Our Services',
-        'meta_description': 'Explore our comprehensive range of technology services including web development, mobile apps, digital marketing, and more.',
+        'meta_description': dynamic_description,
     }
+    context.update(_seo_context(
+        request,
+        title="Services | Nexalix Technologies",
+        description=dynamic_description,
+        schemas=[services_schema],
+    ))
     return render(request, 'services.html', context) 
 
 def service_detail(request, slug):
@@ -178,21 +347,50 @@ def service_detail(request, slug):
         'page_title': service.meta_title or service.title,
         'meta_description': service.meta_description or service.short_description,
     }
+    context.update(_seo_context(
+        request,
+        title=f"{service.title} | Nexalix Services",
+        description=service.meta_description or service.short_description or service.full_description,
+        og_type="article",
+        image_url=(service.featured_image.url if service.featured_image else ""),
+        schemas=[{"@context": "https://schema.org", **_service_schema(request, service)}],
+    ))
     return render(request, 'service_detail.html', context)  # Changed from 'services/detail.html'
 
 def industries(request):
     """Industries page view"""
-    industries_list = Industry.objects.filter(is_active=True).order_by('order')
-    return render(request, 'industries.html', {"industries": industries_list})
+    industries_list = list(Industry.objects.filter(is_active=True).order_by('order'))
+    context = {"industries": industries_list}
+    description = "Explore the industries where Nexalix delivers digital transformation solutions."
+    if industries_list:
+        description = "Industries we support: " + ", ".join([industry.name for industry in industries_list])
+    context.update(_seo_context(
+        request,
+        title="Industries | Nexalix Technologies",
+        description=description,
+    ))
+    return render(request, 'industries.html', context)
 
 def how_we_work(request):
     """How We Work page view"""
     steps = ProcessStep.objects.all().order_by('order')
-    return render(request, 'how_we_work.html', {"process_steps": steps})
+    context = {"process_steps": steps}
+    context.update(_seo_context(
+        request,
+        title="How We Work | Nexalix Technologies",
+        description="Discover the Nexalix delivery process from discovery and planning to implementation, launch, and continuous support.",
+    ))
+    return render(request, 'how_we_work.html', context)
 
 def why_choose_us(request):
     """Why Choose Us page view"""
-    return render(request, 'why_choose_us.html')
+    context = {}
+    context.update(_seo_context(
+        request,
+        title="Why Choose Us | Nexalix Technologies",
+        description="See why organizations choose Nexalix for IT consulting, engineering delivery, and innovation execution.",
+    ))
+    return render(request, 'why_choose_us.html', context)
 
 
 @user_passes_test(is_staff_user, login_url="/admin/login/")
@@ -539,7 +737,7 @@ def quote_generator(request):
             "multiplier": str(SUPPORT_MULTIPLIERS.get(value, Decimal("0.00"))),
         })
 
-    return render(request, "quote_generator.html", {
+    context = {
         "quote_services": quote_services,
         "quote_addons": quote_addons,
         "complexity_options": complexity_options,
@@ -549,7 +747,13 @@ def quote_generator(request):
         "error_message": error_message,
         "generated_quote": generated_quote,
         "form_data": form_data,
-    })
+    }
+    context.update(_seo_context(
+        request,
+        title="Auto Quote Generator | Nexalix Technologies",
+        description="Generate a fast estimate for your software, cloud, AI, or consulting project using Nexalix Auto Quote Generator.",
+    ))
+    return render(request, "quote_generator.html", context)
 
 
 def send_quote_notifications(quote_request):
@@ -668,10 +872,16 @@ def contact(request):
                 print(f"Error saving contact: {e}")
                 error_message = "Sorry, there was an error submitting your message. Please try again."
     
-    return render(request, "contact.html", {
+    context = {
         'success_message': success_message,
         'error_message': error_message,
-    })
+    }
+    context.update(_seo_context(
+        request,
+        title="Contact Nexalix | IT & Innovation Consulting",
+        description="Contact Nexalix Technologies to discuss your digital transformation, AI, cloud, and software delivery goals.",
+    ))
+    return render(request, "contact.html", context)
 
 
 def send_admin_notification(contact_message):
@@ -861,13 +1071,31 @@ def ai_training(request):
 
 def case_studies_list(request):
     """Display all case studies"""
-    case_studies_all = CaseStudy.objects.filter(is_active=True).order_by('order')
+    case_studies_all = list(CaseStudy.objects.filter(is_active=True).order_by('order'))
+
+    case_schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Nexalix Case Studies",
+        "itemListElement": [_case_study_schema(request, case, index + 1) for index, case in enumerate(case_studies_all)],
+    }
+    dynamic_description = (
+        f"Explore {len(case_studies_all)} Nexalix case studies and success stories across digital transformation programs."
+        if case_studies_all
+        else "Explore Nexalix case studies and success stories across digital transformation programs."
+    )
 
     context = {
         'case_studies': case_studies_all,
         'page_title': 'Case Studies - Success Stories',
-        'meta_description': 'Explore our portfolio of successful projects and client success stories.',
+        'meta_description': dynamic_description,
     }
+    context.update(_seo_context(
+        request,
+        title="Case Studies | Nexalix Success Stories",
+        description=dynamic_description,
+        schemas=[case_schema],
+    ))
     return render(request, 'case_studies.html', context)
 
 
@@ -890,4 +1118,12 @@ def case_study_detail(request, slug):
         'page_title': case_study.title,
         'meta_description': case_study.description[:160] if len(case_study.description) > 160 else case_study.description,
     }
+    context.update(_seo_context(
+        request,
+        title=f"{case_study.title} | Nexalix Case Study",
+        description=case_study.description,
+        og_type="article",
+        image_url=(case_study.image.url if case_study.image else ""),
+        schemas=[{"@context": "https://schema.org", **_case_study_schema(request, case_study)}],
+    ))
     return render(request, 'case_study_detail.html', context)

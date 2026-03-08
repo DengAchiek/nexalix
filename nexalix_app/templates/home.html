@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static media_optimization %}
 
-{% block title %}Nexalix Technologies | IT & Innovation Consulting{% endblock %}
+{% block title %}{{ meta_title|default:'Nexalix Technologies | IT & Innovation Consulting' }}{% endblock %}
 
 {% block content %}
 <section class="home-hero">

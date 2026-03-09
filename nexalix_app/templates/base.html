@@ -8,6 +8,9 @@
     <meta name="keywords" content="{% block meta_keywords %}{{ meta_keywords|default:'technology consulting, AI solutions, software development, cloud services, cybersecurity' }}{% endblock %}">
     <meta name="author" content="Nexalix Technologies">
     <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}?v=20260309c">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}?v=20260309c">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}?v=20260309c">
 
     <link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
 
@@ -62,7 +65,7 @@
     <header class="site-header" id="siteHeader">
         <div class="container header-row">
             <a href="{% url 'home' %}" class="brand" aria-label="Nexalix home">
-                <img src="{% static 'images/logo1.png' %}?v=20260309a" alt="Nexalix logo" class="brand-logo" loading="eager" fetchpriority="high" decoding="async">
+                <img src="{% static 'images/logo1.png' %}?v=20260309c" alt="Nexalix logo" class="brand-logo" loading="eager" fetchpriority="high" decoding="async">
             </a>
 
             <nav class="nav-links" aria-label="Primary navigation">

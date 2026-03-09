@@ -181,13 +181,13 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() in {"1", "true", "yes
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 
-DEFAULT_FROM_EMAIL = os.getenv(
-    "DEFAULT_FROM_EMAIL",
-    f"Nexalix Technologies <{EMAIL_HOST_USER or 'noreply@nexalix.com'}>",
-)
-
 # Primary inbox for contact form notifications.
 CONTACT_NOTIFICATION_EMAIL = os.getenv("CONTACT_NOTIFICATION_EMAIL", "dachiek4@gmail.com").strip()
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    f"Nexalix Technologies <{EMAIL_HOST_USER or CONTACT_NOTIFICATION_EMAIL}>",
+)
 
 ADMIN_EMAILS = [
     email.strip()

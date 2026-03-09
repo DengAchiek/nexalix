@@ -124,10 +124,13 @@ a {
 
 .nav-links a {
     color: #25214a;
-    font-weight: 700;
-    font-size: clamp(0.8rem, 0.8vw, 0.92rem);
-    padding: 8px 2px;
+    font-weight: 800;
+    font-size: clamp(0.96rem, 1.02vw, 1.12rem);
+    letter-spacing: 0.01em;
+    padding: 8px 6px;
+    border-radius: 8px;
     position: relative;
+    transition: color 0.2s ease, background 0.2s ease;
 }
 
 .nav-links a::after {
@@ -146,6 +149,7 @@ a {
 .nav-links a:hover,
 .nav-links a.active {
     color: var(--nx-primary);
+    background: rgba(47, 129, 255, 0.08);
 }
 
 .nav-links a:hover::after,

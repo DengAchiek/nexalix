@@ -89,7 +89,7 @@ a {
 }
 
 .header-row {
-    min-height: 76px;
+    min-height: 70px;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -103,8 +103,9 @@ a {
 }
 
 .brand img {
-    width: clamp(145px, 13vw, 210px);
-    height: auto;
+    width: auto;
+    height: clamp(30px, 2.8vw, 38px);
+    max-width: min(146px, 18vw);
     border-radius: 0;
     object-fit: contain;
     display: block;
@@ -1654,7 +1655,9 @@ a.partner-home-card:hover {
     }
 
     .brand img {
-        width: 150px;
+        width: auto;
+        height: 32px;
+        max-width: 118px;
     }
 }
 

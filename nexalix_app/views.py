@@ -802,6 +802,12 @@ def activity_dashboard(request):
     ]
     current_query = _dashboard_query_string(period_days, activity_filter, search_query, role_view, selected_day_str)
 
+    contacts_preview = filtered_contacts.order_by("-submitted_at")[:8]
+    quotes_preview = filtered_quotes.order_by("-created_at")[:8]
+    partners_preview = Partner.objects.filter(is_active=True).order_by("order", "name")[:8]
+    case_studies_preview = CaseStudy.objects.filter(is_active=True).order_by("order", "-created_at")[:8]
+    seo_topics_preview = generate_seo_topics(DEFAULT_SEO_KEYWORDS[:4], 1)
+
     return render(request, "admin/activity_dashboard.html", {
         "kpis": kpis,
         "period_days": period_days,
@@ -823,6 +829,12 @@ def activity_dashboard(request):
         "clear_day_query": _dashboard_query_string(period_days, activity_filter, search_query, role_view),
         "sales_mode": role_view == "sales",
         "ops_mode": role_view == "ops",
+        "contacts_preview": contacts_preview,
+        "quotes_preview": quotes_preview,
+        "partners_preview": partners_preview,
+        "case_studies_preview": case_studies_preview,
+        "seo_keywords_preview": DEFAULT_SEO_KEYWORDS[:8],
+        "seo_topics_preview": seo_topics_preview,
     })
 
 

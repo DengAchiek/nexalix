@@ -80,26 +80,32 @@
 }
 
 .mk-role-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
+    display: grid;
+    gap: 8px;
 }
 
 .mk-role-strip a {
     text-decoration: none;
-    border-radius: 999px;
-    border: 1px solid #d1deed;
-    background: #f8fbff;
-    color: #3e6289;
-    font-size: 0.74rem;
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.84rem;
     font-weight: 700;
-    padding: 6px 10px;
+    color: #35557b;
+    background: #f8fbff;
+    display: block;
 }
 
 .mk-role-strip a.active {
-    background: #eef5ff;
-    border-color: #bdd2ec;
-    color: #145ea5;
+    background: linear-gradient(135deg, var(--mk-blue), var(--mk-blue-dark));
+    border-color: transparent;
+    color: #fff;
+}
+
+.mk-role-strip a:hover {
+    background: linear-gradient(135deg, var(--mk-blue), var(--mk-blue-dark));
+    border-color: transparent;
+    color: #fff;
 }
 
 .mk-period a {
@@ -147,6 +153,66 @@
     border-color: #c9dbf4;
     background: #eef5ff;
     color: #165fa7;
+}
+
+.mk-nav a.admin-home-link {
+    border-color: #cfd9e9;
+    background: #fff;
+    color: #2f4f6f;
+}
+
+.mk-nav a.admin-home-link:hover {
+    border-color: #bdd2ec;
+    background: #eef5ff;
+    color: #165fa7;
+}
+
+.mk-section-grid {
+    margin-top: 14px;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mk-mini-list {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-mini-item {
+    border: 1px solid #e1e9f5;
+    border-radius: 9px;
+    padding: 8px 10px;
+    background: #fbfdff;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-mini-item strong {
+    color: #264b70;
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+.mk-mini-item span {
+    color: #5d7899;
+    font-size: 0.74rem;
+}
+
+.mk-pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.mk-pill-small {
+    border: 1px solid #d7e3f2;
+    border-radius: 999px;
+    padding: 4px 8px;
+    background: #f8fbff;
+    color: #3d6086;
+    font-size: 0.72rem;
+    font-weight: 700;
 }
 
 .mk-sidebar-foot {
@@ -783,7 +849,8 @@
     }
 
     .mk-grid,
-    .mk-bottom {
+    .mk-bottom,
+    .mk-section-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -876,13 +943,13 @@
         </div>
 
         <nav class="mk-nav">
-            <a class="current" href="{% url 'activity_dashboard' %}?{{ current_query }}">Dashboard Overview</a>
-            <a href="{% url 'seo_topic_generator' %}">SEO Topic Generator</a>
-            <a href="{% url 'admin:nexalix_app_contactmessage_changelist' %}">Contact Messages</a>
-            <a href="{% url 'admin:nexalix_app_quoterequest_changelist' %}">Quote Requests</a>
-            <a href="{% url 'admin:nexalix_app_partner_changelist' %}">Partners</a>
-            <a href="{% url 'admin:nexalix_app_casestudy_changelist' %}">Case Studies</a>
-            <a href="{% url 'admin:index' %}">Django Admin Home</a>
+            <a class="current mk-section-link" href="#section-overview">Dashboard Overview</a>
+            <a class="mk-section-link" href="#section-seo-topic-generator">SEO Topic Generator</a>
+            <a class="mk-section-link" href="#section-contact-messages" data-activity-filter="contact">Contact Messages</a>
+            <a class="mk-section-link" href="#section-quote-requests" data-activity-filter="quote">Quote Requests</a>
+            <a class="mk-section-link" href="#section-partners">Partners</a>
+            <a class="mk-section-link" href="#section-case-studies">Case Studies</a>
+            <a class="admin-home-link" href="{% url 'admin:index' %}">Django Admin Home</a>
         </nav>
 
         <div class="mk-saved-filters">
@@ -1014,7 +1081,7 @@
                 </article>
             </div>
 
-            <div class="mk-grid">
+            <div class="mk-grid" id="section-overview">
                 <article class="mk-panel">
                     <h2>Activity Trend</h2>
                     <p class="mk-sub">Contacts and quotes visualized as grouped bars. Click a bar to drill into that day.</p>
@@ -1070,7 +1137,89 @@
                 </article>
             </div>
 
-            <div class="mk-bottom">
+            <div class="mk-section-grid">
+                <article class="mk-panel" id="section-seo-topic-generator">
+                    <h2>SEO Topic Generator</h2>
+                    <p class="mk-sub">Preview technology consulting topics generated for Nexalix SEO campaigns.</p>
+                    <div class="mk-pill-list">
+                        {% for keyword in seo_keywords_preview %}
+                        <span class="mk-pill-small">{{ keyword }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mk-mini-list" style="margin-top:10px;">
+                        {% for topic in seo_topics_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ topic.title }}</strong>
+                            <span>{{ topic.keyword }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No topics generated.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel" id="section-contact-messages">
+                    <h2>Contact Messages</h2>
+                    <p class="mk-sub">Latest contact submissions within the active period and filters.</p>
+                    <div class="mk-mini-list">
+                        {% for message in contacts_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ message.full_name }} · {{ message.service|default:"General inquiry" }}</strong>
+                            <span>{{ message.email }} · {{ message.submitted_at|date:"M d, Y H:i" }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No contact messages found.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel" id="section-quote-requests">
+                    <h2>Quote Requests</h2>
+                    <p class="mk-sub">Latest quote requests within the active period and filters.</p>
+                    <div class="mk-mini-list">
+                        {% for quote in quotes_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ quote.quote_reference }} · {{ quote.service.title|default:"Service not selected" }}</strong>
+                            <span>{{ quote.email }} · {{ quote.created_at|date:"M d, Y H:i" }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No quote requests found.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel" id="section-partners">
+                    <h2>Partners</h2>
+                    <p class="mk-sub">Active partners currently displayed across Nexalix pages.</p>
+                    <div class="mk-mini-list">
+                        {% for partner in partners_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ partner.name }}</strong>
+                            <span>{% if partner.website %}{{ partner.website }}{% else %}No website set{% endif %}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No partners available.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel" id="section-case-studies">
+                    <h2>Case Studies</h2>
+                    <p class="mk-sub">Recent active case studies available on the public website.</p>
+                    <div class="mk-mini-list">
+                        {% for case in case_studies_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ case.title }}</strong>
+                            <span>{{ case.created_at|date:"M d, Y" }}{% if case.tags %} · {{ case.tags }}{% endif %}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No case studies available.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+            </div>
+
+            <div class="mk-bottom" id="section-client-activity">
                 <article class="mk-panel">
                     <div class="mk-panel-head">
                         <div>
@@ -1164,6 +1313,7 @@
     const activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
     const logRows = Array.from(document.querySelectorAll("#adminLogTable tbody tr"));
     const tabs = Array.from(document.querySelectorAll("#activityFilterTabs button"));
+    const sectionLinks = Array.from(document.querySelectorAll(".mk-nav .mk-section-link"));
     const activityEmpty = document.getElementById("activityEmpty");
     const logEmpty = document.getElementById("logEmpty");
     const toggleContacts = document.getElementById("toggleContacts");
@@ -1208,6 +1358,27 @@
 
     tabs.forEach((btn) => {
         btn.addEventListener("click", () => setActiveTab(btn.dataset.filter || "all"));
+    });
+
+    sectionLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+            const targetSelector = link.getAttribute("href") || "";
+            if (!targetSelector.startsWith("#")) return;
+            event.preventDefault();
+
+            const requestedFilter = (link.dataset.activityFilter || "").trim();
+            if (requestedFilter && ["all", "contact", "quote"].includes(requestedFilter)) {
+                setActiveTab(requestedFilter);
+            }
+
+            sectionLinks.forEach((item) => item.classList.remove("current"));
+            link.classList.add("current");
+
+            const targetElement = document.querySelector(targetSelector);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        });
     });
 
     if (searchInput) {

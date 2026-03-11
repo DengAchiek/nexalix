@@ -88,24 +88,24 @@
     text-decoration: none;
     border: 1px solid var(--mk-line);
     border-radius: 10px;
-    padding: 8px 10px;
+    padding: 9px 10px;
     font-size: 0.84rem;
-    font-weight: 700;
-    color: #35557b;
-    background: #f8fbff;
+    font-weight: 600;
+    color: #3a5a7f;
+    background: #fff;
     display: block;
 }
 
 .mk-role-strip a.active {
-    background: linear-gradient(135deg, var(--mk-blue), var(--mk-blue-dark));
-    border-color: transparent;
-    color: #fff;
+    border-color: #c9dbf4;
+    background: #eef5ff;
+    color: #165fa7;
 }
 
 .mk-role-strip a:hover {
-    background: linear-gradient(135deg, var(--mk-blue), var(--mk-blue-dark));
-    border-color: transparent;
-    color: #fff;
+    border-color: #c4d8f4;
+    color: #125ea8;
+    background: #f5faff;
 }
 
 .mk-period a {
@@ -172,6 +172,14 @@
     display: grid;
     gap: 14px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mk-section-grid.is-view-mode {
+    grid-template-columns: 1fr;
+}
+
+.mk-view-hidden {
+    display: none !important;
 }
 
 .mk-mini-list {
@@ -943,12 +951,12 @@
         </div>
 
         <nav class="mk-nav">
-            <a class="current mk-section-link" href="#section-overview">Dashboard Overview</a>
-            <a class="mk-section-link" href="#section-seo-topic-generator">SEO Topic Generator</a>
-            <a class="mk-section-link" href="#section-contact-messages" data-activity-filter="contact">Contact Messages</a>
-            <a class="mk-section-link" href="#section-quote-requests" data-activity-filter="quote">Quote Requests</a>
-            <a class="mk-section-link" href="#section-partners">Partners</a>
-            <a class="mk-section-link" href="#section-case-studies">Case Studies</a>
+            <a class="current mk-section-link" href="#" data-view="overview">Dashboard Overview</a>
+            <a class="mk-section-link" href="#" data-view="seo-topic-generator">SEO Topic Generator</a>
+            <a class="mk-section-link" href="#" data-view="contact-messages" data-activity-filter="contact">Contact Messages</a>
+            <a class="mk-section-link" href="#" data-view="quote-requests" data-activity-filter="quote">Quote Requests</a>
+            <a class="mk-section-link" href="#" data-view="partners">Partners</a>
+            <a class="mk-section-link" href="#" data-view="case-studies">Case Studies</a>
             <a class="admin-home-link" href="{% url 'admin:index' %}">Django Admin Home</a>
         </nav>
 
@@ -1137,8 +1145,8 @@
                 </article>
             </div>
 
-            <div class="mk-section-grid">
-                <article class="mk-panel" id="section-seo-topic-generator">
+            <div class="mk-section-grid mk-view-hidden" id="sectionPagesContainer">
+                <article class="mk-panel mk-view-panel" id="section-seo-topic-generator" data-view-panel="seo-topic-generator">
                     <h2>SEO Topic Generator</h2>
                     <p class="mk-sub">Preview technology consulting topics generated for Nexalix SEO campaigns.</p>
                     <div class="mk-pill-list">
@@ -1158,7 +1166,7 @@
                     </div>
                 </article>
 
-                <article class="mk-panel" id="section-contact-messages">
+                <article class="mk-panel mk-view-panel" id="section-contact-messages" data-view-panel="contact-messages">
                     <h2>Contact Messages</h2>
                     <p class="mk-sub">Latest contact submissions within the active period and filters.</p>
                     <div class="mk-mini-list">
@@ -1173,7 +1181,7 @@
                     </div>
                 </article>
 
-                <article class="mk-panel" id="section-quote-requests">
+                <article class="mk-panel mk-view-panel" id="section-quote-requests" data-view-panel="quote-requests">
                     <h2>Quote Requests</h2>
                     <p class="mk-sub">Latest quote requests within the active period and filters.</p>
                     <div class="mk-mini-list">
@@ -1188,7 +1196,7 @@
                     </div>
                 </article>
 
-                <article class="mk-panel" id="section-partners">
+                <article class="mk-panel mk-view-panel" id="section-partners" data-view-panel="partners">
                     <h2>Partners</h2>
                     <p class="mk-sub">Active partners currently displayed across Nexalix pages.</p>
                     <div class="mk-mini-list">
@@ -1203,7 +1211,7 @@
                     </div>
                 </article>
 
-                <article class="mk-panel" id="section-case-studies">
+                <article class="mk-panel mk-view-panel" id="section-case-studies" data-view-panel="case-studies">
                     <h2>Case Studies</h2>
                     <p class="mk-sub">Recent active case studies available on the public website.</p>
                     <div class="mk-mini-list">
@@ -1314,6 +1322,13 @@
     const logRows = Array.from(document.querySelectorAll("#adminLogTable tbody tr"));
     const tabs = Array.from(document.querySelectorAll("#activityFilterTabs button"));
     const sectionLinks = Array.from(document.querySelectorAll(".mk-nav .mk-section-link"));
+    const sectionPagesContainer = document.getElementById("sectionPagesContainer");
+    const viewPanels = Array.from(document.querySelectorAll(".mk-view-panel"));
+    const overviewBlocks = [
+        document.getElementById("kpiCards"),
+        document.getElementById("section-overview"),
+        document.getElementById("section-client-activity"),
+    ].filter(Boolean);
     const activityEmpty = document.getElementById("activityEmpty");
     const logEmpty = document.getElementById("logEmpty");
     const toggleContacts = document.getElementById("toggleContacts");
@@ -1360,24 +1375,37 @@
         btn.addEventListener("click", () => setActiveTab(btn.dataset.filter || "all"));
     });
 
+    function switchDashboardView(viewKey) {
+        if (!viewKey || viewKey === "overview") {
+            overviewBlocks.forEach((el) => el.classList.remove("mk-view-hidden"));
+            if (sectionPagesContainer) sectionPagesContainer.classList.add("mk-view-hidden");
+            return;
+        }
+
+        overviewBlocks.forEach((el) => el.classList.add("mk-view-hidden"));
+        if (sectionPagesContainer) {
+            sectionPagesContainer.classList.remove("mk-view-hidden");
+            sectionPagesContainer.classList.add("is-view-mode");
+        }
+
+        viewPanels.forEach((panel) => {
+            panel.classList.toggle("mk-view-hidden", panel.dataset.viewPanel !== viewKey);
+        });
+    }
+
     sectionLinks.forEach((link) => {
         link.addEventListener("click", (event) => {
-            const targetSelector = link.getAttribute("href") || "";
-            if (!targetSelector.startsWith("#")) return;
             event.preventDefault();
-
+            const requestedView = (link.dataset.view || "overview").trim();
             const requestedFilter = (link.dataset.activityFilter || "").trim();
+
             if (requestedFilter && ["all", "contact", "quote"].includes(requestedFilter)) {
                 setActiveTab(requestedFilter);
             }
 
             sectionLinks.forEach((item) => item.classList.remove("current"));
             link.classList.add("current");
-
-            const targetElement = document.querySelector(targetSelector);
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
+            switchDashboardView(requestedView);
         });
     });
 
@@ -1433,8 +1461,6 @@
     document.querySelectorAll("#kpiCards .mk-kpi[data-kpi-filter]").forEach((card) => {
         card.addEventListener("click", () => {
             setActiveTab(card.dataset.kpiFilter || "all");
-            const activityPanel = document.getElementById("activityList");
-            if (activityPanel) activityPanel.scrollIntoView({ behavior: "smooth", block: "start" });
         });
     });
 
@@ -1453,6 +1479,7 @@
     });
 
     setActiveTab(activeType);
+    switchDashboardView("overview");
     applyTrendVisibility();
 })();
 </script>

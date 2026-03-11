@@ -207,6 +207,242 @@
     font-size: 0.74rem;
 }
 
+.mk-sla-cards {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-sla-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 9px;
+    background: #f8fbff;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-sla-card strong {
+    color: #1f466e;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.mk-sla-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-sla-card.overdue {
+    border-color: #f0bcc7;
+    background: #fff4f6;
+}
+
+.mk-sla-card.overdue strong,
+.mk-sla-card.overdue span {
+    color: #b43053;
+}
+
+.mk-mini-item.sla-overdue {
+    border-color: #f2c2cd;
+    background: #fff6f8;
+}
+
+.mk-mini-item.sla-due-soon {
+    border-color: #f4d7b5;
+    background: #fffaf2;
+}
+
+.mk-mini-item.sla-due-day {
+    border-color: #d6e4f7;
+    background: #f6fbff;
+}
+
+.mk-funnel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-funnel-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8fbff;
+    display: grid;
+    gap: 3px;
+}
+
+.mk-funnel-card strong {
+    color: #1f466e;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.mk-funnel-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-alert-cards,
+.mk-quality-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-alert-card,
+.mk-quality-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 9px;
+    background: #f8fbff;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-alert-card strong,
+.mk-quality-card strong {
+    color: #1f466e;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.mk-alert-card span,
+.mk-quality-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-alert-card.critical {
+    border-color: #f0bcc7;
+    background: #fff4f6;
+}
+
+.mk-alert-card.critical strong,
+.mk-alert-card.critical span {
+    color: #b43053;
+}
+
+.mk-alert-card.high {
+    border-color: #ffd6b1;
+    background: #fff7ef;
+}
+
+.mk-alert-card.high strong,
+.mk-alert-card.high span {
+    color: #9b4d00;
+}
+
+.mk-alert-card.medium {
+    border-color: #d6e4f7;
+    background: #f6fbff;
+}
+
+.mk-alert-card.medium strong,
+.mk-alert-card.medium span {
+    color: #225f9a;
+}
+
+.mk-alert-list,
+.mk-quality-list {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-alert-item,
+.mk-quality-item {
+    border: 1px solid #e1e9f5;
+    border-left: 4px solid #3a73d8;
+    border-radius: 10px;
+    padding: 9px 10px;
+    background: #fbfdff;
+}
+
+.mk-alert-item.critical {
+    border-left-color: #d84b72;
+}
+
+.mk-alert-item.high {
+    border-left-color: #dd8d2f;
+}
+
+.mk-alert-item.medium {
+    border-left-color: #4d86d9;
+}
+
+.mk-alert-item.info {
+    border-left-color: #64a0e2;
+}
+
+.mk-alert-item strong,
+.mk-quality-item strong {
+    display: block;
+    color: #224768;
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+.mk-alert-item span,
+.mk-quality-item span {
+    display: block;
+    margin-top: 2px;
+    color: #5f7898;
+    font-size: 0.74rem;
+}
+
+.mk-alert-item a,
+.mk-quality-item a {
+    margin-top: 4px;
+    display: inline-block;
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: #1d5fa8;
+    text-decoration: none;
+}
+
+.mk-funnel-rate {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.mk-funnel-rate .mk-chip {
+    font-size: 0.72rem;
+}
+
+.mk-mini-table-wrap {
+    overflow: auto;
+}
+
+.mk-mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 540px;
+}
+
+.mk-mini-table th,
+.mk-mini-table td {
+    padding: 7px;
+    border-bottom: 1px solid #e5edf6;
+    text-align: left;
+    color: #345677;
+    font-size: 0.76rem;
+}
+
+.mk-mini-table th {
+    background: #f7fbff;
+    color: #21486d;
+    font-weight: 700;
+}
+
 .mk-pill-list {
     display: flex;
     flex-wrap: wrap;
@@ -856,6 +1092,19 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .mk-sla-cards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mk-funnel-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-alert-cards,
+    .mk-quality-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .mk-grid,
     .mk-bottom,
     .mk-section-grid {
@@ -911,6 +1160,19 @@
     .mk-meta {
         text-align: left;
     }
+
+    .mk-sla-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-funnel-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mk-alert-cards,
+    .mk-quality-cards {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 {% endblock %}
@@ -952,7 +1214,11 @@
 
         <nav class="mk-nav">
             <a class="current mk-section-link" href="#" data-view="overview">Dashboard Overview</a>
+            <a class="mk-section-link" href="#" data-view="alert-center">Alert Center</a>
+            <a class="mk-section-link" href="#" data-view="data-quality">Data Quality Checks</a>
+            <a class="mk-section-link" href="#" data-view="executive-reporting">Executive Reporting</a>
             <a class="mk-section-link" href="#" data-view="seo-topic-generator">SEO Topic Generator</a>
+            <a class="mk-section-link" href="#" data-view="funnel-analytics">Funnel Analytics</a>
             <a class="mk-section-link" href="#" data-view="contact-messages" data-activity-filter="contact">Contact Messages</a>
             <a class="mk-section-link" href="#" data-view="quote-requests" data-activity-filter="quote">Quote Requests</a>
             <a class="mk-section-link" href="#" data-view="partners">Partners</a>
@@ -1001,9 +1267,9 @@
         <div class="mk-sidebar-foot">
             <label class="mk-switch">
                 <input type="checkbox" id="autoRefreshToggle">
-                Auto-refresh every 60s
+                Live updates every 15s
             </label>
-            <p id="autoRefreshStatus">Auto-refresh is off.</p>
+            <p id="autoRefreshStatus">Live updates are off.</p>
             <p>Last rendered: {% now "M d, Y H:i" %}</p>
         </div>
     </aside>
@@ -1027,6 +1293,8 @@
                     {% if not sales_mode %}
                     <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ csv_logs_query }}">Export Logs CSV</a>
                     {% endif %}
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ weekly_csv_query }}">Weekly Exec CSV</a>
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ weekly_pdf_query }}">Weekly Exec PDF</a>
                     <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
                 </div>
                 <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
@@ -1053,9 +1321,9 @@
                         <h3>Contact Messages</h3>
                         <span class="mk-tag blue">This Period</span>
                     </div>
-                    <strong>{{ kpis.contacts_window }}</strong>
-                    <small>{{ kpis.contacts_total }} total records</small>
-                    <div class="mk-progress"><span class="blue" style="width: {% if contacts_pct > 100 %}100{% else %}{{ contacts_pct|default:0 }}{% endif %}%;"></span></div>
+                    <strong id="kpiContactsWindow">{{ kpis.contacts_window }}</strong>
+                    <small id="kpiContactsTotal">{{ kpis.contacts_total }} total records</small>
+                    <div class="mk-progress"><span id="kpiContactsProgress" class="blue" style="width: {% if contacts_pct > 100 %}100{% else %}{{ contacts_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
 
                 <article class="mk-kpi" data-kpi-filter="quote">
@@ -1063,9 +1331,9 @@
                         <h3>Quote Requests</h3>
                         <span class="mk-tag yellow">This Period</span>
                     </div>
-                    <strong>{{ kpis.quotes_window }}</strong>
-                    <small>{{ kpis.quotes_total }} total records</small>
-                    <div class="mk-progress"><span class="yellow" style="width: {% if quotes_pct > 100 %}100{% else %}{{ quotes_pct|default:0 }}{% endif %}%;"></span></div>
+                    <strong id="kpiQuotesWindow">{{ kpis.quotes_window }}</strong>
+                    <small id="kpiQuotesTotal">{{ kpis.quotes_total }} total records</small>
+                    <div class="mk-progress"><span id="kpiQuotesProgress" class="yellow" style="width: {% if quotes_pct > 100 %}100{% else %}{{ quotes_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
 
                 <article class="mk-kpi" data-kpi-filter="contact">
@@ -1073,9 +1341,9 @@
                         <h3>Unread Contacts</h3>
                         <span class="mk-tag green">Queue</span>
                     </div>
-                    <strong>{{ kpis.contacts_unread }}</strong>
+                    <strong id="kpiUnreadContacts">{{ kpis.contacts_unread }}</strong>
                     <small>Pending review</small>
-                    <div class="mk-progress"><span class="green" style="width: {% if unread_pct > 100 %}100{% else %}{{ unread_pct|default:0 }}{% endif %}%;"></span></div>
+                    <div class="mk-progress"><span id="kpiUnreadProgress" class="green" style="width: {% if unread_pct > 100 %}100{% else %}{{ unread_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
 
                 <article class="mk-kpi" data-kpi-filter="quote">
@@ -1083,9 +1351,9 @@
                         <h3>New Quotes</h3>
                         <span class="mk-tag violet">Pipeline</span>
                     </div>
-                    <strong>{{ kpis.quotes_new }}</strong>
+                    <strong id="kpiNewQuotes">{{ kpis.quotes_new }}</strong>
                     <small>Need follow-up</small>
-                    <div class="mk-progress"><span class="violet" style="width: {% if new_quotes_pct > 100 %}100{% else %}{{ new_quotes_pct|default:0 }}{% endif %}%;"></span></div>
+                    <div class="mk-progress"><span id="kpiNewQuotesProgress" class="violet" style="width: {% if new_quotes_pct > 100 %}100{% else %}{{ new_quotes_pct|default:0 }}{% endif %}%;"></span></div>
                 </article>
             </div>
 
@@ -1145,7 +1413,141 @@
                 </article>
             </div>
 
+            <article class="mk-panel" id="section-sla-queue">
+                <h2>Response SLA Queue</h2>
+                <p class="mk-sub">Contacts SLA: {{ contact_sla_hours }}h · Quotes SLA: {{ quote_sla_hours }}h · Overdue items are highlighted in red.</p>
+                <div class="mk-sla-cards">
+                    <div class="mk-sla-card overdue">
+                        <strong id="slaOverdue">{{ sla_summary.overdue }}</strong>
+                        <span>Overdue</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="sla1h">{{ sla_summary.within_1h }}</strong>
+                        <span>Due in 1h</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="sla4h">{{ sla_summary.within_4h }}</strong>
+                        <span>Due in 4h</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="sla24h">{{ sla_summary.within_24h }}</strong>
+                        <span>Due in 24h</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="slaPendingTotal">{{ sla_summary.pending_total }}</strong>
+                        <span>Pending Total</span>
+                    </div>
+                </div>
+
+                <div class="mk-mini-list" id="slaQueueList">
+                    {% for item in sla_queue %}
+                    <div class="mk-mini-item {% if item.bucket == 'overdue' %}sla-overdue{% elif item.bucket == 'within_1h' or item.bucket == 'within_4h' %}sla-due-soon{% elif item.bucket == 'within_24h' %}sla-due-day{% endif %}">
+                        <strong>{{ item.title }} · {{ item.kind|title }}</strong>
+                        <span>{{ item.subtitle }} · {{ item.status }}</span>
+                        <span>{{ item.remaining_label }} · due {{ item.due_at_label }} · <a href="{{ item.admin_url }}">Open</a></span>
+                    </div>
+                    {% empty %}
+                    <div class="mk-mini-item"><strong>No pending contact or quote items in this range.</strong></div>
+                    {% endfor %}
+                </div>
+            </article>
+
             <div class="mk-section-grid mk-view-hidden" id="sectionPagesContainer">
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-alert-center" data-view-panel="alert-center">
+                    <h2>Alert Center</h2>
+                    <p class="mk-sub">Proactive alerts for spikes, overdue leads, email failures, and chatbot escalations.</p>
+
+                    <div class="mk-alert-cards">
+                        <div class="mk-alert-card critical">
+                            <strong id="alertCritical">{{ alert_summary.critical }}</strong>
+                            <span>Critical</span>
+                        </div>
+                        <div class="mk-alert-card high">
+                            <strong id="alertHigh">{{ alert_summary.high }}</strong>
+                            <span>High</span>
+                        </div>
+                        <div class="mk-alert-card medium">
+                            <strong id="alertMedium">{{ alert_summary.medium }}</strong>
+                            <span>Medium</span>
+                        </div>
+                        <div class="mk-alert-card">
+                            <strong id="alertTotal">{{ alert_summary.total }}</strong>
+                            <span>Total Alerts</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-alert-list" id="alertList">
+                        {% for alert in alerts %}
+                        <div class="mk-alert-item {{ alert.severity }}">
+                            <strong>{{ alert.title }}</strong>
+                            <span>{{ alert.message }}</span>
+                            <a href="{{ alert.action_url }}">Investigate</a>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No active alerts right now.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-data-quality" data-view-panel="data-quality">
+                    <h2>Data Quality Checks</h2>
+                    <p class="mk-sub">Duplicates, invalid records, missing fields, and stale pipeline entries.</p>
+
+                    <div class="mk-quality-cards">
+                        <div class="mk-quality-card">
+                            <strong id="qualityTotal">{{ quality_summary.total_issues }}</strong>
+                            <span>Total Issues</span>
+                        </div>
+                        <div class="mk-quality-card">
+                            <strong id="qualityDuplicate">{{ quality_summary.duplicates }}</strong>
+                            <span>Duplicates</span>
+                        </div>
+                        <div class="mk-quality-card">
+                            <strong id="qualityInvalid">{{ quality_summary.invalid_emails|add:quality_summary.invalid_phones }}</strong>
+                            <span>Invalid Email/Phone</span>
+                        </div>
+                        <div class="mk-quality-card">
+                            <strong id="qualityStale">{{ quality_summary.stale_records }}</strong>
+                            <span>Stale Records</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-quality-list" id="qualityList">
+                        {% for issue in quality_issues %}
+                        <div class="mk-quality-item">
+                            <strong>[{{ issue.category }}] {{ issue.label }}</strong>
+                            <span>{{ issue.detail }}</span>
+                            <a href="{{ issue.action_url }}">Open Record</a>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No data quality issues detected.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-executive-reporting" data-view-panel="executive-reporting">
+                    <h2>Executive Reporting</h2>
+                    <p class="mk-sub">Auto-generated weekly summaries for leadership and operations reviews.</p>
+                    <div class="mk-pill-list">
+                        <a class="mk-pill-small" href="{% url 'activity_dashboard' %}?{{ weekly_csv_query }}">Download Weekly CSV</a>
+                        <a class="mk-pill-small" href="{% url 'activity_dashboard' %}?{{ weekly_pdf_query }}">Download Weekly PDF</a>
+                    </div>
+                    <div class="mk-mini-list" style="margin-top:10px;">
+                        <div class="mk-mini-item">
+                            <strong>Weekly report includes</strong>
+                            <span>KPI totals, conversion rates, SLA exposure, alerts, data quality summary, and trend lines.</span>
+                        </div>
+                        <div class="mk-mini-item">
+                            <strong>Default window</strong>
+                            <span>Last 7 days, scoped by the active role view (All/Sales/Ops).</span>
+                        </div>
+                        <div class="mk-mini-item">
+                            <strong>Usage</strong>
+                            <span>Share CSV with analysts and PDF with executives for weekly decision reviews.</span>
+                        </div>
+                    </div>
+                </article>
+
                 <article class="mk-panel mk-view-panel" id="section-seo-topic-generator" data-view-panel="seo-topic-generator">
                     <h2>SEO Topic Generator</h2>
                     <p class="mk-sub">Preview technology consulting topics generated for Nexalix SEO campaigns.</p>
@@ -1163,6 +1565,109 @@
                         {% empty %}
                         <div class="mk-mini-item"><strong>No topics generated.</strong></div>
                         {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-funnel-analytics" data-view-panel="funnel-analytics">
+                    <h2>Funnel Analytics</h2>
+                    <p class="mk-sub">Contact → Quote → Won/Lost conversion and drop-off by service and industry.</p>
+
+                    <div class="mk-funnel-grid">
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallContacts">{{ funnel_analytics.overall.contacts }}</strong>
+                            <span>Contacts</span>
+                        </div>
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallQuotes">{{ funnel_analytics.overall.quotes }}</strong>
+                            <span>Quotes</span>
+                        </div>
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallWon">{{ funnel_analytics.overall.won }}</strong>
+                            <span>Won</span>
+                        </div>
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallLost">{{ funnel_analytics.overall.lost }}</strong>
+                            <span>Lost</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-funnel-rate">
+                        <span class="mk-chip" id="funnelRateContactQuote">Contact→Quote: {{ funnel_analytics.overall.contact_to_quote_rate }}%</span>
+                        <span class="mk-chip" id="funnelRateQuoteWon">Quote→Won: {{ funnel_analytics.overall.quote_to_won_rate }}%</span>
+                        <span class="mk-chip" id="funnelDropContactQuote">Drop (Contact→Quote): {{ funnel_analytics.overall.drop_contact_to_quote }}</span>
+                        <span class="mk-chip" id="funnelDropQuoteWon">Drop (Quote→Won): {{ funnel_analytics.overall.drop_quote_to_won }}</span>
+                    </div>
+
+                    <h3 style="margin:0 0 8px; color:#224768; font-size:0.93rem;">By Service</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Contacts</th>
+                                    <th>Quotes</th>
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>C→Q</th>
+                                    <th>Q→W</th>
+                                    <th>Drop C→Q</th>
+                                    <th>Drop Q→W</th>
+                                </tr>
+                            </thead>
+                            <tbody id="funnelServiceBody">
+                                {% for row in funnel_analytics.service_rows %}
+                                <tr>
+                                    <td>{{ row.label }}</td>
+                                    <td>{{ row.contacts }}</td>
+                                    <td>{{ row.quotes }}</td>
+                                    <td>{{ row.won }}</td>
+                                    <td>{{ row.lost }}</td>
+                                    <td>{{ row.contact_to_quote_rate }}%</td>
+                                    <td>{{ row.quote_to_won_rate }}%</td>
+                                    <td>{{ row.drop_contact_to_quote }}</td>
+                                    <td>{{ row.drop_quote_to_won }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="9">No service funnel data.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin:12px 0 8px; color:#224768; font-size:0.93rem;">By Industry</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Industry</th>
+                                    <th>Contacts</th>
+                                    <th>Quotes</th>
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>C→Q</th>
+                                    <th>Q→W</th>
+                                    <th>Drop C→Q</th>
+                                    <th>Drop Q→W</th>
+                                </tr>
+                            </thead>
+                            <tbody id="funnelIndustryBody">
+                                {% for row in funnel_analytics.industry_rows %}
+                                <tr>
+                                    <td>{{ row.label }}</td>
+                                    <td>{{ row.contacts }}</td>
+                                    <td>{{ row.quotes }}</td>
+                                    <td>{{ row.won }}</td>
+                                    <td>{{ row.lost }}</td>
+                                    <td>{{ row.contact_to_quote_rate }}%</td>
+                                    <td>{{ row.quote_to_won_rate }}%</td>
+                                    <td>{{ row.drop_contact_to_quote }}</td>
+                                    <td>{{ row.drop_quote_to_won }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="9">No industry funnel data.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </article>
 
@@ -1314,11 +1819,13 @@
 
 <script>
 (function () {
+    const liveEndpoint = "{% url 'activity_dashboard_live' %}";
     const searchForm = document.getElementById("dashboardSearchForm");
     const searchInput = document.getElementById("dashboardSearchInput");
     const activityHiddenInput = document.getElementById("activityHiddenInput");
     const dayHiddenInput = document.getElementById("dayHiddenInput");
-    const activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
+    const activityList = document.getElementById("activityList");
+    let activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
     const logRows = Array.from(document.querySelectorAll("#adminLogTable tbody tr"));
     const tabs = Array.from(document.querySelectorAll("#activityFilterTabs button"));
     const sectionLinks = Array.from(document.querySelectorAll(".mk-nav .mk-section-link"));
@@ -1327,6 +1834,7 @@
     const overviewBlocks = [
         document.getElementById("kpiCards"),
         document.getElementById("section-overview"),
+        document.getElementById("section-sla-queue"),
         document.getElementById("section-client-activity"),
     ].filter(Boolean);
     const activityEmpty = document.getElementById("activityEmpty");
@@ -1335,10 +1843,66 @@
     const toggleQuotes = document.getElementById("toggleQuotes");
     const autoRefreshToggle = document.getElementById("autoRefreshToggle");
     const autoRefreshStatus = document.getElementById("autoRefreshStatus");
+    const slaQueueList = document.getElementById("slaQueueList");
+    const alertList = document.getElementById("alertList");
+    const qualityList = document.getElementById("qualityList");
+
+    const kpiContactsWindow = document.getElementById("kpiContactsWindow");
+    const kpiContactsTotal = document.getElementById("kpiContactsTotal");
+    const kpiQuotesWindow = document.getElementById("kpiQuotesWindow");
+    const kpiQuotesTotal = document.getElementById("kpiQuotesTotal");
+    const kpiUnreadContacts = document.getElementById("kpiUnreadContacts");
+    const kpiNewQuotes = document.getElementById("kpiNewQuotes");
+    const kpiContactsProgress = document.getElementById("kpiContactsProgress");
+    const kpiQuotesProgress = document.getElementById("kpiQuotesProgress");
+    const kpiUnreadProgress = document.getElementById("kpiUnreadProgress");
+    const kpiNewQuotesProgress = document.getElementById("kpiNewQuotesProgress");
+
+    const slaOverdue = document.getElementById("slaOverdue");
+    const sla1h = document.getElementById("sla1h");
+    const sla4h = document.getElementById("sla4h");
+    const sla24h = document.getElementById("sla24h");
+    const slaPendingTotal = document.getElementById("slaPendingTotal");
+
+    const alertCritical = document.getElementById("alertCritical");
+    const alertHigh = document.getElementById("alertHigh");
+    const alertMedium = document.getElementById("alertMedium");
+    const alertTotal = document.getElementById("alertTotal");
+
+    const qualityTotal = document.getElementById("qualityTotal");
+    const qualityDuplicate = document.getElementById("qualityDuplicate");
+    const qualityInvalid = document.getElementById("qualityInvalid");
+    const qualityStale = document.getElementById("qualityStale");
+
+    const funnelOverallContacts = document.getElementById("funnelOverallContacts");
+    const funnelOverallQuotes = document.getElementById("funnelOverallQuotes");
+    const funnelOverallWon = document.getElementById("funnelOverallWon");
+    const funnelOverallLost = document.getElementById("funnelOverallLost");
+    const funnelRateContactQuote = document.getElementById("funnelRateContactQuote");
+    const funnelRateQuoteWon = document.getElementById("funnelRateQuoteWon");
+    const funnelDropContactQuote = document.getElementById("funnelDropContactQuote");
+    const funnelDropQuoteWon = document.getElementById("funnelDropQuoteWon");
+    const funnelServiceBody = document.getElementById("funnelServiceBody");
+    const funnelIndustryBody = document.getElementById("funnelIndustryBody");
 
     let activeType = activityHiddenInput ? activityHiddenInput.value : "all";
     if (!["all", "contact", "quote"].includes(activeType)) {
         activeType = "all";
+    }
+
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function clampPercent(value) {
+        const numeric = Number(value || 0);
+        if (!Number.isFinite(numeric)) return 0;
+        return Math.max(0, Math.min(100, numeric));
     }
 
     function applyActivityFilterAndSearch() {
@@ -1362,6 +1926,163 @@
 
         if (activityEmpty) activityEmpty.style.display = visibleActivity ? "none" : "block";
         if (logEmpty) logEmpty.style.display = visibleLogs ? "none" : "block";
+    }
+
+    function renderActivities(items) {
+        if (!activityList) return;
+        if (!Array.isArray(items) || !items.length) {
+            activityList.innerHTML = "";
+            activityItems = [];
+            applyActivityFilterAndSearch();
+            return;
+        }
+
+        activityList.innerHTML = items.map((item) => `
+            <div class="mk-activity ${item.type === "quote" ? "quote" : ""}" data-type="${escapeHtml(item.type)}" data-search="${escapeHtml(item.search_text || "")}">
+                <div>
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <p>${escapeHtml(item.subtitle)} · ${escapeHtml(item.detail)}</p>
+                </div>
+                <div class="mk-meta">
+                    <span class="mk-chip">${escapeHtml(item.status)}</span>
+                    <time>${escapeHtml(item.timestamp_label)}</time>
+                    <a href="${escapeHtml(item.admin_url)}">Open</a>
+                </div>
+            </div>
+        `).join("");
+
+        activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
+        applyActivityFilterAndSearch();
+    }
+
+    function renderSlaQueue(queueItems) {
+        if (!slaQueueList) return;
+        if (!Array.isArray(queueItems) || !queueItems.length) {
+            slaQueueList.innerHTML = '<div class="mk-mini-item"><strong>No pending contact or quote items in this range.</strong></div>';
+            return;
+        }
+
+        slaQueueList.innerHTML = queueItems.map((item) => {
+            let rowClass = "";
+            if (item.bucket === "overdue") rowClass = "sla-overdue";
+            else if (item.bucket === "within_1h" || item.bucket === "within_4h") rowClass = "sla-due-soon";
+            else if (item.bucket === "within_24h") rowClass = "sla-due-day";
+            const kindLabel = String(item.kind || "").replace(/^./, (ch) => ch.toUpperCase());
+
+            return `
+                <div class="mk-mini-item ${rowClass}">
+                    <strong>${escapeHtml(item.title)} · ${escapeHtml(kindLabel)}</strong>
+                    <span>${escapeHtml(item.subtitle)} · ${escapeHtml(item.status)}</span>
+                    <span>${escapeHtml(item.remaining_label)} · due ${escapeHtml(item.due_at_label)} · <a href="${escapeHtml(item.admin_url)}">Open</a></span>
+                </div>
+            `;
+        }).join("");
+    }
+
+    function renderAlertList(items) {
+        if (!alertList) return;
+        if (!Array.isArray(items) || !items.length) {
+            alertList.innerHTML = '<div class="mk-mini-item"><strong>No active alerts right now.</strong></div>';
+            return;
+        }
+        alertList.innerHTML = items.map((item) => `
+            <div class="mk-alert-item ${escapeHtml(item.severity)}">
+                <strong>${escapeHtml(item.title)}</strong>
+                <span>${escapeHtml(item.message)}</span>
+                <a href="${escapeHtml(item.action_url)}">Investigate</a>
+            </div>
+        `).join("");
+    }
+
+    function renderQualityList(items) {
+        if (!qualityList) return;
+        if (!Array.isArray(items) || !items.length) {
+            qualityList.innerHTML = '<div class="mk-mini-item"><strong>No data quality issues detected.</strong></div>';
+            return;
+        }
+        qualityList.innerHTML = items.map((item) => `
+            <div class="mk-quality-item">
+                <strong>[${escapeHtml(item.category)}] ${escapeHtml(item.label)}</strong>
+                <span>${escapeHtml(item.detail)}</span>
+                <a href="${escapeHtml(item.action_url)}">Open Record</a>
+            </div>
+        `).join("");
+    }
+
+    function renderFunnelRows(targetBody, rows, emptyLabel) {
+        if (!targetBody) return;
+        if (!Array.isArray(rows) || !rows.length) {
+            targetBody.innerHTML = `<tr><td colspan="9">${escapeHtml(emptyLabel)}</td></tr>`;
+            return;
+        }
+        targetBody.innerHTML = rows.map((row) => `
+            <tr>
+                <td>${escapeHtml(row.label)}</td>
+                <td>${escapeHtml(row.contacts)}</td>
+                <td>${escapeHtml(row.quotes)}</td>
+                <td>${escapeHtml(row.won)}</td>
+                <td>${escapeHtml(row.lost)}</td>
+                <td>${escapeHtml(row.contact_to_quote_rate)}%</td>
+                <td>${escapeHtml(row.quote_to_won_rate)}%</td>
+                <td>${escapeHtml(row.drop_contact_to_quote)}</td>
+                <td>${escapeHtml(row.drop_quote_to_won)}</td>
+            </tr>
+        `).join("");
+    }
+
+    function applyLiveSnapshot(data) {
+        if (!data || data.ok !== true) return;
+
+        const kpis = data.kpis || {};
+        const percentages = data.kpi_percentages || {};
+        if (kpiContactsWindow) kpiContactsWindow.textContent = kpis.contacts_window ?? 0;
+        if (kpiContactsTotal) kpiContactsTotal.textContent = `${kpis.contacts_total ?? 0} total records`;
+        if (kpiQuotesWindow) kpiQuotesWindow.textContent = kpis.quotes_window ?? 0;
+        if (kpiQuotesTotal) kpiQuotesTotal.textContent = `${kpis.quotes_total ?? 0} total records`;
+        if (kpiUnreadContacts) kpiUnreadContacts.textContent = kpis.contacts_unread ?? 0;
+        if (kpiNewQuotes) kpiNewQuotes.textContent = kpis.quotes_new ?? 0;
+        if (kpiContactsProgress) kpiContactsProgress.style.width = `${clampPercent(percentages.contacts_window)}%`;
+        if (kpiQuotesProgress) kpiQuotesProgress.style.width = `${clampPercent(percentages.quotes_window)}%`;
+        if (kpiUnreadProgress) kpiUnreadProgress.style.width = `${clampPercent(percentages.contacts_unread)}%`;
+        if (kpiNewQuotesProgress) kpiNewQuotesProgress.style.width = `${clampPercent(percentages.quotes_new)}%`;
+
+        const summary = data.sla_summary || {};
+        if (slaOverdue) slaOverdue.textContent = summary.overdue ?? 0;
+        if (sla1h) sla1h.textContent = summary.within_1h ?? 0;
+        if (sla4h) sla4h.textContent = summary.within_4h ?? 0;
+        if (sla24h) sla24h.textContent = summary.within_24h ?? 0;
+        if (slaPendingTotal) slaPendingTotal.textContent = summary.pending_total ?? 0;
+        renderSlaQueue(data.sla_queue || []);
+
+        const alertSummary = data.alert_summary || {};
+        if (alertCritical) alertCritical.textContent = alertSummary.critical ?? 0;
+        if (alertHigh) alertHigh.textContent = alertSummary.high ?? 0;
+        if (alertMedium) alertMedium.textContent = alertSummary.medium ?? 0;
+        if (alertTotal) alertTotal.textContent = alertSummary.total ?? 0;
+        renderAlertList(data.alerts || []);
+
+        const qualitySummary = data.quality_summary || {};
+        if (qualityTotal) qualityTotal.textContent = qualitySummary.total_issues ?? 0;
+        if (qualityDuplicate) qualityDuplicate.textContent = qualitySummary.duplicates ?? 0;
+        if (qualityInvalid) qualityInvalid.textContent = (qualitySummary.invalid_emails ?? 0) + (qualitySummary.invalid_phones ?? 0);
+        if (qualityStale) qualityStale.textContent = qualitySummary.stale_records ?? 0;
+        renderQualityList(data.quality_issues || []);
+
+        renderActivities(data.client_activities || []);
+
+        const funnel = data.funnel_analytics || {};
+        const overall = funnel.overall || {};
+        if (funnelOverallContacts) funnelOverallContacts.textContent = overall.contacts ?? 0;
+        if (funnelOverallQuotes) funnelOverallQuotes.textContent = overall.quotes ?? 0;
+        if (funnelOverallWon) funnelOverallWon.textContent = overall.won ?? 0;
+        if (funnelOverallLost) funnelOverallLost.textContent = overall.lost ?? 0;
+        if (funnelRateContactQuote) funnelRateContactQuote.textContent = `Contact→Quote: ${overall.contact_to_quote_rate ?? 0}%`;
+        if (funnelRateQuoteWon) funnelRateQuoteWon.textContent = `Quote→Won: ${overall.quote_to_won_rate ?? 0}%`;
+        if (funnelDropContactQuote) funnelDropContactQuote.textContent = `Drop (Contact→Quote): ${overall.drop_contact_to_quote ?? 0}`;
+        if (funnelDropQuoteWon) funnelDropQuoteWon.textContent = `Drop (Quote→Won): ${overall.drop_quote_to_won ?? 0}`;
+
+        renderFunnelRows(funnelServiceBody, funnel.service_rows || [], "No service funnel data.");
+        renderFunnelRows(funnelIndustryBody, funnel.industry_rows || [], "No industry funnel data.");
     }
 
     function setActiveTab(filter) {
@@ -1429,25 +2150,72 @@
     if (toggleQuotes) toggleQuotes.addEventListener("change", applyTrendVisibility);
 
     const refreshKey = "nexalix_dashboard_auto_refresh";
+    const pollMs = 15000;
     let refreshTimer = null;
+    let liveFetchInFlight = false;
+
+    function buildLiveParams() {
+        const params = new URLSearchParams();
+        if (searchForm) {
+            const formData = new FormData(searchForm);
+            formData.forEach((value, key) => {
+                if (value !== null && String(value).trim() !== "") {
+                    params.set(key, String(value));
+                }
+            });
+        }
+        if (!params.get("period")) params.set("period", "7");
+        if (!params.get("role")) params.set("role", "all");
+        params.set("activity", activeType);
+        return params;
+    }
+
+    async function fetchLiveSnapshot() {
+        if (liveFetchInFlight) return;
+        liveFetchInFlight = true;
+        try {
+            const params = buildLiveParams();
+            const response = await fetch(`${liveEndpoint}?${params.toString()}`, {
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                credentials: "same-origin",
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            applyLiveSnapshot(data);
+            if (autoRefreshStatus) {
+                autoRefreshStatus.textContent = `Live updates on (every 15s). Last sync ${data.server_time || "now"}.`;
+            }
+        } catch (error) {
+            if (autoRefreshStatus) {
+                autoRefreshStatus.textContent = "Live updates on, but sync failed. Retrying...";
+            }
+            console.warn("Dashboard live sync failed", error);
+        } finally {
+            liveFetchInFlight = false;
+        }
+    }
 
     function startAutoRefresh() {
         if (refreshTimer) clearInterval(refreshTimer);
-        refreshTimer = setInterval(() => {
-            window.location.reload();
-        }, 60000);
-        if (autoRefreshStatus) autoRefreshStatus.textContent = "Auto-refresh is on (every 60s).";
+        fetchLiveSnapshot();
+        refreshTimer = setInterval(fetchLiveSnapshot, pollMs);
+        if (autoRefreshStatus) autoRefreshStatus.textContent = "Live updates on (every 15s).";
     }
 
     function stopAutoRefresh() {
         if (refreshTimer) clearInterval(refreshTimer);
         refreshTimer = null;
-        if (autoRefreshStatus) autoRefreshStatus.textContent = "Auto-refresh is off.";
+        if (autoRefreshStatus) autoRefreshStatus.textContent = "Live updates are off.";
     }
 
     if (autoRefreshToggle) {
-        const persisted = localStorage.getItem(refreshKey) === "1";
+        const persistedValue = localStorage.getItem(refreshKey);
+        const persisted = persistedValue === null ? true : persistedValue === "1";
         autoRefreshToggle.checked = persisted;
+        if (persistedValue === null) {
+            localStorage.setItem(refreshKey, "1");
+        }
         if (persisted) startAutoRefresh();
 
         autoRefreshToggle.addEventListener("change", () => {
@@ -1481,6 +2249,9 @@
     setActiveTab(activeType);
     switchDashboardView("overview");
     applyTrendVisibility();
+    if (!autoRefreshToggle) {
+        fetchLiveSnapshot();
+    }
 })();
 </script>
 {% endblock %}

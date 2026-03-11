@@ -17,6 +17,8 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from datetime import timedelta, date
 from decimal import Decimal, ROUND_HALF_UP
+from collections import defaultdict
+from io import BytesIO
 import logging
 import csv
 import json
@@ -79,6 +81,13 @@ HOME_CONTEXT_CACHE_TTL = int(getattr(settings, "HOME_CACHE_TIMEOUT", 300))
 DASHBOARD_AGGREGATES_CACHE_TTL = int(getattr(settings, "DASHBOARD_CACHE_TIMEOUT", 120))
 CHATBOT_HISTORY_SESSION_KEY = "chatbot_history"
 CHATBOT_HISTORY_MAX_ITEMS = int(getattr(settings, "CHATBOT_SESSION_HISTORY_LIMIT", 16))
+DASHBOARD_CONTACT_SLA_HOURS = max(1, int(getattr(settings, "DASHBOARD_CONTACT_SLA_HOURS", 4)))
+DASHBOARD_QUOTE_SLA_HOURS = max(1, int(getattr(settings, "DASHBOARD_QUOTE_SLA_HOURS", 24)))
+ALERT_SPIKE_MULTIPLIER = float(getattr(settings, "DASHBOARD_ALERT_SPIKE_MULTIPLIER", 1.8))
+ALERT_SPIKE_MIN_ABS_DELTA = int(getattr(settings, "DASHBOARD_ALERT_SPIKE_MIN_ABS_DELTA", 3))
+EMAIL_ALERT_GRACE_MINUTES = int(getattr(settings, "DASHBOARD_EMAIL_ALERT_GRACE_MINUTES", 15))
+STALE_CONTACT_HOURS = int(getattr(settings, "DASHBOARD_STALE_CONTACT_HOURS", 72))
+STALE_QUOTE_HOURS = int(getattr(settings, "DASHBOARD_STALE_QUOTE_HOURS", 168))
 
 logger = logging.getLogger("nexalix_app.views")
 
@@ -100,6 +109,31 @@ def _absolute_url(request, path_or_url):
     if str(path_or_url).startswith(("http://", "https://")):
         return str(path_or_url)
     return request.build_absolute_uri(path_or_url)
+
+
+def _format_remaining_time(delta):
+    total_seconds = int(delta.total_seconds())
+    if total_seconds <= 0:
+        return "Overdue"
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes = remainder // 60
+    if hours <= 0:
+        return f"{minutes}m left"
+    if minutes == 0:
+        return f"{hours}h left"
+    return f"{hours}h {minutes}m left"
+
+
+def _sla_bucket_for_seconds(remaining_seconds):
+    if remaining_seconds <= 0:
+        return "overdue"
+    if remaining_seconds <= 3600:
+        return "within_1h"
+    if remaining_seconds <= 4 * 3600:
+        return "within_4h"
+    if remaining_seconds <= 24 * 3600:
+        return "within_24h"
+    return "on_track"
 
 
 def _organization_schema(request):
@@ -213,6 +247,26 @@ ROLE_LABELS = {
     "ops": "Ops View",
 }
 
+INDUSTRY_KEYWORD_MAP = (
+    ("health", "Healthcare"),
+    ("hospital", "Healthcare"),
+    ("clinic", "Healthcare"),
+    ("edu", "Education"),
+    ("school", "Education"),
+    ("university", "Education"),
+    ("bank", "Finance"),
+    ("fin", "Finance"),
+    ("payment", "Finance"),
+    ("shop", "Retail"),
+    ("retail", "Retail"),
+    ("store", "Retail"),
+    ("logistic", "Logistics"),
+    ("supply", "Logistics"),
+    ("transport", "Logistics"),
+    ("startup", "Startups"),
+    ("saas", "Startups"),
+)
+
 
 def _safe_parse_iso_date(value):
     if not value:
@@ -251,6 +305,694 @@ def _dashboard_query_string(period_days, activity_filter, search_query, role_vie
     if day_value:
         params["day"] = day_value
     return urlencode(params)
+
+
+def _safe_ratio_percent(numerator, denominator):
+    if denominator <= 0:
+        return 0.0
+    return round((numerator / denominator) * 100, 1)
+
+
+def _normalize_service_label(value):
+    label = (value or "").strip()
+    if not label:
+        return "Unspecified"
+    return label[:80]
+
+
+def _infer_industry_label(text, known_industries):
+    raw = (text or "").strip().lower()
+    if not raw:
+        return "Unspecified"
+
+    for industry in known_industries:
+        if industry and industry.lower() in raw:
+            return industry
+
+    for keyword, fallback_label in INDUSTRY_KEYWORD_MAP:
+        if keyword in raw:
+            return fallback_label
+
+    return "Unspecified"
+
+
+def _build_funnel_rows(contact_counts, quote_counts, won_counts, lost_counts, limit=8):
+    labels = set(contact_counts.keys()) | set(quote_counts.keys()) | set(won_counts.keys()) | set(lost_counts.keys())
+    rows = []
+    for label in labels:
+        contacts = int(contact_counts.get(label, 0))
+        quotes = int(quote_counts.get(label, 0))
+        won = int(won_counts.get(label, 0))
+        lost = int(lost_counts.get(label, 0))
+        rows.append({
+            "label": label,
+            "contacts": contacts,
+            "quotes": quotes,
+            "won": won,
+            "lost": lost,
+            "drop_contact_to_quote": max(contacts - quotes, 0),
+            "drop_quote_to_won": max(quotes - won, 0),
+            "contact_to_quote_rate": _safe_ratio_percent(quotes, contacts),
+            "quote_to_won_rate": _safe_ratio_percent(won, quotes),
+        })
+
+    rows.sort(key=lambda item: (item["quotes"], item["contacts"]), reverse=True)
+    return rows[:limit]
+
+
+def _build_funnel_analytics(contacts_queryset, quotes_queryset):
+    known_industries = list(
+        Industry.objects.filter(is_active=True)
+        .order_by("order", "name")
+        .values_list("name", flat=True)
+    )
+
+    contact_service_counts = defaultdict(int)
+    quote_service_counts = defaultdict(int)
+    won_service_counts = defaultdict(int)
+    lost_service_counts = defaultdict(int)
+
+    contact_industry_counts = defaultdict(int)
+    quote_industry_counts = defaultdict(int)
+    won_industry_counts = defaultdict(int)
+    lost_industry_counts = defaultdict(int)
+
+    for message in contacts_queryset.only("service", "message"):
+        service_label = _normalize_service_label(message.service)
+        industry_label = _infer_industry_label(f"{message.service} {message.message}", known_industries)
+        contact_service_counts[service_label] += 1
+        contact_industry_counts[industry_label] += 1
+
+    for quote in quotes_queryset.select_related("service").only("status", "company", "project_summary", "service__title"):
+        service_label = _normalize_service_label(quote.service.title if quote.service else "")
+        industry_label = _infer_industry_label(
+            f"{quote.company} {quote.project_summary} {quote.service.title if quote.service else ''}",
+            known_industries,
+        )
+        quote_service_counts[service_label] += 1
+        quote_industry_counts[industry_label] += 1
+        if quote.status == "won":
+            won_service_counts[service_label] += 1
+            won_industry_counts[industry_label] += 1
+        elif quote.status == "lost":
+            lost_service_counts[service_label] += 1
+            lost_industry_counts[industry_label] += 1
+
+    contacts_total = int(sum(contact_service_counts.values()))
+    quotes_total = int(sum(quote_service_counts.values()))
+    won_total = int(sum(won_service_counts.values()))
+    lost_total = int(sum(lost_service_counts.values()))
+
+    return {
+        "overall": {
+            "contacts": contacts_total,
+            "quotes": quotes_total,
+            "won": won_total,
+            "lost": lost_total,
+            "drop_contact_to_quote": max(contacts_total - quotes_total, 0),
+            "drop_quote_to_won": max(quotes_total - won_total, 0),
+            "contact_to_quote_rate": _safe_ratio_percent(quotes_total, contacts_total),
+            "quote_to_won_rate": _safe_ratio_percent(won_total, quotes_total),
+        },
+        "service_rows": _build_funnel_rows(
+            contact_service_counts,
+            quote_service_counts,
+            won_service_counts,
+            lost_service_counts,
+            limit=8,
+        ),
+        "industry_rows": _build_funnel_rows(
+            contact_industry_counts,
+            quote_industry_counts,
+            won_industry_counts,
+            lost_industry_counts,
+            limit=8,
+        ),
+    }
+
+
+def _build_sla_snapshot(filtered_contacts, filtered_quotes, now):
+    summary = {
+        "overdue": 0,
+        "within_1h": 0,
+        "within_4h": 0,
+        "within_24h": 0,
+        "on_track": 0,
+    }
+    queue = []
+
+    def _append(kind, created_at, title, subtitle, status_label, admin_url, sla_hours):
+        due_at = created_at + timedelta(hours=sla_hours)
+        remaining = due_at - now
+        remaining_seconds = int(remaining.total_seconds())
+        bucket = _sla_bucket_for_seconds(remaining_seconds)
+        summary[bucket] += 1
+        queue.append({
+            "kind": kind,
+            "title": title,
+            "subtitle": subtitle,
+            "status": status_label,
+            "admin_url": admin_url,
+            "due_at": due_at,
+            "remaining_label": _format_remaining_time(remaining),
+            "remaining_seconds": remaining_seconds,
+            "bucket": bucket,
+        })
+
+    pending_contacts = filtered_contacts.filter(is_read=False).order_by("submitted_at")
+    pending_quotes = filtered_quotes.filter(status__in=["new", "reviewed", "sent"]).select_related("service").order_by("created_at")
+
+    for message in pending_contacts.iterator():
+        _append(
+            kind="contact",
+            created_at=message.submitted_at,
+            title=message.full_name,
+            subtitle=message.service or "General inquiry",
+            status_label="Unread",
+            admin_url=reverse("admin:nexalix_app_contactmessage_change", args=[message.id]),
+            sla_hours=DASHBOARD_CONTACT_SLA_HOURS,
+        )
+
+    for quote in pending_quotes.iterator():
+        _append(
+            kind="quote",
+            created_at=quote.created_at,
+            title=quote.quote_reference,
+            subtitle=quote.service.title if quote.service else "Service not selected",
+            status_label=quote.get_status_display(),
+            admin_url=reverse("admin:nexalix_app_quoterequest_change", args=[quote.id]),
+            sla_hours=DASHBOARD_QUOTE_SLA_HOURS,
+        )
+
+    queue.sort(key=lambda item: item["remaining_seconds"])
+    for item in queue:
+        item["due_at_label"] = timezone.localtime(item["due_at"]).strftime("%b %d, %H:%M")
+    queue = queue[:12]
+    summary["pending_total"] = (
+        summary["overdue"]
+        + summary["within_1h"]
+        + summary["within_4h"]
+        + summary["within_24h"]
+        + summary["on_track"]
+    )
+    return summary, queue
+
+
+def _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=60):
+    activities = []
+    for message in filtered_contacts.order_by("-submitted_at")[:50]:
+        activities.append({
+            "type": "contact",
+            "title": f"Contact from {message.full_name}",
+            "subtitle": message.service or "General inquiry",
+            "detail": message.email,
+            "timestamp": message.submitted_at,
+            "status": "Unread" if not message.is_read else "Read",
+            "admin_url": reverse("admin:nexalix_app_contactmessage_change", args=[message.id]),
+            "search_text": f"{message.full_name} {message.email} {message.service or ''} {message.message}".lower(),
+        })
+
+    for quote in filtered_quotes.order_by("-created_at")[:50]:
+        activities.append({
+            "type": "quote",
+            "title": f"Quote request {quote.quote_reference}",
+            "subtitle": quote.service.title if quote.service else "Service not selected",
+            "detail": quote.email,
+            "timestamp": quote.created_at,
+            "status": quote.get_status_display(),
+            "admin_url": reverse("admin:nexalix_app_quoterequest_change", args=[quote.id]),
+            "search_text": f"{quote.quote_reference} {quote.full_name} {quote.email} {quote.company or ''} {quote.project_summary}".lower(),
+        })
+
+    if role_view == "ops":
+        activities = [
+            item for item in activities
+            if item["type"] == "contact" or item["status"] in {"New", "Reviewed", "Quote Sent"}
+        ]
+
+    activities.sort(key=lambda item: item["timestamp"], reverse=True)
+    return activities[:limit]
+
+
+def _is_likely_valid_email(value):
+    email = (value or "").strip()
+    if not email or "@" not in email or "." not in email:
+        return False
+    if ".." in email or email.startswith("@") or email.endswith("@"):
+        return False
+    return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email))
+
+
+def _is_likely_valid_phone(value):
+    phone = (value or "").strip()
+    if not phone:
+        return False
+    digits = re.sub(r"\D", "", phone)
+    if len(digits) < 7 or len(digits) > 15:
+        return False
+    return bool(re.match(r"^[0-9+\-\s()]+$", phone))
+
+
+def _build_alert_center(now, contacts_queryset, quotes_queryset, sla_summary):
+    alerts = []
+    severity_rank = {"critical": 4, "high": 3, "medium": 2, "info": 1}
+
+    lookback_24h = now - timedelta(hours=24)
+    previous_window_start = now - timedelta(days=8)
+    previous_window_end = lookback_24h
+
+    contacts_last_24h = contacts_queryset.filter(submitted_at__gte=lookback_24h).count()
+    contacts_prev_count = contacts_queryset.filter(
+        submitted_at__gte=previous_window_start,
+        submitted_at__lt=previous_window_end,
+    ).count()
+    contacts_prev_daily_avg = contacts_prev_count / 7 if contacts_prev_count else 0
+
+    quotes_last_24h = quotes_queryset.filter(created_at__gte=lookback_24h).count()
+    quotes_prev_count = quotes_queryset.filter(
+        created_at__gte=previous_window_start,
+        created_at__lt=previous_window_end,
+    ).count()
+    quotes_prev_daily_avg = quotes_prev_count / 7 if quotes_prev_count else 0
+
+    if contacts_prev_daily_avg > 0 and (
+        contacts_last_24h >= contacts_prev_daily_avg * ALERT_SPIKE_MULTIPLIER
+        and contacts_last_24h - contacts_prev_daily_avg >= ALERT_SPIKE_MIN_ABS_DELTA
+    ):
+        alerts.append({
+            "code": "contact_spike",
+            "severity": "high",
+            "title": "Contact volume spike",
+            "message": f"{contacts_last_24h} contacts in 24h vs {contacts_prev_daily_avg:.1f} avg/day baseline.",
+            "action_url": reverse("admin:nexalix_app_contactmessage_changelist"),
+        })
+
+    if quotes_prev_daily_avg > 0 and (
+        quotes_last_24h >= quotes_prev_daily_avg * ALERT_SPIKE_MULTIPLIER
+        and quotes_last_24h - quotes_prev_daily_avg >= ALERT_SPIKE_MIN_ABS_DELTA
+    ):
+        alerts.append({
+            "code": "quote_spike",
+            "severity": "high",
+            "title": "Quote request spike",
+            "message": f"{quotes_last_24h} quotes in 24h vs {quotes_prev_daily_avg:.1f} avg/day baseline.",
+            "action_url": reverse("admin:nexalix_app_quoterequest_changelist"),
+        })
+
+    overdue_count = int(sla_summary.get("overdue", 0))
+    if overdue_count > 0:
+        alerts.append({
+            "code": "overdue_leads",
+            "severity": "critical",
+            "title": "Overdue lead responses",
+            "message": f"{overdue_count} leads are overdue based on SLA targets.",
+            "action_url": reverse("activity_dashboard"),
+        })
+
+    grace_cutoff = now - timedelta(minutes=EMAIL_ALERT_GRACE_MINUTES)
+    email_failure_count = ContactMessage.objects.filter(
+        submitted_at__lte=grace_cutoff
+    ).filter(
+        Q(admin_notified=False) | Q(user_confirmation_sent=False)
+    ).count()
+    if email_failure_count > 0:
+        alerts.append({
+            "code": "email_failures",
+            "severity": "medium",
+            "title": "Email notification failures",
+            "message": f"{email_failure_count} contact messages appear unsent after {EMAIL_ALERT_GRACE_MINUTES} minutes.",
+            "action_url": reverse("admin:nexalix_app_contactmessage_changelist"),
+        })
+
+    escalations_7d = ChatbotLead.objects.filter(
+        created_at__gte=now - timedelta(days=7),
+        is_escalated=True,
+    ).count()
+    if escalations_7d > 0:
+        alerts.append({
+            "code": "chatbot_escalations",
+            "severity": "info" if escalations_7d < 5 else "medium",
+            "title": "Chatbot escalations",
+            "message": f"{escalations_7d} chatbot conversations escalated to human channels in the last 7 days.",
+            "action_url": reverse("admin:nexalix_app_chatbotlead_changelist"),
+        })
+
+    alerts.sort(key=lambda item: severity_rank.get(item["severity"], 0), reverse=True)
+    summary = {
+        "critical": sum(1 for item in alerts if item["severity"] == "critical"),
+        "high": sum(1 for item in alerts if item["severity"] == "high"),
+        "medium": sum(1 for item in alerts if item["severity"] == "medium"),
+        "info": sum(1 for item in alerts if item["severity"] == "info"),
+        "total": len(alerts),
+    }
+    return summary, alerts[:12]
+
+
+def _build_data_quality_checks(now, contacts_queryset, quotes_queryset):
+    issues = []
+    severity_rank = {"critical": 4, "high": 3, "medium": 2, "low": 1}
+
+    contact_email_dups = list(
+        contacts_queryset.exclude(email__isnull=True).exclude(email__exact="")
+        .values("email")
+        .annotate(total=Count("id"))
+        .filter(total__gt=1)
+        .order_by("-total")[:6]
+    )
+    quote_email_dups = list(
+        quotes_queryset.exclude(email__isnull=True).exclude(email__exact="")
+        .values("email")
+        .annotate(total=Count("id"))
+        .filter(total__gt=1)
+        .order_by("-total")[:6]
+    )
+
+    for dup in contact_email_dups:
+        email = dup["email"]
+        issues.append({
+            "code": "duplicate_contact_email",
+            "severity": "medium",
+            "category": "Duplicate",
+            "label": f"Contact email duplicated: {email}",
+            "detail": f"{dup['total']} contact records share this email.",
+            "action_url": f"{reverse('admin:nexalix_app_contactmessage_changelist')}?email__icontains={email}",
+        })
+    for dup in quote_email_dups:
+        email = dup["email"]
+        issues.append({
+            "code": "duplicate_quote_email",
+            "severity": "medium",
+            "category": "Duplicate",
+            "label": f"Quote email duplicated: {email}",
+            "detail": f"{dup['total']} quote requests share this email.",
+            "action_url": f"{reverse('admin:nexalix_app_quoterequest_changelist')}?email__icontains={email}",
+        })
+
+    invalid_contact_emails = []
+    for item in contacts_queryset.only("id", "email", "full_name").exclude(email__isnull=True)[:200]:
+        if not _is_likely_valid_email(item.email):
+            invalid_contact_emails.append(item)
+
+    invalid_quote_emails = []
+    invalid_quote_phones = []
+    for item in quotes_queryset.only("id", "email", "phone", "quote_reference").exclude(email__isnull=True)[:300]:
+        if not _is_likely_valid_email(item.email):
+            invalid_quote_emails.append(item)
+        if item.phone and not _is_likely_valid_phone(item.phone):
+            invalid_quote_phones.append(item)
+
+    for item in invalid_contact_emails[:6]:
+        issues.append({
+            "code": "invalid_contact_email",
+            "severity": "high",
+            "category": "Validation",
+            "label": f"Invalid contact email: {item.email}",
+            "detail": f"Contact record for {item.full_name} has malformed email.",
+            "action_url": reverse("admin:nexalix_app_contactmessage_change", args=[item.id]),
+        })
+    for item in invalid_quote_emails[:6]:
+        issues.append({
+            "code": "invalid_quote_email",
+            "severity": "high",
+            "category": "Validation",
+            "label": f"Invalid quote email: {item.email}",
+            "detail": f"Quote {item.quote_reference} has malformed email.",
+            "action_url": reverse("admin:nexalix_app_quoterequest_change", args=[item.id]),
+        })
+    for item in invalid_quote_phones[:6]:
+        issues.append({
+            "code": "invalid_quote_phone",
+            "severity": "medium",
+            "category": "Validation",
+            "label": f"Invalid phone on quote {item.quote_reference}",
+            "detail": f"Phone value '{item.phone}' is likely invalid.",
+            "action_url": reverse("admin:nexalix_app_quoterequest_change", args=[item.id]),
+        })
+
+    missing_contact_fields = contacts_queryset.filter(
+        Q(full_name__isnull=True) | Q(full_name__exact="") | Q(message__isnull=True) | Q(message__exact="")
+    )[:6]
+    missing_quote_fields = quotes_queryset.filter(
+        Q(full_name__isnull=True) | Q(full_name__exact="") | Q(email__isnull=True) | Q(email__exact="")
+        | Q(project_summary__isnull=True) | Q(project_summary__exact="")
+    )[:6]
+
+    for item in missing_contact_fields:
+        issues.append({
+            "code": "missing_contact_fields",
+            "severity": "high",
+            "category": "Missing fields",
+            "label": f"Contact {item.id} missing required fields",
+            "detail": "Full name or message is empty.",
+            "action_url": reverse("admin:nexalix_app_contactmessage_change", args=[item.id]),
+        })
+    for item in missing_quote_fields:
+        issues.append({
+            "code": "missing_quote_fields",
+            "severity": "high",
+            "category": "Missing fields",
+            "label": f"Quote {item.quote_reference} missing required fields",
+            "detail": "Name, email, or project summary is empty.",
+            "action_url": reverse("admin:nexalix_app_quoterequest_change", args=[item.id]),
+        })
+
+    stale_contact_cutoff = now - timedelta(hours=STALE_CONTACT_HOURS)
+    stale_quote_cutoff = now - timedelta(hours=STALE_QUOTE_HOURS)
+    stale_contacts = contacts_queryset.filter(is_read=False, submitted_at__lt=stale_contact_cutoff)[:10]
+    stale_quotes = quotes_queryset.filter(status__in=["new", "reviewed", "sent"], created_at__lt=stale_quote_cutoff)[:10]
+
+    for item in stale_contacts:
+        issues.append({
+            "code": "stale_contact",
+            "severity": "high",
+            "category": "Stale records",
+            "label": f"Stale unread contact: {item.full_name}",
+            "detail": f"No response for more than {STALE_CONTACT_HOURS} hours.",
+            "action_url": reverse("admin:nexalix_app_contactmessage_change", args=[item.id]),
+        })
+    for item in stale_quotes:
+        issues.append({
+            "code": "stale_quote",
+            "severity": "high",
+            "category": "Stale records",
+            "label": f"Stale quote: {item.quote_reference}",
+            "detail": f"Quote is still open after {STALE_QUOTE_HOURS} hours.",
+            "action_url": reverse("admin:nexalix_app_quoterequest_change", args=[item.id]),
+        })
+
+    summary = {
+        "duplicates": len(contact_email_dups) + len(quote_email_dups),
+        "invalid_emails": len(invalid_contact_emails) + len(invalid_quote_emails),
+        "invalid_phones": len(invalid_quote_phones),
+        "missing_fields": len(missing_contact_fields) + len(missing_quote_fields),
+        "stale_records": len(stale_contacts) + len(stale_quotes),
+    }
+    summary["total_issues"] = (
+        summary["duplicates"]
+        + summary["invalid_emails"]
+        + summary["invalid_phones"]
+        + summary["missing_fields"]
+        + summary["stale_records"]
+    )
+
+    issues.sort(key=lambda item: severity_rank.get(item["severity"], 0), reverse=True)
+    return summary, issues[:20]
+
+
+def _build_weekly_exec_snapshot(now, role_view="all"):
+    week_start = now - timedelta(days=7)
+    contacts_queryset = ContactMessage.objects.filter(submitted_at__gte=week_start)
+    quotes_queryset = QuoteRequest.objects.select_related("service").filter(created_at__gte=week_start)
+    if role_view == "ops":
+        contacts_queryset = contacts_queryset.filter(is_read=False)
+        quotes_queryset = quotes_queryset.filter(status__in=["new", "reviewed", "sent"])
+    elif role_view == "sales":
+        quotes_queryset = quotes_queryset.exclude(status="lost")
+
+    contacts_count = contacts_queryset.count()
+    quotes_count = quotes_queryset.count()
+    quotes_won = quotes_queryset.filter(status="won").count()
+    quotes_lost = quotes_queryset.filter(status="lost").count()
+    contacts_unread = contacts_queryset.filter(is_read=False).count()
+    quotes_new = quotes_queryset.filter(status="new").count()
+
+    contacts_daily_raw = contacts_queryset.annotate(day=TruncDate("submitted_at")).values("day").annotate(total=Count("id"))
+    quotes_daily_raw = quotes_queryset.annotate(day=TruncDate("created_at")).values("day").annotate(total=Count("id"))
+    contacts_daily = {item["day"]: item["total"] for item in contacts_daily_raw}
+    quotes_daily = {item["day"]: item["total"] for item in quotes_daily_raw}
+
+    trend_rows = []
+    for i in range(7):
+        day = (week_start.date() + timedelta(days=i + 1))
+        trend_rows.append({
+            "date": day.isoformat(),
+            "contacts": int(contacts_daily.get(day, 0)),
+            "quotes": int(quotes_daily.get(day, 0)),
+        })
+
+    sla_summary, _ = _build_sla_snapshot(contacts_queryset, quotes_queryset, now)
+    alerts_summary, _ = _build_alert_center(now, ContactMessage.objects.all(), QuoteRequest.objects.all(), sla_summary)
+    quality_summary, _ = _build_data_quality_checks(now, contacts_queryset, quotes_queryset)
+    funnel = _build_funnel_analytics(contacts_queryset, quotes_queryset)
+
+    return {
+        "generated_at": timezone.localtime(now).strftime("%Y-%m-%d %H:%M:%S"),
+        "window_start": week_start.date().isoformat(),
+        "window_end": now.date().isoformat(),
+        "role_view": role_view,
+        "kpis": {
+            "contacts": contacts_count,
+            "quotes": quotes_count,
+            "won": quotes_won,
+            "lost": quotes_lost,
+            "contacts_unread": contacts_unread,
+            "quotes_new": quotes_new,
+        },
+        "conversion": {
+            "contact_to_quote_rate": _safe_ratio_percent(quotes_count, contacts_count),
+            "quote_to_won_rate": _safe_ratio_percent(quotes_won, quotes_count),
+            "drop_contact_to_quote": max(contacts_count - quotes_count, 0),
+            "drop_quote_to_won": max(quotes_count - quotes_won, 0),
+        },
+        "trend_rows": trend_rows,
+        "sla_summary": sla_summary,
+        "alerts_summary": alerts_summary,
+        "quality_summary": quality_summary,
+        "top_services": funnel["service_rows"][:5],
+        "top_industries": funnel["industry_rows"][:5],
+    }
+
+
+def _weekly_report_csv_response(snapshot):
+    response = HttpResponse(content_type="text/csv")
+    ts = timezone.now().strftime("%Y%m%d_%H%M")
+    response["Content-Disposition"] = f'attachment; filename="nexalix_weekly_executive_{ts}.csv"'
+    writer = csv.writer(response)
+
+    writer.writerow(["Nexalix Executive Weekly Report"])
+    writer.writerow(["Generated At", snapshot["generated_at"]])
+    writer.writerow(["Window", f"{snapshot['window_start']} to {snapshot['window_end']}"])
+    writer.writerow(["Role View", snapshot["role_view"]])
+    writer.writerow([])
+
+    writer.writerow(["KPI", "Value"])
+    for key, value in snapshot["kpis"].items():
+        writer.writerow([key, value])
+    writer.writerow([])
+
+    writer.writerow(["Conversion Metric", "Value"])
+    for key, value in snapshot["conversion"].items():
+        writer.writerow([key, value])
+    writer.writerow([])
+
+    writer.writerow(["SLA", "Value"])
+    for key, value in snapshot["sla_summary"].items():
+        writer.writerow([key, value])
+    writer.writerow([])
+
+    writer.writerow(["Alert Summary", "Value"])
+    for key, value in snapshot["alerts_summary"].items():
+        writer.writerow([key, value])
+    writer.writerow([])
+
+    writer.writerow(["Data Quality Summary", "Value"])
+    for key, value in snapshot["quality_summary"].items():
+        writer.writerow([key, value])
+    writer.writerow([])
+
+    writer.writerow(["Daily Trend", "Contacts", "Quotes"])
+    for row in snapshot["trend_rows"]:
+        writer.writerow([row["date"], row["contacts"], row["quotes"]])
+    writer.writerow([])
+
+    writer.writerow(["Top Services", "Contacts", "Quotes", "Won", "Lost", "C2Q%", "Q2W%"])
+    for row in snapshot["top_services"]:
+        writer.writerow([
+            row["label"],
+            row["contacts"],
+            row["quotes"],
+            row["won"],
+            row["lost"],
+            row["contact_to_quote_rate"],
+            row["quote_to_won_rate"],
+        ])
+    writer.writerow([])
+
+    writer.writerow(["Top Industries", "Contacts", "Quotes", "Won", "Lost", "C2Q%", "Q2W%"])
+    for row in snapshot["top_industries"]:
+        writer.writerow([
+            row["label"],
+            row["contacts"],
+            row["quotes"],
+            row["won"],
+            row["lost"],
+            row["contact_to_quote_rate"],
+            row["quote_to_won_rate"],
+        ])
+    return response
+
+
+def _weekly_report_pdf_response(snapshot):
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+    y = height - 40
+
+    def write_line(text, font="Helvetica", size=10, gap=14):
+        nonlocal y
+        if y < 50:
+            pdf.showPage()
+            y = height - 40
+        pdf.setFont(font, size)
+        pdf.drawString(40, y, str(text)[:120])
+        y -= gap
+
+    write_line("Nexalix Executive Weekly Report", font="Helvetica-Bold", size=15, gap=18)
+    write_line(f"Generated At: {snapshot['generated_at']}")
+    write_line(f"Window: {snapshot['window_start']} to {snapshot['window_end']}")
+    write_line(f"Role View: {snapshot['role_view']}")
+    y -= 6
+
+    write_line("KPIs", font="Helvetica-Bold", size=12, gap=16)
+    for key, value in snapshot["kpis"].items():
+        write_line(f"- {key}: {value}")
+
+    y -= 4
+    write_line("Conversion", font="Helvetica-Bold", size=12, gap=16)
+    for key, value in snapshot["conversion"].items():
+        write_line(f"- {key}: {value}")
+
+    y -= 4
+    write_line("SLA", font="Helvetica-Bold", size=12, gap=16)
+    for key, value in snapshot["sla_summary"].items():
+        write_line(f"- {key}: {value}")
+
+    y -= 4
+    write_line("Alert Summary", font="Helvetica-Bold", size=12, gap=16)
+    for key, value in snapshot["alerts_summary"].items():
+        write_line(f"- {key}: {value}")
+
+    y -= 4
+    write_line("Data Quality Summary", font="Helvetica-Bold", size=12, gap=16)
+    for key, value in snapshot["quality_summary"].items():
+        write_line(f"- {key}: {value}")
+
+    y -= 4
+    write_line("Daily Trend (Contacts / Quotes)", font="Helvetica-Bold", size=12, gap=16)
+    for row in snapshot["trend_rows"]:
+        write_line(f"- {row['date']}: {row['contacts']} / {row['quotes']}")
+
+    pdf.save()
+    pdf_bytes = buffer.getvalue()
+    buffer.close()
+
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    ts = timezone.now().strftime("%Y%m%d_%H%M")
+    response["Content-Disposition"] = f'attachment; filename="nexalix_weekly_executive_{ts}.pdf"'
+    return response
 
 
 def calculate_quote_estimate(service, complexity, timeline, support_plan, addons):
@@ -659,41 +1401,14 @@ def activity_dashboard(request):
         filtered_contacts = filtered_contacts.filter(submitted_at__date=selected_day)
         filtered_quotes = filtered_quotes.filter(created_at__date=selected_day)
 
-    client_activities = []
-    for message in filtered_contacts.order_by("-submitted_at")[:50]:
-        client_activities.append({
-            "type": "contact",
-            "title": f"Contact from {message.full_name}",
-            "subtitle": message.service or "General inquiry",
-            "detail": message.email,
-            "timestamp": message.submitted_at,
-            "status": "Unread" if not message.is_read else "Read",
-            "admin_url": reverse("admin:nexalix_app_contactmessage_change", args=[message.id]),
-            "search_text": f"{message.full_name} {message.email} {message.service or ''} {message.message}".lower(),
-        })
+    sla_summary, sla_queue = _build_sla_snapshot(filtered_contacts, filtered_quotes, now)
+    funnel_analytics = _build_funnel_analytics(filtered_contacts, filtered_quotes)
+    alert_summary, alerts = _build_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
+    quality_summary, quality_issues = _build_data_quality_checks(now, filtered_contacts, filtered_quotes)
 
-    for quote in filtered_quotes.order_by("-created_at")[:50]:
-        client_activities.append({
-            "type": "quote",
-            "title": f"Quote request {quote.quote_reference}",
-            "subtitle": quote.service.title if quote.service else "Service not selected",
-            "detail": quote.email,
-            "timestamp": quote.created_at,
-            "status": quote.get_status_display(),
-            "admin_url": reverse("admin:nexalix_app_quoterequest_change", args=[quote.id]),
-            "search_text": f"{quote.quote_reference} {quote.full_name} {quote.email} {quote.company or ''} {quote.project_summary}".lower(),
-        })
-
-    if role_view == "ops":
-        client_activities = [
-            item for item in client_activities
-            if item["type"] == "contact" or item["status"] in {"New", "Reviewed", "Quote Sent"}
-        ]
-
-    client_activities.sort(key=lambda item: item["timestamp"], reverse=True)
+    client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=60)
     if activity_filter in {"contact", "quote"}:
         client_activities = [item for item in client_activities if item["type"] == activity_filter]
-    client_activities = client_activities[:60]
 
     action_labels = {
         ADDITION: "Added",
@@ -735,6 +1450,14 @@ def activity_dashboard(request):
             "link": entry.get_admin_url(),
             "search_text": f"{entry.user.get_username()} {model_name} {entry.object_repr} {entry.change_message}".lower(),
         })
+
+    export_type = (request.GET.get("export") or "").strip().lower()
+    export_format = (request.GET.get("format") or "").strip().lower()
+    if export_type == "executive":
+        weekly_snapshot = _build_weekly_exec_snapshot(now, role_view=role_view)
+        if export_format == "pdf":
+            return _weekly_report_pdf_response(weekly_snapshot)
+        return _weekly_report_csv_response(weekly_snapshot)
 
     if request.GET.get("export") == "csv":
         dataset = (request.GET.get("dataset") or "activity").strip().lower()
@@ -826,6 +1549,8 @@ def activity_dashboard(request):
         "selected_day_label": selected_day.strftime("%b %d, %Y") if selected_day else "",
         "csv_activity_query": f"{current_query}&export=csv&dataset=activity",
         "csv_logs_query": f"{current_query}&export=csv&dataset=logs",
+        "weekly_csv_query": f"{current_query}&export=executive&format=csv",
+        "weekly_pdf_query": f"{current_query}&export=executive&format=pdf",
         "clear_day_query": _dashboard_query_string(period_days, activity_filter, search_query, role_view),
         "sales_mode": role_view == "sales",
         "ops_mode": role_view == "ops",
@@ -835,6 +1560,163 @@ def activity_dashboard(request):
         "case_studies_preview": case_studies_preview,
         "seo_keywords_preview": DEFAULT_SEO_KEYWORDS[:8],
         "seo_topics_preview": seo_topics_preview,
+        "sla_summary": sla_summary,
+        "sla_queue": sla_queue,
+        "contact_sla_hours": DASHBOARD_CONTACT_SLA_HOURS,
+        "quote_sla_hours": DASHBOARD_QUOTE_SLA_HOURS,
+        "funnel_analytics": funnel_analytics,
+        "alert_summary": alert_summary,
+        "alerts": alerts,
+        "quality_summary": quality_summary,
+        "quality_issues": quality_issues,
+    })
+
+
+@user_passes_test(is_staff_user, login_url="/admin/login/")
+def activity_dashboard_live(request):
+    """Polling endpoint for dashboard live updates."""
+    requested_period = request.GET.get("period", "7")
+    valid_periods = {"7": 7, "30": 30, "90": 90}
+    period_days = valid_periods.get(requested_period, 7)
+
+    search_query = (request.GET.get("q") or "").strip()
+    role_view = (request.GET.get("role") or "all").strip().lower()
+    selected_day_str = (request.GET.get("day") or "").strip()
+    selected_day = _safe_parse_iso_date(selected_day_str)
+
+    allowed_roles = _allowed_role_views(request.user)
+    if role_view not in allowed_roles:
+        role_view = allowed_roles[0]
+
+    now = timezone.now()
+    window_start = now - timedelta(days=period_days)
+
+    contacts_queryset = ContactMessage.objects.all()
+    quotes_queryset = QuoteRequest.objects.select_related("service")
+    if role_view == "ops":
+        contacts_queryset = contacts_queryset.filter(is_read=False)
+        quotes_queryset = quotes_queryset.filter(status__in=["new", "reviewed", "sent"])
+    elif role_view == "sales":
+        quotes_queryset = quotes_queryset.exclude(status="lost")
+
+    recent_contacts_period = contacts_queryset.filter(submitted_at__gte=window_start)
+    recent_quotes_period = quotes_queryset.filter(created_at__gte=window_start)
+
+    contacts_totals = contacts_queryset.aggregate(
+        total=Count("id"),
+        unread=Count("id", filter=Q(is_read=False)),
+        window=Count("id", filter=Q(submitted_at__gte=window_start)),
+    )
+    quotes_totals = quotes_queryset.aggregate(
+        total=Count("id"),
+        new=Count("id", filter=Q(status="new")),
+        window=Count("id", filter=Q(created_at__gte=window_start)),
+    )
+    kpis = {
+        "contacts_total": contacts_totals["total"],
+        "contacts_unread": contacts_totals["unread"],
+        "contacts_window": contacts_totals["window"],
+        "quotes_total": quotes_totals["total"],
+        "quotes_new": quotes_totals["new"],
+        "quotes_window": quotes_totals["window"],
+    }
+
+    filtered_contacts = recent_contacts_period
+    filtered_quotes = recent_quotes_period
+    if search_query:
+        filtered_contacts = filtered_contacts.filter(
+            Q(full_name__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(service__icontains=search_query)
+            | Q(message__icontains=search_query)
+        )
+        filtered_quotes = filtered_quotes.filter(
+            Q(quote_reference__icontains=search_query)
+            | Q(full_name__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(company__icontains=search_query)
+            | Q(project_summary__icontains=search_query)
+            | Q(service__title__icontains=search_query)
+        )
+    if selected_day:
+        filtered_contacts = filtered_contacts.filter(submitted_at__date=selected_day)
+        filtered_quotes = filtered_quotes.filter(created_at__date=selected_day)
+
+    sla_summary, sla_queue = _build_sla_snapshot(filtered_contacts, filtered_quotes, now)
+    funnel_analytics = _build_funnel_analytics(filtered_contacts, filtered_quotes)
+    alert_summary, alerts = _build_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
+    quality_summary, quality_issues = _build_data_quality_checks(now, filtered_contacts, filtered_quotes)
+    client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=30)
+
+    payload_activities = [
+        {
+            "type": item["type"],
+            "title": item["title"],
+            "subtitle": item["subtitle"],
+            "detail": item["detail"],
+            "status": item["status"],
+            "admin_url": item["admin_url"],
+            "timestamp_label": timezone.localtime(item["timestamp"]).strftime("%b %d, %Y %H:%M"),
+            "search_text": item["search_text"],
+        }
+        for item in client_activities
+    ]
+    payload_sla_queue = [
+        {
+            "kind": item["kind"],
+            "title": item["title"],
+            "subtitle": item["subtitle"],
+            "status": item["status"],
+            "admin_url": item["admin_url"],
+            "due_at_label": item["due_at_label"],
+            "remaining_label": item["remaining_label"],
+            "bucket": item["bucket"],
+        }
+        for item in sla_queue
+    ]
+    payload_alerts = [
+        {
+            "severity": item["severity"],
+            "title": item["title"],
+            "message": item["message"],
+            "action_url": item["action_url"],
+        }
+        for item in alerts
+    ]
+    payload_quality = [
+        {
+            "severity": item["severity"],
+            "category": item["category"],
+            "label": item["label"],
+            "detail": item["detail"],
+            "action_url": item["action_url"],
+        }
+        for item in quality_issues[:12]
+    ]
+
+    contacts_pct = _safe_ratio_percent(kpis["contacts_window"], kpis["contacts_total"])
+    quotes_pct = _safe_ratio_percent(kpis["quotes_window"], kpis["quotes_total"])
+    unread_pct = _safe_ratio_percent(kpis["contacts_unread"], kpis["contacts_total"])
+    new_quotes_pct = _safe_ratio_percent(kpis["quotes_new"], kpis["quotes_total"])
+
+    return JsonResponse({
+        "ok": True,
+        "server_time": timezone.localtime(now).strftime("%Y-%m-%d %H:%M:%S"),
+        "kpis": kpis,
+        "kpi_percentages": {
+            "contacts_window": contacts_pct,
+            "quotes_window": quotes_pct,
+            "contacts_unread": unread_pct,
+            "quotes_new": new_quotes_pct,
+        },
+        "sla_summary": sla_summary,
+        "sla_queue": payload_sla_queue,
+        "client_activities": payload_activities,
+        "funnel_analytics": funnel_analytics,
+        "alert_summary": alert_summary,
+        "alerts": payload_alerts,
+        "quality_summary": quality_summary,
+        "quality_issues": payload_quality,
     })
 
 

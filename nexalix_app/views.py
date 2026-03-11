@@ -863,6 +863,56 @@ def _build_weekly_exec_snapshot(now, role_view="all"):
     }
 
 
+def _safe_funnel_analytics(contacts_queryset, quotes_queryset):
+    try:
+        return _build_funnel_analytics(contacts_queryset, quotes_queryset)
+    except Exception as exc:  # pragma: no cover - defensive in production
+        logger.exception("Funnel analytics computation failed: %s", exc)
+        return {
+            "overall": {
+                "contacts": 0,
+                "quotes": 0,
+                "won": 0,
+                "lost": 0,
+                "drop_contact_to_quote": 0,
+                "drop_quote_to_won": 0,
+                "contact_to_quote_rate": 0.0,
+                "quote_to_won_rate": 0.0,
+            },
+            "service_rows": [],
+            "industry_rows": [],
+        }
+
+
+def _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary):
+    try:
+        return _build_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
+    except Exception as exc:  # pragma: no cover - defensive in production
+        logger.exception("Alert center computation failed: %s", exc)
+        return (
+            {"critical": 0, "high": 0, "medium": 0, "info": 0, "total": 0},
+            [],
+        )
+
+
+def _safe_data_quality(now, contacts_queryset, quotes_queryset):
+    try:
+        return _build_data_quality_checks(now, contacts_queryset, quotes_queryset)
+    except Exception as exc:  # pragma: no cover - defensive in production
+        logger.exception("Data quality computation failed: %s", exc)
+        return (
+            {
+                "duplicates": 0,
+                "invalid_emails": 0,
+                "invalid_phones": 0,
+                "missing_fields": 0,
+                "stale_records": 0,
+                "total_issues": 0,
+            },
+            [],
+        )
+
+
 def _weekly_report_csv_response(snapshot):
     response = HttpResponse(content_type="text/csv")
     ts = timezone.now().strftime("%Y%m%d_%H%M")
@@ -1402,9 +1452,9 @@ def activity_dashboard(request):
         filtered_quotes = filtered_quotes.filter(created_at__date=selected_day)
 
     sla_summary, sla_queue = _build_sla_snapshot(filtered_contacts, filtered_quotes, now)
-    funnel_analytics = _build_funnel_analytics(filtered_contacts, filtered_quotes)
-    alert_summary, alerts = _build_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
-    quality_summary, quality_issues = _build_data_quality_checks(now, filtered_contacts, filtered_quotes)
+    funnel_analytics = _safe_funnel_analytics(filtered_contacts, filtered_quotes)
+    alert_summary, alerts = _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
+    quality_summary, quality_issues = _safe_data_quality(now, filtered_contacts, filtered_quotes)
 
     client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=60)
     if activity_filter in {"contact", "quote"}:
@@ -1454,10 +1504,14 @@ def activity_dashboard(request):
     export_type = (request.GET.get("export") or "").strip().lower()
     export_format = (request.GET.get("format") or "").strip().lower()
     if export_type == "executive":
-        weekly_snapshot = _build_weekly_exec_snapshot(now, role_view=role_view)
-        if export_format == "pdf":
-            return _weekly_report_pdf_response(weekly_snapshot)
-        return _weekly_report_csv_response(weekly_snapshot)
+        try:
+            weekly_snapshot = _build_weekly_exec_snapshot(now, role_view=role_view)
+            if export_format == "pdf":
+                return _weekly_report_pdf_response(weekly_snapshot)
+            return _weekly_report_csv_response(weekly_snapshot)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.exception("Executive report generation failed: %s", exc)
+            messages.error(request, "Executive report generation failed. Please try again.")
 
     if request.GET.get("export") == "csv":
         dataset = (request.GET.get("dataset") or "activity").strip().lower()
@@ -1643,37 +1697,42 @@ def activity_dashboard_live(request):
         filtered_quotes = filtered_quotes.filter(created_at__date=selected_day)
 
     sla_summary, sla_queue = _build_sla_snapshot(filtered_contacts, filtered_quotes, now)
-    funnel_analytics = _build_funnel_analytics(filtered_contacts, filtered_quotes)
-    alert_summary, alerts = _build_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
-    quality_summary, quality_issues = _build_data_quality_checks(now, filtered_contacts, filtered_quotes)
+    funnel_analytics = _safe_funnel_analytics(filtered_contacts, filtered_quotes)
+    alert_summary, alerts = _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
+    quality_summary, quality_issues = _safe_data_quality(now, filtered_contacts, filtered_quotes)
     client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=30)
 
-    payload_activities = [
-        {
-            "type": item["type"],
-            "title": item["title"],
-            "subtitle": item["subtitle"],
-            "detail": item["detail"],
-            "status": item["status"],
-            "admin_url": item["admin_url"],
-            "timestamp_label": timezone.localtime(item["timestamp"]).strftime("%b %d, %Y %H:%M"),
-            "search_text": item["search_text"],
-        }
-        for item in client_activities
-    ]
-    payload_sla_queue = [
-        {
-            "kind": item["kind"],
-            "title": item["title"],
-            "subtitle": item["subtitle"],
-            "status": item["status"],
-            "admin_url": item["admin_url"],
-            "due_at_label": item["due_at_label"],
-            "remaining_label": item["remaining_label"],
-            "bucket": item["bucket"],
-        }
-        for item in sla_queue
-    ]
+    try:
+        payload_activities = [
+            {
+                "type": item["type"],
+                "title": item["title"],
+                "subtitle": item["subtitle"],
+                "detail": item["detail"],
+                "status": item["status"],
+                "admin_url": item["admin_url"],
+                "timestamp_label": timezone.localtime(item["timestamp"]).strftime("%b %d, %Y %H:%M"),
+                "search_text": item["search_text"],
+            }
+            for item in client_activities
+        ]
+        payload_sla_queue = [
+            {
+                "kind": item["kind"],
+                "title": item["title"],
+                "subtitle": item["subtitle"],
+                "status": item["status"],
+                "admin_url": item["admin_url"],
+                "due_at_label": item["due_at_label"],
+                "remaining_label": item["remaining_label"],
+                "bucket": item["bucket"],
+            }
+            for item in sla_queue
+        ]
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.exception("Dashboard live payload build failed: %s", exc)
+        payload_activities = []
+        payload_sla_queue = []
     payload_alerts = [
         {
             "severity": item["severity"],

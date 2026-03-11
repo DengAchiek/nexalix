@@ -34,6 +34,7 @@
     display: grid;
     grid-template-columns: 260px minmax(0, 1fr);
     min-height: calc(100vh - 92px);
+    color-scheme: light;
 }
 
 .mk-sidebar {
@@ -278,7 +279,7 @@
 
 .mk-funnel-card strong {
     color: #1f466e;
-    font-size: 1.15rem;
+    font-size: 1.22rem;
     line-height: 1;
 }
 
@@ -438,8 +439,17 @@
 }
 
 .mk-mini-table th {
-    background: #f7fbff;
+    background: #f2f7ff;
     color: #21486d;
+    font-weight: 700;
+}
+
+.mk-mini-table tbody tr:nth-child(even) {
+    background: #fbfdff;
+}
+
+.mk-mini-table td:first-child {
+    color: #22496f;
     font-weight: 700;
 }
 
@@ -575,17 +585,16 @@
 
 .mk-top {
     background: linear-gradient(120deg, var(--mk-blue), #4f73ff);
-    padding: 18px 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    padding: 22px 24px 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: start;
 }
 
 .mk-search {
     position: relative;
-    width: min(500px, 100%);
+    width: min(760px, 100%);
     display: flex;
     gap: 8px;
     align-items: center;
@@ -638,22 +647,25 @@
 .mk-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
     color: #fff;
+    padding-top: 2px;
 }
 
 .mk-toolbar {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
 .mk-pill {
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.45);
-    padding: 7px 11px;
-    font-size: 0.75rem;
+    padding: 8px 12px;
+    font-size: 0.77rem;
     font-weight: 700;
     text-decoration: none;
     color: #fff;
@@ -670,9 +682,9 @@
 }
 
 .mk-content {
-    padding: 18px 20px;
+    padding: 22px 22px;
     display: grid;
-    gap: 14px;
+    gap: 18px;
 }
 
 .mk-msg {
@@ -888,12 +900,31 @@
     border-radius: 8px;
     padding: 8px 10px;
     font-size: 0.84rem;
+    color: #1f456d;
+    background: #f7fbff;
+    -webkit-text-fill-color: #1f456d;
+    caret-color: #1f456d;
 }
 
 .mk-profile-form input:focus {
     outline: none;
     border-color: #74a9de;
     box-shadow: 0 0 0 3px rgba(86, 165, 245, 0.18);
+    background: #ffffff;
+}
+
+.mk-profile-form input::placeholder {
+    color: #7d93ad;
+}
+
+.mk-profile-form input:-webkit-autofill,
+.mk-profile-form input:-webkit-autofill:hover,
+.mk-profile-form input:-webkit-autofill:focus,
+.mk-profile-form input:-webkit-autofill:active {
+    -webkit-text-fill-color: #1f456d;
+    -webkit-box-shadow: 0 0 0 1000px #f7fbff inset;
+    box-shadow: 0 0 0 1000px #f7fbff inset;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .mk-profile-actions {
@@ -1141,7 +1172,8 @@
 
     .mk-actions {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 10px;
     }
 
     .mk-activity {

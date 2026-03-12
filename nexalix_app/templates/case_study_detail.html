@@ -10,7 +10,7 @@
         <article class="about-section">
             <h1>{{ case_study.title }}</h1>
             {% if case_study.image %}
-            <div class="case-image-wrapper" style="padding: 0; margin-bottom: 18px;">
+            <div class="case-image-wrapper case-image-wrapper-detail">
                 <img src="{{ case_study.image.url|optimized_media:'case_detail' }}" alt="{{ case_study.title }}" class="case-image" loading="eager" fetchpriority="high" decoding="async">
             </div>
             {% endif %}
@@ -28,14 +28,14 @@
         </article>
 
         {% if related_cases %}
-        <section class="page-block" style="padding-bottom: 0;">
+        <section class="page-block related-case-section">
             <h2>Related Case Studies</h2>
             <div class="case-grid">
                 {% for case in related_cases %}
                 <article class="case-card">
-                    <div class="case-content" style="padding: 18px;">
+                    <div class="case-content compact-card-content">
                         <h3>{{ case.title }}</h3>
-                        <p>{{ case.description|truncatewords:18 }}</p>
+                        <p>{{ case.description }}</p>
                         <a href="{% url 'case_study_detail' case.title|slugify %}" class="case-link">Read More <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </article>

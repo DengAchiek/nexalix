@@ -81,7 +81,7 @@
 
                                 {% if service.get_key_features_list %}
                                 <ul class="service-features">
-                                    {% for feature in service.get_key_features_list|slice:":3" %}
+                                    {% for feature in service.get_key_features_list %}
                                     <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
                                     {% endfor %}
                                 </ul>
@@ -89,7 +89,7 @@
 
                                 {% if service.get_technologies_list %}
                                 <div class="service-technologies">
-                                    {% for tech in service.get_technologies_list|slice:":4" %}
+                                    {% for tech in service.get_technologies_list %}
                                     <span class="tech-tag">{{ tech }}</span>
                                     {% endfor %}
                                 </div>

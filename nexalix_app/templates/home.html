@@ -154,7 +154,7 @@
                 </div>
                 <div class="project-completed-content">
                     <h3>{{ project.title }}</h3>
-                    <p>{{ project.description|truncatewords:18 }}</p>
+                    <p>{{ project.description }}</p>
                     {% if project.get_tags_list %}
                     <div class="project-tags">
                         {% for tag in project.get_tags_list %}
@@ -209,7 +209,7 @@
                         <h3>{{ partner.name }}</h3>
                         <p>
                             {% if partner.description %}
-                            {{ partner.description|truncatewords:20 }}
+                            {{ partner.description }}
                             {% else %}
                             Strategic delivery partner working with Nexalix on innovation and enterprise technology solutions.
                             {% endif %}
@@ -236,7 +236,7 @@
                         <h3>{{ partner.name }}</h3>
                         <p>
                             {% if partner.description %}
-                            {{ partner.description|truncatewords:20 }}
+                            {{ partner.description }}
                             {% else %}
                             Strategic delivery partner working with Nexalix on innovation and enterprise technology solutions.
                             {% endif %}
@@ -333,7 +333,7 @@
                 </div>
                 <div class="portfolio-content">
                     <h3>{{ case.title }}</h3>
-                    <p>{{ case.description|truncatewords:28 }}</p>
+                    <p>{{ case.description }}</p>
                     <a href="{% if case.link %}{{ case.link }}{% else %}{% url 'case_studies' %}{% endif %}" class="case-link" {% if case.link %}target="_blank" rel="noopener"{% endif %}>View Details <i class="fas fa-arrow-right"></i></a>
                 </div>
             </article>
@@ -355,7 +355,7 @@
         <div class="testimonial-strip">
             {% for testimonial in testimonials %}
             <article class="testimonial-card-modern">
-                <p>"{{ testimonial.content|truncatewords:35 }}"</p>
+                <p>"{{ testimonial.content }}"</p>
                 <h4>{{ testimonial.name }}</h4>
                 <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}</span>
             </article>

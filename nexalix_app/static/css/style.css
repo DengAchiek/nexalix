@@ -2762,3 +2762,77 @@ textarea:focus-visible {
         height: 54px;
     }
 }
+
+/* -----------------------------
+   Text Visibility Improvements
+------------------------------ */
+.topbar {
+    display: block;
+}
+
+.topbar-inner p,
+.topbar-inner a {
+    color: #f7fbff;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.28);
+}
+
+.video-overlay {
+    background:
+        linear-gradient(116deg, rgba(4, 16, 45, 0.9) 6%, rgba(8, 34, 78, 0.76) 54%, rgba(28, 22, 86, 0.65) 100%),
+        radial-gradient(850px 420px at 18% 20%, rgba(47, 109, 226, 0.2), transparent 66%);
+}
+
+.home-hero-content,
+.services-hero-modern,
+.industries-hero-modern,
+.about-hero-modern,
+.work-hero-modern,
+.why-hero-modern {
+    text-shadow: 0 2px 14px rgba(4, 12, 38, 0.35);
+}
+
+.home-hero-content h1,
+.services-hero-modern h1,
+.industries-hero-modern h1,
+.about-hero-modern h1,
+.work-hero-modern h1,
+.why-hero-modern h1 {
+    color: #ffffff;
+}
+
+.hero-subtitle,
+.services-hero-modern p,
+.industries-hero-modern p,
+.about-hero-text,
+.work-hero-modern p,
+.why-hero-modern p {
+    color: #e2ecfb;
+}
+
+.hero-kicker {
+    color: #ffffff;
+    background: rgba(12, 28, 72, 0.42);
+    border-color: rgba(226, 236, 251, 0.42);
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        display: block;
+    }
+
+    .topbar-inner {
+        min-height: 40px;
+        padding: 6px 0;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+    }
+
+    .topbar-inner p {
+        font-size: 0.78rem;
+        line-height: 1.3;
+    }
+
+    .topbar-inner a {
+        font-size: 0.83rem;
+    }
+}

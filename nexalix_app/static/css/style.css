@@ -2836,3 +2836,50 @@ textarea:focus-visible {
         font-size: 0.83rem;
     }
 }
+
+/* -----------------------------
+   UX and Accessibility Upgrades
+------------------------------ */
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -48px;
+    background: #102c63;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    z-index: 3000;
+    font-weight: 700;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 10px;
+}
+
+.field-invalid,
+.field-invalid:focus {
+    border-color: #c63d58 !important;
+    box-shadow: 0 0 0 3px rgba(198, 61, 88, 0.16) !important;
+}
+
+.deferred-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 840px;
+}
+
+.section-subtitle,
+.subheading,
+.hero-subtitle {
+    max-width: 70ch;
+}
+
+.nav-links a,
+.mobile-menu-links a {
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-links a:hover,
+.mobile-menu-links a:hover {
+    transform: translateY(-1px);
+}

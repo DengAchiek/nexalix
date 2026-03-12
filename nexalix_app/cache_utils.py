@@ -1,6 +1,8 @@
 from django.core.cache import cache
 
 HOME_CONTEXT_CACHE_KEY = "home_context_v2"
+SEARCH_INDEX_CACHE_KEY = "site_search_index_v1"
+SEARCH_INDEX_CACHE_TTL = 300
 DASHBOARD_AGGREGATES_CACHE_PREFIX = "dashboard_aggregates_v2"
 DASHBOARD_PERIODS = (7, 30, 90)
 
@@ -11,6 +13,7 @@ def get_dashboard_aggregate_cache_key(period_days):
 
 def invalidate_home_cache():
     cache.delete(HOME_CONTEXT_CACHE_KEY)
+    cache.delete(SEARCH_INDEX_CACHE_KEY)
 
 
 def invalidate_dashboard_cache():

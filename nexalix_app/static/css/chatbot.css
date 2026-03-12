@@ -136,6 +136,30 @@
     cursor: not-allowed;
 }
 
+.nx-quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 8px 12px 2px;
+    border-top: 1px solid #deebf8;
+    background: #ffffff;
+}
+
+.nx-quick-reply {
+    border: 1px solid #cfe0f2;
+    background: #f7fbff;
+    color: #1a446f;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 10px;
+    line-height: 1.2;
+}
+
+.nx-quick-reply:hover {
+    background: #edf5ff;
+}
+
 .nx-chatbot-actions {
     display: flex;
     flex-wrap: wrap;
@@ -197,6 +221,16 @@
     font-size: 0.8rem;
     margin-top: -3px;
     margin-bottom: 8px;
+}
+
+.nx-chatbot-form input:focus,
+.nx-lead-form input:focus,
+.nx-lead-form select:focus,
+.nx-lead-form textarea:focus,
+.nx-quick-reply:focus {
+    outline: none;
+    border-color: #478fe6;
+    box-shadow: 0 0 0 3px rgba(71, 143, 230, 0.2);
 }
 
 @media (max-width: 760px) {

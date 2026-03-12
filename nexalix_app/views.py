@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.utils.text import slugify
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import user_passes_test
@@ -101,6 +102,36 @@ def _text_excerpt(value, limit=160):
     if len(text) <= limit:
         return text
     return f"{text[:limit - 1].rstrip()}…"
+
+
+def _build_keywords(*keyword_groups):
+    baseline = [
+        "technology consulting",
+        "software development",
+        "ai solutions",
+        "digital transformation",
+    ]
+    ordered = []
+    seen = set()
+
+    def _add(keyword):
+        normalized = str(keyword or "").strip().lower()
+        if not normalized or normalized in seen:
+            return
+        seen.add(normalized)
+        ordered.append(normalized)
+
+    for item in baseline:
+        _add(item)
+
+    for group in keyword_groups:
+        if isinstance(group, (list, tuple, set)):
+            for item in group:
+                _add(item)
+        else:
+            _add(group)
+
+    return ", ".join(ordered[:18])
 
 
 def _absolute_url(request, path_or_url):
@@ -1103,8 +1134,11 @@ def home(request):
     hero = context.get("hero")
     hero_title = hero.title if hero else "Living Up To Your Creative Potential"
     hero_subtitle = hero.subtitle if hero else "We are an engineering and consulting partner for digital products, data platforms, automation, and enterprise transformation."
+    services_for_keywords = context.get("services", [])
+    industries_for_keywords = context.get("industries", [])
+    case_studies_for_keywords = context.get("case_studies", [])
     home_schemas = []
-    featured_services = context.get("services", [])
+    featured_services = services_for_keywords
     if featured_services:
         home_schemas.append({
             "@context": "https://schema.org",
@@ -1113,12 +1147,19 @@ def home(request):
             "itemListElement": [_service_schema(request, service, index + 1) for index, service in enumerate(featured_services)],
         })
 
+    dynamic_keywords = _build_keywords(
+        [item.title for item in services_for_keywords[:6]],
+        [item.name for item in industries_for_keywords[:5]],
+        [item.title for item in case_studies_for_keywords[:4]],
+    )
+
     page_context = {
         **context,
         **_seo_context(
             request,
             title=f"{hero_title} | Nexalix Technologies",
             description=hero_subtitle,
+            keywords=dynamic_keywords,
             image_url=(hero.video_poster.url if hero and hero.video_poster else ""),
             schemas=home_schemas,
         ),
@@ -1186,6 +1227,7 @@ def services(request):
         request,
         title="Services | Nexalix Technologies",
         description=dynamic_description,
+        keywords=_build_keywords([service.title for service in services_list[:10]], "it consulting", "automation systems"),
         schemas=[services_schema],
     ))
     return render(request, 'services.html', context) 
@@ -1224,6 +1266,7 @@ def industries(request):
         request,
         title="Industries | Nexalix Technologies",
         description=description,
+        keywords=_build_keywords([industry.name for industry in industries_list], "industry technology solutions"),
     ))
     return render(request, 'industries.html', context)
 
@@ -2077,7 +2120,7 @@ Our team will review your request and follow up with a detailed proposal.
             fail_silently=True,
         )
     except Exception as exc:
-        print(f"Error sending quote notifications: {exc}")
+        logger.exception("Error sending quote notifications: %s", exc)
 
 
 
@@ -2193,6 +2236,46 @@ def _validate_lead_payload(payload):
         "escalation_channel": escalate_channel,
     }
     return sanitized, ""
+
+
+def _validate_ux_event_payload(payload):
+    event_type = (payload.get("event_type") or "").strip().lower()
+    label = (payload.get("label") or "").strip()
+    metadata = payload.get("metadata") or {}
+    page_path = (payload.get("page_path") or "").strip()
+
+    allowed_events = {
+        "cta_click",
+        "search_query",
+        "search_result_click",
+        "contact_form_submit",
+        "quote_form_submit",
+        "chat_open",
+        "chat_message_sent",
+        "chat_lead_requested",
+        "chat_lead_submitted",
+    }
+
+    if event_type not in allowed_events:
+        return None, "Unsupported event type."
+
+    if not isinstance(metadata, dict):
+        metadata = {}
+
+    trimmed_metadata = {}
+    for key, value in metadata.items():
+        safe_key = str(key).strip()[:60]
+        if not safe_key:
+            continue
+        trimmed_metadata[safe_key] = str(value).strip()[:240]
+
+    validated = {
+        "event_type": event_type,
+        "label": label[:120],
+        "page_path": page_path[:200] or "/",
+        "metadata": trimmed_metadata,
+    }
+    return validated, ""
 
 
 def _resolve_admin_recipients():
@@ -2370,6 +2453,41 @@ def chatbot_lead_api(request):
     )
 
 
+@csrf_exempt
+@require_POST
+def ux_event_api(request):
+    max_requests = int(getattr(settings, "UX_EVENT_RATE_LIMIT_COUNT", 120))
+    window_seconds = int(getattr(settings, "UX_EVENT_RATE_LIMIT_WINDOW_SECONDS", 300))
+
+    if _rate_limit_hit("ux", request, max_requests, window_seconds):
+        return JsonResponse({"ok": False, "error": "Rate limit exceeded."}, status=429)
+
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({"ok": False, "error": "Invalid request payload."}, status=400)
+
+    validated, error = _validate_ux_event_payload(payload)
+    if error:
+        return JsonResponse({"ok": False, "error": error}, status=400)
+
+    current_day = timezone.localdate().isoformat()
+    counter_key = f"ux:event:{current_day}:{validated['event_type']}"
+    try:
+        cache.incr(counter_key)
+    except ValueError:
+        cache.set(counter_key, 1, timeout=60 * 60 * 24 * 7)
+
+    logger.info(
+        "UX event tracked type=%s label=%s page=%s meta=%s",
+        validated["event_type"],
+        validated["label"],
+        validated["page_path"],
+        validated["metadata"],
+    )
+    return JsonResponse({"ok": True})
+
+
 def contact(request):
     """Contact page view"""
     success_message = None
@@ -2382,8 +2500,8 @@ def contact(request):
         message = request.POST.get("message", "").strip()
         
         # Basic validation
-        if not all([full_name, email, message]):
-            error_message = "Please fill in all required fields (Name, Email, and Message)."
+        if not all([full_name, email, service, message]):
+            error_message = "Please fill in all required fields (Name, Email, Service, and Message)."
         elif '@' not in email or '.' not in email:
             error_message = "Please enter a valid email address."
         else:
@@ -2408,7 +2526,7 @@ def contact(request):
                     success_message = "Thank you for your message! We've received it (email notification failed, but your message was saved)."
                 
             except Exception as e:
-                print(f"Error saving contact: {e}")
+                logger.exception("Error saving contact message: %s", e)
                 error_message = "Sorry, there was an error submitting your message. Please try again."
     
     context = {
@@ -2493,7 +2611,7 @@ Reply to: {contact_message.email}
         return True
         
     except Exception as e:
-        print(f"Error sending admin notification: {e}")
+        logger.exception("Error sending admin notification email: %s", e)
         return False
 
 
@@ -2536,7 +2654,7 @@ The Nexalix Technologies Team
         return True
         
     except Exception as e:
-        print(f"Error sending user confirmation: {e}")
+        logger.exception("Error sending user confirmation email: %s", e)
         return False
 
 def web_dev(request):
@@ -2633,6 +2751,12 @@ def case_studies_list(request):
         request,
         title="Case Studies | Nexalix Success Stories",
         description=dynamic_description,
+        keywords=_build_keywords(
+            [case.title for case in case_studies_all[:8]],
+            [tag for case in case_studies_all[:8] for tag in case.get_tags_list()],
+            "case studies",
+            "client success stories",
+        ),
         schemas=[case_schema],
     ))
     return render(request, 'case_studies.html', context)
@@ -2661,6 +2785,7 @@ def case_study_detail(request, slug):
         request,
         title=f"{case_study.title} | Nexalix Case Study",
         description=case_study.description,
+        keywords=_build_keywords(case_study.title, case_study.get_tags_list(), "project implementation"),
         og_type="article",
         image_url=(case_study.image.url if case_study.image else ""),
         schemas=[{"@context": "https://schema.org", **_case_study_schema(request, case_study)}],

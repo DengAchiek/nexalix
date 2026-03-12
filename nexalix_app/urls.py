@@ -14,6 +14,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path("api/chatbot/message/", views.chatbot_message_api, name="chatbot_message_api"),
     path("api/chatbot/lead/", views.chatbot_lead_api, name="chatbot_lead_api"),
+    path("api/ux/event/", views.ux_event_api, name="ux_event_api"),
     
    
     path('case-studies/', views.case_studies_list, name='case_studies'),

@@ -7,42 +7,96 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
     const mobileMenu = document.getElementById("mobileMenu");
     const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+    const uxEventUrl = body?.dataset.uxEventUrl || "";
+    let lastSearchTracked = "";
 
-    const searchData = [
-        { title: "Home", description: "Company overview and featured solutions", url: "/", category: "Page" },
-        { title: "About", description: "Vision, mission, and core values", url: "/about/", category: "Page" },
-        { title: "Services", description: "Technology and consulting offerings", url: "/services/", category: "Page" },
-        { title: "Auto Quote", description: "Generate a live project cost estimate", url: "/quote-generator/", category: "Page" },
-        { title: "Industries", description: "Sector-focused transformation work", url: "/industries/", category: "Page" },
-        { title: "How We Work", description: "Delivery process and methodology", url: "/how_we_work/", category: "Page" },
-        { title: "Why Choose Us", description: "Differentiators and value proposition", url: "/why_choose_us/", category: "Page" },
-        { title: "Contact", description: "Get proposal and consultation support", url: "/contact/", category: "Page" },
-        { title: "Web Development", description: "Scalable web platforms and portals", url: "/web_dev/", category: "Service" },
-        { title: "Mobile Apps", description: "Cross-platform app engineering", url: "/mobile_app/", category: "Service" },
-        { title: "Cloud Solutions", description: "Migration, infrastructure, and optimization", url: "/cloud/", category: "Service" },
-        { title: "Digital Marketing", description: "Growth strategy and demand generation", url: "/digital_marketing/", category: "Service" },
-        { title: "SEO", description: "Search visibility and technical optimization", url: "/seo/", category: "Service" },
-        { title: "IT Consulting", description: "Strategic advisory and architecture", url: "/it_consult/", category: "Service" },
-        { title: "AI Training", description: "Upskilling teams for AI adoption", url: "/ai_training/", category: "Service" }
+    const getCsrfToken = () => {
+        const cookieValue = document.cookie
+            .split(";")
+            .map((item) => item.trim())
+            .find((item) => item.startsWith("csrftoken="));
+        return cookieValue ? decodeURIComponent(cookieValue.split("=")[1]) : "";
+    };
+
+    const trackEvent = (eventType, label = "", metadata = {}) => {
+        if (!uxEventUrl || !eventType) return;
+
+        const payload = {
+            event_type: eventType,
+            label: String(label || "").slice(0, 120),
+            metadata,
+            page_path: window.location.pathname,
+        };
+
+        fetch(uxEventUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCsrfToken(),
+            },
+            credentials: "same-origin",
+            keepalive: true,
+            body: JSON.stringify(payload),
+        }).catch(() => {});
+    };
+
+    window.nxTrackEvent = trackEvent;
+
+    const fallbackSearchData = [
+        { title: "Home", description: "Company overview and featured solutions", url: "/", category: "Page", keywords: ["home"] },
+        { title: "About", description: "Vision, mission, and core values", url: "/about/", category: "Page", keywords: ["company"] },
+        { title: "Services", description: "Technology and consulting offerings", url: "/services/", category: "Page", keywords: ["solutions"] },
+        { title: "Auto Quote", description: "Generate a live project cost estimate", url: "/quote-generator/", category: "Page", keywords: ["pricing", "quote"] },
+        { title: "Industries", description: "Sector-focused transformation work", url: "/industries/", category: "Page", keywords: ["sector"] },
+        { title: "How We Work", description: "Delivery process and methodology", url: "/how_we_work/", category: "Page", keywords: ["delivery"] },
+        { title: "Why Choose Us", description: "Differentiators and value proposition", url: "/why_choose_us/", category: "Page", keywords: ["advantages"] },
+        { title: "Contact", description: "Get proposal and consultation support", url: "/contact/", category: "Page", keywords: ["email", "phone"] },
     ];
+
+    const readSearchDataFromDom = () => {
+        const scriptEl = document.getElementById("globalSearchIndexData");
+        if (!scriptEl) return [];
+        try {
+            const parsed = JSON.parse(scriptEl.textContent || "[]");
+            if (!Array.isArray(parsed)) return [];
+            return parsed.map((item) => ({
+                title: String(item.title || "").trim().slice(0, 120),
+                description: String(item.description || "").trim().slice(0, 220),
+                url: String(item.url || "").trim() || "/",
+                category: String(item.category || "Page").trim().slice(0, 40),
+                keywords: Array.isArray(item.keywords)
+                    ? item.keywords.map((kw) => String(kw || "").trim().toLowerCase()).filter(Boolean).slice(0, 12)
+                    : [],
+            })).filter((item) => item.title && item.url);
+        } catch (_err) {
+            return [];
+        }
+    };
+
+    const searchData = (() => {
+        const dynamicData = readSearchDataFromDom();
+        return dynamicData.length ? dynamicData : fallbackSearchData;
+    })();
 
     function setActiveNavLink() {
         const currentPath = window.location.pathname;
-        document.querySelectorAll(".nav-links a").forEach((link) => {
-            const linkPath = new URL(link.href).pathname;
-            if (currentPath === linkPath || (linkPath !== "/" && currentPath.startsWith(linkPath))) {
-                link.classList.add("active");
-            }
+        const navSelectors = [".nav-links a", ".mobile-menu-links a"];
+
+        navSelectors.forEach((selector) => {
+            document.querySelectorAll(selector).forEach((link) => {
+                const linkPath = new URL(link.href, window.location.origin).pathname;
+                const isActive = currentPath === linkPath || (linkPath !== "/" && currentPath.startsWith(linkPath));
+                link.classList.toggle("active", isActive);
+                if (isActive && selector === ".mobile-menu-links a") {
+                    link.setAttribute("aria-current", "page");
+                }
+            });
         });
     }
 
     function handleHeaderScroll() {
         if (!siteHeader) return;
-        if (window.scrollY > 12) {
-            siteHeader.classList.add("scrolled");
-        } else {
-            siteHeader.classList.remove("scrolled");
-        }
+        siteHeader.classList.toggle("scrolled", window.scrollY > 12);
     }
 
     function toggleMobileMenu(forceState) {
@@ -59,7 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function wireMobileMenu() {
         if (!mobileMenuBtn || !mobileMenu || !mobileMenuOverlay) return;
 
-        mobileMenuBtn.addEventListener("click", () => toggleMobileMenu());
+        mobileMenuBtn.addEventListener("click", () => {
+            const isOpening = !mobileMenu.classList.contains("active");
+            trackEvent("cta_click", isOpening ? "mobile_menu_open" : "mobile_menu_close");
+            toggleMobileMenu();
+        });
         mobileMenuOverlay.addEventListener("click", () => toggleMobileMenu(false));
 
         document.querySelectorAll(".mobile-menu-links a").forEach((link) => {
@@ -84,9 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        container.innerHTML = results.map((result) => {
+        container.innerHTML = results.map((result, idx) => {
             return `
-                <a href="${result.url}" class="search-result-item">
+                <a href="${result.url}" class="search-result-item" data-result-index="${idx}" data-result-title="${result.title}">
                     <div class="result-title">${result.title}</div>
                     <div class="result-description">${result.description}</div>
                     <div class="result-tag">${result.category}</div>
@@ -97,30 +155,87 @@ document.addEventListener("DOMContentLoaded", () => {
         container.classList.add("active");
     }
 
+    function scoreSearchResult(item, query, queryTerms) {
+        const title = item.title.toLowerCase();
+        const description = item.description.toLowerCase();
+        const category = item.category.toLowerCase();
+        const keywords = (item.keywords || []).join(" ").toLowerCase();
+        let score = 0;
+
+        if (title.startsWith(query)) score += 8;
+        if (title.includes(query)) score += 5;
+        if (description.includes(query)) score += 2;
+        if (category.includes(query)) score += 1;
+        if (keywords.includes(query)) score += 3;
+
+        queryTerms.forEach((term) => {
+            if (title.includes(term)) score += 2;
+            if (description.includes(term)) score += 1;
+            if (keywords.includes(term)) score += 1;
+        });
+
+        return score;
+    }
+
     function wireSearch(inputId, resultsId) {
         const input = document.getElementById(inputId);
         const resultsContainer = document.getElementById(resultsId);
         if (!input || !resultsContainer) return;
+
+        let latestResults = [];
 
         input.addEventListener("input", () => {
             const query = input.value.trim().toLowerCase();
             if (query.length < 2) {
                 resultsContainer.classList.remove("active");
                 resultsContainer.innerHTML = "";
+                latestResults = [];
                 return;
             }
 
-            const results = searchData.filter((item) => {
-                return item.title.toLowerCase().includes(query)
-                    || item.description.toLowerCase().includes(query)
-                    || item.category.toLowerCase().includes(query);
-            }).slice(0, 7);
+            const queryTerms = query.split(/\s+/).filter(Boolean).slice(0, 5);
 
+            const results = searchData
+                .map((item) => ({ ...item, _score: scoreSearchResult(item, query, queryTerms) }))
+                .filter((item) => item._score > 0)
+                .sort((a, b) => b._score - a._score)
+                .slice(0, 7)
+                .map((item) => {
+                    const cleaned = { ...item };
+                    delete cleaned._score;
+                    return cleaned;
+                });
+
+            latestResults = results;
             displaySearchResults(results, resultsContainer);
+
+            if (query !== lastSearchTracked) {
+                trackEvent("search_query", query, { source: inputId, results: results.length });
+                lastSearchTracked = query;
+            }
         });
 
         input.addEventListener("focus", () => {
             if (resultsContainer.innerHTML) resultsContainer.classList.add("active");
+        });
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter") return;
+            if (!latestResults.length) return;
+            event.preventDefault();
+            const firstResult = latestResults[0];
+            trackEvent("search_result_click", firstResult.title, { source: inputId, position: 1, href: firstResult.url });
+            window.location.href = firstResult.url;
+        });
+
+        resultsContainer.addEventListener("click", (event) => {
+            const link = event.target.closest(".search-result-item");
+            if (!link) return;
+            trackEvent("search_result_click", link.dataset.resultTitle || "", {
+                source: inputId,
+                position: Number.parseInt(link.dataset.resultIndex || "0", 10) + 1,
+                href: link.getAttribute("href") || "",
+            });
         });
     }
 
@@ -173,7 +288,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ".about-section", ".value-card", ".work-step", ".advantage", ".industry-card",
             ".service-card", ".case-card", ".blog-card", ".stat-card", ".partner-card",
             ".award-card", ".pricing-plan-card", ".step-card", ".contact-form",
-            ".quote-form-card", ".quote-summary-card"
+            ".quote-form-card", ".quote-summary-card", ".project-completed-card",
+            ".partner-home-card", ".portfolio-card", ".industry-modern-card",
         ];
 
         const elements = document.querySelectorAll(selectors.join(","));
@@ -203,6 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         backToTop.addEventListener("click", (event) => {
             event.preventDefault();
+            trackEvent("cta_click", "back_to_top");
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
     }
@@ -218,7 +335,44 @@ document.addEventListener("DOMContentLoaded", () => {
             techCloud.classList.toggle("expanded", next);
             toggleBtn.dataset.expanded = String(next);
             toggleBtn.textContent = next ? "Show Less" : "Show More";
+            trackEvent("cta_click", next ? "tech_show_less" : "tech_show_more");
         });
+    }
+
+    function wireFormValidation() {
+        const forms = [
+            document.querySelector(".contact-form form"),
+            document.getElementById("quoteForm"),
+        ].filter(Boolean);
+
+        const validateField = (field) => {
+            if (!field || !("checkValidity" in field)) return true;
+            const valid = field.checkValidity();
+            field.classList.toggle("field-invalid", !valid);
+            field.setAttribute("aria-invalid", String(!valid));
+            return valid;
+        };
+
+        forms.forEach((form) => {
+            const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+            fields.forEach((field) => {
+                field.addEventListener("blur", () => validateField(field));
+                field.addEventListener("input", () => {
+                    if (field.classList.contains("field-invalid")) validateField(field);
+                });
+            });
+
+            form.addEventListener("submit", () => {
+                fields.forEach((field) => validateField(field));
+                const formType = form.id === "quoteForm" ? "quote_form_submit" : "contact_form_submit";
+                trackEvent(formType, "submit", { form_id: form.id || "contact_form" });
+            });
+        });
+
+        const successBanner = document.querySelector(".form-message.success");
+        if (successBanner) {
+            trackEvent("cta_click", "form_submission_success", { page: window.location.pathname });
+        }
     }
 
     function wireContactEnhancements() {
@@ -253,7 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("homeHeroVideo") || document.querySelector(".hero-video");
         if (!video) return;
 
-        // Keep autoplay compatible across modern browsers (especially Safari/iOS).
         video.muted = true;
         video.defaultMuted = true;
         video.autoplay = true;
@@ -268,9 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const tryPlay = () => {
             const promise = video.play();
             if (promise && typeof promise.catch === "function") {
-                promise.catch(() => {
-                    // Retry after first interaction if autoplay is temporarily blocked.
-                });
+                promise.catch(() => {});
             }
         };
 
@@ -317,7 +468,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
-                maximumFractionDigits: 0
+                maximumFractionDigits: 0,
             }).format(value);
         };
 
@@ -368,6 +519,48 @@ document.addEventListener("DOMContentLoaded", () => {
         calculate();
     }
 
+    function wireMediaOptimization() {
+        if ("loading" in HTMLImageElement.prototype) {
+            document.querySelectorAll("img:not([loading])").forEach((img) => {
+                if (img.classList.contains("brand-logo")) return;
+                img.setAttribute("loading", "lazy");
+            });
+        }
+
+        document.querySelectorAll("img").forEach((img) => {
+            if (!img.getAttribute("decoding")) {
+                img.setAttribute("decoding", "async");
+            }
+        });
+
+        const sections = document.querySelectorAll(".site-main section");
+        sections.forEach((section, index) => {
+            if (index > 1) section.classList.add("deferred-section");
+        });
+    }
+
+    function wireCtaTracking() {
+        document.addEventListener("click", (event) => {
+            const interactiveEl = event.target.closest("a, button");
+            if (!interactiveEl) return;
+
+            const isTrackable = interactiveEl.matches(
+                ".btn, .header-cta, .nav-links a, .mobile-menu-links a, .nx-chat-link, .partner-home-card, .project-link-btn, .case-link"
+            );
+            if (!isTrackable) return;
+
+            const label = (interactiveEl.textContent || interactiveEl.getAttribute("aria-label") || "cta")
+                .replace(/\s+/g, " ")
+                .trim()
+                .slice(0, 120);
+
+            trackEvent("cta_click", label || "cta_click", {
+                href: interactiveEl.getAttribute("href") || "",
+                class_name: interactiveEl.className || "",
+            });
+        });
+    }
+
     setActiveNavLink();
     handleHeaderScroll();
     wireMobileMenu();
@@ -378,9 +571,12 @@ document.addEventListener("DOMContentLoaded", () => {
     wireRevealAnimation();
     wireBackToTop();
     wireTechToggle();
+    wireFormValidation();
     wireContactEnhancements();
     wireHeroVideo();
     wireQuoteCalculator();
+    wireMediaOptimization();
+    wireCtaTracking();
 
     window.addEventListener("scroll", handleHeaderScroll);
 });

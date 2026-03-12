@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("nxChatForm");
     const input = document.getElementById("nxChatInput");
     const sendBtn = document.getElementById("nxChatSend");
+    const quickRepliesWrap = document.getElementById("nxQuickReplies");
 
     const leadForm = document.getElementById("nxLeadForm");
     const leadSubmit = document.getElementById("nxLeadSubmit");
@@ -21,10 +22,19 @@ document.addEventListener("DOMContentLoaded", () => {
         quote: root.dataset.quoteUrl,
     };
 
+    const trackEvent = typeof window.nxTrackEvent === "function" ? window.nxTrackEvent : () => {};
+
     const state = {
         recommendedServices: [],
         lastAssistantMessage: "",
     };
+
+    const quickReplies = [
+        "What services does Nexalix offer?",
+        "Can I get a quote?",
+        "How do I start a project?",
+        "I want to talk to a human",
+    ];
 
     const getCsrfToken = () => {
         const cookieValue = document.cookie
@@ -103,12 +113,83 @@ document.addEventListener("DOMContentLoaded", () => {
         return data;
     };
 
+    const renderQuickReplies = () => {
+        if (!quickRepliesWrap) return;
+        quickRepliesWrap.innerHTML = quickReplies.map((question) => (
+            `<button type="button" class="nx-quick-reply" data-question="${question.replace(/"/g, "&quot;")}">${question}</button>`
+        )).join("");
+    };
+
+    const handleUserMessage = async (text) => {
+        const trimmed = (text || "").trim();
+        if (!trimmed) return;
+
+        appendMessage(trimmed, "user");
+        trackEvent("chat_message_sent", trimmed.slice(0, 100), { source: "chat_widget" });
+        if (input) input.value = "";
+        if (sendBtn) {
+            sendBtn.disabled = true;
+            sendBtn.textContent = "Sending...";
+        }
+
+        try {
+            const data = await sendMessage(trimmed);
+            state.lastAssistantMessage = data.answer || "";
+            state.recommendedServices = Array.isArray(data.recommended_services) ? data.recommended_services : [];
+
+            appendMessage(data.answer || "Thanks for your message.", "assistant");
+            if (state.recommendedServices.length) {
+                appendMessage(`Recommended services: ${state.recommendedServices.join(", ")}`, "assistant");
+            }
+            if (data.escalation_message) {
+                appendMessage(data.escalation_message, "assistant");
+            }
+
+            setActions({
+                contactUrl: data.contact_url,
+                quoteUrl: data.quote_url,
+                whatsappUrl: data.whatsapp_url,
+            });
+
+            if (data.collect_lead || data.escalate_to_human) {
+                showLeadForm(true);
+                trackEvent("chat_lead_requested", "lead_form_shown");
+                const serviceSelect = document.getElementById("nxLeadServiceInterest");
+                if (serviceSelect && state.recommendedServices.length && !serviceSelect.value) {
+                    const first = state.recommendedServices[0];
+                    const hasOption = Array.from(serviceSelect.options).some((opt) => opt.value === first);
+                    if (hasOption) serviceSelect.value = first;
+                }
+            }
+        } catch (error) {
+            appendMessage(error.message || "Could not send your message right now.", "assistant");
+        } finally {
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.textContent = "Send";
+            }
+        }
+    };
+
+    renderQuickReplies();
+
+    if (quickRepliesWrap) {
+        quickRepliesWrap.addEventListener("click", (event) => {
+            const btn = event.target.closest(".nx-quick-reply");
+            if (!btn) return;
+            const question = (btn.dataset.question || "").trim();
+            if (!question) return;
+            handleUserMessage(question);
+        });
+    }
+
     if (launcher && panel) {
         launcher.addEventListener("click", () => {
             const open = !root.classList.contains("open");
             root.classList.toggle("open", open);
             panel.setAttribute("aria-hidden", open ? "false" : "true");
             if (open && input) input.focus();
+            if (open) trackEvent("chat_open", "widget_opened");
         });
     }
 
@@ -122,49 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (form && input && sendBtn) {
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
-
-            const text = input.value.trim();
-            if (!text) return;
-
-            appendMessage(text, "user");
-            input.value = "";
-            sendBtn.disabled = true;
-            sendBtn.textContent = "Sending...";
-
-            try {
-                const data = await sendMessage(text);
-                state.lastAssistantMessage = data.answer || "";
-                state.recommendedServices = Array.isArray(data.recommended_services) ? data.recommended_services : [];
-
-                appendMessage(data.answer || "Thanks for your message.", "assistant");
-                if (state.recommendedServices.length) {
-                    appendMessage(`Recommended services: ${state.recommendedServices.join(", ")}`, "assistant");
-                }
-                if (data.escalation_message) {
-                    appendMessage(data.escalation_message, "assistant");
-                }
-
-                setActions({
-                    contactUrl: data.contact_url,
-                    quoteUrl: data.quote_url,
-                    whatsappUrl: data.whatsapp_url,
-                });
-
-                if (data.collect_lead || data.escalate_to_human) {
-                    showLeadForm(true);
-                    const serviceSelect = document.getElementById("nxLeadServiceInterest");
-                    if (serviceSelect && state.recommendedServices.length && !serviceSelect.value) {
-                        const first = state.recommendedServices[0];
-                        const hasOption = Array.from(serviceSelect.options).some((opt) => opt.value === first);
-                        if (hasOption) serviceSelect.value = first;
-                    }
-                }
-            } catch (error) {
-                appendMessage(error.message || "Could not send your message right now.", "assistant");
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.textContent = "Send";
-            }
+            await handleUserMessage(input.value);
         });
     }
 
@@ -195,6 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const data = await submitLead(payload);
                 appendMessage(data.message || "Thanks. We will contact you shortly.", "assistant");
+                trackEvent("chat_lead_submitted", payload.service_interest || "unspecified");
                 showLeadForm(false);
                 leadForm.reset();
             } catch (error) {

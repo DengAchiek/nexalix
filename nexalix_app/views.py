@@ -89,6 +89,7 @@ ALERT_SPIKE_MIN_ABS_DELTA = int(getattr(settings, "DASHBOARD_ALERT_SPIKE_MIN_ABS
 EMAIL_ALERT_GRACE_MINUTES = int(getattr(settings, "DASHBOARD_EMAIL_ALERT_GRACE_MINUTES", 15))
 STALE_CONTACT_HOURS = int(getattr(settings, "DASHBOARD_STALE_CONTACT_HOURS", 72))
 STALE_QUOTE_HOURS = int(getattr(settings, "DASHBOARD_STALE_QUOTE_HOURS", 168))
+HOME_AB_VARIANTS = ("A", "B")
 
 logger = logging.getLogger("nexalix_app.views")
 
@@ -132,6 +133,40 @@ def _build_keywords(*keyword_groups):
             _add(group)
 
     return ", ".join(ordered[:18])
+
+
+def _resolve_home_ab_variant(request, default_headline, default_subtitle):
+    forced_variant = (request.GET.get("ab") or "").strip().upper()
+    if forced_variant in HOME_AB_VARIANTS:
+        request.session["home_ab_variant"] = forced_variant
+        variant = forced_variant
+    else:
+        variant = (request.session.get("home_ab_variant") or "").strip().upper()
+        if variant not in HOME_AB_VARIANTS:
+            session_key = _ensure_session_key(request)
+            bucket = sum(ord(ch) for ch in session_key) % 2 if session_key else 0
+            variant = "A" if bucket == 0 else "B"
+            request.session["home_ab_variant"] = variant
+            request.session.modified = True
+
+    if variant == "B":
+        return {
+            "test_name": "home_hero_primary",
+            "variant": "B",
+            "headline": "Build Resilient Digital Systems That Scale With Your Business",
+            "subtitle": "From product strategy to implementation, we help teams ship faster, automate operations, and grow with confidence.",
+            "primary_cta_text": "Book Strategy Call",
+            "primary_cta_url": reverse("contact"),
+        }
+
+    return {
+        "test_name": "home_hero_primary",
+        "variant": "A",
+        "headline": default_headline,
+        "subtitle": default_subtitle,
+        "primary_cta_text": "Explore Services",
+        "primary_cta_url": reverse("services"),
+    }
 
 
 def _absolute_url(request, path_or_url):
@@ -1134,6 +1169,7 @@ def home(request):
     hero = context.get("hero")
     hero_title = hero.title if hero else "Living Up To Your Creative Potential"
     hero_subtitle = hero.subtitle if hero else "We are an engineering and consulting partner for digital products, data platforms, automation, and enterprise transformation."
+    home_ab = _resolve_home_ab_variant(request, hero_title, hero_subtitle)
     services_for_keywords = context.get("services", [])
     industries_for_keywords = context.get("industries", [])
     case_studies_for_keywords = context.get("case_studies", [])
@@ -1155,10 +1191,11 @@ def home(request):
 
     page_context = {
         **context,
+        "home_ab": home_ab,
         **_seo_context(
             request,
-            title=f"{hero_title} | Nexalix Technologies",
-            description=hero_subtitle,
+            title=f"{home_ab['headline']} | Nexalix Technologies",
+            description=home_ab["subtitle"],
             keywords=dynamic_keywords,
             image_url=(hero.video_poster.url if hero and hero.video_poster else ""),
             schemas=home_schemas,
@@ -2250,10 +2287,13 @@ def _validate_ux_event_payload(payload):
         "search_result_click",
         "contact_form_submit",
         "quote_form_submit",
+        "form_dropoff",
         "chat_open",
         "chat_message_sent",
         "chat_lead_requested",
         "chat_lead_submitted",
+        "ab_exposure",
+        "ab_click",
     }
 
     if event_type not in allowed_events:

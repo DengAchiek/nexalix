@@ -107,6 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileMenuBtn.classList.toggle("active", shouldOpen);
         mobileMenu.classList.toggle("active", shouldOpen);
         mobileMenuOverlay.classList.toggle("active", shouldOpen);
+        mobileMenuBtn.setAttribute("aria-expanded", String(shouldOpen));
+        mobileMenu.setAttribute("aria-hidden", String(!shouldOpen));
+        mobileMenuOverlay.setAttribute("aria-hidden", String(!shouldOpen));
         body.style.overflow = shouldOpen ? "hidden" : "";
     }
 
@@ -144,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         container.innerHTML = results.map((result, idx) => {
             return `
-                <a href="${result.url}" class="search-result-item" data-result-index="${idx}" data-result-title="${result.title}">
+                <a href="${result.url}" id="${container.id}-opt-${idx}" role="option" class="search-result-item" data-result-index="${idx}" data-result-title="${result.title}" tabindex="-1">
                     <div class="result-title">${result.title}</div>
                     <div class="result-description">${result.description}</div>
                     <div class="result-tag">${result.category}</div>
@@ -183,6 +186,25 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!input || !resultsContainer) return;
 
         let latestResults = [];
+        let activeIndex = -1;
+
+        const setExpandedState = (isExpanded) => {
+            input.setAttribute("aria-expanded", String(isExpanded));
+        };
+
+        const setActiveResult = (index) => {
+            const items = Array.from(resultsContainer.querySelectorAll(".search-result-item"));
+            items.forEach((item, itemIdx) => {
+                const isActive = itemIdx === index;
+                item.classList.toggle("is-keyboard-active", isActive);
+                if (isActive) {
+                    input.setAttribute("aria-activedescendant", item.id);
+                    item.scrollIntoView({ block: "nearest" });
+                }
+            });
+            if (index < 0) input.removeAttribute("aria-activedescendant");
+            activeIndex = index;
+        };
 
         input.addEventListener("input", () => {
             const query = input.value.trim().toLowerCase();
@@ -190,6 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 resultsContainer.classList.remove("active");
                 resultsContainer.innerHTML = "";
                 latestResults = [];
+                activeIndex = -1;
+                setExpandedState(false);
+                input.removeAttribute("aria-activedescendant");
                 return;
             }
 
@@ -208,6 +233,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             latestResults = results;
             displaySearchResults(results, resultsContainer);
+            setExpandedState(true);
+            setActiveResult(-1);
 
             if (query !== lastSearchTracked) {
                 trackEvent("search_query", query, { source: inputId, results: results.length });
@@ -216,16 +243,42 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         input.addEventListener("focus", () => {
-            if (resultsContainer.innerHTML) resultsContainer.classList.add("active");
+            if (resultsContainer.innerHTML) {
+                resultsContainer.classList.add("active");
+                setExpandedState(true);
+            }
         });
 
         input.addEventListener("keydown", (event) => {
-            if (event.key !== "Enter") return;
             if (!latestResults.length) return;
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = activeIndex < latestResults.length - 1 ? activeIndex + 1 : 0;
+                setActiveResult(nextIndex);
+                return;
+            }
+
+            if (event.key === "ArrowUp") {
+                event.preventDefault();
+                const nextIndex = activeIndex > 0 ? activeIndex - 1 : latestResults.length - 1;
+                setActiveResult(nextIndex);
+                return;
+            }
+
+            if (event.key === "Escape") {
+                resultsContainer.classList.remove("active");
+                setExpandedState(false);
+                setActiveResult(-1);
+                return;
+            }
+
+            if (event.key !== "Enter") return;
             event.preventDefault();
-            const firstResult = latestResults[0];
-            trackEvent("search_result_click", firstResult.title, { source: inputId, position: 1, href: firstResult.url });
-            window.location.href = firstResult.url;
+            const selected = activeIndex >= 0 ? latestResults[activeIndex] : latestResults[0];
+            const selectedPosition = activeIndex >= 0 ? activeIndex + 1 : 1;
+            trackEvent("search_result_click", selected.title, { source: inputId, position: selectedPosition, href: selected.url });
+            window.location.href = selected.url;
         });
 
         resultsContainer.addEventListener("click", (event) => {
@@ -246,6 +299,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             document.querySelectorAll(".search-results").forEach((resultsContainer) => {
                 resultsContainer.classList.remove("active");
+            });
+            document.querySelectorAll("#desktopSearch, #mobileSearch").forEach((input) => {
+                input.setAttribute("aria-expanded", "false");
+                input.removeAttribute("aria-activedescendant");
             });
         });
     }
@@ -295,7 +352,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const elements = document.querySelectorAll(selectors.join(","));
         if (!elements.length) return;
 
-        elements.forEach((element) => element.setAttribute("data-reveal", ""));
+        elements.forEach((element, index) => {
+            element.setAttribute("data-reveal", "");
+            element.style.setProperty("--reveal-delay", `${Math.min(index % 8, 6) * 36}ms`);
+        });
 
         if (!("IntersectionObserver" in window)) {
             elements.forEach((element) => element.classList.add("revealed"));
@@ -344,6 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector(".contact-form form"),
             document.getElementById("quoteForm"),
         ].filter(Boolean);
+        const formStates = new Map();
 
         const validateField = (field) => {
             if (!field || !("checkValidity" in field)) return true;
@@ -355,10 +416,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         forms.forEach((form) => {
             const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+            formStates.set(form, { started: false, submitted: false, lastField: "", requiredCount: fields.filter((f) => f.required).length });
+
             fields.forEach((field) => {
                 field.addEventListener("blur", () => validateField(field));
                 field.addEventListener("input", () => {
                     if (field.classList.contains("field-invalid")) validateField(field);
+                    const state = formStates.get(form);
+                    if (!state) return;
+                    state.started = true;
+                    state.lastField = field.name || field.id || "unknown";
+                });
+                field.addEventListener("focus", () => {
+                    const state = formStates.get(form);
+                    if (!state) return;
+                    state.started = true;
+                    state.lastField = field.name || field.id || "unknown";
                 });
             });
 
@@ -366,7 +439,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 fields.forEach((field) => validateField(field));
                 const formType = form.id === "quoteForm" ? "quote_form_submit" : "contact_form_submit";
                 trackEvent(formType, "submit", { form_id: form.id || "contact_form" });
+                const state = formStates.get(form);
+                if (state) state.submitted = true;
             });
+        });
+
+        const trackFormDropoff = () => {
+            formStates.forEach((state, form) => {
+                if (!state.started || state.submitted) return;
+                const requiredFields = Array.from(form.querySelectorAll("[required]"));
+                const filledRequired = requiredFields.filter((field) => String(field.value || "").trim().length > 0).length;
+                trackEvent("form_dropoff", form.id || "contact_form", {
+                    last_field: state.lastField || "unknown",
+                    required_completion: `${filledRequired}/${state.requiredCount || requiredFields.length || 0}`,
+                });
+            });
+        };
+
+        window.addEventListener("beforeunload", trackFormDropoff, { capture: true });
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "hidden") trackFormDropoff();
         });
 
         const successBanner = document.querySelector(".form-message.success");
@@ -561,6 +653,36 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function wireAbExperimentTracking() {
+        const tests = document.querySelectorAll("[data-ab-test][data-ab-variant]");
+        tests.forEach((testEl) => {
+            const testName = testEl.dataset.abTest || "";
+            const variant = testEl.dataset.abVariant || "";
+            if (!testName || !variant) return;
+
+            const exposureKey = `nx_ab_exposure:${testName}:${variant}`;
+            if (!sessionStorage.getItem(exposureKey)) {
+                trackEvent("ab_exposure", `${testName}:${variant}`);
+                sessionStorage.setItem(exposureKey, "1");
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            const clickEl = event.target.closest("[data-ab-click]");
+            if (!clickEl) return;
+            const scope = clickEl.closest("[data-ab-test][data-ab-variant]");
+            if (!scope) return;
+            const testName = scope.dataset.abTest || "";
+            const variant = scope.dataset.abVariant || "";
+            const clickType = clickEl.dataset.abClick || "cta";
+            const clickLabel = clickEl.dataset.abLabel || (clickEl.textContent || "").trim() || clickType;
+            trackEvent("ab_click", `${testName}:${variant}:${clickType}`, {
+                label: clickLabel,
+                href: clickEl.getAttribute("href") || "",
+            });
+        });
+    }
+
     setActiveNavLink();
     handleHeaderScroll();
     wireMobileMenu();
@@ -577,6 +699,7 @@ document.addEventListener("DOMContentLoaded", () => {
     wireQuoteCalculator();
     wireMediaOptimization();
     wireCtaTracking();
+    wireAbExperimentTracking();
 
     window.addEventListener("scroll", handleHeaderScroll);
 });

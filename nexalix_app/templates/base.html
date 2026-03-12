@@ -40,8 +40,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260312c">
-    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}?v=20260312b">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260312d">
+    <link rel="stylesheet" href="{% static 'css/chatbot.css' %}?v=20260312c">
 
     <title>{% block title %}{{ meta_title|default:'Nexalix Technologies' }}{% endblock %}</title>
     {% block extra_css %}{% endblock %}
@@ -80,13 +80,13 @@
             </nav>
 
             <div class="header-tools">
-                <form class="search-shell" role="search" onsubmit="return false;">
+                <form class="search-shell" role="search" onsubmit="return false;" aria-label="Site search">
                     <i class="fas fa-search"></i>
-                    <input type="search" id="desktopSearch" placeholder="Search pages and services" autocomplete="off">
-                    <div class="search-results" id="desktopSearchResults"></div>
+                    <input type="search" id="desktopSearch" placeholder="Search pages and services" autocomplete="off" aria-label="Search pages and services" aria-controls="desktopSearchResults" aria-expanded="false">
+                    <div class="search-results" id="desktopSearchResults" role="listbox" aria-label="Search results"></div>
                 </form>
                 <a href="{% url 'contact' %}" class="btn btn-primary header-cta">Get Proposal</a>
-                <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -94,12 +94,12 @@
             </div>
         </div>
 
-        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-        <div class="mobile-menu" id="mobileMenu">
-            <form class="search-shell mobile-search-shell" role="search" onsubmit="return false;">
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
+        <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+            <form class="search-shell mobile-search-shell" role="search" onsubmit="return false;" aria-label="Mobile site search">
                 <i class="fas fa-search"></i>
-                <input type="search" id="mobileSearch" placeholder="Search pages and services" autocomplete="off">
-                <div class="search-results" id="mobileSearchResults"></div>
+                <input type="search" id="mobileSearch" placeholder="Search pages and services" autocomplete="off" aria-label="Search pages and services" aria-controls="mobileSearchResults" aria-expanded="false">
+                <div class="search-results" id="mobileSearchResults" role="listbox" aria-label="Search results"></div>
             </form>
 
             <nav class="mobile-menu-links" aria-label="Mobile navigation">
@@ -162,15 +162,15 @@
     data-lead-url="{% url 'chatbot_lead_api' %}"
     data-contact-url="{% url 'contact' %}"
     data-quote-url="{% url 'quote_generator' %}">
-    <button type="button" class="nx-chatbot-launcher" id="nxChatLauncher" aria-label="Open Nexalix assistant">
+    <button type="button" class="nx-chatbot-launcher" id="nxChatLauncher" aria-label="Open Nexalix assistant" aria-expanded="false" aria-controls="nxChatPanel">
         <i class="fas fa-comments"></i>
         <span>Chat with Nexalix</span>
     </button>
 
-    <div class="nx-chatbot-panel" id="nxChatPanel" aria-hidden="true">
+    <div class="nx-chatbot-panel" id="nxChatPanel" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="nxChatTitle">
         <header class="nx-chatbot-header">
             <div>
-                <h3>Nexalix Assistant</h3>
+                <h3 id="nxChatTitle">Nexalix Assistant</h3>
                 <p>Ask about services, pricing, and project planning.</p>
             </div>
             <button type="button" id="nxChatClose" aria-label="Close chat">
@@ -186,7 +186,7 @@
         <div class="nx-quick-replies" id="nxQuickReplies" aria-label="Quick chat suggestions"></div>
 
         <form class="nx-chatbot-form" id="nxChatForm">
-            <input type="text" id="nxChatInput" maxlength="1200" placeholder="Type your question..." required>
+            <input type="text" id="nxChatInput" maxlength="1200" placeholder="Type your question..." aria-label="Chat message" required>
             <button type="submit" id="nxChatSend">Send</button>
         </form>
 
@@ -199,12 +199,12 @@
         <form class="nx-lead-form" id="nxLeadForm">
             <h4>Share your project details</h4>
             <div class="nx-lead-grid">
-                <input type="text" id="nxLeadName" placeholder="Full name" maxlength="200" required>
-                <input type="email" id="nxLeadEmail" placeholder="Email" maxlength="254" required>
-                <input type="text" id="nxLeadPhone" placeholder="Phone (optional)" maxlength="50">
-                <input type="text" id="nxLeadCompany" placeholder="Company (optional)" maxlength="200">
+                <input type="text" id="nxLeadName" placeholder="Full name" maxlength="200" aria-label="Full name" required>
+                <input type="email" id="nxLeadEmail" placeholder="Email" maxlength="254" aria-label="Email address" required>
+                <input type="text" id="nxLeadPhone" placeholder="Phone (optional)" maxlength="50" aria-label="Phone number">
+                <input type="text" id="nxLeadCompany" placeholder="Company (optional)" maxlength="200" aria-label="Company name">
             </div>
-            <select id="nxLeadServiceInterest" required>
+            <select id="nxLeadServiceInterest" aria-label="Service of interest" required>
                 <option value="">Service of interest</option>
                 <option value="Software Development">Software Development</option>
                 <option value="AI Solutions">AI Solutions</option>
@@ -213,7 +213,7 @@
                 <option value="Automation Systems">Automation Systems</option>
                 <option value="Technology Consulting">Technology Consulting</option>
             </select>
-            <textarea id="nxLeadNeeds" rows="3" maxlength="3000" placeholder="Project description" required></textarea>
+            <textarea id="nxLeadNeeds" rows="3" maxlength="3000" placeholder="Project description" aria-label="Project description" required></textarea>
             <button type="submit" id="nxLeadSubmit">Submit details</button>
         </form>
     </div>
@@ -221,8 +221,8 @@
 
 {{ global_search_index|json_script:"globalSearchIndexData" }}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static 'js/main.js' %}?v=20260312b"></script>
-<script src="{% static 'js/chatbot.js' %}?v=20260312a"></script>
+<script src="{% static 'js/main.js' %}?v=20260312d"></script>
+<script src="{% static 'js/chatbot.js' %}?v=20260312c"></script>
 {% block extra_js %}{% endblock %}
 </body>
 </html>

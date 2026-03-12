@@ -4,7 +4,7 @@
 {% block title %}{{ meta_title|default:'Nexalix Technologies | IT & Innovation Consulting' }}{% endblock %}
 
 {% block content %}
-<section class="home-hero">
+<section class="home-hero" data-ab-test="{{ home_ab.test_name }}" data-ab-variant="{{ home_ab.variant }}">
     <div class="home-hero-media">
         <video
             id="homeHeroVideo"
@@ -27,10 +27,10 @@
     </div>
     <div class="container home-hero-content">
         <p class="hero-kicker">IT & Innovation Consulting</p>
-        <h1>{% if hero %}{{ hero.title }}{% else %}Living Up To Your Creative Potential{% endif %}</h1>
-        <p class="hero-subtitle">{% if hero %}{{ hero.subtitle }}{% else %}We are an engineering and consulting partner for digital products, data platforms, automation, and enterprise transformation.{% endif %}</p>
+        <h1 id="homeHeroHeadline">{{ home_ab.headline }}</h1>
+        <p class="hero-subtitle">{{ home_ab.subtitle }}</p>
         <div class="hero-actions">
-            <a href="{% url 'services' %}" class="btn btn-primary">Explore Services</a>
+            <a href="{{ home_ab.primary_cta_url }}" class="btn btn-primary" data-ab-click="primary_cta" data-ab-label="{{ home_ab.primary_cta_text }}">{{ home_ab.primary_cta_text }}</a>
             <a href="{% url 'contact' %}" class="btn btn-outline-primary">Get Consultation</a>
         </div>
     </div>

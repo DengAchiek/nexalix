@@ -2883,3 +2883,39 @@ textarea:focus-visible {
 .mobile-menu-links a:hover {
     transform: translateY(-1px);
 }
+
+/* -----------------------------
+   WCAG + Keyboard Refinements
+------------------------------ */
+.result-description {
+    color: #445d7b;
+}
+
+.search-result-item:focus-visible,
+.search-result-item.is-keyboard-active {
+    background: #eaf3ff;
+    outline: 2px solid rgba(41, 109, 211, 0.35);
+    outline-offset: -2px;
+}
+
+.nav-links a:focus-visible,
+.mobile-menu-links a:focus-visible,
+.btn:focus-visible,
+.header-cta:focus-visible,
+.back-to-top:focus-visible {
+    outline: 3px solid rgba(47, 109, 226, 0.35);
+    outline-offset: 2px;
+}
+
+.section-eyebrow {
+    color: #0c4f9f;
+}
+
+.contact-privacy {
+    color: #45627f;
+}
+
+[data-reveal] {
+    will-change: opacity, transform;
+    transition-delay: var(--reveal-delay, 0ms);
+}

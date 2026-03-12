@@ -188,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const open = !root.classList.contains("open");
             root.classList.toggle("open", open);
             panel.setAttribute("aria-hidden", open ? "false" : "true");
+            launcher.setAttribute("aria-expanded", open ? "true" : "false");
             if (open && input) input.focus();
             if (open) trackEvent("chat_open", "widget_opened");
         });
@@ -197,6 +198,8 @@ document.addEventListener("DOMContentLoaded", () => {
         closeBtn.addEventListener("click", () => {
             root.classList.remove("open");
             panel.setAttribute("aria-hidden", "true");
+            if (launcher) launcher.setAttribute("aria-expanded", "false");
+            if (launcher) launcher.focus();
         });
     }
 
@@ -250,6 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === "Escape") {
             root.classList.remove("open");
             if (panel) panel.setAttribute("aria-hidden", "true");
+            if (launcher) launcher.setAttribute("aria-expanded", "false");
         }
     });
 });

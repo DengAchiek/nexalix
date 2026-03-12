@@ -90,6 +90,24 @@ EMAIL_ALERT_GRACE_MINUTES = int(getattr(settings, "DASHBOARD_EMAIL_ALERT_GRACE_M
 STALE_CONTACT_HOURS = int(getattr(settings, "DASHBOARD_STALE_CONTACT_HOURS", 72))
 STALE_QUOTE_HOURS = int(getattr(settings, "DASHBOARD_STALE_QUOTE_HOURS", 168))
 HOME_AB_VARIANTS = ("A", "B")
+UX_EVENT_TRACKED_TYPES = (
+    "cta_click",
+    "search_query",
+    "search_result_click",
+    "contact_form_submit",
+    "quote_form_submit",
+    "form_dropoff",
+    "chat_open",
+    "chat_message_sent",
+    "chat_lead_requested",
+    "chat_lead_submitted",
+    "ab_exposure",
+    "ab_click",
+)
+UX_EVENT_CACHE_TTL_SECONDS = int(60 * 60 * 24 * 7)
+UX_AB_PRIMARY_TEST = "home_hero_primary"
+UX_AB_PRIMARY_TEST_KEY = slugify(UX_AB_PRIMARY_TEST)
+UX_AB_VARIANTS = ("A", "B")
 
 logger = logging.getLogger("nexalix_app.views")
 
@@ -377,6 +395,155 @@ def _safe_ratio_percent(numerator, denominator):
     if denominator <= 0:
         return 0.0
     return round((numerator / denominator) * 100, 1)
+
+
+def _cache_counter_get_int(cache_key):
+    raw_value = cache.get(cache_key, 0)
+    try:
+        return int(raw_value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _increment_cache_counter(cache_key, timeout=UX_EVENT_CACHE_TTL_SECONDS):
+    try:
+        cache.incr(cache_key)
+    except ValueError:
+        cache.set(cache_key, 1, timeout=timeout)
+
+
+def _ab_dimensions_from_payload(label, metadata):
+    metadata = metadata or {}
+    parts = [part.strip() for part in str(label or "").split(":") if str(part).strip()]
+    test_name = str(metadata.get("test_name") or "").strip()
+    variant = str(metadata.get("variant") or "").strip()
+    click_type = str(metadata.get("click_type") or "").strip()
+
+    if not test_name and parts:
+        test_name = parts[0]
+    if not variant and len(parts) > 1:
+        variant = parts[1]
+    if not click_type and len(parts) > 2:
+        click_type = parts[2]
+
+    test_name = test_name or UX_AB_PRIMARY_TEST
+    test_key = slugify(test_name)[:80] or UX_AB_PRIMARY_TEST_KEY
+    variant = (variant or "unknown").upper()
+    variant_key = slugify(variant)[:30] or "unknown"
+    click_key = slugify(click_type)[:40] if click_type else ""
+
+    return {
+        "test_name": test_name,
+        "test_key": test_key,
+        "variant": variant,
+        "variant_key": variant_key,
+        "click_key": click_key,
+    }
+
+
+def _build_ux_analytics(period_days, selected_day=None):
+    if selected_day:
+        days = [selected_day]
+    else:
+        period_days = max(1, int(period_days or 1))
+        today = timezone.localdate()
+        days = [today - timedelta(days=offset) for offset in range(period_days - 1, -1, -1)]
+
+    day_tokens = [item.isoformat() for item in days]
+    event_totals = {}
+    for event_type in UX_EVENT_TRACKED_TYPES:
+        event_totals[event_type] = sum(
+            _cache_counter_get_int(f"ux:event:{day}:{event_type}")
+            for day in day_tokens
+        )
+
+    form_submits = int(event_totals.get("contact_form_submit", 0)) + int(event_totals.get("quote_form_submit", 0))
+    form_dropoff = int(event_totals.get("form_dropoff", 0))
+    form_started = form_submits + form_dropoff
+    cta_clicks = int(event_totals.get("cta_click", 0))
+    chat_opens = int(event_totals.get("chat_open", 0))
+    chat_leads = int(event_totals.get("chat_lead_submitted", 0))
+    quote_submits = int(event_totals.get("quote_form_submit", 0))
+
+    ab_rows = []
+    total_ab_exposures = 0
+    total_ab_clicks = 0
+    for variant in UX_AB_VARIANTS:
+        variant_key = slugify(variant)[:30] or variant.lower()
+        exposure_count = sum(
+            _cache_counter_get_int(f"ux:ab:{day}:{UX_AB_PRIMARY_TEST_KEY}:{variant_key}:exposure")
+            for day in day_tokens
+        )
+        click_count = sum(
+            _cache_counter_get_int(f"ux:ab:{day}:{UX_AB_PRIMARY_TEST_KEY}:{variant_key}:click")
+            for day in day_tokens
+        )
+        total_ab_exposures += exposure_count
+        total_ab_clicks += click_count
+        ab_rows.append({
+            "test_name": UX_AB_PRIMARY_TEST,
+            "variant": variant,
+            "exposures": exposure_count,
+            "clicks": click_count,
+            "ctr": _safe_ratio_percent(click_count, exposure_count),
+        })
+
+    if total_ab_exposures == 0 and total_ab_clicks == 0 and (
+        event_totals.get("ab_exposure") or event_totals.get("ab_click")
+    ):
+        total_ab_exposures = int(event_totals.get("ab_exposure", 0))
+        total_ab_clicks = int(event_totals.get("ab_click", 0))
+        ab_rows = [{
+            "test_name": UX_AB_PRIMARY_TEST,
+            "variant": "Unknown",
+            "exposures": total_ab_exposures,
+            "clicks": total_ab_clicks,
+            "ctr": _safe_ratio_percent(total_ab_clicks, total_ab_exposures),
+        }]
+
+    daily_rows = []
+    for day in days[-14:]:
+        day_key = day.isoformat()
+        daily_rows.append({
+            "date": day_key,
+            "label": day.strftime("%b %d"),
+            "cta_clicks": _cache_counter_get_int(f"ux:event:{day_key}:cta_click"),
+            "form_dropoff": _cache_counter_get_int(f"ux:event:{day_key}:form_dropoff"),
+            "chat_leads": _cache_counter_get_int(f"ux:event:{day_key}:chat_lead_submitted"),
+            "ab_exposures": _cache_counter_get_int(f"ux:event:{day_key}:ab_exposure"),
+            "ab_clicks": _cache_counter_get_int(f"ux:event:{day_key}:ab_click"),
+        })
+
+    window_label = (
+        selected_day.strftime("%b %d, %Y")
+        if selected_day
+        else f"Last {len(days)} day{'s' if len(days) != 1 else ''}"
+    )
+
+    return {
+        "window_days": len(days),
+        "window_label": window_label,
+        "totals": {
+            "cta_clicks": cta_clicks,
+            "search_queries": int(event_totals.get("search_query", 0)),
+            "form_dropoff": form_dropoff,
+            "form_submits": form_submits,
+            "chat_messages": int(event_totals.get("chat_message_sent", 0)),
+            "chat_lead_requests": int(event_totals.get("chat_lead_requested", 0)),
+            "chat_lead_submits": chat_leads,
+            "ab_exposures": int(event_totals.get("ab_exposure", 0)),
+            "ab_clicks": int(event_totals.get("ab_click", 0)),
+        },
+        "conversion": {
+            "form_completion_rate": _safe_ratio_percent(form_submits, form_started),
+            "form_dropoff_rate": _safe_ratio_percent(form_dropoff, form_started),
+            "chat_lead_conversion_rate": _safe_ratio_percent(chat_leads, chat_opens),
+            "cta_to_quote_rate": _safe_ratio_percent(quote_submits, cta_clicks),
+            "ab_ctr": _safe_ratio_percent(total_ab_clicks, total_ab_exposures),
+        },
+        "ab_rows": ab_rows,
+        "daily_rows": daily_rows,
+    }
 
 
 def _normalize_service_label(value):
@@ -1535,6 +1702,7 @@ def activity_dashboard(request):
     funnel_analytics = _safe_funnel_analytics(filtered_contacts, filtered_quotes)
     alert_summary, alerts = _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
     quality_summary, quality_issues = _safe_data_quality(now, filtered_contacts, filtered_quotes)
+    ux_analytics = _build_ux_analytics(period_days, selected_day=selected_day)
 
     client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=60)
     if activity_filter in {"contact", "quote"}:
@@ -1703,6 +1871,7 @@ def activity_dashboard(request):
         "alerts": alerts,
         "quality_summary": quality_summary,
         "quality_issues": quality_issues,
+        "ux_analytics": ux_analytics,
     })
 
 
@@ -1780,6 +1949,7 @@ def activity_dashboard_live(request):
     funnel_analytics = _safe_funnel_analytics(filtered_contacts, filtered_quotes)
     alert_summary, alerts = _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
     quality_summary, quality_issues = _safe_data_quality(now, filtered_contacts, filtered_quotes)
+    ux_analytics = _build_ux_analytics(period_days, selected_day=selected_day)
     client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=30)
 
     try:
@@ -1856,6 +2026,7 @@ def activity_dashboard_live(request):
         "alerts": payload_alerts,
         "quality_summary": quality_summary,
         "quality_issues": payload_quality,
+        "ux_analytics": ux_analytics,
     })
 
 
@@ -2513,10 +2684,27 @@ def ux_event_api(request):
 
     current_day = timezone.localdate().isoformat()
     counter_key = f"ux:event:{current_day}:{validated['event_type']}"
-    try:
-        cache.incr(counter_key)
-    except ValueError:
-        cache.set(counter_key, 1, timeout=60 * 60 * 24 * 7)
+    _increment_cache_counter(counter_key, timeout=UX_EVENT_CACHE_TTL_SECONDS)
+
+    if validated["label"]:
+        label_key = slugify(validated["label"])[:120]
+        if label_key:
+            label_counter_key = f"ux:event_label:{current_day}:{validated['event_type']}:{label_key}"
+            _increment_cache_counter(label_counter_key, timeout=UX_EVENT_CACHE_TTL_SECONDS)
+
+    if validated["event_type"] in {"ab_exposure", "ab_click"}:
+        ab_dims = _ab_dimensions_from_payload(validated["label"], validated["metadata"])
+        ab_metric = "exposure" if validated["event_type"] == "ab_exposure" else "click"
+        ab_counter_key = (
+            f"ux:ab:{current_day}:{ab_dims['test_key']}:{ab_dims['variant_key']}:{ab_metric}"
+        )
+        _increment_cache_counter(ab_counter_key, timeout=UX_EVENT_CACHE_TTL_SECONDS)
+
+        if validated["event_type"] == "ab_click" and ab_dims["click_key"]:
+            click_type_counter_key = (
+                f"ux:ab:{current_day}:{ab_dims['test_key']}:{ab_dims['variant_key']}:click:{ab_dims['click_key']}"
+            )
+            _increment_cache_counter(click_type_counter_key, timeout=UX_EVENT_CACHE_TTL_SECONDS)
 
     logger.info(
         "UX event tracked type=%s label=%s page=%s meta=%s",

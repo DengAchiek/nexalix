@@ -289,6 +289,34 @@
     font-weight: 700;
 }
 
+.mk-ux-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-ux-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8fbff;
+    display: grid;
+    gap: 3px;
+}
+
+.mk-ux-card strong {
+    color: #1f466e;
+    font-size: 1.22rem;
+    line-height: 1;
+}
+
+.mk-ux-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
 .mk-alert-cards,
 .mk-quality-cards {
     display: grid;
@@ -1131,6 +1159,10 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .mk-ux-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .mk-alert-cards,
     .mk-quality-cards {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1201,6 +1233,10 @@
         grid-template-columns: 1fr;
     }
 
+    .mk-ux-cards {
+        grid-template-columns: 1fr;
+    }
+
     .mk-alert-cards,
     .mk-quality-cards {
         grid-template-columns: 1fr;
@@ -1251,6 +1287,7 @@
             <a class="mk-section-link" href="#" data-view="executive-reporting">Executive Reporting</a>
             <a class="mk-section-link" href="#" data-view="seo-topic-generator">SEO Topic Generator</a>
             <a class="mk-section-link" href="#" data-view="funnel-analytics">Funnel Analytics</a>
+            <a class="mk-section-link" href="#" data-view="ux-analytics">UX Analytics</a>
             <a class="mk-section-link" href="#" data-view="contact-messages" data-activity-filter="contact">Contact Messages</a>
             <a class="mk-section-link" href="#" data-view="quote-requests" data-activity-filter="quote">Quote Requests</a>
             <a class="mk-section-link" href="#" data-view="partners">Partners</a>
@@ -1703,6 +1740,96 @@
                     </div>
                 </article>
 
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-ux-analytics" data-view-panel="ux-analytics">
+                    <h2>UX Analytics</h2>
+                    <p class="mk-sub">Website conversion signals for {{ ux_analytics.window_label|default:"active period" }}.</p>
+
+                    <div class="mk-ux-cards">
+                        <div class="mk-ux-card">
+                            <strong id="uxCtaClicks">{{ ux_analytics.totals.cta_clicks }}</strong>
+                            <span>CTA Clicks</span>
+                        </div>
+                        <div class="mk-ux-card">
+                            <strong id="uxFormDropoff">{{ ux_analytics.totals.form_dropoff }}</strong>
+                            <span>Form Drop-off</span>
+                        </div>
+                        <div class="mk-ux-card">
+                            <strong id="uxChatLeads">{{ ux_analytics.totals.chat_lead_submits }}</strong>
+                            <span>Chatbot Leads</span>
+                        </div>
+                        <div class="mk-ux-card">
+                            <strong id="uxSearchQueries">{{ ux_analytics.totals.search_queries }}</strong>
+                            <span>Search Queries</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-funnel-rate">
+                        <span class="mk-chip" id="uxFormCompletionRate">Form completion: {{ ux_analytics.conversion.form_completion_rate }}%</span>
+                        <span class="mk-chip" id="uxFormDropoffRate">Form drop-off: {{ ux_analytics.conversion.form_dropoff_rate }}%</span>
+                        <span class="mk-chip" id="uxChatLeadConversionRate">Chat lead conversion: {{ ux_analytics.conversion.chat_lead_conversion_rate }}%</span>
+                        <span class="mk-chip" id="uxCtaToQuoteRate">CTA→Quote rate: {{ ux_analytics.conversion.cta_to_quote_rate }}%</span>
+                        <span class="mk-chip" id="uxAbCtr">A/B CTR: {{ ux_analytics.conversion.ab_ctr }}%</span>
+                    </div>
+
+                    <h3 style="margin:0 0 8px; color:#224768; font-size:0.93rem;">A/B Test Performance</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Test</th>
+                                    <th>Variant</th>
+                                    <th>Exposures</th>
+                                    <th>Clicks</th>
+                                    <th>CTR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uxAbBody">
+                                {% for row in ux_analytics.ab_rows %}
+                                <tr>
+                                    <td>{{ row.test_name }}</td>
+                                    <td>{{ row.variant }}</td>
+                                    <td>{{ row.exposures }}</td>
+                                    <td>{{ row.clicks }}</td>
+                                    <td>{{ row.ctr }}%</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="5">No A/B interaction data available yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin:12px 0 8px; color:#224768; font-size:0.93rem;">Recent Daily UX Signals</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>CTA Clicks</th>
+                                    <th>Form Drop-off</th>
+                                    <th>Chat Leads</th>
+                                    <th>A/B Exposures</th>
+                                    <th>A/B Clicks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uxDailyBody">
+                                {% for row in ux_analytics.daily_rows %}
+                                <tr>
+                                    <td>{{ row.label }}</td>
+                                    <td>{{ row.cta_clicks }}</td>
+                                    <td>{{ row.form_dropoff }}</td>
+                                    <td>{{ row.chat_leads }}</td>
+                                    <td>{{ row.ab_exposures }}</td>
+                                    <td>{{ row.ab_clicks }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="6">No UX event data available yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
                 <article class="mk-panel mk-view-panel" id="section-contact-messages" data-view-panel="contact-messages">
                     <h2>Contact Messages</h2>
                     <p class="mk-sub">Latest contact submissions within the active period and filters.</p>
@@ -1917,6 +2044,18 @@
     const funnelServiceBody = document.getElementById("funnelServiceBody");
     const funnelIndustryBody = document.getElementById("funnelIndustryBody");
 
+    const uxCtaClicks = document.getElementById("uxCtaClicks");
+    const uxFormDropoff = document.getElementById("uxFormDropoff");
+    const uxChatLeads = document.getElementById("uxChatLeads");
+    const uxSearchQueries = document.getElementById("uxSearchQueries");
+    const uxFormCompletionRate = document.getElementById("uxFormCompletionRate");
+    const uxFormDropoffRate = document.getElementById("uxFormDropoffRate");
+    const uxChatLeadConversionRate = document.getElementById("uxChatLeadConversionRate");
+    const uxCtaToQuoteRate = document.getElementById("uxCtaToQuoteRate");
+    const uxAbCtr = document.getElementById("uxAbCtr");
+    const uxAbBody = document.getElementById("uxAbBody");
+    const uxDailyBody = document.getElementById("uxDailyBody");
+
     let activeType = activityHiddenInput ? activityHiddenInput.value : "all";
     if (!["all", "contact", "quote"].includes(activeType)) {
         activeType = "all";
@@ -2062,6 +2201,60 @@
         `).join("");
     }
 
+    function renderUxAbRows(rows) {
+        if (!uxAbBody) return;
+        if (!Array.isArray(rows) || !rows.length) {
+            uxAbBody.innerHTML = '<tr><td colspan="5">No A/B interaction data available yet.</td></tr>';
+            return;
+        }
+        uxAbBody.innerHTML = rows.map((row) => `
+            <tr>
+                <td>${escapeHtml(row.test_name)}</td>
+                <td>${escapeHtml(row.variant)}</td>
+                <td>${escapeHtml(row.exposures)}</td>
+                <td>${escapeHtml(row.clicks)}</td>
+                <td>${escapeHtml(row.ctr)}%</td>
+            </tr>
+        `).join("");
+    }
+
+    function renderUxDailyRows(rows) {
+        if (!uxDailyBody) return;
+        if (!Array.isArray(rows) || !rows.length) {
+            uxDailyBody.innerHTML = '<tr><td colspan="6">No UX event data available yet.</td></tr>';
+            return;
+        }
+        uxDailyBody.innerHTML = rows.map((row) => `
+            <tr>
+                <td>${escapeHtml(row.label)}</td>
+                <td>${escapeHtml(row.cta_clicks)}</td>
+                <td>${escapeHtml(row.form_dropoff)}</td>
+                <td>${escapeHtml(row.chat_leads)}</td>
+                <td>${escapeHtml(row.ab_exposures)}</td>
+                <td>${escapeHtml(row.ab_clicks)}</td>
+            </tr>
+        `).join("");
+    }
+
+    function renderUxAnalytics(snapshot) {
+        const ux = snapshot || {};
+        const totals = ux.totals || {};
+        const conversion = ux.conversion || {};
+
+        if (uxCtaClicks) uxCtaClicks.textContent = totals.cta_clicks ?? 0;
+        if (uxFormDropoff) uxFormDropoff.textContent = totals.form_dropoff ?? 0;
+        if (uxChatLeads) uxChatLeads.textContent = totals.chat_lead_submits ?? 0;
+        if (uxSearchQueries) uxSearchQueries.textContent = totals.search_queries ?? 0;
+        if (uxFormCompletionRate) uxFormCompletionRate.textContent = `Form completion: ${conversion.form_completion_rate ?? 0}%`;
+        if (uxFormDropoffRate) uxFormDropoffRate.textContent = `Form drop-off: ${conversion.form_dropoff_rate ?? 0}%`;
+        if (uxChatLeadConversionRate) uxChatLeadConversionRate.textContent = `Chat lead conversion: ${conversion.chat_lead_conversion_rate ?? 0}%`;
+        if (uxCtaToQuoteRate) uxCtaToQuoteRate.textContent = `CTA→Quote rate: ${conversion.cta_to_quote_rate ?? 0}%`;
+        if (uxAbCtr) uxAbCtr.textContent = `A/B CTR: ${conversion.ab_ctr ?? 0}%`;
+
+        renderUxAbRows(ux.ab_rows || []);
+        renderUxDailyRows(ux.daily_rows || []);
+    }
+
     function applyLiveSnapshot(data) {
         if (!data || data.ok !== true) return;
 
@@ -2115,6 +2308,8 @@
 
         renderFunnelRows(funnelServiceBody, funnel.service_rows || [], "No service funnel data.");
         renderFunnelRows(funnelIndustryBody, funnel.industry_rows || [], "No industry funnel data.");
+
+        renderUxAnalytics(data.ux_analytics || {});
     }
 
     function setActiveTab(filter) {

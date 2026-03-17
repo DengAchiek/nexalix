@@ -689,6 +689,13 @@
     flex-wrap: wrap;
 }
 
+.mk-header-side {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
 .mk-pill {
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.45);
@@ -696,7 +703,33 @@
     font-size: 0.77rem;
     font-weight: 700;
     text-decoration: none;
-    color: #fff;
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.mk-pill:link,
+.mk-pill:visited,
+.mk-pill:hover,
+.mk-pill:focus,
+.mk-pill:active {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.mk-pill:hover,
+.mk-pill:focus {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mk-pill:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 2px;
+}
+
+.mk-pill span,
+.mk-pill strong {
+    color: inherit !important;
 }
 
 .mk-avatar {
@@ -707,6 +740,190 @@
     place-items: center;
     background: rgba(255,255,255,0.25);
     font-weight: 800;
+}
+
+.mk-notification-wrap {
+    position: relative;
+}
+
+.mk-bell {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mk-bell:hover,
+.mk-bell:focus {
+    background: rgba(255,255,255,0.24);
+    transform: translateY(-1px);
+}
+
+.mk-bell:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.7);
+    outline-offset: 2px;
+}
+
+.mk-bell-icon {
+    font-size: 1.08rem;
+    line-height: 1;
+}
+
+.mk-bell-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    padding: 0 5px;
+    background: #ff5f90;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    box-shadow: 0 8px 18px rgba(14, 36, 72, 0.2);
+}
+
+.mk-notification-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: min(380px, calc(100vw - 48px));
+    border: 1px solid #dbe5f1;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgba(16, 44, 86, 0.18);
+    overflow: hidden;
+    z-index: 30;
+}
+
+.mk-notification-panel[hidden] {
+    display: none;
+}
+
+.mk-notification-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #e6edf7;
+}
+
+.mk-notification-head h3 {
+    margin: 0;
+    color: #1f456d;
+    font-size: 0.95rem;
+}
+
+.mk-notification-head span {
+    color: #7089a8;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-notification-list {
+    display: grid;
+    gap: 0;
+    max-height: 360px;
+    overflow: auto;
+}
+
+.mk-notification-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef3f9;
+    background: #fff;
+}
+
+.mk-notification-item:last-child {
+    border-bottom: 0;
+}
+
+.mk-notification-item strong {
+    display: block;
+    color: #1f456d;
+    font-size: 0.84rem;
+    line-height: 1.3;
+}
+
+.mk-notification-item time {
+    display: block;
+    margin-top: 3px;
+    color: #7a90ab;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.mk-notification-item p {
+    margin: 8px 0 0;
+    color: #5d7899;
+    font-size: 0.76rem;
+    line-height: 1.45;
+}
+
+.mk-notification-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.mk-notification-links a {
+    color: #1b61a8;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mk-notification-links a:hover,
+.mk-notification-links a:focus {
+    text-decoration: underline;
+}
+
+.mk-notification-empty {
+    padding: 16px;
+    color: #6f86a4;
+    font-size: 0.78rem;
+}
+
+.mk-notification-toast {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 60;
+    max-width: 320px;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: #153b68;
+    color: #fff;
+    box-shadow: 0 18px 40px rgba(17, 39, 73, 0.26);
+}
+
+.mk-notification-toast[hidden] {
+    display: none;
+}
+
+.mk-notification-toast strong {
+    display: block;
+    font-size: 0.82rem;
+}
+
+.mk-notification-toast span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255,255,255,0.82);
+    font-size: 0.75rem;
+    line-height: 1.45;
 }
 
 .mk-content {
@@ -828,6 +1045,24 @@
     margin: 0;
     color: #224768;
     font-size: 1.08rem;
+}
+
+.mk-email-link {
+    color: #1b61a8;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mk-email-link:hover,
+.mk-email-link:focus {
+    color: #114e89;
+    text-decoration: underline;
+}
+
+.mk-email-link:focus-visible {
+    outline: 2px solid rgba(27, 97, 168, 0.28);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .mk-sub {
@@ -1366,11 +1601,50 @@
                     <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ weekly_pdf_query }}">Weekly Exec PDF</a>
                     <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
                 </div>
-                <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
+                <div class="mk-header-side">
+                    <div class="mk-notification-wrap">
+                        <button
+                            type="button"
+                            class="mk-bell"
+                            id="dashboardNotificationBell"
+                            aria-label="Open client message notifications"
+                            aria-controls="dashboardNotificationPanel"
+                            aria-expanded="false"
+                        >
+                            <span class="mk-bell-icon" aria-hidden="true">🔔</span>
+                            <span class="mk-bell-badge" id="notificationBellCount" {% if not dashboard_notifications.count %}hidden{% endif %}>{{ dashboard_notifications.count }}</span>
+                        </button>
+                        <div class="mk-notification-panel" id="dashboardNotificationPanel" hidden>
+                            <div class="mk-notification-head">
+                                <div>
+                                    <h3>Client Message Notifications</h3>
+                                    <span id="notificationSummary">{{ dashboard_notifications.count }} unread message{{ dashboard_notifications.count|pluralize }}</span>
+                                </div>
+                            </div>
+                            <div class="mk-notification-list" id="dashboardNotificationList">
+                                {% for item in dashboard_notifications.items %}
+                                <article class="mk-notification-item" data-notification-id="{{ item.id }}">
+                                    <strong>{{ item.title }}</strong>
+                                    <time>{{ item.timestamp_label }}</time>
+                                    <p>{{ item.service }}{% if item.preview %} · {{ item.preview }}{% endif %}</p>
+                                    <div class="mk-notification-links">
+                                        <a class="mk-email-link" href="mailto:{{ item.email }}">{{ item.email }}</a>
+                                        <a href="{{ item.admin_url }}">Open in admin</a>
+                                    </div>
+                                </article>
+                                {% empty %}
+                                <div class="mk-notification-empty">No unread client messages right now.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
+                </div>
             </div>
         </header>
 
         <div class="mk-content">
+            <div class="mk-notification-toast" id="dashboardNotificationToast" hidden role="status" aria-live="polite"></div>
             {% if messages %}
                 {% for message in messages %}
                     <div class="mk-msg {% if message.tags == 'error' %}error{% else %}success{% endif %}">{{ message }}</div>
@@ -1837,7 +2111,7 @@
                         {% for message in contacts_preview %}
                         <div class="mk-mini-item">
                             <strong>{{ message.full_name }} · {{ message.service|default:"General inquiry" }}</strong>
-                            <span>{{ message.email }} · {{ message.submitted_at|date:"M d, Y H:i" }}</span>
+                            <span><a class="mk-email-link" href="mailto:{{ message.email }}">{{ message.email }}</a> · {{ message.submitted_at|date:"M d, Y H:i" }}</span>
                         </div>
                         {% empty %}
                         <div class="mk-mini-item"><strong>No contact messages found.</strong></div>
@@ -1852,7 +2126,7 @@
                         {% for quote in quotes_preview %}
                         <div class="mk-mini-item">
                             <strong>{{ quote.quote_reference }} · {{ quote.service.title|default:"Service not selected" }}</strong>
-                            <span>{{ quote.email }} · {{ quote.created_at|date:"M d, Y H:i" }}</span>
+                            <span><a class="mk-email-link" href="mailto:{{ quote.email }}">{{ quote.email }}</a> · {{ quote.created_at|date:"M d, Y H:i" }}</span>
                         </div>
                         {% empty %}
                         <div class="mk-mini-item"><strong>No quote requests found.</strong></div>
@@ -1915,7 +2189,7 @@
                         <div class="mk-activity {% if item.type == 'quote' %}quote{% endif %}" data-type="{{ item.type }}" data-search="{{ item.search_text }}">
                             <div>
                                 <strong>{{ item.title }}</strong>
-                                <p>{{ item.subtitle }} · {{ item.detail }}</p>
+                                <p>{{ item.subtitle }}{% if item.detail %} · <a class="mk-email-link" href="mailto:{{ item.detail }}">{{ item.detail }}</a>{% endif %}</p>
                             </div>
                             <div class="mk-meta">
                                 <span class="mk-chip">{{ item.status }}</span>
@@ -2055,11 +2329,23 @@
     const uxAbCtr = document.getElementById("uxAbCtr");
     const uxAbBody = document.getElementById("uxAbBody");
     const uxDailyBody = document.getElementById("uxDailyBody");
+    const notificationBell = document.getElementById("dashboardNotificationBell");
+    const notificationPanel = document.getElementById("dashboardNotificationPanel");
+    const notificationCount = document.getElementById("notificationBellCount");
+    const notificationSummary = document.getElementById("notificationSummary");
+    const notificationList = document.getElementById("dashboardNotificationList");
+    const notificationToast = document.getElementById("dashboardNotificationToast");
 
     let activeType = activityHiddenInput ? activityHiddenInput.value : "all";
     if (!["all", "contact", "quote"].includes(activeType)) {
         activeType = "all";
     }
+    let notificationToastTimer = null;
+    let knownNotificationIds = new Set(
+        Array.from(notificationList ? notificationList.querySelectorAll("[data-notification-id]") : [])
+            .map((node) => String(node.dataset.notificationId || "").trim())
+            .filter(Boolean)
+    );
 
     function escapeHtml(value) {
         return String(value || "")
@@ -2074,6 +2360,94 @@
         const numeric = Number(value || 0);
         if (!Number.isFinite(numeric)) return 0;
         return Math.max(0, Math.min(100, numeric));
+    }
+
+    function closeNotificationPanel() {
+        if (!notificationPanel || !notificationBell) return;
+        notificationPanel.hidden = true;
+        notificationBell.setAttribute("aria-expanded", "false");
+    }
+
+    function openNotificationPanel() {
+        if (!notificationPanel || !notificationBell) return;
+        notificationPanel.hidden = false;
+        notificationBell.setAttribute("aria-expanded", "true");
+    }
+
+    function toggleNotificationPanel() {
+        if (!notificationPanel || !notificationBell) return;
+        if (notificationPanel.hidden) openNotificationPanel();
+        else closeNotificationPanel();
+    }
+
+    function showNotificationToast(items) {
+        if (!notificationToast || !Array.isArray(items) || !items.length) return;
+        const firstItem = items[0] || {};
+        const extraCount = items.length - 1;
+        notificationToast.innerHTML = `
+            <strong>${escapeHtml(firstItem.title || "New client message")}</strong>
+            <span>${escapeHtml(firstItem.service || "General inquiry")}${extraCount > 0 ? ` · plus ${extraCount} more new message${extraCount === 1 ? "" : "s"}` : ""}</span>
+        `;
+        notificationToast.hidden = false;
+        if (notificationToastTimer) clearTimeout(notificationToastTimer);
+        notificationToastTimer = setTimeout(() => {
+            notificationToast.hidden = true;
+        }, 4200);
+    }
+
+    function renderNotifications(snapshot, options = {}) {
+        const announce = options.announce !== false;
+        const notifications = snapshot || {};
+        const items = Array.isArray(notifications.items) ? notifications.items : [];
+        const count = Number(notifications.count || 0);
+        const nextIds = new Set(
+            items
+                .map((item) => String(item.id || "").trim())
+                .filter(Boolean)
+        );
+        const newItems = announce
+            ? items.filter((item) => {
+                const itemId = String(item.id || "").trim();
+                return itemId && !knownNotificationIds.has(itemId);
+            })
+            : [];
+        knownNotificationIds = nextIds;
+
+        if (notificationCount) {
+            if (count > 0) {
+                notificationCount.hidden = false;
+                notificationCount.textContent = count > 99 ? "99+" : String(count);
+            } else {
+                notificationCount.hidden = true;
+                notificationCount.textContent = "0";
+            }
+        }
+
+        if (notificationSummary) {
+            notificationSummary.textContent = `${count} unread message${count === 1 ? "" : "s"}`;
+        }
+
+        if (notificationList) {
+            if (!items.length) {
+                notificationList.innerHTML = '<div class="mk-notification-empty">No unread client messages right now.</div>';
+            } else {
+                notificationList.innerHTML = items.map((item) => `
+                    <article class="mk-notification-item" data-notification-id="${escapeHtml(item.id)}">
+                        <strong>${escapeHtml(item.title)}</strong>
+                        <time>${escapeHtml(item.timestamp_label)}</time>
+                        <p>${escapeHtml(item.service || "General inquiry")}${item.preview ? ` · ${escapeHtml(item.preview)}` : ""}</p>
+                        <div class="mk-notification-links">
+                            <a class="mk-email-link" href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a>
+                            <a href="${escapeHtml(item.admin_url)}">Open in admin</a>
+                        </div>
+                    </article>
+                `).join("");
+            }
+        }
+
+        if (announce && newItems.length) {
+            showNotificationToast(newItems);
+        }
     }
 
     function applyActivityFilterAndSearch() {
@@ -2112,7 +2486,7 @@
             <div class="mk-activity ${item.type === "quote" ? "quote" : ""}" data-type="${escapeHtml(item.type)}" data-search="${escapeHtml(item.search_text || "")}">
                 <div>
                     <strong>${escapeHtml(item.title)}</strong>
-                    <p>${escapeHtml(item.subtitle)} · ${escapeHtml(item.detail)}</p>
+                    <p>${escapeHtml(item.subtitle)}${item.detail ? ` · <a class="mk-email-link" href="mailto:${escapeHtml(item.detail)}">${escapeHtml(item.detail)}</a>` : ""}</p>
                 </div>
                 <div class="mk-meta">
                     <span class="mk-chip">${escapeHtml(item.status)}</span>
@@ -2293,6 +2667,7 @@
         if (qualityStale) qualityStale.textContent = qualitySummary.stale_records ?? 0;
         renderQualityList(data.quality_issues || []);
 
+        renderNotifications(data.notifications || {});
         renderActivities(data.client_activities || []);
 
         const funnel = data.funnel_analytics || {};
@@ -2375,6 +2750,32 @@
 
     if (toggleContacts) toggleContacts.addEventListener("change", applyTrendVisibility);
     if (toggleQuotes) toggleQuotes.addEventListener("change", applyTrendVisibility);
+
+    if (notificationBell) {
+        notificationBell.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleNotificationPanel();
+        });
+    }
+
+    if (notificationPanel) {
+        notificationPanel.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+    }
+
+    document.addEventListener("click", (event) => {
+        if (!notificationPanel || !notificationBell || notificationPanel.hidden) return;
+        if (notificationPanel.contains(event.target) || notificationBell.contains(event.target)) return;
+        closeNotificationPanel();
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeNotificationPanel();
+        }
+    });
 
     const refreshKey = "nexalix_dashboard_auto_refresh";
     const pollMs = 15000;

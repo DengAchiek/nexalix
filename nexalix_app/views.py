@@ -767,6 +767,26 @@ def _build_client_activities(filtered_contacts, filtered_quotes, role_view, limi
     return activities[:limit]
 
 
+def _build_dashboard_notifications(contacts_queryset, limit=6):
+    unread_contacts = contacts_queryset.filter(is_read=False).order_by("-submitted_at")
+    items = []
+    for message in unread_contacts[:limit]:
+        items.append({
+            "id": message.id,
+            "title": f"New message from {message.full_name}",
+            "service": message.service or "General inquiry",
+            "email": message.email,
+            "preview": _text_excerpt(message.message, 96),
+            "timestamp": message.submitted_at,
+            "timestamp_label": timezone.localtime(message.submitted_at).strftime("%b %d, %Y %H:%M"),
+            "admin_url": reverse("admin:nexalix_app_contactmessage_change", args=[message.id]),
+        })
+    return {
+        "count": unread_contacts.count(),
+        "items": items,
+    }
+
+
 def _is_likely_valid_email(value):
     email = (value or "").strip()
     if not email or "@" not in email or "." not in email:
@@ -1703,6 +1723,7 @@ def activity_dashboard(request):
     alert_summary, alerts = _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
     quality_summary, quality_issues = _safe_data_quality(now, filtered_contacts, filtered_quotes)
     ux_analytics = _build_ux_analytics(period_days, selected_day=selected_day)
+    dashboard_notifications = _build_dashboard_notifications(ContactMessage.objects.all())
 
     client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=60)
     if activity_filter in {"contact", "quote"}:
@@ -1872,6 +1893,7 @@ def activity_dashboard(request):
         "quality_summary": quality_summary,
         "quality_issues": quality_issues,
         "ux_analytics": ux_analytics,
+        "dashboard_notifications": dashboard_notifications,
     })
 
 
@@ -1950,6 +1972,7 @@ def activity_dashboard_live(request):
     alert_summary, alerts = _safe_alert_center(now, contacts_queryset, quotes_queryset, sla_summary)
     quality_summary, quality_issues = _safe_data_quality(now, filtered_contacts, filtered_quotes)
     ux_analytics = _build_ux_analytics(period_days, selected_day=selected_day)
+    dashboard_notifications = _build_dashboard_notifications(ContactMessage.objects.all())
     client_activities = _build_client_activities(filtered_contacts, filtered_quotes, role_view, limit=30)
 
     try:
@@ -2027,6 +2050,7 @@ def activity_dashboard_live(request):
         "quality_summary": quality_summary,
         "quality_issues": payload_quality,
         "ux_analytics": ux_analytics,
+        "notifications": dashboard_notifications,
     })
 
 

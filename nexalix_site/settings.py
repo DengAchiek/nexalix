@@ -202,6 +202,27 @@ if CONTACT_NOTIFICATION_EMAIL and CONTACT_NOTIFICATION_EMAIL not in ADMIN_EMAILS
 SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
 
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", EMAIL_HOST_USER or CONTACT_NOTIFICATION_EMAIL)
+CONTACT_PHONE = os.getenv("CONTACT_PHONE", "+254768774232")
+CONTACT_PHONE_DISPLAY = os.getenv("CONTACT_PHONE_DISPLAY", "+254 768 774 232")
+CONTACT_LOCATION = os.getenv("CONTACT_LOCATION", "Kenya")
+COMPANY_LEGAL_NAME = os.getenv("COMPANY_LEGAL_NAME", "Nexalix Technologies Ltd.")
+FOOTER_POSITIONING = os.getenv(
+    "FOOTER_POSITIONING",
+    "Consulting-led software, AI, data, and automation delivery for businesses scaling operations.",
+)
+FOOTER_SERVICE_REGIONS = os.getenv(
+    "FOOTER_SERVICE_REGIONS",
+    "Kenya, East Africa, and remote global delivery",
+)
+FOOTER_RESPONSE_PROMISE = os.getenv("FOOTER_RESPONSE_PROMISE", "Response within 24 hours")
+FOOTER_SUPPORT_HOURS = os.getenv(
+    "FOOTER_SUPPORT_HOURS",
+    "Business hours (EAT) with project-based support coverage",
+)
+FOOTER_LINKEDIN_URL = os.getenv("FOOTER_LINKEDIN_URL", "").strip()
+FOOTER_FACEBOOK_URL = os.getenv("FOOTER_FACEBOOK_URL", "").strip()
+FOOTER_INSTAGRAM_URL = os.getenv("FOOTER_INSTAGRAM_URL", "").strip()
+FOOTER_X_URL = os.getenv("FOOTER_X_URL", "").strip()
 
 # --------------------
 # CHATBOT SETTINGS

@@ -13,7 +13,7 @@ from .models import (
     Industry, TechnologyCategory, Technology, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
-    QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead
+    QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead, UpdatesSubscriber
 )
 
 User = get_user_model()
@@ -69,6 +69,14 @@ class CaseStudyAdmin(admin.ModelAdmin):
 @admin.register(NewsletterSignup)
 class NewsletterSignupAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_active']
+
+
+@admin.register(UpdatesSubscriber)
+class UpdatesSubscriberAdmin(admin.ModelAdmin):
+    list_display = ["email", "source", "is_active", "created_at"]
+    list_filter = ["source", "is_active", "created_at"]
+    search_fields = ["email"]
+    ordering = ["-created_at"]
 
 @admin.register(Statistic)
 class StatisticAdmin(admin.ModelAdmin):

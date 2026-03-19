@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ meta_title }}{% endblock %}
+
+{% block content %}
+<section class="page-block section-soft">
+    <div class="container legal-page">
+        <div class="section-heading">
+            <p class="section-eyebrow">Legal</p>
+            <h1>{{ legal_heading }}</h1>
+            <p class="section-subtitle">{{ legal_lead }}</p>
+        </div>
+
+        <div class="legal-sections">
+            {% for section in legal_sections %}
+            <article class="legal-card">
+                <h2>{{ section.title }}</h2>
+                <ul>
+                    {% for point in section.points %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

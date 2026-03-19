@@ -521,3 +521,18 @@ class DashboardSavedFilter(models.Model):
 
     def __str__(self):
         return f"{self.user} · {self.name}"
+
+
+class UpdatesSubscriber(models.Model):
+    email = models.EmailField(unique=True)
+    source = models.CharField(max_length=50, default="footer")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Updates Subscriber"
+        verbose_name_plural = "Updates Subscribers"
+
+    def __str__(self):
+        return self.email

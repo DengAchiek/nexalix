@@ -43,7 +43,7 @@ from .models import (
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
-    QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead
+    QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead, UpdatesSubscriber
 )
 # If you have these models, import them:
 # from .models import AboutPage, CompanyValue, ContactInfo, ContactMessage
@@ -283,6 +283,22 @@ def _organization_schema(request):
             "addressCountry": "KE",
         },
     }
+
+
+def _legal_page_context(request, *, title, description, heading, lead, sections):
+    context = {
+        "legal_heading": heading,
+        "legal_lead": lead,
+        "legal_sections": sections,
+    }
+    context.update(
+        _seo_context(
+            request,
+            title=title,
+            description=description,
+        )
+    )
+    return context
 
 
 def _service_schema(request, service, position=None):
@@ -1664,6 +1680,131 @@ def why_choose_us(request):
         description="See why organizations choose Nexalix for IT consulting, engineering delivery, and innovation execution.",
     ))
     return render(request, 'why_choose_us.html', context)
+
+
+def privacy_policy(request):
+    sections = [
+        {
+            "title": "Information We Collect",
+            "points": [
+                "Contact details, project requirements, and consultation information submitted through Nexalix forms or chat.",
+                "Proposal and service-interest details shared while requesting quotes or planning an engagement.",
+                "Operational website usage data used to improve site experience, analytics, and support workflows.",
+            ],
+        },
+        {
+            "title": "How We Use Information",
+            "points": [
+                "Respond to inquiries, proposals, and consultation requests.",
+                "Coordinate delivery planning, follow-up communication, and project onboarding.",
+                "Improve site performance, marketing relevance, and service delivery workflows.",
+            ],
+        },
+        {
+            "title": "Data Protection",
+            "points": [
+                "Access to submitted data is limited to authorized Nexalix administrators and delivery staff.",
+                "We use secure hosting, email, and storage providers to operate the website and communication workflows.",
+                "Nexalix does not sell personal information submitted through this website.",
+            ],
+        },
+        {
+            "title": "Your Rights",
+            "points": [
+                "You can request updates or removal of the information you shared with Nexalix.",
+                "You can opt out of update emails at any time.",
+                "For privacy requests, contact support@nexalixtechnology.com.",
+            ],
+        },
+    ]
+    return render(
+        request,
+        "legal_page.html",
+        _legal_page_context(
+            request,
+            title="Privacy Policy | Nexalix Technologies",
+            description="Read how Nexalix collects, uses, and protects website, contact, quote, and updates information.",
+            heading="Privacy Policy",
+            lead="This policy explains how Nexalix handles the information submitted through the website, quote tools, chatbot, and updates forms.",
+            sections=sections,
+        ),
+    )
+
+
+def terms_of_service(request):
+    sections = [
+        {
+            "title": "Website Use",
+            "points": [
+                "The Nexalix website is intended for information, project discovery, and service engagement.",
+                "Visitors should provide accurate information when submitting forms or requesting consultations.",
+                "You may not use the website to submit unlawful, harmful, or misleading content.",
+            ],
+        },
+        {
+            "title": "Proposals and Estimates",
+            "points": [
+                "Automatic quote outputs are indicative and subject to detailed project discovery.",
+                "Final scope, pricing, and timelines are confirmed through a formal proposal or engagement agreement.",
+                "Delivery commitments depend on agreed scope, dependencies, approvals, and implementation constraints.",
+            ],
+        },
+        {
+            "title": "Intellectual Property",
+            "points": [
+                "Website content, branding, and original Nexalix materials remain the property of Nexalix unless otherwise stated.",
+                "Project deliverables and ownership terms are governed by the commercial agreement for each engagement.",
+            ],
+        },
+        {
+            "title": "Support and Contact",
+            "points": [
+                "Support coverage, escalation paths, and service levels are defined per engagement or support plan.",
+                "For commercial, delivery, or website questions, contact support@nexalixtechnology.com.",
+            ],
+        },
+    ]
+    return render(
+        request,
+        "legal_page.html",
+        _legal_page_context(
+            request,
+            title="Terms of Service | Nexalix Technologies",
+            description="Review the terms governing the use of the Nexalix website, proposal tools, and service inquiry workflows.",
+            heading="Terms of Service",
+            lead="These terms outline how visitors may use the Nexalix website, quote tools, and service inquiry workflows.",
+            sections=sections,
+        ),
+    )
+
+
+@require_POST
+def updates_subscribe(request):
+    email = (request.POST.get("email") or "").strip().lower()
+    redirect_target = (request.POST.get("next") or request.META.get("HTTP_REFERER") or reverse("home")).strip()
+
+    email_validator = EmailValidator()
+    try:
+        email_validator(email)
+    except ValidationError:
+        messages.error(request, "Please enter a valid email address for updates.")
+        return redirect(f"{redirect_target}#footerUpdates")
+
+    subscriber, created = UpdatesSubscriber.objects.get_or_create(
+        email=email,
+        defaults={"source": "footer", "is_active": True},
+    )
+
+    if not created and not subscriber.is_active:
+        subscriber.is_active = True
+        subscriber.save(update_fields=["is_active"])
+
+    if created:
+        messages.success(request, "You’re subscribed. Nexalix updates will be sent to your inbox.")
+    else:
+        messages.info(request, "This email is already subscribed to Nexalix updates.")
+
+    return redirect(f"{redirect_target}#footerUpdates")
 
 
 @user_passes_test(is_staff_user, login_url="/admin/login/")

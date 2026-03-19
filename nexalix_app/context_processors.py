@@ -1,9 +1,10 @@
+from django.conf import settings
 from django.core.cache import cache
 from django.urls import reverse
 from django.utils.text import slugify
 
 from .cache_utils import SEARCH_INDEX_CACHE_KEY, SEARCH_INDEX_CACHE_TTL
-from .models import BlogPost, CaseStudy, Industry, Service
+from .models import BlogPost, CaseStudy, Industry, NewsletterSignup, Service
 
 
 def _search_entry(title, description, url, category, keywords=None):
@@ -78,6 +79,59 @@ def global_site_context(_request):
 
         cache.set(SEARCH_INDEX_CACHE_KEY, search_index, SEARCH_INDEX_CACHE_TTL)
 
+    footer_context = cache.get("global_site_footer_context_v1")
+    if footer_context is None:
+        footer_industries = list(Industry.objects.filter(is_active=True).order_by("order", "name")[:6])
+        footer_newsletter = NewsletterSignup.objects.filter(is_active=True).first()
+        configured_socials = [
+            ("LinkedIn", "fab fa-linkedin-in", getattr(settings, "FOOTER_LINKEDIN_URL", "").strip()),
+            ("Facebook", "fab fa-facebook-f", getattr(settings, "FOOTER_FACEBOOK_URL", "").strip()),
+            ("Instagram", "fab fa-instagram", getattr(settings, "FOOTER_INSTAGRAM_URL", "").strip()),
+            ("X", "fab fa-x-twitter", getattr(settings, "FOOTER_X_URL", "").strip()),
+        ]
+        footer_social_links = [
+            {"label": label, "icon": icon, "url": url}
+            for label, icon, url in configured_socials
+            if url
+        ]
+        footer_context = {
+            "footer_industries": footer_industries,
+            "footer_newsletter": footer_newsletter,
+            "footer_positioning": getattr(
+                settings,
+                "FOOTER_POSITIONING",
+                "Consulting-led software, AI, data, and automation delivery for businesses scaling operations.",
+            ),
+            "footer_contact_email": getattr(settings, "CONTACT_EMAIL", "").strip() or getattr(settings, "CONTACT_NOTIFICATION_EMAIL", "").strip(),
+            "footer_contact_phone": getattr(settings, "CONTACT_PHONE", "+254768774232").strip(),
+            "footer_contact_phone_display": getattr(settings, "CONTACT_PHONE_DISPLAY", "+254 768 774 232").strip(),
+            "footer_contact_location": getattr(settings, "CONTACT_LOCATION", "Kenya").strip(),
+            "footer_whatsapp_url": getattr(settings, "CHATBOT_WHATSAPP_URL", "https://wa.me/254768774232").strip(),
+            "footer_service_regions": getattr(
+                settings,
+                "FOOTER_SERVICE_REGIONS",
+                "Kenya, East Africa, and remote global delivery",
+            ).strip(),
+            "footer_response_promise": getattr(
+                settings,
+                "FOOTER_RESPONSE_PROMISE",
+                "Response within 24 hours",
+            ).strip(),
+            "footer_support_hours": getattr(
+                settings,
+                "FOOTER_SUPPORT_HOURS",
+                "Business hours (EAT) with project-based support coverage",
+            ).strip(),
+            "footer_legal_name": getattr(
+                settings,
+                "COMPANY_LEGAL_NAME",
+                "Nexalix Technologies Ltd.",
+            ).strip(),
+            "footer_social_links": footer_social_links,
+        }
+        cache.set("global_site_footer_context_v1", footer_context, 300)
+
     return {
         "global_search_index": search_index,
+        **footer_context,
     }

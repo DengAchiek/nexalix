@@ -1,5 +1,8 @@
 # admin.py
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.admin.sites import NotRegistered
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils.html import format_html
@@ -10,6 +13,8 @@ from .models import (
     Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
     QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead
 )
+
+User = get_user_model()
 
 # ========== EXISTING MODELS (NON-SERVICE) ==========
 @admin.register(HeroSection)
@@ -370,3 +375,34 @@ class ChatbotLeadAdmin(admin.ModelAdmin):
     list_filter = ("lead_status", "is_escalated", "escalation_channel", "created_at")
     search_fields = ("full_name", "email", "phone", "company", "project_needs", "interested_services")
     readonly_fields = ("session_key", "created_at", "updated_at")
+
+
+@admin.action(description="Approve staff access for selected users")
+def approve_staff_access(modeladmin, request, queryset):
+    updated = queryset.exclude(is_staff=True).update(is_staff=True)
+    modeladmin.message_user(request, f"Granted staff access to {updated} user(s).")
+
+
+@admin.action(description="Remove staff access for selected users")
+def remove_staff_access(modeladmin, request, queryset):
+    updated = queryset.filter(is_staff=True, is_superuser=False).update(is_staff=False)
+    modeladmin.message_user(
+        request,
+        f"Removed staff access from {updated} user(s). Superusers were left unchanged.",
+    )
+
+
+class NexalixUserAdmin(BaseUserAdmin):
+    list_display = ("username", "email", "first_name", "last_name", "is_staff", "is_superuser", "date_joined")
+    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+    search_fields = ("username", "first_name", "last_name", "email")
+    ordering = ("-date_joined",)
+    actions = [approve_staff_access, remove_staff_access]
+
+
+try:
+    admin.site.unregister(User)
+except NotRegistered:
+    pass
+
+admin.site.register(User, NexalixUserAdmin)

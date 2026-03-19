@@ -23,6 +23,8 @@ from django.conf.urls.static import static
 from nexalix_app import views as app_views
 
 urlpatterns = [
+    path("robots.txt", app_views.robots_txt, name="robots_txt"),
+    path("sitemap.xml", app_views.sitemap_xml, name="sitemap_xml"),
     path("admin/create-account/", app_views.admin_account_request, name="admin_account_request"),
     path(
         "admin/password_reset/",

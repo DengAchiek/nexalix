@@ -7,39 +7,56 @@
 {% block content %}
 <section class="services-hero-modern">
     <div class="container services-hero-inner">
-        <p class="section-eyebrow">Nexalix Services</p>
-        <h1>Digital Consulting and Engineering Services</h1>
-        <p>From strategy to delivery, we design and implement scalable technology solutions tailored to your business goals.</p>
+        <p class="section-eyebrow">Nexalix Solutions</p>
+        <h1>Business solutions built through software, AI, data, and consulting-led delivery</h1>
+        <p>We help fast-growing teams replace manual processes, launch better digital systems, and execute transformation roadmaps with practical engineering support from planning through rollout.</p>
         <div class="hero-actions">
-            <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
-            <a href="#servicesCatalog" class="btn btn-outline-primary">View Service Catalog</a>
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="#solutionClusters" class="btn btn-outline-primary">Explore Services</a>
         </div>
+        <p class="hero-action-note">Structured scoping, consulting-led planning, and practical execution from one delivery partner.</p>
     </div>
 </section>
 
-<section class="page-block section-soft" id="servicesCatalog">
+<section class="page-block section-soft" id="solutionClusters">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Our Core Model</p>
-            <h2>Design. Code. Support.</h2>
-            <p class="section-subtitle">A consulting-led execution model inspired by high-performing product engineering teams.</p>
+            <p class="section-eyebrow">Solution Clusters</p>
+            <h2>Services packaged around business outcomes</h2>
+            <p class="section-subtitle">Each cluster is designed around the problem a buyer needs solved, the deliverables we ship, and the kind of team it supports.</p>
         </div>
-        <div class="pillars-grid">
-            <article class="pillar-card">
-                <div class="pillar-icon"><i class="fas fa-compass-drafting"></i></div>
-                <h3>Design</h3>
-                <p>We decompose large objectives into clear modules and delivery milestones to reduce rework and risk.</p>
+        <div class="solution-clusters-grid">
+            {% for cluster in service_solution_clusters %}
+            <article class="solution-cluster-card">
+                <div class="solution-cluster-top">
+                    <div class="solution-cluster-icon"><i class="{{ cluster.icon }}"></i></div>
+                    <div>
+                        <h3>{{ cluster.title }}</h3>
+                        <p>{{ cluster.value_statement }}</p>
+                    </div>
+                </div>
+                <div class="solution-cluster-copy">
+                    <div>
+                        <span>Business problem solved</span>
+                        <p>{{ cluster.business_problem }}</p>
+                    </div>
+                    <div>
+                        <span>Who it is for</span>
+                        <p>{{ cluster.who_for }}</p>
+                    </div>
+                </div>
+                <div class="solution-cluster-list">
+                    {% for deliverable in cluster.deliverables %}
+                    <span>{{ deliverable }}</span>
+                    {% endfor %}
+                </div>
+                <div class="solution-cluster-actions">
+                    <a href="{{ cluster.cta_primary_url }}" class="btn btn-primary">Get Proposal</a>
+                    <a href="{{ cluster.cta_secondary_url }}" class="btn btn-outline-primary">Book Consultation</a>
+                    <a href="{% url 'solution_landing' cluster.landing_slug %}" class="home-service-link">View Solution Page <i class="fas fa-arrow-right"></i></a>
+                </div>
             </article>
-            <article class="pillar-card">
-                <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
-                <h3>Code</h3>
-                <p>We convert validated designs into high-quality applications with clean architecture and robust QA.</p>
-            </article>
-            <article class="pillar-card">
-                <div class="pillar-icon"><i class="fas fa-headset"></i></div>
-                <h3>Support</h3>
-                <p>We support your deployment and scale journey with optimization, monitoring, and iterative improvements.</p>
-            </article>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -47,57 +64,166 @@
 <section class="page-block">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Service Categories</p>
-            <h2>Comprehensive Offerings</h2>
+            <p class="section-eyebrow">Focused Landing Pages</p>
+            <h2>Dedicated solution pages for buyers and search visibility</h2>
+            <p class="section-subtitle">These focused pages are designed for teams evaluating a specific service area and looking for a clear starting point.</p>
+        </div>
+        <div class="solution-clusters-grid">
+            {% for page in solution_pages %}
+            <article class="solution-cluster-card">
+                <div class="solution-cluster-top">
+                    <div class="solution-cluster-icon"><i class="fas fa-arrow-up-right-dots"></i></div>
+                    <div>
+                        <h3>{{ page.nav_title }}</h3>
+                        <p>{{ page.subheadline|truncatechars:120 }}</p>
+                    </div>
+                </div>
+                <div class="solution-cluster-list">
+                    {% for deliverable in page.deliverables %}
+                    <span>{{ deliverable }}</span>
+                    {% endfor %}
+                </div>
+                <div class="solution-cluster-actions">
+                    <a href="{% url 'solution_landing' page.slug %}" class="btn btn-outline-primary">View Solutions</a>
+                    <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Our Delivery Model</p>
+            <h2>Design. Build. Support.</h2>
+            <p class="section-subtitle">Three linked stages that reduce risk, improve delivery visibility, and keep implementation aligned to business priorities.</p>
+        </div>
+        <div class="pillars-grid">
+            <article class="pillar-card">
+                <div class="pillar-icon"><i class="fas fa-compass-drafting"></i></div>
+                <h3>Design</h3>
+                <p>Clarify the business case, scope, architecture, and delivery priorities before engineering begins.</p>
+            </article>
+            <article class="pillar-card">
+                <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Build</h3>
+                <p>Ship the software, automation, or analytics layer with disciplined testing, security, and sprint visibility.</p>
+            </article>
+            <article class="pillar-card">
+                <div class="pillar-icon"><i class="fas fa-headset"></i></div>
+                <h3>Support</h3>
+                <p>Launch with confidence, monitor performance, and continue improving the solution after go-live.</p>
+            </article>
+        </div>
+        <div class="pillars-risk-line">
+            <i class="fas fa-shield-check"></i>
+            <p>Discovery reduces rework, structured build reduces delivery risk, and post-launch support protects operational continuity.</p>
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Service Catalog</p>
+            <h2>Solution-led service breakdown</h2>
+            <p class="section-subtitle">Use the filters to focus on the service cluster most relevant to your current business need.</p>
         </div>
 
         <div class="service-category-filter" id="serviceCategoryFilter">
-            <button class="btn btn-outline-primary active" type="button" data-category="all">All</button>
-            {% for category, category_services in services_by_category.items %}
-            <button class="btn btn-outline-primary" type="button" data-category="{{ category|slugify }}">{{ category }}</button>
+            <button class="btn btn-outline-primary active" type="button" data-category="all">All Solutions</button>
+            {% for cluster in service_solution_clusters %}
+            <button class="btn btn-outline-primary" type="button" data-category="{{ cluster.slug }}">{{ cluster.title }}</button>
             {% endfor %}
         </div>
 
         <div class="service-sections-wrap" id="serviceSectionsWrap">
-            {% for category, category_services in services_by_category.items %}
-            <section class="service-category-block" data-category="{{ category|slugify }}">
-                <h3 class="category-title-modern">{{ category }}</h3>
+            {% for cluster in service_solution_clusters %}
+            <section class="service-category-block" data-category="{{ cluster.slug }}">
+                <div class="service-cluster-header">
+                    <div>
+                        <div class="service-cluster-kicker">
+                            <i class="{{ cluster.icon }}"></i>
+                            <span>{{ cluster.title }}</span>
+                        </div>
+                        <h3 class="category-title-modern">{{ cluster.value_statement }}</h3>
+                    </div>
+                    <div class="service-cluster-cta">
+                        <a href="{{ cluster.cta_primary_url }}" class="btn btn-primary">Request Proposal</a>
+                        <a href="{{ cluster.cta_secondary_url }}" class="btn btn-outline-primary">Book Discovery Call</a>
+                    </div>
+                </div>
+
+                <div class="service-cluster-summary-grid">
+                    <article class="service-summary-card">
+                        <span>Business problem solved</span>
+                        <p>{{ cluster.business_problem }}</p>
+                    </article>
+                    <article class="service-summary-card">
+                        <span>Key deliverables</span>
+                        <ul>
+                            {% for deliverable in cluster.deliverables %}
+                            <li>{{ deliverable }}</li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                    <article class="service-summary-card">
+                        <span>Who it is for</span>
+                        <p>{{ cluster.who_for }}</p>
+                    </article>
+                </div>
+
                 <div class="services-grid">
-                    {% for service in category_services %}
-                    <article class="service-card" data-service-name="{{ service.title|lower }}">
+                    {% for service in cluster.services %}
+                    <article class="service-card solution-service-card" data-service-name="{{ service.title|lower }}">
                         <div class="service-card-inner">
-                            {% if service.featured_image %}
-                            <div class="service-image">
-                                <img src="{{ service.featured_image.url|optimized_media:'card' }}" alt="{{ service.title }}" loading="lazy" decoding="async">
-                            </div>
-                            {% endif %}
-
                             <div class="service-content">
-                                {% if service.icon %}
-                                <div class="service-icon"><i class="{{ service.icon }}"></i></div>
-                                {% endif %}
+                                <div class="solution-service-top">
+                                    <div class="service-icon"><i class="{{ service.icon }}"></i></div>
+                                    <div class="solution-service-meta">
+                                        <span>{{ service.delivery_tier }}</span>
+                                        <strong>~{{ service.delivery_weeks }} weeks</strong>
+                                    </div>
+                                </div>
                                 <h4 class="service-title">{{ service.title }}</h4>
-                                <p class="service-description">{{ service.short_description }}</p>
+                                <p class="service-description">{{ service.value_statement }}</p>
 
-                                {% if service.get_key_features_list %}
-                                <ul class="service-features">
-                                    {% for feature in service.get_key_features_list %}
-                                    <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                                <ul class="service-outcome-list">
+                                    {% for outcome in service.outcomes %}
+                                    <li>{{ outcome }}</li>
                                     {% endfor %}
                                 </ul>
-                                {% endif %}
 
-                                {% if service.get_technologies_list %}
+                                {% if service.technologies %}
                                 <div class="service-technologies">
-                                    {% for tech in service.get_technologies_list %}
+                                    {% for tech in service.technologies %}
                                     <span class="tech-tag">{{ tech }}</span>
                                     {% endfor %}
                                 </div>
                                 {% endif %}
 
                                 <div class="service-actions">
-                                    <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary">Learn More</a>
-                                    <a href="{% url 'contact' %}" class="btn btn-outline-primary">Get Quote</a>
+                                    <a href="{{ service.detail_url }}" class="btn btn-outline-primary">View Service Detail</a>
+                                    <a href="{% url 'quote_generator' %}?service={{ service.object.slug }}" class="btn btn-primary">Request Proposal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <article class="service-card solution-service-card solution-service-card-empty">
+                        <div class="service-card-inner">
+                            <div class="service-content">
+                                <h4 class="service-title">{{ cluster.title }} delivery track</h4>
+                                <p class="service-description">This cluster is ready for service records in Django admin. Until then, use the consultation CTA to scope the right engagement.</p>
+                                <ul class="service-outcome-list">
+                                    {% for deliverable in cluster.deliverables %}
+                                    <li>{{ deliverable }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="service-actions">
+                                    <a href="{{ cluster.cta_secondary_url }}" class="btn btn-outline-primary">Book Discovery Call</a>
                                 </div>
                             </div>
                         </div>
@@ -110,48 +236,40 @@
     </div>
 </section>
 
-<section class="page-block section-soft">
-    <div class="container">
-        <div class="section-heading">
-            <p class="section-eyebrow">Why Choose Nexalix</p>
-            <h2>We Bring Experience and Execution Excellence</h2>
-        </div>
-        <div class="stats-ribbon">
-            <div class="stat-chip"><h3 data-count="15" data-suffix="+">0</h3><p>Years Experience</p></div>
-            <div class="stat-chip"><h3 data-count="100" data-suffix="+">0</h3><p>Projects</p></div>
-            <div class="stat-chip"><h3 data-count="8" data-suffix="+">0</h3><p>Industries</p></div>
-            <div class="stat-chip"><h3 data-count="24" data-suffix="/7">0</h3><p>Support</p></div>
-        </div>
-        <div class="benefits-grid">
-            <div class="benefit-item"><i class="fas fa-check-circle"></i> Quality commitment with measurable outcomes</div>
-            <div class="benefit-item"><i class="fas fa-check-circle"></i> Industry specific implementation strategy</div>
-            <div class="benefit-item"><i class="fas fa-check-circle"></i> Robust and secure applications</div>
-            <div class="benefit-item"><i class="fas fa-check-circle"></i> On-time milestone delivery</div>
-            <div class="benefit-item"><i class="fas fa-check-circle"></i> Cost-effective delivery model</div>
-            <div class="benefit-item"><i class="fas fa-check-circle"></i> Professional and responsive team</div>
-        </div>
-    </div>
-</section>
-
 <section class="page-block">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Knowledge Base</p>
-            <h2>Technology Coverage</h2>
+            <p class="section-eyebrow">Capability Proof</p>
+            <h2>Technology stack aligned to active delivery</h2>
+            <p class="section-subtitle">We organize the stack by the role it plays in a solution, not as a generic list of tools.</p>
         </div>
-        <div class="tech-cloud">
-            <span class="tech-cloud-item">Python</span>
-            <span class="tech-cloud-item">Django</span>
-            <span class="tech-cloud-item">JavaScript</span>
-            <span class="tech-cloud-item">React</span>
-            <span class="tech-cloud-item">Node.js</span>
-            <span class="tech-cloud-item">AWS</span>
-            <span class="tech-cloud-item">Azure</span>
-            <span class="tech-cloud-item">Docker</span>
-            <span class="tech-cloud-item">Kubernetes</span>
-            <span class="tech-cloud-item">PostgreSQL</span>
-            <span class="tech-cloud-item">Flutter</span>
-            <span class="tech-cloud-item">TensorFlow</span>
+        <div class="technology-capability-grid">
+            {% for group in technology_capability_groups %}
+            <article class="technology-capability-card">
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="{{ group.icon }}"></i></div>
+                    <div>
+                        <h3>{{ group.title }}</h3>
+                        <p>{{ group.description }}</p>
+                    </div>
+                </div>
+                <div class="technology-capability-tags">
+                    {% for tech in group.technologies %}
+                    <span class="technology-chip{% if tech in group.primary_technologies %} primary{% endif %}">{{ tech.name }}</span>
+                    {% endfor %}
+                </div>
+            </article>
+            {% empty %}
+            <article class="technology-capability-card">
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="fas fa-layer-group"></i></div>
+                    <div>
+                        <h3>Active delivery stack</h3>
+                        <p>Technology capability cards appear here when active technologies are configured in Django admin.</p>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -160,13 +278,23 @@
     <div class="container">
         <div class="section-heading">
             <p class="section-eyebrow">Our Process</p>
-            <h2>Step Ahead With Best Practices</h2>
+            <h2>From discovery to launch with clear outputs at every step</h2>
+            <p class="section-subtitle">Each phase produces a concrete artifact so teams know what is being delivered and what comes next.</p>
         </div>
-        <div class="process-flow">
-            <article class="process-node"><span class="process-index">01</span><h3>Requirement Gathering</h3><p>Align business goals, scope, and critical constraints.</p></article>
-            <article class="process-node"><span class="process-index">02</span><h3>Research & Analysis</h3><p>Assess technology options and execution approach.</p></article>
-            <article class="process-node"><span class="process-index">03</span><h3>Design & Development</h3><p>Build in modular phases with quality checkpoints.</p></article>
-            <article class="process-node"><span class="process-index">04</span><h3>QA & Delivery</h3><p>Validate, deploy, and support production operations.</p></article>
+        <div class="process-flow process-flow-journey">
+            {% for step in process_journey %}
+            <article class="process-node process-journey-card">
+                <span class="process-index">{{ step.number }}</span>
+                <div class="process-journey-icon"><i class="{{ step.icon }}"></i></div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+                <ul class="process-output-list">
+                    {% for output in step.outputs %}
+                    <li>{{ output }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -174,9 +302,9 @@
 <section class="pricing-section page-block">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Pricing</p>
-            <h2>Flexible Pricing Plans</h2>
-            <p class="section-description">Choose the engagement model that best fits your needs.</p>
+            <p class="section-eyebrow">Engagement Options</p>
+            <h2>Flexible ways to start and scale delivery</h2>
+            <p class="section-description">Choose a delivery model that fits your stage, scope, and internal capacity.</p>
         </div>
 
         <div class="pricing-plans-grid">
@@ -198,25 +326,32 @@
                     </ul>
                 </div>
                 <div class="plan-footer">
-                    <a href="{% url 'contact' %}?plan={{ plan.name|slugify }}" class="btn {% if plan.is_popular %}btn-primary{% else %}btn-outline-primary{% endif %} w-100">Get Started</a>
+                    <a href="{% url 'quote_generator' %}?plan={{ plan.name|slugify }}" class="btn {% if plan.is_popular %}btn-primary{% else %}btn-outline-primary{% endif %} w-100">Start Your Project Brief</a>
                 </div>
             </article>
             {% empty %}
             <div class="no-plans text-center py-5">
-                <h4>Custom Pricing Available</h4>
-                <p>Contact us for a proposal tailored to your requirements.</p>
-                <a href="{% url 'contact' %}" class="btn btn-primary">Request Quote</a>
+                <h4>Custom pricing available</h4>
+                <p>Tell us what you are solving and we will scope the right delivery model.</p>
+                <a href="{% url 'quote_generator' %}" class="btn btn-primary">Start Your Project Brief</a>
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
-<section class="home-cta-final">
+<section class="home-cta-final services-cta-final">
     <div class="container">
-        <h2>Need a Custom Service Mix?</h2>
-        <p>We can combine consulting, design, development, and support into a plan aligned to your delivery timeline and budget.</p>
-        <a href="{% url 'contact' %}" class="btn btn-primary">Discuss Your Project</a>
+        <h2>Need a solution mix across software, AI, data, and consulting?</h2>
+        <p>We can shape a phased engagement around your budget, internal team, timeline, and implementation priorities.</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="{% url 'contact' %}" class="btn btn-outline-primary">Book Consultation</a>
+        </div>
+        <div class="cta-tertiary-links">
+            <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="{% url 'contact' %}">Contact Team</a>
+        </div>
     </div>
 </section>
 {% endblock %}

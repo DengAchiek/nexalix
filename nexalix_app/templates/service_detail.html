@@ -1,56 +1,154 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}{{ meta_title|default:page_title|default:'Service - Nexalix Technologies' }}{% endblock %}
 
 {% block content %}
 <section class="page-block">
     <div class="container">
-        <div class="about-section">
-            <h1>{{ service.title }}</h1>
-            <p class="subheading">{{ service.short_description }}</p>
-            <p>{{ service.full_description }}</p>
+        <div class="service-detail-hero">
+            <div class="service-detail-main">
+                <p class="section-eyebrow">{{ service_cluster.title }}</p>
+                <h1>{{ service.title }}</h1>
+                <p class="service-detail-subheading">{{ service.short_description }}</p>
+                <p class="service-detail-copy">{{ service.full_description }}</p>
+                <div class="hero-actions">
+                    <a href="{% url 'quote_generator' %}?service={{ service.slug }}" class="btn btn-primary">Request Proposal</a>
+                    <a href="{% url 'contact' %}?service={{ service.slug }}" class="btn btn-outline-primary">Book Discovery Call</a>
+                </div>
+                <div class="cta-tertiary-links">
+                    <a href="{% url 'services' %}">Back to Services</a>
+                    <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+                </div>
+            </div>
+            <aside class="service-detail-sidecard">
+                <span class="service-detail-pill">{{ service_story.delivery_tier|default:"Delivery Engagement" }}</span>
+                <div class="service-detail-stat">
+                    <strong>~{{ service.quote_delivery_weeks }} weeks</strong>
+                    <span>Typical delivery window</span>
+                </div>
+                <div class="service-detail-stat">
+                    <strong>{{ service_cluster.title }}</strong>
+                    <span>Solution cluster</span>
+                </div>
+                <div class="service-detail-stat">
+                    <strong>{{ service_cluster.who_for }}</strong>
+                    <span>Best fit</span>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
 
-            {% if features %}
-            <h2>Key Features</h2>
-            <ul class="service-features">
-                {% for feature in features %}
-                <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Service Outcomes</p>
+            <h2>What this engagement is designed to deliver</h2>
+        </div>
+        <div class="service-detail-grid">
+            <article class="service-detail-card">
+                <span>Business problem solved</span>
+                <p>{{ service_cluster.business_problem }}</p>
+            </article>
+            <article class="service-detail-card">
+                <span>Who it is for</span>
+                <p>{{ service_cluster.who_for }}</p>
+            </article>
+            <article class="service-detail-card">
+                <span>Key deliverables</span>
+                <ul class="service-features">
+                    {% for deliverable in service_cluster.deliverables %}
+                    <li><i class="fas fa-check-circle"></i> {{ deliverable }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="service-detail-columns">
+            <article class="service-detail-panel">
+                <h2>Outcome bullets</h2>
+                <ul class="service-features">
+                    {% for feature in features %}
+                    <li><i class="fas fa-check-circle"></i> {{ feature }}</li>
+                    {% empty %}
+                    {% for outcome in service_story.outcomes %}
+                    <li><i class="fas fa-check-circle"></i> {{ outcome }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                </ul>
+            </article>
 
             {% if technologies %}
-            <h2>Technologies</h2>
-            <div class="tech-tags" style="margin-bottom: 20px;">
-                {% for tech in technologies %}
-                <span class="tech-tag">{{ tech }}</span>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            {% if pricing_plans %}
-            <h2>Pricing Options</h2>
-            <div class="pricing-plans-grid">
-                {% for plan in pricing_plans %}
-                <div class="pricing-plan-card {% if plan.is_popular %}popular-plan{% endif %}">
-                    {% if plan.is_popular %}<span class="popular-badge">Most Popular</span>{% endif %}
-                    <h3>{{ plan.name }}</h3>
-                    <p><strong>${{ plan.price }}</strong> / {{ plan.period }}</p>
-                    <ul class="features-list">
-                        {% for feature in plan.get_features_list %}
-                        <li><i class="fas fa-check"></i> {{ feature }}</li>
-                        {% endfor %}
-                    </ul>
+            <article class="service-detail-panel">
+                <h2>Active delivery technologies</h2>
+                <div class="service-technologies service-detail-tech">
+                    {% for tech in technologies %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
+            </article>
             {% endif %}
+        </div>
+    </div>
+</section>
 
-            <div style="margin-top: 24px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="{% url 'contact' %}" class="btn btn-primary">Request Proposal</a>
-                <a href="{% url 'services' %}" class="btn btn-outline-primary">Back to Services</a>
+{% if service_faqs %}
+<section class="page-block section-soft deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">FAQs</p>
+            <h2>Common questions about this service</h2>
+        </div>
+        <div class="faq-grid">
+            {% for item in service_faqs %}
+            <article class="service-detail-card">
+                <span>FAQ {{ forloop.counter }}</span>
+                <h3>{{ item.question }}</h3>
+                <p>{{ item.answer }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if pricing_plans %}
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Engagement Options</p>
+            <h2>Start with the model that fits your scope</h2>
+        </div>
+        <div class="pricing-plans-grid">
+            {% for plan in pricing_plans %}
+            <div class="pricing-plan-card {% if plan.is_popular %}popular-plan{% endif %}">
+                {% if plan.is_popular %}<span class="popular-badge">Most Popular</span>{% endif %}
+                <h3>{{ plan.name }}</h3>
+                <p><strong>${{ plan.price }}</strong> / {{ plan.period }}</p>
+                <ul class="features-list">
+                    {% for feature in plan.get_features_list %}
+                    <li><i class="fas fa-check"></i> {{ feature }}</li>
+                    {% endfor %}
+                </ul>
             </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="home-cta-final service-detail-cta">
+    <div class="container">
+        <h2>Need this solution adapted to your exact workflow?</h2>
+        <p>We can scope a discovery call, estimate the delivery track, and recommend the fastest practical way to get this solution live.</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}?service={{ service.slug }}" class="btn btn-primary">Request Proposal</a>
+            <a href="{% url 'contact' %}?service={{ service.slug }}" class="btn btn-outline-primary">Book Discovery Call</a>
         </div>
     </div>
 </section>

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ meta_title|default:'Auto Quote Generator - Nexalix Technologies' }}{% endblock %}
+{% block title %}{{ meta_title|default:'Start Your Project Brief - Nexalix Technologies' }}{% endblock %}
 
 {% block content %}
 <section class="quote-page page-block">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Auto Quote Generator</p>
-            <h1>Get an Instant Project Estimate</h1>
-            <p class="subheading">Configure your requirements and receive a real-time estimate range. Submit the quote request to lock a consultation follow-up.</p>
+            <p class="section-eyebrow">Project Brief</p>
+            <h1>Start your project brief with a guided estimate</h1>
+            <p class="subheading">Answer a few structured questions about scope, complexity, timeline, and support so Nexalix can prepare the right proposal and consultation follow-up.</p>
         </div>
 
         <div class="quote-layout">
@@ -131,7 +131,7 @@
                     <label for="project_summary">Project Summary *</label>
                     <textarea id="project_summary" name="project_summary" rows="5" placeholder="Describe key goals, platforms, integrations, and expected outcomes" required>{{ form_data.project_summary }}</textarea>
 
-                    <button type="submit">Generate and Submit Quote</button>
+                    <button type="submit">Start Your Project Brief</button>
                 </form>
             </div>
 

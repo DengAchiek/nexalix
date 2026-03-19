@@ -228,12 +228,12 @@
         </div>
 
         <div class="projects-completed-grid">
-            {% for project in featured_case_studies %}
+            {% for project in featured_case_study_cards %}
             <article class="project-completed-card">
                 <div class="project-completed-media">
-                    {% if project.image %}
+                    {% if project.case_study.image %}
                     <img
-                        src="{{ project.image.url|optimized_media:'card' }}"
+                        src="{{ project.case_study.image.url|optimized_media:'card' }}"
                         alt="{{ project.title }}"
                         loading="lazy"
                         onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
@@ -244,27 +244,24 @@
                 </div>
                 <div class="project-completed-content">
                     <div class="project-proof-top">
-                        <span class="project-proof-type">{{ project.get_proof_type_display }}</span>
-                        {% if project.industry %}<span class="project-proof-industry">{{ project.industry }}</span>{% endif %}
+                        <span class="project-proof-type">{{ project.case_study.get_proof_type_display }}</span>
+                        {% if project.case_study.industry %}<span class="project-proof-industry">{{ project.case_study.industry }}</span>{% endif %}
                     </div>
-                    <h3>{% if project.client_name %}{{ project.client_name }}{% else %}{{ project.title }}{% endif %}</h3>
-                    <p>{{ project.challenge|default:project.description|truncatechars:150 }}</p>
-                    {% if project.results %}
-                    <div class="case-results"><i class="fas fa-chart-line"></i> {{ project.results|truncatechars:120 }}</div>
+                    <h3>{{ project.title }}</h3>
+                    <p class="project-summary-text">{{ project.brief_description }}</p>
+                    {% if project.summary_text %}
+                    <p class="case-solution-line"><strong>{{ project.summary_label }}:</strong> {{ project.summary_text }}</p>
                     {% endif %}
-                    {% if project.get_tags_list %}
+                    {% if project.case_study.get_tags_list %}
                     <div class="project-tags">
-                        {% for tag in project.get_tags_list|slice:":3" %}
+                        {% for tag in project.case_study.get_tags_list|slice:":3" %}
                         <span class="project-tag">{{ tag }}</span>
                         {% endfor %}
                     </div>
                     {% endif %}
                     <div class="project-proof-actions">
-                        <a href="{% url 'case_study_detail' project.title|slugify %}" class="project-link-btn">
-                            View Project <i class="fas fa-arrow-right"></i>
-                        </a>
-                        <a href="{% url 'quote_generator' %}" class="project-link-btn secondary-link">
-                            Get Similar Solution
+                        <a href="{{ project.detail_url }}" class="project-link-btn">
+                            Learn More <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -276,8 +273,7 @@
                     <h3>Solution showcase space</h3>
                     <p>Publish real case studies, internal prototypes, or clearly labelled solution examples here to build buyer confidence with visible proof.</p>
                     <div class="project-proof-actions">
-                        <a href="{% url 'case_studies' %}" class="project-link-btn">View Delivery Stories</a>
-                        <a href="{% url 'quote_generator' %}" class="project-link-btn secondary-link">Get Similar Solution</a>
+                        <a href="{% url 'case_studies' %}" class="project-link-btn">Learn More</a>
                     </div>
                 </div>
             </article>

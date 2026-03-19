@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ meta_title|default:solution_page.nav_title|default:'Solution - Nexalix Technologies' }}{% endblock %}
+
+{% block content %}
+<section class="services-hero-modern solution-hero">
+    <div class="container services-hero-inner">
+        <p class="section-eyebrow">Focused Solution</p>
+        <h1>{{ solution_page.headline }}</h1>
+        <p>{{ solution_page.subheadline }}</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="{% url 'contact' %}?solution={{ solution_slug }}" class="btn btn-outline-primary">Book Consultation</a>
+        </div>
+        <div class="cta-tertiary-links">
+            <a href="{% url 'services' %}">Explore Services</a>
+            <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-block deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Problems We Solve</p>
+            <h2>Business challenges this solution is designed to address</h2>
+        </div>
+        <div class="service-detail-grid">
+            {% for problem in solution_page.problems %}
+            <article class="service-detail-card">
+                <span>Challenge {{ forloop.counter }}</span>
+                <p>{{ problem }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Deliverables</p>
+            <h2>What a typical Nexalix engagement can include</h2>
+        </div>
+        <div class="solution-clusters-grid">
+            {% for deliverable in solution_page.deliverables %}
+            <article class="solution-cluster-card">
+                <div class="solution-cluster-top">
+                    <div class="solution-cluster-icon"><i class="fas fa-check"></i></div>
+                    <div>
+                        <h3>{{ deliverable }}</h3>
+                        <p>Structured around practical rollout and measurable operational value.</p>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Delivery Process</p>
+            <h2>How Nexalix takes this solution from idea to rollout</h2>
+        </div>
+        <div class="process-flow process-flow-journey">
+            {% for step in solution_process %}
+            <article class="process-node process-journey-card">
+                <span class="process-index">{{ step.number }}</span>
+                <div class="process-journey-icon"><i class="{{ step.icon }}"></i></div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+                <ul class="process-output-list">
+                    {% for output in step.outputs %}
+                    <li>{{ output }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Technologies Used</p>
+            <h2>Stack choices that support delivery and scale</h2>
+        </div>
+        <div class="technology-capability-tags">
+            {% for tech in solution_technologies %}
+            <span class="technology-chip primary">{{ tech }}</span>
+            {% endfor %}
+        </div>
+        {% if technology_capability_groups %}
+        <div class="technology-capability-grid" style="margin-top: 18px;">
+            {% for group in technology_capability_groups %}
+            <article class="technology-capability-card">
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="{{ group.icon }}"></i></div>
+                    <div>
+                        <h3>{{ group.title }}</h3>
+                        <p>{{ group.description }}</p>
+                    </div>
+                </div>
+                <div class="technology-capability-tags">
+                    {% for tech in group.technologies %}
+                    <span class="technology-chip{% if tech in group.primary_technologies %} primary{% endif %}">{{ tech.name }}</span>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="page-block deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Frequently Asked Questions</p>
+            <h2>Questions teams typically ask before starting</h2>
+        </div>
+        <div class="faq-grid">
+            {% for item in solution_faqs %}
+            <article class="service-detail-card">
+                <span>FAQ {{ forloop.counter }}</span>
+                <h3>{{ item.question }}</h3>
+                <p>{{ item.answer }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft deferred-section">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Related Proof</p>
+            <h2>Case studies and solution showcases connected to this page</h2>
+        </div>
+        <div class="case-grid">
+            {% for case in related_case_studies %}
+            <article class="case-card">
+                <div class="case-content compact-card-content">
+                    <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
+                    <h3 class="case-title">{% if case.client_name %}{{ case.client_name }}{% else %}{{ case.title }}{% endif %}</h3>
+                    <p class="case-description">{{ case.description|default:case.challenge|truncatechars:130 }}</p>
+                    {% if case.results %}
+                    <div class="case-results"><i class="fas fa-chart-line"></i><span>{{ case.results|truncatechars:108 }}</span></div>
+                    {% elif case.solution %}
+                    <p class="case-solution-line"><strong>Solution:</strong> {{ case.solution|truncatechars:108 }}</p>
+                    {% endif %}
+                    <div class="project-proof-actions">
+                        <a href="{% url 'case_study_detail' case.title|slugify %}" class="project-link-btn">Learn More</a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <article class="case-card">
+                <div class="case-content compact-card-content">
+                    <span class="project-proof-type">Solution Example</span>
+                    <h3>Related proof will appear here</h3>
+                    <p>Published case studies, internal prototypes, and sample implementations connected to this solution appear here as they are added.</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="home-cta-final service-detail-cta deferred-section">
+    <div class="container">
+        <h2>Ready to move this solution into planning?</h2>
+        <p>Share your business context, delivery constraints, and priorities so Nexalix can recommend the right implementation approach.</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="{% url 'contact' %}?solution={{ solution_slug }}" class="btn btn-outline-primary">Book Consultation</a>
+        </div>
+        <div class="cta-tertiary-links">
+            <a href="{% url 'services' %}">Explore Services</a>
+            <a href="{% url 'contact' %}">Contact Team</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

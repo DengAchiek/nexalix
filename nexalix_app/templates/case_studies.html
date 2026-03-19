@@ -4,10 +4,88 @@
 {% block title %}{{ meta_title|default:page_title|default:'Case Studies - Nexalix Technologies' }}{% endblock %}
 
 {% block content %}
+<section class="services-hero-modern case-studies-hero">
+    <div class="container services-hero-inner">
+        <p class="section-eyebrow">Case Studies</p>
+        <h1>Delivery stories that show how Nexalix solves business problems</h1>
+        <p>Explore published case studies, sample implementations, internal prototypes, and solution examples across software, automation, analytics, and transformation work.</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="#featuredCaseStudies" class="btn btn-outline-primary">View Solutions</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft" id="featuredCaseStudies">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">Featured Proof</p>
+            <h2>Selected case studies and solution examples</h2>
+            <p class="section-subtitle">Every card below highlights the challenge, the solution delivered, and the outcome achieved or targeted.</p>
+        </div>
+
+        <div class="case-grid case-study-grid-strong">
+            {% for case in featured_cases %}
+            <article class="case-card case-study-card-strong">
+                <div class="case-image-wrapper">
+                    {% if case.image %}
+                    <img
+                        src="{{ case.image.url|optimized_media:'card' }}"
+                        alt="{{ case.title }}"
+                        class="case-image"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
+                    >
+                    {% else %}
+                    <div class="case-image-placeholder">{{ case.get_proof_type_display }}</div>
+                    {% endif %}
+                </div>
+                <div class="case-content compact-card-content">
+                    <div class="case-card-meta">
+                        <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
+                        {% if case.industry %}<span class="project-proof-industry">{{ case.industry }}</span>{% endif %}
+                    </div>
+                    <h3 class="case-title">{% if case.client_name %}{{ case.client_name }}{% else %}{{ case.title }}{% endif %}</h3>
+                    <p class="case-description">{{ case.description|default:case.challenge|truncatechars:136 }}</p>
+                    {% if case.results %}
+                    <div class="case-results"><i class="fas fa-chart-line"></i><span>{{ case.results|truncatechars:118 }}</span></div>
+                    {% elif case.solution %}
+                    <p class="case-solution-line"><strong>Solution:</strong> {{ case.solution|truncatechars:120 }}</p>
+                    {% endif %}
+                    {% if case.get_tech_stack_list %}
+                    <div class="service-technologies">
+                        {% for tech in case.get_tech_stack_list|slice:":4" %}
+                        <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="project-proof-actions">
+                        <a href="{% url 'case_study_detail' case.title|slugify %}" class="project-link-btn">Learn More</a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <article class="case-card case-study-card-strong">
+                <div class="case-content compact-card-content">
+                    <span class="project-proof-type">Solution Example</span>
+                    <h3 class="case-title">Published case studies will appear here</h3>
+                    <p class="case-description">Until real projects are published, Nexalix can use clearly labelled sample implementations and internal prototypes instead of generic filler content.</p>
+                    <div class="project-proof-actions">
+                        <a href="{% url 'contact' %}" class="project-link-btn">Book Consultation</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 <section class="page-block">
     <div class="container">
-        <h1>Case Studies</h1>
-        <p class="subheading">Examples of projects where we delivered measurable outcomes for our clients.</p>
+        <div class="section-heading">
+            <p class="section-eyebrow">All Delivery Stories</p>
+            <h2>Recent case studies, prototypes, and solution showcases</h2>
+        </div>
 
         <div class="case-grid">
             {% for case in case_studies %}
@@ -22,27 +100,31 @@
                         onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
                     >
                     {% else %}
-                    <div class="case-image-placeholder">No image uploaded</div>
+                    <div class="case-image-placeholder">{{ case.get_proof_type_display }}</div>
                     {% endif %}
                 </div>
                 <div class="case-content compact-card-content">
-                    <h3 class="case-title">{{ case.title }}</h3>
-                    <p class="case-description">{{ case.description }}</p>
-                    {% if case.results %}
-                    <div class="case-results"><i class="fas fa-chart-line"></i> {{ case.results }}</div>
-                    {% endif %}
-                    {% if case.link %}
-                    <div class="case-footer">
-                        <a href="{{ case.link }}" class="case-link" target="_blank" rel="noopener">View Project <i class="fas fa-arrow-right"></i></a>
+                    <div class="case-card-meta">
+                        <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
+                        {% if case.industry %}<span class="project-proof-industry">{{ case.industry }}</span>{% endif %}
                     </div>
+                    <h3 class="case-title">{% if case.client_name %}{{ case.client_name }}{% else %}{{ case.title }}{% endif %}</h3>
+                    <p class="case-description">{{ case.description|default:case.challenge|truncatechars:132 }}</p>
+                    {% if case.results %}
+                    <div class="case-results"><i class="fas fa-chart-line"></i><span>{{ case.results|truncatechars:110 }}</span></div>
+                    {% elif case.solution %}
+                    <p class="case-solution-line"><strong>Solution:</strong> {{ case.solution|truncatechars:110 }}</p>
                     {% endif %}
+                    <div class="project-proof-actions">
+                        <a href="{% url 'case_study_detail' case.title|slugify %}" class="project-link-btn">Learn More</a>
+                    </div>
                 </div>
             </article>
             {% empty %}
             <div class="about-section">
-                <h3>No case studies published yet</h3>
-                <p>We are currently preparing detailed project stories. Contact us for references relevant to your industry.</p>
-                <a href="{% url 'contact' %}" class="btn btn-primary">Contact Our Team</a>
+                <h3>More delivery stories will appear here</h3>
+                <p>If the current proof set is still small, the featured stories above represent the active published portfolio. Additional case studies, prototypes, and solution examples will expand this grid over time.</p>
+                <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
             </div>
             {% endfor %}
         </div>

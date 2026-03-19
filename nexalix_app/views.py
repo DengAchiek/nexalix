@@ -122,6 +122,239 @@ DEFAULT_HOME_HERO_SUBTITLE = (
     "consulting-led execution."
 )
 DEFAULT_HOME_HERO_KICKER = "For fast-growing businesses, regulated teams, and organizations modernizing operations"
+SOLUTION_PAGE_CONFIG = {
+    "software-development": {
+        "nav_title": "Software Development",
+        "headline": "Software development that replaces friction with scalable digital systems",
+        "subheadline": "We design and build web platforms, internal business systems, and customer portals that improve execution, visibility, and growth.",
+        "problems": [
+            "Manual workflows slow down delivery and increase operational risk.",
+            "Teams are relying on disconnected tools that do not match the real business process.",
+            "Existing systems cannot scale with new customers, users, or reporting needs.",
+        ],
+        "deliverables": ["Custom web platforms", "Client portals", "Internal business systems"],
+        "technologies": ["Python", "Django", "React", "PostgreSQL", "APIs"],
+        "keywords": ("software", "platform", "portal", "web", "system", "product", "application"),
+        "faqs": [
+            ("What kind of software does Nexalix build?", "Nexalix builds custom web platforms, client portals, internal systems, and digital products tailored to specific business workflows."),
+            ("How do projects usually start?", "We begin with business discovery, scope the core requirements, and then define the architecture, delivery phases, and implementation plan."),
+            ("Can you modernize an existing system?", "Yes. Nexalix can improve, extend, or re-platform existing systems while preserving critical workflows and integrations."),
+        ],
+    },
+    "ai-automation": {
+        "nav_title": "AI Automation",
+        "headline": "AI automation that helps teams respond faster and do more with less manual work",
+        "subheadline": "From chat assistants to lead handling and workflow orchestration, we implement AI and automation systems that remove bottlenecks and improve service speed.",
+        "problems": [
+            "Leads, service requests, or internal tasks are handled manually and inconsistently.",
+            "Teams spend time on repetitive coordination instead of strategic work.",
+            "Customer interactions need faster first-response and better routing.",
+        ],
+        "deliverables": ["AI chat assistants", "Workflow automation", "Lead qualification systems"],
+        "technologies": ["Python", "OpenAI", "Django", "APIs", "Automation Integrations"],
+        "keywords": ("ai", "automation", "assistant", "chatbot", "workflow", "lead", "process"),
+        "faqs": [
+            ("What AI automation services do you provide?", "We implement AI chat assistants, automated lead qualification, workflow orchestration, and process-support systems."),
+            ("Do you expose AI APIs on the frontend?", "No. Nexalix uses server-side integrations so keys and orchestration logic remain protected."),
+            ("Can AI automation connect to existing systems?", "Yes. We can integrate automation with forms, CRMs, email workflows, internal tools, and reporting systems."),
+        ],
+    },
+    "machine-learning-solutions": {
+        "nav_title": "Machine Learning Solutions",
+        "headline": "Machine learning solutions for forecasting, decision support, and smarter operations",
+        "subheadline": "We help businesses turn historical data into predictive models and decision-support tools that improve planning, prioritization, and risk visibility.",
+        "problems": [
+            "Teams have data but no predictive layer for planning or forecasting.",
+            "Decisions are being made without reliable pattern detection or trend analysis.",
+            "Operational or commercial risk is hard to quantify in advance.",
+        ],
+        "deliverables": ["Predictive models", "Recommendation systems", "Decision-support analytics"],
+        "technologies": ["Python", "TensorFlow", "Pandas", "PostgreSQL", "Dashboards"],
+        "keywords": ("machine learning", "prediction", "forecast", "model", "recommendation", "analytics"),
+        "faqs": [
+            ("When is machine learning the right fit?", "Machine learning is useful when you have historical data and want to improve forecasting, classification, recommendations, or pattern detection."),
+            ("Can Nexalix help with model deployment?", "Yes. We support the full path from use-case definition and model development to deployment and monitoring."),
+            ("Do you also build the reporting layer around ML outputs?", "Yes. We can connect predictive outputs to dashboards, alerts, and operational workflows."),
+        ],
+    },
+    "data-analytics": {
+        "nav_title": "Data Analytics",
+        "headline": "Data analytics systems that make business performance visible and actionable",
+        "subheadline": "We build dashboards, reporting systems, and data workflows that give leadership and operations teams a clearer view of performance, trends, and risk.",
+        "problems": [
+            "Reporting is fragmented across spreadsheets and siloed tools.",
+            "Decision-makers do not have timely visibility into key business metrics.",
+            "Operational performance issues are discovered too late to act quickly.",
+        ],
+        "deliverables": ["Dashboards", "Reporting systems", "BI implementation"],
+        "technologies": ["Python", "SQL", "PostgreSQL", "BI Dashboards", "APIs"],
+        "keywords": ("data", "analytics", "dashboard", "reporting", "bi", "metrics"),
+        "faqs": [
+            ("What analytics solutions does Nexalix offer?", "We deliver dashboards, reporting systems, data integration workflows, and visibility tools for business intelligence."),
+            ("Can you work with existing data sources?", "Yes. We can connect operational databases, spreadsheets, APIs, and third-party systems into reporting layers."),
+            ("Do you build real-time dashboards?", "Yes, where the source systems and update patterns support real-time or near-real-time reporting."),
+        ],
+    },
+    "business-automation": {
+        "nav_title": "Business Automation",
+        "headline": "Business automation that removes repetitive work and improves delivery speed",
+        "subheadline": "We digitize and automate operational workflows so teams can reduce errors, improve turnaround time, and scale with fewer manual dependencies.",
+        "problems": [
+            "Manual approvals, handoffs, and updates are slowing down execution.",
+            "Teams repeat the same operational tasks every day with inconsistent quality.",
+            "As the business grows, coordination overhead is increasing faster than output.",
+        ],
+        "deliverables": ["Approval workflows", "Operational automations", "Process digitization systems"],
+        "technologies": ["Django", "APIs", "Automation Logic", "Notifications", "Dashboards"],
+        "keywords": ("automation", "business", "workflow", "digitization", "process", "operations"),
+        "faqs": [
+            ("What processes can be automated?", "Typical candidates include approvals, lead routing, follow-up workflows, status tracking, notifications, and repetitive operational tasks."),
+            ("Does automation replace the team?", "No. The goal is to remove low-value manual work so the team can focus on exceptions, quality, and strategic decisions."),
+            ("Can automation include reporting?", "Yes. Automation can be paired with dashboards and alerts so teams see outcomes, delays, and workload trends."),
+        ],
+    },
+    "technology-consulting": {
+        "nav_title": "Technology Consulting",
+        "headline": "Technology consulting for organizations planning digital change with less risk",
+        "subheadline": "We help leaders define the right systems, roadmap, architecture, and execution plan before committing budget and delivery effort.",
+        "problems": [
+            "Leadership knows change is needed but the next technical step is unclear.",
+            "Transformation initiatives lack a phased roadmap and delivery structure.",
+            "Multiple systems, stakeholders, or integrations make decision-making difficult.",
+        ],
+        "deliverables": ["Solution architecture", "Process digitization roadmap", "Transformation planning"],
+        "technologies": ["Architecture Planning", "Discovery Workshops", "Roadmaps", "Integration Mapping"],
+        "keywords": ("consulting", "strategy", "architecture", "transformation", "roadmap", "digitization"),
+        "faqs": [
+            ("What does consulting-led execution mean?", "It means Nexalix helps define the solution and then stays close to implementation so planning and delivery remain aligned."),
+            ("Can you support only the strategy phase?", "Yes. We can deliver discovery, roadmap, and architecture work as a standalone engagement."),
+            ("Do you also support implementation after consulting?", "Yes. Nexalix can move from strategy into build, launch, support, and optimization."),
+        ],
+    },
+}
+SOLUTION_CLUSTER_TO_PAGE = {
+    "software-development": "software-development",
+    "ai-automation": "ai-automation",
+    "data-analytics": "data-analytics",
+    "consulting-transformation": "technology-consulting",
+}
+SERVICE_SOLUTION_CLUSTER_CONFIG = {
+    "software-development": {
+        "title": "Software Development",
+        "icon": "fas fa-laptop-code",
+        "value_statement": "Custom digital systems that remove operational friction and support growth.",
+        "business_problem": "When teams outgrow spreadsheets, disconnected tools, or off-the-shelf platforms, we design software that matches the real operating model.",
+        "deliverables": ["Custom web platforms", "Client portals", "Internal business systems"],
+        "who_for": "Operations-heavy teams, service businesses, and organizations launching new digital products.",
+        "keywords": ("software", "platform", "portal", "web", "mobile", "app", "system", "product", "cloud", "infrastructure"),
+    },
+    "ai-automation": {
+        "title": "AI and Automation",
+        "icon": "fas fa-robot",
+        "value_statement": "AI workflows and automation systems that reduce manual work and improve response speed.",
+        "business_problem": "We help teams remove repetitive tasks, improve lead handling, and create faster customer and internal workflows.",
+        "deliverables": ["Lead qualification systems", "AI chat assistants", "Workflow automation"],
+        "who_for": "Teams handling high-volume inquiries, repeatable operations, or service processes that need automation.",
+        "keywords": ("ai", "automation", "machine learning", "chatbot", "assistant", "workflow", "predictive"),
+    },
+    "data-analytics": {
+        "title": "Data and Analytics",
+        "icon": "fas fa-chart-line",
+        "value_statement": "Reporting systems and data visibility tools that improve decision-making.",
+        "business_problem": "When reporting is fragmented or delayed, we create dashboards and data systems that give teams operational clarity.",
+        "deliverables": ["Dashboards", "Reporting systems", "BI implementation"],
+        "who_for": "Leadership, operations, finance, and growth teams that need trustworthy reporting and performance visibility.",
+        "keywords": ("data", "analytics", "dashboard", "report", "bi", "insight", "reporting"),
+    },
+    "consulting-transformation": {
+        "title": "Consulting and Transformation",
+        "icon": "fas fa-sitemap",
+        "value_statement": "Consulting-led planning and implementation for modernization, scale, and digital transformation.",
+        "business_problem": "We turn unclear requirements, legacy process friction, and scaling challenges into a phased execution roadmap.",
+        "deliverables": ["Solution architecture", "Process digitization", "Digital transformation roadmap"],
+        "who_for": "Leaders planning modernization, transformation programs, or cross-functional delivery initiatives.",
+        "keywords": ("consult", "transformation", "strategy", "roadmap", "digitization", "advisory", "training"),
+    },
+}
+SERVICE_CATEGORY_CLUSTER_MAP = {
+    "development": "software-development",
+    "cloud": "software-development",
+    "ai": "ai-automation",
+    "marketing": "data-analytics",
+    "consulting": "consulting-transformation",
+    "training": "consulting-transformation",
+}
+LEGACY_PROCESS_TITLE_MAP = {
+    "requirement gathering": "Discovery",
+    "research & analysis": "Solution Planning",
+    "research": "Solution Planning",
+    "design & development": "Build and QA",
+    "design & build": "Build and QA",
+    "qa & delivery": "Launch and Support",
+    "delivery": "Launch and Support",
+}
+PROCESS_PLAYBOOK = [
+    {
+        "number": "01",
+        "title": "Discovery",
+        "icon": "fas fa-magnifying-glass-chart",
+        "description": "Understand business goals, user needs, operational bottlenecks, and implementation constraints.",
+        "outputs": ["Discovery notes", "Priority use cases", "Stakeholder requirements"],
+    },
+    {
+        "number": "02",
+        "title": "Solution Planning",
+        "icon": "fas fa-diagram-project",
+        "description": "Map features, integrations, architecture, milestones, and delivery phases before build starts.",
+        "outputs": ["Solution blueprint", "Delivery roadmap", "Integration plan"],
+    },
+    {
+        "number": "03",
+        "title": "Build and QA",
+        "icon": "fas fa-code-branch",
+        "description": "Develop, test, secure, and validate the solution in focused sprints with visible progress.",
+        "outputs": ["MVP or build sprint", "QA checklist", "Release-ready system"],
+    },
+    {
+        "number": "04",
+        "title": "Launch and Support",
+        "icon": "fas fa-rocket",
+        "description": "Deploy, monitor, optimize, and support the system after launch so teams can scale with confidence.",
+        "outputs": ["Deployment plan", "Support handoff", "Optimization backlog"],
+    },
+]
+TECHNOLOGY_GROUP_META = {
+    "frontend": {
+        "title": "Frontend",
+        "icon": "fas fa-desktop",
+        "description": "Interfaces for customer portals, dashboards, and digital product experiences.",
+    },
+    "backend": {
+        "title": "Backend",
+        "icon": "fas fa-server",
+        "description": "Application logic, APIs, and service layers designed for reliability and scale.",
+    },
+    "cloud-devops": {
+        "title": "Cloud and DevOps",
+        "icon": "fas fa-cloud",
+        "description": "Infrastructure, deployment, and operational tooling that keeps delivery secure and stable.",
+    },
+    "ai-data": {
+        "title": "AI and Data",
+        "icon": "fas fa-brain",
+        "description": "Analytics, automation intelligence, and data processing capabilities for decision support.",
+    },
+    "database": {
+        "title": "Databases",
+        "icon": "fas fa-database",
+        "description": "Structured data foundations for reporting, applications, and operational systems.",
+    },
+    "other": {
+        "title": "Delivery Stack",
+        "icon": "fas fa-layer-group",
+        "description": "Supporting technologies used in Nexalix delivery engagements.",
+    },
+}
 
 logger = logging.getLogger("nexalix_app.views")
 User = get_user_model()
@@ -136,6 +369,310 @@ def _text_excerpt(value, limit=160):
     if len(text) <= limit:
         return text
     return f"{text[:limit - 1].rstrip()}…"
+
+
+def _normalize_label(value):
+    return slugify((value or "").strip())
+
+
+def _infer_service_cluster_slug(service):
+    haystack = " ".join([
+        service.title or "",
+        service.short_description or "",
+        service.full_description or "",
+        service.key_features or "",
+        service.technologies or "",
+    ]).lower()
+    for cluster_slug, config in SERVICE_SOLUTION_CLUSTER_CONFIG.items():
+        if any(keyword in haystack for keyword in config["keywords"]):
+            return cluster_slug
+    return SERVICE_CATEGORY_CLUSTER_MAP.get(service.category, "software-development")
+
+
+def _derive_service_engagement_type(service, cluster_slug):
+    if service.category in {"consulting", "training"} or cluster_slug == "consulting-transformation":
+        return "Advisory Engagement"
+    if cluster_slug == "data-analytics":
+        return "Analytics Sprint"
+    if service.quote_delivery_weeks <= 4:
+        return "Rapid Sprint"
+    if service.quote_delivery_weeks <= 8:
+        return "Delivery Sprint"
+    if service.quote_delivery_weeks <= 14:
+        return "Scale Build"
+    return "Managed Program"
+
+
+def _build_service_solution_clusters(services):
+    clusters = []
+    cluster_index = {}
+    for key, config in SERVICE_SOLUTION_CLUSTER_CONFIG.items():
+        cluster = {
+            "slug": key,
+            **config,
+            "services": [],
+            "service_titles": [],
+            "landing_slug": SOLUTION_CLUSTER_TO_PAGE.get(key, key),
+            "cta_primary_text": "Get Proposal",
+            "cta_primary_url": reverse("quote_generator"),
+            "cta_secondary_text": "Book Consultation",
+            "cta_secondary_url": f"{reverse('contact')}?solution={key}",
+        }
+        clusters.append(cluster)
+        cluster_index[key] = cluster
+
+    for service in services:
+        cluster_slug = _infer_service_cluster_slug(service)
+        cluster = cluster_index.get(cluster_slug, cluster_index["software-development"])
+        outcomes = service.get_key_features_list()[:3] or cluster["deliverables"][:3]
+        service_card = {
+            "object": service,
+            "title": service.title,
+            "value_statement": service.short_description or _text_excerpt(service.full_description, limit=120),
+            "outcomes": outcomes,
+            "detail_url": reverse("service_detail", args=[service.slug]),
+            "delivery_tier": _derive_service_engagement_type(service, cluster_slug),
+            "delivery_weeks": service.quote_delivery_weeks,
+            "technologies": service.get_technologies_list()[:4],
+            "icon": service.icon or cluster["icon"],
+        }
+        cluster["services"].append(service_card)
+        cluster["service_titles"].append(service.title)
+
+    for cluster in clusters:
+        cluster["service_count"] = len(cluster["services"])
+        cluster["service_titles"] = cluster["service_titles"][:3]
+        if not cluster["services"]:
+            cluster["sample_services"] = cluster["deliverables"]
+        else:
+            cluster["sample_services"] = cluster["service_titles"]
+    return clusters
+
+
+def _solution_page_links():
+    return [
+        {"slug": slug, **config}
+        for slug, config in SOLUTION_PAGE_CONFIG.items()
+    ]
+
+
+def _build_process_journey(process_steps):
+    steps = []
+    source_steps = list(process_steps or [])
+    for index, blueprint in enumerate(PROCESS_PLAYBOOK):
+        source = source_steps[index] if index < len(source_steps) else None
+        source_title = (source.title or "").strip().lower() if source else ""
+        resolved_title = LEGACY_PROCESS_TITLE_MAP.get(source_title, source.title if source else blueprint["title"])
+        resolved_description = source.description if source and source.description else blueprint["description"]
+        steps.append({
+            "number": source.number if source and source.number else blueprint["number"],
+            "title": resolved_title,
+            "icon": blueprint["icon"],
+            "description": resolved_description,
+            "outputs": blueprint["outputs"],
+        })
+    return steps
+
+
+def _normalize_technology_group(name):
+    key = _normalize_label(name)
+    if "front" in key:
+        return "frontend"
+    if "back" in key or "api" in key:
+        return "backend"
+    if "cloud" in key or "devops" in key or "infra" in key:
+        return "cloud-devops"
+    if "ai" in key or "data" in key or "machine" in key or "analytics" in key:
+        return "ai-data"
+    if "database" in key or "db" == key:
+        return "database"
+    return "other"
+
+
+def _build_technology_capability_groups(categories):
+    groups = []
+    for category in categories:
+        group_key = _normalize_technology_group(category.name)
+        meta = TECHNOLOGY_GROUP_META[group_key]
+        technologies = list(category.technologies.all())
+        if not technologies:
+            continue
+        groups.append({
+            "slug": group_key,
+            "title": meta["title"],
+            "icon": meta["icon"],
+            "description": meta["description"],
+            "technologies": technologies,
+            "primary_technologies": technologies[:2],
+        })
+    return groups
+
+
+def _parse_schema_markup(raw_value):
+    if not raw_value:
+        return []
+    try:
+        parsed = json.loads(raw_value)
+    except json.JSONDecodeError:
+        logger.warning("Invalid schema markup JSON provided; skipping custom schema payload.")
+        return []
+    if isinstance(parsed, list):
+        return [item for item in parsed if isinstance(item, dict)]
+    if isinstance(parsed, dict):
+        return [parsed]
+    return []
+
+
+def _faq_schema(faq_items):
+    valid_items = [
+        item for item in faq_items
+        if item.get("question") and item.get("answer")
+    ]
+    if not valid_items:
+        return None
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": item["question"],
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": item["answer"],
+                },
+            }
+            for item in valid_items
+        ],
+    }
+
+
+def _service_share_image_url(service):
+    if service.social_share_image:
+        return service.social_share_image.url
+    if service.featured_image:
+        return service.featured_image.url
+    return ""
+
+
+def _solution_page_schema(request, slug, page):
+    page_url = _absolute_url(request, reverse("solution_landing", args=[slug]))
+    return {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": page["nav_title"],
+        "url": page_url,
+        "description": _text_excerpt(page["subheadline"], limit=260),
+        "provider": {
+            "@type": "Organization",
+            "name": "Nexalix Technologies",
+            "url": _absolute_url(request, "/"),
+        },
+        "serviceType": page["nav_title"],
+        "areaServed": settings.FOOTER_SERVICE_REGIONS,
+    }
+
+
+def _build_solution_page_context(request, slug):
+    config = SOLUTION_PAGE_CONFIG.get(slug)
+    if not config:
+        return None
+
+    services = list(Service.objects.filter(is_active=True).order_by("order"))
+    matching_services = []
+    for service in services:
+        haystack = " ".join([
+            service.title or "",
+            service.short_description or "",
+            service.full_description or "",
+            service.key_features or "",
+            service.technologies or "",
+        ]).lower()
+        if any(keyword in haystack for keyword in config["keywords"]):
+            matching_services.append(service)
+
+    if not matching_services:
+        cluster_fallbacks = _build_service_solution_clusters(services)
+        fallback_cluster_slug = {
+            "software-development": "software-development",
+            "ai-automation": "ai-automation",
+            "machine-learning-solutions": "ai-automation",
+            "data-analytics": "data-analytics",
+            "business-automation": "ai-automation",
+            "technology-consulting": "consulting-transformation",
+        }.get(slug, "software-development")
+        cluster_match = next(
+            (cluster for cluster in cluster_fallbacks if cluster["slug"] == fallback_cluster_slug),
+            None,
+        )
+        if cluster_match:
+            matching_services = [item["object"] for item in cluster_match["services"]]
+
+    case_studies = list(CaseStudy.objects.filter(is_active=True, is_published=True).order_by("-is_featured", "order", "-created_at"))
+    related_case_studies = []
+    solution_keywords = {_normalize_label(word) for word in config["keywords"]}
+    for case in case_studies:
+        case_haystack = " ".join([
+            case.title or "",
+            case.description or "",
+            case.challenge or "",
+            case.solution or "",
+            case.tags or "",
+            case.industry or "",
+            case.tech_stack or "",
+        ]).lower()
+        if any(keyword.replace("-", " ") in case_haystack for keyword in solution_keywords):
+            related_case_studies.append(case)
+        if len(related_case_studies) == 3:
+            break
+    if not related_case_studies:
+        related_case_studies = case_studies[:3]
+
+    grouped_technologies = _build_technology_capability_groups(
+        list(TechnologyCategory.objects.prefetch_related("technologies").all())
+    )
+    relevant_groups = [
+        group for group in grouped_technologies
+        if any(keyword in _normalize_label(group["title"]) for keyword in (
+            "front", "back", "cloud", "devops", "ai", "data", "database"
+        ))
+    ]
+    faq_items = [{"question": q, "answer": a} for q, a in config["faqs"]]
+    solution_schema = _solution_page_schema(request, slug, config)
+    faq_schema = _faq_schema(faq_items)
+    schemas = [solution_schema]
+    if faq_schema:
+        schemas.append(faq_schema)
+    share_image = ""
+    if matching_services:
+        share_image = _service_share_image_url(matching_services[0])
+    if not share_image and related_case_studies:
+        top_case = related_case_studies[0]
+        if top_case.social_share_image:
+            share_image = top_case.social_share_image.url
+        elif top_case.image:
+            share_image = top_case.image.url
+
+    page_context = {
+        "solution_slug": slug,
+        "solution_page": config,
+        "solution_services": matching_services[:4],
+        "solution_process": PROCESS_PLAYBOOK,
+        "solution_technologies": config["technologies"],
+        "solution_faqs": faq_items,
+        "related_case_studies": related_case_studies,
+        "technology_capability_groups": relevant_groups[:4],
+    }
+    page_context.update(_seo_context(
+        request,
+        title=f"{config['nav_title']} | Nexalix Technologies",
+        description=config["subheadline"],
+        keywords=_build_keywords(config["nav_title"], config["deliverables"], config["keywords"]),
+        og_type="article",
+        image_url=share_image,
+        schemas=schemas,
+    ))
+    return page_context
 
 
 def _build_keywords(*keyword_groups):
@@ -276,8 +813,8 @@ def _organization_schema(request):
         "name": "Nexalix Technologies",
         "url": site_url,
         "logo": logo_url,
-        "email": "info@nexalixtech.com",
-        "telephone": "+254768774232",
+        "email": settings.CONTACT_EMAIL,
+        "telephone": settings.CONTACT_PHONE,
         "address": {
             "@type": "PostalAddress",
             "addressCountry": "KE",
@@ -331,12 +868,14 @@ def _case_study_schema(request, case_study, position=None):
         "@type": "CreativeWork",
         "name": case_study.title,
         "url": case_url,
-        "description": _text_excerpt(case_study.description, limit=260),
+        "description": _text_excerpt(case_study.solution or case_study.challenge or case_study.description, limit=260),
     }
     if case_study.image:
         data["image"] = _absolute_url(request, case_study.image.url)
     if case_study.tags:
         data["keywords"] = [tag.strip() for tag in case_study.tags.split(",") if tag.strip()]
+    if case_study.industry:
+        data["about"] = case_study.industry
     if position is not None:
         return {"@type": "ListItem", "position": position, "url": case_url, "item": data}
     return data
@@ -350,9 +889,11 @@ def _seo_context(
     keywords="technology consulting, AI solutions, software development, cloud services, cybersecurity",
     og_type="website",
     image_url="",
+    canonical_override="",
     schemas=None,
+    custom_schema_json="",
 ):
-    canonical_url = request.build_absolute_uri(request.path)
+    canonical_url = canonical_override or request.build_absolute_uri(request.path)
     resolved_image = _absolute_url(request, image_url or "/static/images/logo1.png")
 
     schema_payloads = [
@@ -367,6 +908,7 @@ def _seo_context(
     ]
     if schemas:
         schema_payloads.extend(schemas)
+    schema_payloads.extend(_parse_schema_markup(custom_schema_json))
 
     return {
         "meta_title": title,
@@ -1420,24 +1962,39 @@ def home(request):
     """Home page view"""
     context = cache.get(HOME_CONTEXT_CACHE_KEY)
     if context is None:
+        all_services = list(Service.objects.filter(is_active=True).order_by("order"))
+        technology_categories = list(TechnologyCategory.objects.prefetch_related("technologies").all())
+        published_case_studies = list(
+            CaseStudy.objects.filter(is_active=True, is_published=True).order_by("-is_featured", "order", "-created_at")
+        )
+        featured_case_studies = [case for case in published_case_studies if case.is_featured][:4] or published_case_studies[:4]
+        portfolio_case_studies = [case for case in published_case_studies if case not in featured_case_studies][:3]
         context = {
             "hero": HeroSection.objects.filter(is_active=True).first(),
-            "services": list(Service.objects.filter(is_featured=True).order_by("order")[:3]),
-            "testimonials": list(Testimonial.objects.filter(is_active=True).order_by("-created_at")[:2]),
+            "services": list(Service.objects.filter(is_featured=True, is_active=True).order_by("order")[:3]),
+            "all_services": all_services,
+            "service_solution_clusters": _build_service_solution_clusters(all_services),
+            "solution_pages": _solution_page_links(),
+            "testimonials": list(
+                Testimonial.objects.filter(is_active=True, is_published=True).order_by("sort_order", "-created_at")[:3]
+            ),
             "about": AboutSection.objects.filter(is_active=True).first(),
             "process_steps": list(ProcessStep.objects.all().order_by("order")),
-            "industries": list(Industry.objects.filter(is_active=True).order_by("order")[:4]),
-            "technology_categories": list(TechnologyCategory.objects.prefetch_related("technologies").all()),
-            "case_studies": list(CaseStudy.objects.filter(is_active=True).order_by("order")[:2]),
-            "completed_projects": list(CaseStudy.objects.filter(is_active=True).order_by("-created_at", "order")[:6]),
-            "completed_projects_count": CaseStudy.objects.filter(is_active=True).count(),
+            "process_journey": _build_process_journey(ProcessStep.objects.all().order_by("order")),
+            "industries": list(Industry.objects.filter(is_active=True).order_by("order")[:6]),
+            "technology_categories": technology_categories,
+            "technology_capability_groups": _build_technology_capability_groups(technology_categories),
+            "case_studies": portfolio_case_studies,
+            "featured_case_studies": featured_case_studies,
+            "completed_projects": published_case_studies[:6],
+            "completed_projects_count": len(published_case_studies),
             "newsletter": NewsletterSignup.objects.filter(is_active=True).first(),
             "statistics": list(Statistic.objects.filter(is_active=True).order_by("order")[:4]),
             "blog_posts": list(BlogPost.objects.filter(is_published=True).order_by("-publish_date")[:2]),
-            "partners": list(Partner.objects.filter(is_active=True).order_by("order")),
+            "partners": list(Partner.objects.filter(is_active=True, is_published=True).order_by("order")),
             "awards": list(Award.objects.filter(is_active=True).order_by("-year", "order")[:3]),
             "contact_cta": ContactCTA.objects.filter(is_active=True).first(),
-            "services_total": Service.objects.filter(is_active=True).count(),
+            "services_total": len(all_services),
             "industries_total": Industry.objects.filter(is_active=True).count(),
         }
         cache.set(HOME_CONTEXT_CACHE_KEY, context, HOME_CONTEXT_CACHE_TTL)
@@ -1502,11 +2059,11 @@ def home(request):
     hero_testimonial = context.get("testimonials", [None])[0] if context.get("testimonials") else None
     hero_outcomes = []
     for project in context.get("completed_projects", []):
-        outcome_text = _text_excerpt(project.results or project.description, limit=110)
+        outcome_text = _text_excerpt(project.results or project.solution or project.description, limit=110)
         if not outcome_text:
             continue
         hero_outcomes.append({
-            "title": project.title,
+            "title": project.client_name or project.title,
             "result": outcome_text,
             "tags": project.get_tags_list()[:2],
         })
@@ -1518,6 +2075,36 @@ def home(request):
             "title": hero_testimonial.company or "Client feedback",
             "result": _text_excerpt(hero_testimonial.content, limit=110),
             "tags": [],
+        })
+    featured_case_study_cards = []
+    for case in context.get("featured_case_studies", []):
+        brief_description = _text_excerpt(
+            case.description or case.challenge or case.solution or case.results,
+            limit=132,
+        )
+        summary_text = _text_excerpt(
+            case.solution or case.results or case.challenge,
+            limit=118,
+        )
+        summary_label = "Summary"
+        if case.results:
+            summary_label = "Outcome"
+        elif case.solution:
+            summary_label = "Solution"
+        elif case.challenge:
+            summary_label = "Challenge"
+        if not brief_description and summary_text:
+            brief_description = summary_text
+            summary_text = ""
+        elif summary_text == brief_description:
+            summary_text = ""
+        featured_case_study_cards.append({
+            "case_study": case,
+            "title": case.client_name or case.title,
+            "brief_description": brief_description,
+            "summary_text": summary_text,
+            "summary_label": summary_label,
+            "detail_url": reverse("case_study_detail", args=[slugify(case.title)]),
         })
     home_schemas = []
     featured_services = services_for_keywords
@@ -1545,6 +2132,7 @@ def home(request):
         "hero_partner_logos": hero_partner_logos,
         "hero_testimonial": hero_testimonial,
         "hero_outcomes": hero_outcomes,
+        "featured_case_study_cards": featured_case_study_cards,
         **_seo_context(
             request,
             title=f"{home_ab['headline']} | Nexalix Technologies",
@@ -1580,16 +2168,8 @@ def services(request):
     """Services list page view"""
     # Get all active services, ordered by order field
     services_list = list(Service.objects.filter(is_active=True).order_by('order'))
-    
-    # Group services by category
-    services_by_category = {}
-    for service in services_list:
-        category = service.get_category_display()
-        if category not in services_by_category:
-            services_by_category[category] = []
-        services_by_category[category].append(service)
-    
-    
+    service_solution_clusters = _build_service_solution_clusters(services_list)
+    technology_categories = list(TechnologyCategory.objects.prefetch_related("technologies").all())
     pricing_plans = PricingPlan.objects.all().order_by('order')
     
     dynamic_description = "Explore our comprehensive range of technology consulting and engineering services."
@@ -1608,7 +2188,10 @@ def services(request):
 
     context = {
         'services': services_list,
-        'services_by_category': services_by_category,
+        'service_solution_clusters': service_solution_clusters,
+        'solution_pages': _solution_page_links(),
+        'technology_capability_groups': _build_technology_capability_groups(technology_categories),
+        'process_journey': _build_process_journey(ProcessStep.objects.all().order_by("order")),
         'pricing_plans': pricing_plans,  # This will work now
         'page_title': 'Our Services',
         'meta_description': dynamic_description,
@@ -1625,13 +2208,23 @@ def services(request):
 def service_detail(request, slug):
     """Individual service detail page view"""
     service = get_object_or_404(Service, slug=slug, is_active=True)
-    
+    service_clusters = _build_service_solution_clusters([service])
+    service_cluster = next((cluster for cluster in service_clusters if cluster["service_count"]), service_clusters[0])
+    service_story = service_cluster["services"][0] if service_cluster["services"] else None
+    service_faq_schema = _faq_schema(service.get_faq_items_list())
+    service_schemas = [{"@context": "https://schema.org", **_service_schema(request, service)}]
+    if service_faq_schema:
+        service_schemas.append(service_faq_schema)
+
     # Get features and technologies using model methods
     context = {
         'service': service,
         'features': service.get_key_features_list(),  # Using model method
         'technologies': service.get_technologies_list(),  # Using model method
+        'service_faqs': service.get_faq_items_list(),
         'pricing_plans': PricingPlan.objects.filter(service=service),  # If you have this model
+        'service_cluster': service_cluster,
+        'service_story': service_story,
         'page_title': service.meta_title or service.title,
         'meta_description': service.meta_description or service.short_description,
     }
@@ -1640,10 +2233,19 @@ def service_detail(request, slug):
         title=f"{service.title} | Nexalix Services",
         description=service.meta_description or service.short_description or service.full_description,
         og_type="article",
-        image_url=(service.featured_image.url if service.featured_image else ""),
-        schemas=[{"@context": "https://schema.org", **_service_schema(request, service)}],
+        image_url=_service_share_image_url(service),
+        canonical_override=service.canonical_url,
+        schemas=service_schemas,
+        custom_schema_json=service.schema_markup_json,
     ))
     return render(request, 'service_detail.html', context)  # Changed from 'services/detail.html'
+
+
+def solution_landing(request, slug):
+    page_context = _build_solution_page_context(request, slug)
+    if not page_context:
+        return redirect("services")
+    return render(request, "solution_landing.html", page_context)
 
 def industries(request):
     """Industries page view"""
@@ -3302,7 +3904,11 @@ def ai_training(request):
 
 def case_studies_list(request):
     """Display all case studies"""
-    case_studies_all = list(CaseStudy.objects.filter(is_active=True).order_by('order'))
+    case_studies_all = list(
+        CaseStudy.objects.filter(is_active=True, is_published=True).order_by("-is_featured", "order", "-created_at")
+    )
+    featured_cases = [case for case in case_studies_all if case.is_featured][:4] or case_studies_all[:4]
+    other_case_studies = [case for case in case_studies_all if case not in featured_cases]
 
     case_schema = {
         "@context": "https://schema.org",
@@ -3317,7 +3923,8 @@ def case_studies_list(request):
     )
 
     context = {
-        'case_studies': case_studies_all,
+        'case_studies': other_case_studies,
+        'featured_cases': featured_cases,
         'page_title': 'Case Studies - Success Stories',
         'meta_description': dynamic_description,
     }
@@ -3339,7 +3946,7 @@ def case_studies_list(request):
 def case_study_detail(request, slug):
     """Display single case study detail"""
     case_study = None
-    for item in CaseStudy.objects.filter(is_active=True):
+    for item in CaseStudy.objects.filter(is_active=True, is_published=True):
         if slugify(item.title) == slug:
             case_study = item
             break
@@ -3347,21 +3954,71 @@ def case_study_detail(request, slug):
     if not case_study:
         return redirect('case_studies')
 
-    related_cases = CaseStudy.objects.filter(is_active=True).exclude(id=case_study.id).order_by('order')[:3]
+    related_cases = (
+        CaseStudy.objects.filter(is_active=True, is_published=True)
+        .exclude(id=case_study.id)
+        .order_by("-is_featured", "order", "-created_at")[:3]
+    )
     
     context = {
         'case_study': case_study,
         'related_cases': related_cases,
         'page_title': case_study.title,
-        'meta_description': case_study.description[:160] if len(case_study.description) > 160 else case_study.description,
+        'meta_description': _text_excerpt(case_study.solution or case_study.challenge or case_study.description, limit=160),
     }
     context.update(_seo_context(
         request,
-        title=f"{case_study.title} | Nexalix Case Study",
-        description=case_study.description,
+        title=f"{case_study.meta_title or case_study.title} | Nexalix Case Study",
+        description=case_study.meta_description or case_study.solution or case_study.challenge or case_study.description,
         keywords=_build_keywords(case_study.title, case_study.get_tags_list(), "project implementation"),
         og_type="article",
-        image_url=(case_study.image.url if case_study.image else ""),
+        image_url=(case_study.social_share_image.url if case_study.social_share_image else case_study.image.url if case_study.image else ""),
+        canonical_override=case_study.canonical_url,
         schemas=[{"@context": "https://schema.org", **_case_study_schema(request, case_study)}],
+        custom_schema_json=case_study.schema_markup_json,
     ))
     return render(request, 'case_study_detail.html', context)
+
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        f"Sitemap: {request.build_absolute_uri(reverse('sitemap_xml'))}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def sitemap_xml(request):
+    pages = [
+        request.build_absolute_uri(reverse("home")),
+        request.build_absolute_uri(reverse("about")),
+        request.build_absolute_uri(reverse("services")),
+        request.build_absolute_uri(reverse("quote_generator")),
+        request.build_absolute_uri(reverse("industries")),
+        request.build_absolute_uri(reverse("how_we_work")),
+        request.build_absolute_uri(reverse("why_choose_us")),
+        request.build_absolute_uri(reverse("contact")),
+        request.build_absolute_uri(reverse("case_studies")),
+        request.build_absolute_uri(reverse("privacy_policy")),
+        request.build_absolute_uri(reverse("terms_of_service")),
+    ]
+    for solution_slug in SOLUTION_PAGE_CONFIG.keys():
+        pages.append(request.build_absolute_uri(reverse("solution_landing", args=[solution_slug])))
+    for service in Service.objects.filter(is_active=True):
+        pages.append(request.build_absolute_uri(reverse("service_detail", args=[service.slug])))
+    for case in CaseStudy.objects.filter(is_active=True, is_published=True):
+        pages.append(request.build_absolute_uri(reverse("case_study_detail", args=[slugify(case.title)])))
+
+    unique_pages = list(dict.fromkeys(pages))
+    xml_parts = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for url in unique_pages:
+        xml_parts.append("  <url>")
+        xml_parts.append(f"    <loc>{url}</loc>")
+        xml_parts.append("  </url>")
+    xml_parts.append("</urlset>")
+    return HttpResponse("\n".join(xml_parts), content_type="application/xml")

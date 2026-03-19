@@ -7,36 +7,95 @@
 {% block content %}
 <section class="page-block">
     <div class="container">
-        <article class="about-section">
-            <h1>{{ case_study.title }}</h1>
+        <article class="case-study-detail-shell">
+            <div class="case-study-detail-top">
+                <div>
+                    <p class="section-eyebrow">{{ case_study.get_proof_type_display }}</p>
+                    <h1>{% if case_study.client_name %}{{ case_study.client_name }}{% else %}{{ case_study.title }}{% endif %}</h1>
+                    <p class="service-detail-subheading">{{ case_study.description }}</p>
+                </div>
+                <div class="case-study-detail-meta">
+                    {% if case_study.industry %}
+                    <span>{{ case_study.industry }}</span>
+                    {% endif %}
+                    {% if case_study.engagement_type %}
+                    <span>{{ case_study.engagement_type }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
             {% if case_study.image %}
             <div class="case-image-wrapper case-image-wrapper-detail">
                 <img src="{{ case_study.image.url|optimized_media:'case_detail' }}" alt="{{ case_study.title }}" class="case-image" loading="eager" fetchpriority="high" decoding="async">
             </div>
             {% endif %}
 
-            <p>{{ case_study.description }}</p>
+            <div class="case-study-detail-grid">
+                <article class="case-study-detail-card">
+                    <span>Challenge</span>
+                    <p>{{ case_study.challenge|default:case_study.description }}</p>
+                </article>
+                <article class="case-study-detail-card">
+                    <span>Solution</span>
+                    <p>{{ case_study.solution|default:"Nexalix designed and delivered a practical implementation tailored to the business need." }}</p>
+                </article>
+                <article class="case-study-detail-card">
+                    <span>Outcome</span>
+                    <p>{{ case_study.results|default:"Outcome metrics and delivery highlights are available during consultation." }}</p>
+                </article>
+            </div>
 
-            {% if case_study.results %}
-            <h2>Results</h2>
-            <p>{{ case_study.results }}</p>
+            {% if case_study.get_tech_stack_list %}
+            <div class="case-study-tech">
+                <h2>Tech Stack</h2>
+                <div class="service-technologies">
+                    {% for tech in case_study.get_tech_stack_list %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+            </div>
             {% endif %}
 
-            {% if case_study.link %}
-            <a href="{{ case_study.link }}" target="_blank" rel="noopener" class="btn btn-primary">Visit Project</a>
+            {% if case_study.get_tags_list %}
+            <div class="case-study-tech">
+                <h2>Focus Areas</h2>
+                <div class="service-technologies">
+                    {% for tag in case_study.get_tags_list %}
+                    <span class="tech-tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            </div>
             {% endif %}
+
+            <div class="hero-actions">
+                {% if case_study.link %}
+                <a href="{{ case_study.link }}" target="_blank" rel="noopener" class="btn btn-primary">View Project</a>
+                {% endif %}
+                <a href="{% url 'quote_generator' %}" class="btn btn-outline-primary">Get Similar Solution</a>
+            </div>
         </article>
 
         {% if related_cases %}
         <section class="page-block related-case-section">
-            <h2>Related Case Studies</h2>
+            <div class="section-heading">
+                <p class="section-eyebrow">Related Proof</p>
+                <h2>More delivery stories</h2>
+            </div>
             <div class="case-grid">
                 {% for case in related_cases %}
                 <article class="case-card">
                     <div class="case-content compact-card-content">
-                        <h3>{{ case.title }}</h3>
-                        <p>{{ case.description }}</p>
-                        <a href="{% url 'case_study_detail' case.title|slugify %}" class="case-link">Read More <i class="fas fa-arrow-right"></i></a>
+                        <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
+                        <h3 class="case-title">{% if case.client_name %}{{ case.client_name }}{% else %}{{ case.title }}{% endif %}</h3>
+                        <p class="case-description">{{ case.description|default:case.challenge|truncatechars:125 }}</p>
+                        {% if case.results %}
+                        <div class="case-results"><i class="fas fa-chart-line"></i><span>{{ case.results|truncatechars:104 }}</span></div>
+                        {% elif case.solution %}
+                        <p class="case-solution-line"><strong>Solution:</strong> {{ case.solution|truncatechars:104 }}</p>
+                        {% endif %}
+                        <div class="project-proof-actions">
+                            <a href="{% url 'case_study_detail' case.title|slugify %}" class="project-link-btn">Learn More</a>
+                        </div>
                     </div>
                 </article>
                 {% endfor %}

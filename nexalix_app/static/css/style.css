@@ -4307,6 +4307,189 @@ textarea:focus-visible {
     height: 100%;
 }
 
+/* -----------------------------
+   Professional Card Refinements
+------------------------------ */
+.case-grid,
+.projects-completed-grid,
+.partners-home-grid,
+.industry-modern-grid,
+.home-services-grid.solution-clusters-grid,
+.solution-clusters-grid,
+.why-modern-grid,
+.work-process-timeline {
+    align-items: stretch;
+}
+
+.case-grid {
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+}
+
+.case-card,
+.project-completed-card,
+.partner-home-card,
+.industry-modern-card,
+.solution-cluster-card,
+.service-summary-card,
+.work-step-card-modern,
+.why-modern-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.case-image-wrapper,
+.project-completed-media,
+.portfolio-image-wrap {
+    flex-shrink: 0;
+}
+
+.case-content,
+.portfolio-content,
+.project-completed-content,
+.partner-home-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    min-height: 0;
+}
+
+.case-card-meta,
+.project-proof-top {
+    align-items: center;
+    gap: 8px;
+    row-gap: 8px;
+}
+
+.case-title,
+.project-completed-content h3,
+.partner-home-content h3,
+.industry-modern-card h3,
+.solution-cluster-card h3,
+.service-summary-card h3,
+.work-step-card-modern h3,
+.why-modern-card h3 {
+    overflow-wrap: anywhere;
+}
+
+.case-title,
+.project-completed-content h3,
+.partner-home-content h3,
+.solution-cluster-card h3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.case-title,
+.project-completed-content h3 {
+    -webkit-line-clamp: 2;
+    min-height: calc(1.24em * 2);
+}
+
+.partner-home-content h3,
+.solution-cluster-card h3 {
+    -webkit-line-clamp: 2;
+}
+
+.project-summary-text,
+.case-description,
+.partner-home-content p,
+.industry-modern-card p,
+.work-step-card-modern p,
+.why-modern-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.58;
+}
+
+.project-summary-text,
+.case-description {
+    -webkit-line-clamp: 4;
+}
+
+.partner-home-content p,
+.industry-modern-card p {
+    -webkit-line-clamp: 4;
+}
+
+.work-step-card-modern p,
+.why-modern-card p {
+    -webkit-line-clamp: 5;
+}
+
+.case-solution-line,
+.case-results {
+    color: #47627f;
+    font-size: 0.9rem;
+}
+
+.case-solution-line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+}
+
+.case-results {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px;
+    align-items: start;
+}
+
+.case-results span {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+}
+
+.project-proof-actions {
+    margin-top: auto;
+    padding-top: 6px;
+    align-items: center;
+    gap: 10px;
+}
+
+.project-proof-actions .project-link-btn,
+.project-proof-actions .secondary-link {
+    min-height: 40px;
+    padding: 0 15px;
+    border-radius: 11px;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.case-card .project-proof-actions .project-link-btn,
+.project-completed-card .project-proof-actions .project-link-btn {
+    background: linear-gradient(135deg, #185fbe, #6b54ff);
+    color: #fff;
+}
+
+.case-card .project-proof-actions .project-link-btn:hover,
+.project-completed-card .project-proof-actions .project-link-btn:hover {
+    background: linear-gradient(135deg, #114f9e, #5e49e3);
+    color: #fff;
+}
+
+.case-card .service-technologies,
+.project-completed-card .project-tags {
+    margin-top: 2px;
+}
+
+.tech-tag,
+.project-tag {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .home-proof-footer {
     display: flex;
     align-items: center;

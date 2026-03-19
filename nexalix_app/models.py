@@ -55,6 +55,13 @@ class Service(models.Model):
     # SEO Fields
     meta_title = models.CharField(max_length=200, blank=True)
     meta_description = models.TextField(blank=True)
+    canonical_url = models.URLField(blank=True)
+    social_share_image = models.ImageField(upload_to='seo/', blank=True, null=True)
+    schema_markup_json = models.TextField(blank=True, help_text="Optional JSON-LD override or supplemental schema.")
+    faq_items = models.TextField(
+        blank=True,
+        help_text="One FAQ per line using the format: Question | Answer"
+    )
     
     # Additional features
     key_features = models.TextField(blank=True, help_text="One feature per line")
@@ -94,6 +101,18 @@ class Service(models.Model):
         if self.technologies:
             return [tech.strip() for tech in self.technologies.split(',') if tech.strip()]
         return []
+
+    def get_faq_items_list(self):
+        faqs = []
+        for line in (self.faq_items or "").splitlines():
+            if "|" not in line:
+                continue
+            question, answer = line.split("|", 1)
+            question = question.strip()
+            answer = answer.strip()
+            if question and answer:
+                faqs.append({"question": question, "answer": answer})
+        return faqs
     
     def __str__(self):
         return self.title
@@ -147,10 +166,16 @@ class Testimonial(models.Model):
     position = models.CharField(max_length=100)
     company = models.CharField(max_length=100)
     content = models.TextField()
+    review_source = models.CharField(max_length=120, blank=True)
     avatar = models.ImageField(upload_to='testimonials/', blank=True, null=True)
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)], default=5)
+    sort_order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["sort_order", "-created_at"]
 
     def __str__(self):
         return f"{self.name} - {self.company}"
@@ -220,22 +245,51 @@ class Technology(models.Model):
 
 
 class CaseStudy(models.Model):
+    PROOF_TYPE_CHOICES = [
+        ("case_study", "Case Study"),
+        ("sample_implementation", "Sample Implementation"),
+        ("internal_prototype", "Internal Prototype"),
+        ("solution_example", "Solution Example"),
+    ]
+
     title = models.CharField(max_length=200)
+    client_name = models.CharField(max_length=200, blank=True)
+    industry = models.CharField(max_length=100, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to='case_studies/')
+    challenge = models.TextField(blank=True)
+    solution = models.TextField(blank=True)
     tags = models.CharField(
         max_length=255,
         blank=True,
         help_text="Comma-separated tags, e.g. Fintech, AI, Automation"
     )
+    tech_stack = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Comma-separated technologies used in this delivery story"
+    )
+    engagement_type = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Optional delivery tier or engagement type, e.g. MVP Sprint, Advisory Engagement"
+    )
     results = models.TextField(blank=True)
     link = models.URLField(blank=True)
+    proof_type = models.CharField(max_length=32, choices=PROOF_TYPE_CHOICES, default="case_study")
+    meta_title = models.CharField(max_length=200, blank=True)
+    meta_description = models.TextField(blank=True)
+    canonical_url = models.URLField(blank=True)
+    social_share_image = models.ImageField(upload_to='seo/', blank=True, null=True)
+    schema_markup_json = models.TextField(blank=True, help_text="Optional JSON-LD override or supplemental schema.")
+    is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=True)
     order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['order']
+        ordering = ['-is_featured', 'order', '-created_at']
         verbose_name_plural = "Case Studies"
 
     def __str__(self):
@@ -244,6 +298,11 @@ class CaseStudy(models.Model):
     def get_tags_list(self):
         if self.tags:
             return [tag.strip() for tag in self.tags.split(',') if tag.strip()]
+        return []
+
+    def get_tech_stack_list(self):
+        if self.tech_stack:
+            return [tech.strip() for tech in self.tech_stack.split(",") if tech.strip()]
         return []
 
 
@@ -378,13 +437,15 @@ class Partner(models.Model):
         blank=True,
         help_text="Brief description shown on the homepage partner card"
     )
+    industry = models.CharField(max_length=100, blank=True)
     logo = models.ImageField(upload_to='partners/', blank=True, null=True)
     website = models.URLField(blank=True)
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ['order']
+        ordering = ['order', 'name']
 
     def __str__(self):
         return self.name

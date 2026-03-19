@@ -28,9 +28,11 @@ class HeroSectionAdmin(admin.ModelAdmin):
 
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ['name', 'company', 'rating', 'is_active', 'created_at']
-    list_filter = ['is_active', 'rating']
-    search_fields = ['name', 'company', 'content']
+    list_display = ['name', 'company', 'position', 'review_source', 'rating', 'sort_order', 'is_active', 'is_published', 'created_at']
+    list_editable = ['sort_order', 'is_active', 'is_published']
+    list_filter = ['is_active', 'is_published', 'rating']
+    search_fields = ['name', 'company', 'position', 'content', 'review_source']
+    ordering = ['sort_order', '-created_at']
 
 @admin.register(AboutSection)
 class AboutSectionAdmin(admin.ModelAdmin):
@@ -60,11 +62,26 @@ class TechnologyCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(CaseStudy)
 class CaseStudyAdmin(admin.ModelAdmin):
-    list_display = ['title', 'tags', 'order', 'is_active', 'created_at']
-    list_editable = ['order', 'is_active']
-    list_filter = ['is_active']
-    search_fields = ['title', 'description', 'tags']
-    ordering = ['order']
+    list_display = ['title', 'client_name', 'industry', 'proof_type', 'is_featured', 'is_active', 'is_published', 'order', 'created_at']
+    list_editable = ['is_featured', 'is_active', 'is_published', 'order']
+    list_filter = ['industry', 'proof_type', 'is_featured', 'is_active', 'is_published']
+    search_fields = ['title', 'client_name', 'description', 'challenge', 'solution', 'results', 'tags', 'tech_stack']
+    ordering = ['-is_featured', 'order', '-created_at']
+    fieldsets = (
+        ('Core Story', {
+            'fields': ('title', 'client_name', 'industry', 'proof_type', 'description', 'image')
+        }),
+        ('Delivery Details', {
+            'fields': ('challenge', 'solution', 'results', 'tech_stack', 'tags', 'engagement_type', 'link')
+        }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'schema_markup_json'),
+            'classes': ('collapse',)
+        }),
+        ('Publishing', {
+            'fields': ('is_featured', 'is_active', 'is_published', 'order')
+        }),
+    )
 
 @admin.register(NewsletterSignup)
 class NewsletterSignupAdmin(admin.ModelAdmin):
@@ -93,10 +110,11 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'website', 'order', 'is_active']
-    list_editable = ['order', 'is_active']
-    search_fields = ['name', 'description', 'website']
-    ordering = ['order']
+    list_display = ['name', 'industry', 'website', 'order', 'is_active', 'is_published']
+    list_editable = ['order', 'is_active', 'is_published']
+    list_filter = ['industry', 'is_active', 'is_published']
+    search_fields = ['name', 'industry', 'description', 'website']
+    ordering = ['order', 'name']
 
 @admin.register(Award)
 class AwardAdmin(admin.ModelAdmin):
@@ -142,6 +160,7 @@ class ServiceAdmin(admin.ModelAdmin):
             'fields': (
                 'key_features',
                 'technologies',
+                'faq_items',
                 'pricing_info',
                 'quote_base_price',
                 'quote_delivery_weeks',
@@ -149,7 +168,7 @@ class ServiceAdmin(admin.ModelAdmin):
             )
         }),
         ('SEO', {
-            'fields': ('meta_title', 'meta_description'),
+            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'schema_markup_json'),
             'classes': ('collapse',)
         }),
     )

@@ -97,7 +97,7 @@
             <div class="hero-visual-header">
                 <div>
                     <p class="hero-visual-eyebrow">Delivery Overview</p>
-                    <h2>Consulting-led execution for products, AI, and automation</h2>
+                    <h2>Consulting-led delivery for AI, products, and automation</h2>
                 </div>
                 <div class="hero-visual-status">
                     <span></span>
@@ -133,7 +133,7 @@
             <div class="hero-outcomes-card">
                 <p class="hero-workflow-title">Recent delivery outcomes</p>
                 <div class="hero-outcomes-list">
-                    {% for outcome in hero_outcomes %}
+                    {% for outcome in hero_outcomes|slice:":2" %}
                     <article class="hero-outcome-item">
                         <strong>{{ outcome.title }}</strong>
                         <span>{{ outcome.result }}</span>
@@ -161,81 +161,41 @@
 <section class="page-block home-services-section">
     <div class="container">
         <div class="section-heading home-services-heading">
-            <p class="section-eyebrow">Core Services</p>
-            <h2>Execution built around the systems businesses need to grow</h2>
-            <p class="section-subtitle">Compact delivery tracks for software, AI automation, data systems, and consulting-led modernization.</p>
+            <p class="section-eyebrow">Business Solutions</p>
+            <h2>Services organized around the outcomes buyers actually need</h2>
+            <p class="section-subtitle">From software delivery to AI, analytics, and transformation planning, each cluster is built around a clear business problem and a practical next step.</p>
         </div>
-        <div class="home-services-grid">
-            {% for service in services %}
-            <article class="home-service-card">
-                <div class="home-service-top">
-                    <span class="home-service-category">{{ service.get_category_display }}</span>
-                    <span class="home-service-meta">~{{ service.quote_delivery_weeks }} weeks</span>
-                </div>
-                <div class="home-service-title-row">
-                    <div class="home-service-icon"><i class="{{ service.icon|default:'fas fa-layer-group' }}"></i></div>
+        <div class="home-services-grid solution-clusters-grid">
+            {% for cluster in service_solution_clusters %}
+            <article class="home-service-card solution-cluster-card">
+                <div class="solution-cluster-top">
+                    <div class="solution-cluster-icon"><i class="{{ cluster.icon }}"></i></div>
                     <div>
-                        <h3>{{ service.title }}</h3>
-                        <p>{{ service.short_description }}</p>
+                        <span class="home-service-category">{{ cluster.title }}</span>
+                        <h3>{{ cluster.value_statement }}</h3>
                     </div>
                 </div>
-                {% with features=service.get_key_features_list %}
+                <p class="solution-cluster-problem">{{ cluster.business_problem }}</p>
                 <ul class="home-service-points">
-                    {% for feature in features|slice:":2" %}
-                    <li>{{ feature }}</li>
-                    {% empty %}
-                    <li>Scoped around measurable operational outcomes.</li>
-                    <li>Delivered with secure, maintainable engineering standards.</li>
+                    {% for deliverable in cluster.deliverables %}
+                    <li>{{ deliverable }}</li>
                     {% endfor %}
                 </ul>
-                {% endwith %}
-                {% with techs=service.get_technologies_list %}
                 <div class="home-service-tags">
-                    {% for tech in techs|slice:":3" %}
-                    <span>{{ tech }}</span>
-                    {% empty %}
-                    <span>Consulting-led</span>
-                    <span>Scale-ready</span>
-                    <span>Operational impact</span>
+                    {% for title in cluster.sample_services %}
+                    <span>{{ title }}</span>
                     {% endfor %}
                 </div>
-                {% endwith %}
-                <div class="home-service-actions">
-                    <a href="{% url 'service_detail' service.slug %}" class="home-service-link">View Service <i class="fas fa-arrow-right"></i></a>
-                    <a href="{% url 'quote_generator' %}" class="home-service-link secondary">Get Proposal</a>
-                </div>
-            </article>
-            {% empty %}
-            <article class="home-service-card">
-                <div class="home-service-top">
-                    <span class="home-service-category">Software Development</span>
-                    <span class="home-service-meta">~8 weeks</span>
-                </div>
-                <div class="home-service-title-row">
-                    <div class="home-service-icon"><i class="fas fa-laptop-code"></i></div>
-                    <div>
-                        <h3>Enterprise Platforms</h3>
-                        <p>Custom platforms, customer workflows, and internal systems designed for growth.</p>
-                    </div>
-                </div>
-                <ul class="home-service-points">
-                    <li>Business-first scoping and architecture</li>
-                    <li>Production-ready engineering and support</li>
-                </ul>
-                <div class="home-service-tags">
-                    <span>Django</span>
-                    <span>React</span>
-                    <span>APIs</span>
+                <div class="solution-cluster-fit">
+                    <strong>Best fit:</strong>
+                    <span>{{ cluster.who_for }}</span>
                 </div>
                 <div class="home-service-actions">
-                    <a href="{% url 'services' %}" class="home-service-link">View Services <i class="fas fa-arrow-right"></i></a>
                     <a href="{% url 'quote_generator' %}" class="home-service-link secondary">Get Proposal</a>
+                    <a href="{% url 'services' %}#solutionClusters" class="home-service-link">Explore Services <i class="fas fa-arrow-right"></i></a>
                 </div>
             </article>
             {% endfor %}
-        </div>
-        <div class="home-services-footer">
-            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore All Services</a>
         </div>
     </div>
 </section>
@@ -244,25 +204,29 @@
     <div class="container">
         <div class="section-heading">
             <p class="section-eyebrow">How We Deliver</p>
-            <h2>Strategy, Engineering, and Continuous Improvement</h2>
-            <p class="section-subtitle">Every engagement moves from business discovery to build, integration, and long-term optimization.</p>
+            <h2>Design. Build. Support.</h2>
+            <p class="section-subtitle">The three stages we use to lower delivery risk and keep execution tied to measurable business outcomes.</p>
         </div>
         <div class="pillars-grid">
             <article class="pillar-card">
                 <div class="pillar-icon"><i class="fas fa-compass-drafting"></i></div>
-                <h3>Discover</h3>
-                <p>We translate business goals, process bottlenecks, and compliance needs into a practical roadmap for delivery.</p>
+                <h3>Design</h3>
+                <p>We turn business goals, process bottlenecks, and stakeholder needs into a scoped solution and execution plan.</p>
             </article>
             <article class="pillar-card">
                 <div class="pillar-icon"><i class="fas fa-code"></i></div>
                 <h3>Build</h3>
-                <p>We engineer scalable software, AI workflows, and integrations with reliable architecture and disciplined QA.</p>
+                <p>We ship secure software, automation, and analytics systems through disciplined engineering and QA sprints.</p>
             </article>
             <article class="pillar-card">
                 <div class="pillar-icon"><i class="fas fa-headset"></i></div>
-                <h3>Optimize</h3>
-                <p>From rollout to reporting and automation tuning, we help teams improve performance after go-live.</p>
+                <h3>Support</h3>
+                <p>We help teams launch confidently, monitor performance, and improve adoption and reliability after go-live.</p>
             </article>
+        </div>
+        <div class="pillars-risk-line">
+            <i class="fas fa-shield-check"></i>
+            <p>Clear planning reduces rework, structured engineering reduces implementation risk, and ongoing support protects operational continuity.</p>
         </div>
     </div>
 </section>
@@ -329,20 +293,20 @@
 <section class="page-block section-soft">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Our Track Record</p>
-            <h2>Projects Completed</h2>
-            <p class="section-subtitle">Successful implementations delivered across industries and technology domains.</p>
+            <p class="section-eyebrow">Featured Case Studies</p>
+            <h2>Proof of delivery, not just service promises</h2>
+            <p class="section-subtitle">Recent case studies and solution examples showing the business problem, solution delivered, and measurable outcome.</p>
         </div>
 
         <div class="projects-completed-summary">
             <div class="project-total-card">
                 <h3 data-count="{{ completed_projects_count|default:0 }}" data-suffix="+">0</h3>
-                <p>Total Completed Projects</p>
+                <p>Published delivery stories</p>
             </div>
         </div>
 
         <div class="projects-completed-grid">
-            {% for project in completed_projects %}
+            {% for project in featured_case_studies %}
             <article class="project-completed-card">
                 <div class="project-completed-media">
                     {% if project.image %}
@@ -357,30 +321,48 @@
                     {% endif %}
                 </div>
                 <div class="project-completed-content">
-                    <h3>{{ project.title }}</h3>
-                    <p>{{ project.description }}</p>
+                    <div class="project-proof-top">
+                        <span class="project-proof-type">{{ project.get_proof_type_display }}</span>
+                        {% if project.industry %}<span class="project-proof-industry">{{ project.industry }}</span>{% endif %}
+                    </div>
+                    <h3>{% if project.client_name %}{{ project.client_name }}{% else %}{{ project.title }}{% endif %}</h3>
+                    <p>{{ project.challenge|default:project.description|truncatechars:150 }}</p>
+                    {% if project.results %}
+                    <div class="case-results"><i class="fas fa-chart-line"></i> {{ project.results|truncatechars:120 }}</div>
+                    {% endif %}
                     {% if project.get_tags_list %}
                     <div class="project-tags">
-                        {% for tag in project.get_tags_list %}
+                        {% for tag in project.get_tags_list|slice:":3" %}
                         <span class="project-tag">{{ tag }}</span>
                         {% endfor %}
                     </div>
                     {% endif %}
-                    {% if project.link %}
-                    <a href="{{ project.link }}" target="_blank" rel="noopener" class="project-link-btn">
-                        View Project <i class="fas fa-arrow-up-right-from-square"></i>
-                    </a>
-                    {% endif %}
+                    <div class="project-proof-actions">
+                        <a href="{% url 'case_study_detail' project.title|slugify %}" class="project-link-btn">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'quote_generator' %}" class="project-link-btn secondary-link">
+                            Get Similar Solution
+                        </a>
+                    </div>
                 </div>
             </article>
             {% empty %}
             <article class="project-completed-card">
                 <div class="project-completed-content">
-                    <h3>No Completed Projects Yet</h3>
-                    <p>Add case studies in Django Admin to populate this section dynamically.</p>
+                    <span class="project-proof-type">Sample Implementation</span>
+                    <h3>Solution showcase space</h3>
+                    <p>Publish real case studies, internal prototypes, or clearly labelled solution examples here to build buyer confidence with visible proof.</p>
+                    <div class="project-proof-actions">
+                        <a href="{% url 'case_studies' %}" class="project-link-btn">View Delivery Stories</a>
+                        <a href="{% url 'quote_generator' %}" class="project-link-btn secondary-link">Get Similar Solution</a>
+                    </div>
                 </div>
             </article>
             {% endfor %}
+        </div>
+        <div class="home-services-footer">
+            <a href="{% url 'case_studies' %}" class="btn btn-outline-primary">View All Case Studies</a>
         </div>
     </div>
 </section>
@@ -411,6 +393,9 @@
                     </div>
                     <div class="partner-home-content">
                         <h3>{{ partner.name }}</h3>
+                        {% if partner.industry %}
+                        <span class="project-proof-industry">{{ partner.industry }}</span>
+                        {% endif %}
                         <p>
                             {% if partner.description %}
                             {{ partner.description }}
@@ -438,6 +423,9 @@
                     </div>
                     <div class="partner-home-content">
                         <h3>{{ partner.name }}</h3>
+                        {% if partner.industry %}
+                        <span class="project-proof-industry">{{ partner.industry }}</span>
+                        {% endif %}
                         <p>
                             {% if partner.description %}
                             {{ partner.description }}
@@ -451,8 +439,8 @@
             {% empty %}
             <article class="partner-home-card partner-home-card-static">
                 <div class="partner-home-content">
-                    <h3>No Partners Added Yet</h3>
-                    <p>Add partners in Django Admin to automatically populate this section with logos, descriptions, and links.</p>
+                    <h3>Partner trust block</h3>
+                    <p>Published partner logos and collaboration summaries appear here once active records are available.</p>
                 </div>
             </article>
             {% endfor %}
@@ -463,30 +451,38 @@
 <section class="page-block section-soft">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Knowledge Base</p>
-            <h2>Well-Versed In Modern Technologies</h2>
-            <p class="section-subtitle">Use the toggle to expand the technology stack.</p>
+            <p class="section-eyebrow">Capability Proof</p>
+            <h2>Modern technologies organized by the role they play in delivery</h2>
+            <p class="section-subtitle">We present the stack in business-relevant groups so buyers can see how the platform, cloud, data, and AI layers fit together.</p>
         </div>
-
-        <div class="tech-cloud" id="techCloud">
-            {% for category in technology_categories %}
-                {% for tech in category.technologies.all %}
-                <span class="tech-cloud-item{% if forloop.counter > 14 %} tech-extra{% endif %}">{{ tech.name }}</span>
-                {% endfor %}
+        <div class="technology-capability-grid">
+            {% for group in technology_capability_groups %}
+            <article class="technology-capability-card">
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="{{ group.icon }}"></i></div>
+                    <div>
+                        <h3>{{ group.title }}</h3>
+                        <p>{{ group.description }}</p>
+                    </div>
+                </div>
+                <div class="technology-capability-tags">
+                    {% for tech in group.technologies %}
+                    <span class="technology-chip{% if tech in group.primary_technologies %} primary{% endif %}">{{ tech.name }}</span>
+                    {% endfor %}
+                </div>
+            </article>
             {% empty %}
-            <span class="tech-cloud-item">Python</span>
-            <span class="tech-cloud-item">Django</span>
-            <span class="tech-cloud-item">React</span>
-            <span class="tech-cloud-item">Node.js</span>
-            <span class="tech-cloud-item">AWS</span>
-            <span class="tech-cloud-item">Azure</span>
-            <span class="tech-cloud-item">Docker</span>
-            <span class="tech-cloud-item tech-extra">Kubernetes</span>
-            <span class="tech-cloud-item tech-extra">TensorFlow</span>
-            <span class="tech-cloud-item tech-extra">PostgreSQL</span>
+            <article class="technology-capability-card">
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="fas fa-layer-group"></i></div>
+                    <div>
+                        <h3>Active delivery stack</h3>
+                        <p>Technology capability cards appear here once active stacks are configured in Django admin.</p>
+                    </div>
+                </div>
+            </article>
             {% endfor %}
         </div>
-        <button class="btn btn-outline-primary tech-toggle" id="techToggle" type="button" data-expanded="false">Show More</button>
     </div>
 </section>
 
@@ -494,20 +490,21 @@
     <div class="container">
         <div class="section-heading">
             <p class="section-eyebrow">Our Process</p>
-            <h2>Step Ahead With Best Practices</h2>
+            <h2>Clear delivery stages with visible outputs</h2>
         </div>
-        <div class="process-flow">
-            {% for step in process_steps %}
-            <article class="process-node">
+        <div class="process-flow process-flow-journey">
+            {% for step in process_journey %}
+            <article class="process-node process-journey-card">
                 <span class="process-index">{{ step.number }}</span>
+                <div class="process-journey-icon"><i class="{{ step.icon }}"></i></div>
                 <h3>{{ step.title }}</h3>
                 <p>{{ step.description }}</p>
+                <ul class="process-output-list">
+                    {% for output in step.outputs %}
+                    <li>{{ output }}</li>
+                    {% endfor %}
+                </ul>
             </article>
-            {% empty %}
-            <article class="process-node"><span class="process-index">01</span><h3>Requirement Gathering</h3><p>Understand goals and constraints.</p></article>
-            <article class="process-node"><span class="process-index">02</span><h3>Research</h3><p>Analyze options and dependencies.</p></article>
-            <article class="process-node"><span class="process-index">03</span><h3>Design & Build</h3><p>Implement with quality assurance.</p></article>
-            <article class="process-node"><span class="process-index">04</span><h3>Delivery</h3><p>Deploy, support, and optimize.</p></article>
             {% endfor %}
         </div>
     </div>
@@ -516,8 +513,8 @@
 <section class="page-block section-soft">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">Our Portfolio</p>
-            <h2>Outstanding Works</h2>
+            <p class="section-eyebrow">More Delivery Proof</p>
+            <h2>Solution examples, prototypes, and recent work</h2>
         </div>
         <div class="portfolio-grid">
             {% for case in case_studies %}
@@ -536,15 +533,16 @@
                     {% endif %}
                 </div>
                 <div class="portfolio-content">
+                    <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
                     <h3>{{ case.title }}</h3>
-                    <p>{{ case.description }}</p>
-                    <a href="{% if case.link %}{{ case.link }}{% else %}{% url 'case_studies' %}{% endif %}" class="case-link" {% if case.link %}target="_blank" rel="noopener"{% endif %}>View Details <i class="fas fa-arrow-right"></i></a>
+                    <p>{{ case.solution|default:case.description|truncatechars:140 }}</p>
+                    <a href="{% url 'case_study_detail' case.title|slugify %}" class="case-link">View Project <i class="fas fa-arrow-right"></i></a>
                 </div>
             </article>
             {% empty %}
-            <article class="portfolio-card"><div class="portfolio-content"><h3>Custom CRM Platforms</h3><p>Enable sales teams to manage leads, quotes, invoicing, and targets efficiently.</p></div></article>
-            <article class="portfolio-card"><div class="portfolio-content"><h3>Enterprise Web Portals</h3><p>Build high-performance CMS and portal platforms for product and service businesses.</p></div></article>
-            <article class="portfolio-card"><div class="portfolio-content"><h3>Operations Automation</h3><p>Digitize and optimize process workflows for speed and accuracy.</p></div></article>
+            <article class="portfolio-card"><div class="portfolio-content"><span class="project-proof-type">Sample Implementation</span><h3>Custom CRM Platform</h3><p>A sample implementation for lead management, quoting, invoicing, and sales operations visibility.</p></div></article>
+            <article class="portfolio-card"><div class="portfolio-content"><span class="project-proof-type">Internal Prototype</span><h3>Enterprise Web Portal</h3><p>A prototype portal pattern for customer self-service, approvals, and internal process coordination.</p></div></article>
+            <article class="portfolio-card"><div class="portfolio-content"><span class="project-proof-type">Solution Example</span><h3>Operations Automation</h3><p>An example automation stack for removing repetitive work and improving reporting accuracy.</p></div></article>
             {% endfor %}
         </div>
     </div>
@@ -561,13 +559,13 @@
             <article class="testimonial-card-modern">
                 <p>"{{ testimonial.content }}"</p>
                 <h4>{{ testimonial.name }}</h4>
-                <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}</span>
+                <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}{% if testimonial.review_source %} • {{ testimonial.review_source }}{% endif %}</span>
             </article>
             {% empty %}
             <article class="testimonial-card-modern">
-                <p>"Nexalix worked like an extension of our internal team and helped us accelerate delivery significantly."</p>
-                <h4>Client Team</h4>
-                <span>Digital Transformation Partner</span>
+                <p>Verified testimonial content appears here once published references are available. Until then, Nexalix can share relevant references during consultation.</p>
+                <h4>Reference-ready delivery</h4>
+                <span>Available on request</span>
             </article>
             {% endfor %}
         </div>
@@ -576,9 +574,28 @@
 
 <section class="contact-cta home-cta-final">
     <div class="container">
-        <h2>{% if contact_cta %}{{ contact_cta.title }}{% else %}Ready To Build Your Next Digital Product?{% endif %}</h2>
-        <p>{% if contact_cta %}{{ contact_cta.content }}{% else %}Partner with Nexalix for consulting-led execution in IT, software, data, and innovation initiatives.{% endif %}</p>
-        <a href="{% url 'contact' %}" class="btn btn-primary">{% if contact_cta %}{{ contact_cta.button_text }}{% else %}Talk To Nexalix{% endif %}</a>
+        <div class="home-proof-footer">
+            {% for partner in hero_partner_logos %}
+            <span class="hero-trust-logo-pill" title="{{ partner.name }}">
+                <img
+                    src="{{ partner.logo.url|optimized_media:'thumb' }}"
+                    alt="{{ partner.name }} logo"
+                    loading="lazy"
+                    onerror="this.onerror=null;this.closest('.hero-trust-logo-pill').textContent='{{ partner.name|slice:":1"|upper }}';"
+                >
+            </span>
+            {% endfor %}
+        </div>
+        <h2>{% if contact_cta %}{{ contact_cta.title }}{% else %}Ready to scope the right solution for your team?{% endif %}</h2>
+        <p>{% if contact_cta %}{{ contact_cta.content }}{% else %}Tell us what you are trying to build, automate, or improve, and we will recommend the most practical engagement path.{% endif %}</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore Services</a>
+        </div>
+        <div class="cta-tertiary-links">
+            <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="{% url 'contact' %}">Contact Team</a>
+        </div>
     </div>
 </section>
 {% endblock %}

@@ -2357,6 +2357,10 @@ a.partner-home-card:hover {
 }
 
 @media (max-width: 768px) {
+    .home-hero {
+        min-height: min(68vh, 620px);
+    }
+
     .pillars-grid,
     .portfolio-grid,
     .process-flow,
@@ -2379,8 +2383,8 @@ a.partner-home-card:hover {
             "content"
             "visual"
             "intro";
-        padding: 94px 0 40px;
-        gap: 20px;
+        padding: 88px 0 34px;
+        gap: 18px;
     }
 
     .hero-side-intro {
@@ -2406,7 +2410,7 @@ a.partner-home-card:hover {
     }
 
     .hero-center-stage {
-        min-height: 260px;
+        min-height: 220px;
     }
 
     .hero-center-frame {
@@ -2442,6 +2446,10 @@ a.partner-home-card:hover {
 }
 
 @media (max-width: 560px) {
+    .home-hero {
+        min-height: min(60vh, 520px);
+    }
+
     .footer-trust-list {
         grid-template-columns: 1fr;
     }
@@ -2456,7 +2464,8 @@ a.partner-home-card:hover {
     }
 
     .home-hero-shell {
-        padding: 86px 0 34px;
+        padding: 80px 0 26px;
+        gap: 16px;
     }
 
     .hero-kicker {
@@ -2472,6 +2481,7 @@ a.partner-home-card:hover {
     .hero-subtitle {
         font-size: 0.86rem;
         line-height: 1.55;
+        max-width: 100%;
     }
 
     .hero-side-caption {
@@ -2495,10 +2505,13 @@ a.partner-home-card:hover {
 
     .hero-inline-metrics {
         grid-template-columns: 1fr;
+        gap: 7px;
+        margin-top: 14px;
     }
 
     .hero-inline-metric {
-        padding: 11px 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
     }
 
     .hero-inline-metric strong {
@@ -2507,6 +2520,21 @@ a.partner-home-card:hover {
 
     .hero-action-note {
         font-size: 0.8rem;
+        margin-top: 10px;
+    }
+
+    .hero-center-stage {
+        min-height: 172px;
+    }
+
+    .hero-center-frame {
+        width: min(100%, 240px);
+    }
+
+    .video-overlay {
+        background:
+            linear-gradient(116deg, rgba(4, 16, 45, 0.86) 8%, rgba(8, 34, 78, 0.58) 52%, rgba(28, 22, 86, 0.4) 100%),
+            radial-gradient(520px 240px at 24% 22%, rgba(79, 139, 247, 0.16), transparent 70%);
     }
 }
 
@@ -3623,8 +3651,9 @@ textarea:focus-visible {
 
 .video-overlay {
     background:
-        linear-gradient(116deg, rgba(4, 16, 45, 0.9) 6%, rgba(8, 34, 78, 0.76) 54%, rgba(28, 22, 86, 0.65) 100%),
-        radial-gradient(850px 420px at 18% 20%, rgba(47, 109, 226, 0.2), transparent 66%);
+        linear-gradient(116deg, rgba(4, 16, 45, 0.82) 8%, rgba(8, 34, 78, 0.62) 52%, rgba(28, 22, 86, 0.48) 100%),
+        radial-gradient(760px 380px at 18% 30%, rgba(65, 125, 236, 0.18), transparent 68%),
+        radial-gradient(620px 280px at 76% 24%, rgba(164, 92, 255, 0.14), transparent 62%);
 }
 
 .home-hero-content,

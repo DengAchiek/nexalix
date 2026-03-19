@@ -25,13 +25,94 @@
         </video>
         <div class="video-overlay"></div>
     </div>
-    <div class="container home-hero-content">
-        <p class="hero-kicker">IT & Innovation Consulting</p>
-        <h1 id="homeHeroHeadline">{{ home_ab.headline }}</h1>
-        <p class="hero-subtitle">{{ home_ab.subtitle }}</p>
-        <div class="hero-actions">
-            <a href="{{ home_ab.primary_cta_url }}" class="btn btn-primary" data-ab-click="primary_cta" data-ab-label="{{ home_ab.primary_cta_text }}">{{ home_ab.primary_cta_text }}</a>
-            <a href="{% url 'contact' %}" class="btn btn-outline-primary">Get Consultation</a>
+    <div class="container home-hero-shell">
+        <div class="home-hero-content">
+            <p class="hero-kicker">{{ home_ab.kicker }}</p>
+            <h1 id="homeHeroHeadline">{{ home_ab.headline }}</h1>
+            <p class="hero-subtitle">{{ home_ab.subtitle }}</p>
+
+            <div class="hero-proof-grid" aria-label="Nexalix value proposition">
+                <article class="hero-proof-item">
+                    <span>{{ home_ab.who_label }}</span>
+                    <p>{{ home_ab.who_text }}</p>
+                </article>
+                <article class="hero-proof-item">
+                    <span>{{ home_ab.what_label }}</span>
+                    <p>{{ home_ab.what_text }}</p>
+                </article>
+                <article class="hero-proof-item">
+                    <span>{{ home_ab.why_label }}</span>
+                    <p>{{ home_ab.why_text }}</p>
+                </article>
+            </div>
+
+            <div class="hero-chip-row" aria-label="Industries Nexalix serves">
+                {% for industry_name in hero_industry_tags %}
+                <span class="hero-chip">{{ industry_name }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="hero-actions">
+                <a href="{{ home_ab.primary_cta_url }}" class="btn btn-primary" data-ab-click="primary_cta" data-ab-label="{{ home_ab.primary_cta_text }}">{{ home_ab.primary_cta_text }}</a>
+                <a href="{{ home_ab.secondary_cta_url }}" class="btn btn-outline-primary">{{ home_ab.secondary_cta_text }}</a>
+            </div>
+            <p class="hero-action-note">{{ home_ab.action_note }}</p>
+        </div>
+
+        <aside class="hero-visual-card" aria-label="Nexalix delivery overview">
+            <div class="hero-visual-header">
+                <div>
+                    <p class="hero-visual-eyebrow">Delivery Overview</p>
+                    <h2>Consulting-led execution for products, AI, and automation</h2>
+                </div>
+                <div class="hero-visual-status">
+                    <span></span>
+                    Production ready
+                </div>
+            </div>
+
+            <div class="hero-metric-grid">
+                {% for metric in hero_metrics %}
+                <article class="hero-metric-card">
+                    <strong>{{ metric.value }}{{ metric.suffix }}</strong>
+                    <span>{{ metric.label }}</span>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="hero-architecture-card">
+                <p class="hero-architecture-title">System stack</p>
+                <div class="hero-architecture-layer">
+                    <strong>Digital Products</strong>
+                    <span>Portals, apps, customer workflows</span>
+                </div>
+                <div class="hero-architecture-layer">
+                    <strong>AI & Automation</strong>
+                    <span>Decision support, integrations, process orchestration</span>
+                </div>
+                <div class="hero-architecture-layer">
+                    <strong>Data & Reporting</strong>
+                    <span>Dashboards, analytics, operational visibility</span>
+                </div>
+            </div>
+
+            <div class="hero-workflow-card">
+                <p class="hero-workflow-title">How Nexalix delivers</p>
+                <div class="hero-workflow-steps">
+                    {% for step in hero_workflow %}
+                    <article class="hero-workflow-step">
+                        <strong>{{ step.title }}</strong>
+                        <span>{{ step.detail }}</span>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="hero-solution-tags" aria-label="Nexalix solution focus">
+                {% for service_name in hero_service_tags %}
+                <span class="hero-solution-tag">{{ service_name }}</span>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </section>
@@ -39,25 +120,25 @@
 <section class="page-block">
     <div class="container">
         <div class="section-heading">
-            <p class="section-eyebrow">What We Do</p>
-            <h2>Design. Build. Support.</h2>
-            <p class="section-subtitle">Inspired by proven consulting execution: clear design process, robust engineering, and long-term support.</p>
+            <p class="section-eyebrow">How We Deliver</p>
+            <h2>Strategy, Engineering, and Continuous Improvement</h2>
+            <p class="section-subtitle">Every engagement moves from business discovery to build, integration, and long-term optimization.</p>
         </div>
         <div class="pillars-grid">
             <article class="pillar-card">
                 <div class="pillar-icon"><i class="fas fa-compass-drafting"></i></div>
-                <h3>Design</h3>
-                <p>We break complex business objectives into practical modules with clear delivery paths and user-focused architecture.</p>
+                <h3>Discover</h3>
+                <p>We translate business goals, process bottlenecks, and compliance needs into a practical roadmap for delivery.</p>
             </article>
             <article class="pillar-card">
                 <div class="pillar-icon"><i class="fas fa-code"></i></div>
-                <h3>Code</h3>
-                <p>We convert solution designs into scalable software and integrations with maintainable code and strong QA discipline.</p>
+                <h3>Build</h3>
+                <p>We engineer scalable software, AI workflows, and integrations with reliable architecture and disciplined QA.</p>
             </article>
             <article class="pillar-card">
                 <div class="pillar-icon"><i class="fas fa-headset"></i></div>
-                <h3>Support</h3>
-                <p>From deployment to optimization, our team supports growth, reliability, and platform evolution post go-live.</p>
+                <h3>Optimize</h3>
+                <p>From rollout to reporting and automation tuning, we help teams improve performance after go-live.</p>
             </article>
         </div>
     </div>

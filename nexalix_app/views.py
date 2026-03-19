@@ -110,6 +110,18 @@ UX_EVENT_CACHE_TTL_SECONDS = int(60 * 60 * 24 * 7)
 UX_AB_PRIMARY_TEST = "home_hero_primary"
 UX_AB_PRIMARY_TEST_KEY = slugify(UX_AB_PRIMARY_TEST)
 UX_AB_VARIANTS = ("A", "B")
+LEGACY_HOME_HERO_TITLE = "Living Up To Your Creative Potential"
+LEGACY_HOME_HERO_SUBTITLE = (
+    "We are an engineering and consulting partner for digital products, data platforms, automation, "
+    "and enterprise transformation."
+)
+DEFAULT_HOME_HERO_HEADLINE = "AI, Software, and Automation for Fast-Growing Businesses"
+DEFAULT_HOME_HERO_SUBTITLE = (
+    "Nexalix helps fast-growing businesses, regulated teams, and organizations modernizing operations "
+    "design and deliver digital products, AI workflows, data platforms, and business automation with "
+    "consulting-led execution."
+)
+DEFAULT_HOME_HERO_KICKER = "For fast-growing businesses, regulated teams, and organizations modernizing operations"
 
 logger = logging.getLogger("nexalix_app.views")
 User = get_user_model()
@@ -156,6 +168,22 @@ def _build_keywords(*keyword_groups):
     return ", ".join(ordered[:18])
 
 
+def _resolve_home_hero_copy(hero):
+    title = (hero.title or "").strip() if hero else ""
+    subtitle = (hero.subtitle or "").strip() if hero else ""
+
+    if not title or title == LEGACY_HOME_HERO_TITLE:
+        title = DEFAULT_HOME_HERO_HEADLINE
+    if not subtitle or subtitle == LEGACY_HOME_HERO_SUBTITLE:
+        subtitle = DEFAULT_HOME_HERO_SUBTITLE
+
+    return {
+        "headline": title,
+        "subtitle": subtitle,
+        "kicker": DEFAULT_HOME_HERO_KICKER,
+    }
+
+
 def _resolve_home_ab_variant(request, default_headline, default_subtitle):
     forced_variant = (request.GET.get("ab") or "").strip().upper()
     if forced_variant in HOME_AB_VARIANTS:
@@ -170,23 +198,38 @@ def _resolve_home_ab_variant(request, default_headline, default_subtitle):
             request.session["home_ab_variant"] = variant
             request.session.modified = True
 
+    common = {
+        "test_name": "home_hero_primary",
+        "kicker": DEFAULT_HOME_HERO_KICKER,
+        "who_label": "Who we serve",
+        "what_label": "What we do",
+        "why_label": "Why Nexalix",
+        "who_text": "SMEs, regulated teams, and growing organizations across healthcare, education, finance, retail, logistics, and startups.",
+        "what_text": "We deliver enterprise software, AI automation, data platforms, dashboards, integrations, and consulting-led execution.",
+        "why_text": "You get business-first strategy, practical engineering, and rollout support in one delivery partner.",
+        "primary_cta_text": "Get Proposal",
+        "primary_cta_url": reverse("quote_generator"),
+        "secondary_cta_text": "Explore Services",
+        "secondary_cta_url": reverse("services"),
+        "action_note": "Start with a proposal for your project or review the service lines behind our delivery model.",
+    }
+
     if variant == "B":
         return {
-            "test_name": "home_hero_primary",
+            **common,
             "variant": "B",
-            "headline": "Build Resilient Digital Systems That Scale With Your Business",
-            "subtitle": "From product strategy to implementation, we help teams ship faster, automate operations, and grow with confidence.",
-            "primary_cta_text": "Book Strategy Call",
-            "primary_cta_url": reverse("contact"),
+            "headline": "Build Smarter Digital Systems for Growth",
+            "subtitle": (
+                "Nexalix partners with ambitious teams to build digital products, automate operations, "
+                "and turn business data into decision-ready systems that scale."
+            ),
         }
 
     return {
-        "test_name": "home_hero_primary",
+        **common,
         "variant": "A",
         "headline": default_headline,
         "subtitle": default_subtitle,
-        "primary_cta_text": "Explore Services",
-        "primary_cta_url": reverse("services"),
     }
 
 
@@ -1378,15 +1421,50 @@ def home(request):
             "partners": list(Partner.objects.filter(is_active=True).order_by("order")),
             "awards": list(Award.objects.filter(is_active=True).order_by("-year", "order")[:3]),
             "contact_cta": ContactCTA.objects.filter(is_active=True).first(),
+            "services_total": Service.objects.filter(is_active=True).count(),
+            "industries_total": Industry.objects.filter(is_active=True).count(),
         }
         cache.set(HOME_CONTEXT_CACHE_KEY, context, HOME_CONTEXT_CACHE_TTL)
     hero = context.get("hero")
-    hero_title = hero.title if hero else "Living Up To Your Creative Potential"
-    hero_subtitle = hero.subtitle if hero else "We are an engineering and consulting partner for digital products, data platforms, automation, and enterprise transformation."
-    home_ab = _resolve_home_ab_variant(request, hero_title, hero_subtitle)
+    hero_copy = _resolve_home_hero_copy(hero)
+    home_ab = _resolve_home_ab_variant(request, hero_copy["headline"], hero_copy["subtitle"])
     services_for_keywords = context.get("services", [])
     industries_for_keywords = context.get("industries", [])
     case_studies_for_keywords = context.get("case_studies", [])
+    hero_industry_tags = [item.name for item in industries_for_keywords[:4]] or [
+        "Healthcare",
+        "Finance",
+        "Education",
+        "Logistics",
+    ]
+    hero_service_tags = [item.title for item in services_for_keywords[:4]] or [
+        "Software Delivery",
+        "AI Automation",
+        "Data Platforms",
+        "Technology Consulting",
+    ]
+    hero_metrics = [
+        {
+            "value": context.get("services_total", len(services_for_keywords) or 0),
+            "suffix": "+",
+            "label": "service lines",
+        },
+        {
+            "value": context.get("industries_total", len(industries_for_keywords) or 0),
+            "suffix": "+",
+            "label": "industries served",
+        },
+        {
+            "value": context.get("completed_projects_count", 0),
+            "suffix": "+",
+            "label": "projects completed",
+        },
+    ]
+    hero_workflow = [
+        {"title": "Discover", "detail": "Business goals, process gaps, and system requirements."},
+        {"title": "Build", "detail": "Software, AI workflows, and integrations engineered for scale."},
+        {"title": "Optimize", "detail": "Dashboards, automation, and ongoing operational support."},
+    ]
     home_schemas = []
     featured_services = services_for_keywords
     if featured_services:
@@ -1406,6 +1484,10 @@ def home(request):
     page_context = {
         **context,
         "home_ab": home_ab,
+        "hero_industry_tags": hero_industry_tags,
+        "hero_service_tags": hero_service_tags,
+        "hero_metrics": hero_metrics,
+        "hero_workflow": hero_workflow,
         **_seo_context(
             request,
             title=f"{home_ab['headline']} | Nexalix Technologies",

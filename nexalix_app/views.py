@@ -211,7 +211,7 @@ def _resolve_home_ab_variant(request, default_headline, default_subtitle):
         "primary_cta_url": reverse("quote_generator"),
         "secondary_cta_text": "Explore Services",
         "secondary_cta_url": reverse("services"),
-        "action_note": "Start with a proposal for your project or review the service lines behind our delivery model.",
+        "action_note": "Share your goals, timeline, and expected outcome. We respond with a practical next step.",
     }
 
     if variant == "B":
@@ -1443,7 +1443,14 @@ def home(request):
         "Data Platforms",
         "Technology Consulting",
     ]
-    hero_metrics = [
+    hero_metrics = []
+    for stat in context.get("statistics", [])[:3]:
+        hero_metrics.append({
+            "value": stat.value,
+            "suffix": stat.suffix or "",
+            "label": stat.name,
+        })
+    fallback_metrics = [
         {
             "value": context.get("services_total", len(services_for_keywords) or 0),
             "suffix": "+",
@@ -1460,11 +1467,42 @@ def home(request):
             "label": "projects completed",
         },
     ]
-    hero_workflow = [
-        {"title": "Discover", "detail": "Business goals, process gaps, and system requirements."},
-        {"title": "Build", "detail": "Software, AI workflows, and integrations engineered for scale."},
-        {"title": "Optimize", "detail": "Dashboards, automation, and ongoing operational support."},
+    existing_labels = {str(item["label"]).strip().lower() for item in hero_metrics}
+    for metric in fallback_metrics:
+        if len(hero_metrics) >= 3:
+            break
+        if metric["label"].strip().lower() in existing_labels:
+            continue
+        hero_metrics.append(metric)
+        existing_labels.add(metric["label"].strip().lower())
+
+    hero_microcopy = [
+        {"icon": "fas fa-clock", "text": "Response within 24 hours"},
+        {"icon": "fas fa-clipboard-check", "text": "Consulting-led project planning"},
+        {"icon": "fas fa-server", "text": "Built with scalable modern stacks"},
+        {"icon": "fas fa-shield-alt", "text": "Trusted for digital product execution"},
     ]
+    hero_partner_logos = [partner for partner in context.get("partners", []) if partner.logo][:4]
+    hero_testimonial = context.get("testimonials", [None])[0] if context.get("testimonials") else None
+    hero_outcomes = []
+    for project in context.get("completed_projects", []):
+        outcome_text = _text_excerpt(project.results or project.description, limit=110)
+        if not outcome_text:
+            continue
+        hero_outcomes.append({
+            "title": project.title,
+            "result": outcome_text,
+            "tags": project.get_tags_list()[:2],
+        })
+        if len(hero_outcomes) == 2:
+            break
+
+    if not hero_outcomes and hero_testimonial:
+        hero_outcomes.append({
+            "title": hero_testimonial.company or "Client feedback",
+            "result": _text_excerpt(hero_testimonial.content, limit=110),
+            "tags": [],
+        })
     home_schemas = []
     featured_services = services_for_keywords
     if featured_services:
@@ -1487,7 +1525,10 @@ def home(request):
         "hero_industry_tags": hero_industry_tags,
         "hero_service_tags": hero_service_tags,
         "hero_metrics": hero_metrics,
-        "hero_workflow": hero_workflow,
+        "hero_microcopy": hero_microcopy,
+        "hero_partner_logos": hero_partner_logos,
+        "hero_testimonial": hero_testimonial,
+        "hero_outcomes": hero_outcomes,
         **_seo_context(
             request,
             title=f"{home_ab['headline']} | Nexalix Technologies",

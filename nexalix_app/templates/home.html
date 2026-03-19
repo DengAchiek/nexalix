@@ -57,6 +57,40 @@
                 <a href="{{ home_ab.secondary_cta_url }}" class="btn btn-outline-primary">{{ home_ab.secondary_cta_text }}</a>
             </div>
             <p class="hero-action-note">{{ home_ab.action_note }}</p>
+
+            <div class="hero-microcopy-list" aria-label="Why teams engage Nexalix">
+                {% for item in hero_microcopy %}
+                <span class="hero-microcopy-item"><i class="{{ item.icon }}"></i>{{ item.text }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="hero-trust-row" aria-label="Trust signals">
+                {% if hero_partner_logos %}
+                <div class="hero-trust-logos">
+                    <span class="hero-trust-label">Trusted in active delivery ecosystems</span>
+                    <div class="hero-trust-logo-list">
+                        {% for partner in hero_partner_logos %}
+                        <span class="hero-trust-logo-pill" title="{{ partner.name }}">
+                            <img
+                                src="{{ partner.logo.url|optimized_media:'thumb' }}"
+                                alt="{{ partner.name }} logo"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.closest('.hero-trust-logo-pill').textContent='{{ partner.name|slice:":1"|upper }}';"
+                            >
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if hero_testimonial %}
+                <div class="hero-trust-quote">
+                    <span class="hero-trust-label">Client signal</span>
+                    <p>"{{ hero_testimonial.content|truncatechars:130 }}"</p>
+                    <strong>{{ hero_testimonial.name }}{% if hero_testimonial.company %}, {{ hero_testimonial.company }}{% endif %}</strong>
+                </div>
+                {% endif %}
+            </div>
         </div>
 
         <aside class="hero-visual-card" aria-label="Nexalix delivery overview">
@@ -96,13 +130,20 @@
                 </div>
             </div>
 
-            <div class="hero-workflow-card">
-                <p class="hero-workflow-title">How Nexalix delivers</p>
-                <div class="hero-workflow-steps">
-                    {% for step in hero_workflow %}
-                    <article class="hero-workflow-step">
-                        <strong>{{ step.title }}</strong>
-                        <span>{{ step.detail }}</span>
+            <div class="hero-outcomes-card">
+                <p class="hero-workflow-title">Recent delivery outcomes</p>
+                <div class="hero-outcomes-list">
+                    {% for outcome in hero_outcomes %}
+                    <article class="hero-outcome-item">
+                        <strong>{{ outcome.title }}</strong>
+                        <span>{{ outcome.result }}</span>
+                        {% if outcome.tags %}
+                        <div class="hero-outcome-tags">
+                            {% for tag in outcome.tags %}
+                            <span>{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </article>
                     {% endfor %}
                 </div>
@@ -113,6 +154,88 @@
                 <span class="hero-solution-tag">{{ service_name }}</span>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-block home-services-section">
+    <div class="container">
+        <div class="section-heading home-services-heading">
+            <p class="section-eyebrow">Core Services</p>
+            <h2>Execution built around the systems businesses need to grow</h2>
+            <p class="section-subtitle">Compact delivery tracks for software, AI automation, data systems, and consulting-led modernization.</p>
+        </div>
+        <div class="home-services-grid">
+            {% for service in services %}
+            <article class="home-service-card">
+                <div class="home-service-top">
+                    <span class="home-service-category">{{ service.get_category_display }}</span>
+                    <span class="home-service-meta">~{{ service.quote_delivery_weeks }} weeks</span>
+                </div>
+                <div class="home-service-title-row">
+                    <div class="home-service-icon"><i class="{{ service.icon|default:'fas fa-layer-group' }}"></i></div>
+                    <div>
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.short_description }}</p>
+                    </div>
+                </div>
+                {% with features=service.get_key_features_list %}
+                <ul class="home-service-points">
+                    {% for feature in features|slice:":2" %}
+                    <li>{{ feature }}</li>
+                    {% empty %}
+                    <li>Scoped around measurable operational outcomes.</li>
+                    <li>Delivered with secure, maintainable engineering standards.</li>
+                    {% endfor %}
+                </ul>
+                {% endwith %}
+                {% with techs=service.get_technologies_list %}
+                <div class="home-service-tags">
+                    {% for tech in techs|slice:":3" %}
+                    <span>{{ tech }}</span>
+                    {% empty %}
+                    <span>Consulting-led</span>
+                    <span>Scale-ready</span>
+                    <span>Operational impact</span>
+                    {% endfor %}
+                </div>
+                {% endwith %}
+                <div class="home-service-actions">
+                    <a href="{% url 'service_detail' service.slug %}" class="home-service-link">View Service <i class="fas fa-arrow-right"></i></a>
+                    <a href="{% url 'quote_generator' %}" class="home-service-link secondary">Get Proposal</a>
+                </div>
+            </article>
+            {% empty %}
+            <article class="home-service-card">
+                <div class="home-service-top">
+                    <span class="home-service-category">Software Development</span>
+                    <span class="home-service-meta">~8 weeks</span>
+                </div>
+                <div class="home-service-title-row">
+                    <div class="home-service-icon"><i class="fas fa-laptop-code"></i></div>
+                    <div>
+                        <h3>Enterprise Platforms</h3>
+                        <p>Custom platforms, customer workflows, and internal systems designed for growth.</p>
+                    </div>
+                </div>
+                <ul class="home-service-points">
+                    <li>Business-first scoping and architecture</li>
+                    <li>Production-ready engineering and support</li>
+                </ul>
+                <div class="home-service-tags">
+                    <span>Django</span>
+                    <span>React</span>
+                    <span>APIs</span>
+                </div>
+                <div class="home-service-actions">
+                    <a href="{% url 'services' %}" class="home-service-link">View Services <i class="fas fa-arrow-right"></i></a>
+                    <a href="{% url 'quote_generator' %}" class="home-service-link secondary">Get Proposal</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <div class="home-services-footer">
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore All Services</a>
         </div>
     </div>
 </section>

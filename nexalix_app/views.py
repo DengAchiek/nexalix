@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.db.models import Count, Q
@@ -30,6 +31,7 @@ from .cache_utils import (
     get_dashboard_aggregate_cache_key,
 )
 from .chatbot import generate_chatbot_response
+from .forms import AdminAccessRequestForm
 from .seo_topics import (
     DEFAULT_SEO_KEYWORDS,
     build_draft_content,
@@ -110,6 +112,7 @@ UX_AB_PRIMARY_TEST_KEY = slugify(UX_AB_PRIMARY_TEST)
 UX_AB_VARIANTS = ("A", "B")
 
 logger = logging.getLogger("nexalix_app.views")
+User = get_user_model()
 
 
 def _money(value):
@@ -323,6 +326,30 @@ def _seo_context(
 
 def is_staff_user(user):
     return user.is_authenticated and user.is_staff
+
+
+def admin_account_request(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect("activity_dashboard")
+
+    form = AdminAccessRequestForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        logger.info("Admin access account created for username=%s email=%s", user.get_username(), user.email)
+        messages.success(
+            request,
+            "Account created successfully. An administrator still needs to grant staff access before you can sign in to the admin area.",
+        )
+        return redirect("/admin/login/")
+
+    return render(
+        request,
+        "admin/account_request.html",
+        {
+            "form": form,
+            "title": "Create Admin Account",
+        },
+    )
 
 
 ROLE_LABELS = {
@@ -2052,6 +2079,37 @@ def activity_dashboard_live(request):
         "ux_analytics": ux_analytics,
         "notifications": dashboard_notifications,
     })
+
+
+@require_POST
+@user_passes_test(is_staff_user, login_url="/admin/login/")
+def dashboard_mark_notification_read(request):
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return JsonResponse({"ok": False, "error": "Invalid request payload."}, status=400)
+
+    message_id = payload.get("id")
+    if not message_id:
+        return JsonResponse({"ok": False, "error": "Notification id is required."}, status=400)
+
+    try:
+        contact_message = ContactMessage.objects.get(pk=message_id)
+    except ContactMessage.DoesNotExist:
+        return JsonResponse({"ok": False, "error": "Notification not found."}, status=404)
+
+    if not contact_message.is_read:
+        contact_message.is_read = True
+        contact_message.save(update_fields=["is_read"])
+
+    notifications = _build_dashboard_notifications(ContactMessage.objects.all())
+    return JsonResponse(
+        {
+            "ok": True,
+            "id": contact_message.id,
+            "notifications": notifications,
+        }
+    )
 
 
 @user_passes_test(is_staff_user, login_url="/admin/login/")

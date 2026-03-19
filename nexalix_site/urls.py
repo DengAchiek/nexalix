@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 from nexalix_app import views as app_views
 
 urlpatterns = [
+    path("admin/create-account/", app_views.admin_account_request, name="admin_account_request"),
     path(
         "admin/password_reset/",
         auth_views.PasswordResetView.as_view(
@@ -57,6 +58,11 @@ urlpatterns = [
     ),
     path("admin/activity-dashboard/", app_views.activity_dashboard, name="activity_dashboard"),
     path("admin/activity-dashboard/live/", app_views.activity_dashboard_live, name="activity_dashboard_live"),
+    path(
+        "admin/activity-dashboard/notifications/read/",
+        app_views.dashboard_mark_notification_read,
+        name="dashboard_mark_notification_read",
+    ),
     path("admin/seo-topic-generator/", app_views.seo_topic_generator, name="seo_topic_generator"),
     path("admin/", admin.site.urls),
     path('', include('nexalix_app.urls')),

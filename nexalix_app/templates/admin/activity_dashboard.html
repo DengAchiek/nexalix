@@ -1629,7 +1629,7 @@
                                     <p>{{ item.service }}{% if item.preview %} · {{ item.preview }}{% endif %}</p>
                                     <div class="mk-notification-links">
                                         <a class="mk-email-link" href="mailto:{{ item.email }}">{{ item.email }}</a>
-                                        <a href="{{ item.admin_url }}">Open in admin</a>
+                                        <a href="{{ item.admin_url }}" class="mk-notification-open" data-notification-id="{{ item.id }}">Open in admin</a>
                                     </div>
                                 </article>
                                 {% empty %}
@@ -2253,6 +2253,7 @@
 <script>
 (function () {
     const liveEndpoint = "{% url 'activity_dashboard_live' %}";
+    const notificationReadEndpoint = "{% url 'dashboard_mark_notification_read' %}";
     const searchForm = document.getElementById("dashboardSearchForm");
     const searchInput = document.getElementById("dashboardSearchInput");
     const activityHiddenInput = document.getElementById("activityHiddenInput");
@@ -2362,6 +2363,15 @@
         return Math.max(0, Math.min(100, numeric));
     }
 
+    function getCookie(name) {
+        const cookieValue = document.cookie
+            .split(";")
+            .map((part) => part.trim())
+            .find((part) => part.startsWith(`${name}=`));
+        if (!cookieValue) return "";
+        return decodeURIComponent(cookieValue.split("=").slice(1).join("="));
+    }
+
     function closeNotificationPanel() {
         if (!notificationPanel || !notificationBell) return;
         notificationPanel.hidden = true;
@@ -2438,7 +2448,7 @@
                         <p>${escapeHtml(item.service || "General inquiry")}${item.preview ? ` · ${escapeHtml(item.preview)}` : ""}</p>
                         <div class="mk-notification-links">
                             <a class="mk-email-link" href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a>
-                            <a href="${escapeHtml(item.admin_url)}">Open in admin</a>
+                            <a href="${escapeHtml(item.admin_url)}" class="mk-notification-open" data-notification-id="${escapeHtml(item.id)}">Open in admin</a>
                         </div>
                     </article>
                 `).join("");
@@ -2762,6 +2772,46 @@
     if (notificationPanel) {
         notificationPanel.addEventListener("click", (event) => {
             event.stopPropagation();
+        });
+    }
+
+    if (notificationList) {
+        notificationList.addEventListener("click", async (event) => {
+            const link = event.target.closest(".mk-notification-open");
+            if (!link) return;
+
+            event.preventDefault();
+            const notificationId = link.dataset.notificationId || "";
+            const destination = link.getAttribute("href") || "";
+
+            if (!notificationId || !destination) {
+                if (destination) window.location.assign(destination);
+                return;
+            }
+
+            try {
+                const response = await fetch(notificationReadEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ id: notificationId }),
+                    keepalive: true,
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.ok) {
+                        renderNotifications(data.notifications || {}, { announce: false });
+                    }
+                }
+            } catch (error) {
+                console.warn("Notification mark-as-read failed", error);
+            } finally {
+                window.location.assign(destination);
+            }
         });
     }
 

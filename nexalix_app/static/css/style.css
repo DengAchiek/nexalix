@@ -2425,6 +2425,9 @@ a.partner-home-card:hover {
     .hero-actions .btn {
         width: 100%;
         justify-content: center;
+        min-height: 40px;
+        padding: 9px 15px;
+        font-size: 0.92rem;
     }
 
     .hero-inline-metrics {
@@ -2504,18 +2507,24 @@ a.partner-home-card:hover {
     }
 
     .hero-inline-metrics {
-        grid-template-columns: 1fr;
-        gap: 7px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
         margin-top: 14px;
     }
 
     .hero-inline-metric {
-        padding: 10px 12px;
-        border-radius: 14px;
+        padding: 9px 8px;
+        border-radius: 12px;
     }
 
     .hero-inline-metric strong {
-        font-size: 1rem;
+        font-size: 0.94rem;
+    }
+
+    .hero-inline-metric span {
+        margin-top: 4px;
+        font-size: 0.66rem;
+        line-height: 1.28;
     }
 
     .hero-action-note {
@@ -2529,6 +2538,12 @@ a.partner-home-card:hover {
 
     .hero-center-frame {
         width: min(100%, 240px);
+    }
+
+    .hero-actions .btn {
+        min-height: 38px;
+        padding: 8px 14px;
+        font-size: 0.88rem;
     }
 
     .video-overlay {

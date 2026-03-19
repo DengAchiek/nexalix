@@ -25,30 +25,38 @@
         </video>
         <div class="video-overlay"></div>
     </div>
-    <div class="container home-hero-shell">
-        <div class="home-hero-content">
-            <p class="hero-kicker">{{ home_ab.kicker }}</p>
+    <div class="container home-hero-shell home-hero-shell-simple">
+        <div class="hero-side-intro" aria-label="Who Nexalix serves">
+            <p class="hero-side-caption">{{ home_ab.who_label }}</p>
+            <h2>Fast-growing teams</h2>
+            <p class="hero-side-copy">{{ home_ab.who_text }}</p>
+            <div class="hero-side-chips">
+                {% for industry_name in hero_industry_tags %}
+                <span class="hero-side-chip">{{ industry_name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="hero-center-stage" aria-hidden="true">
+            <span class="hero-stage-ring hero-stage-ring-one"></span>
+            <span class="hero-stage-ring hero-stage-ring-two"></span>
+            <div class="hero-center-glow"></div>
+            <div class="hero-center-frame">
+                <img src="{% static 'images/logo1.png' %}" alt="Nexalix" class="hero-center-visual">
+            </div>
+        </div>
+
+        <div class="home-hero-content home-hero-content-simple">
+            <p class="hero-kicker">{{ home_ab.what_label }}</p>
             <h1 id="homeHeroHeadline">{{ home_ab.headline }}</h1>
             <p class="hero-subtitle">{{ home_ab.subtitle }}</p>
 
-            <div class="hero-proof-grid" aria-label="Nexalix value proposition">
-                <article class="hero-proof-item">
-                    <span>{{ home_ab.who_label }}</span>
-                    <p>{{ home_ab.who_text }}</p>
+            <div class="hero-inline-metrics" aria-label="Nexalix delivery proof">
+                {% for metric in hero_metrics %}
+                <article class="hero-inline-metric">
+                    <strong>{{ metric.value }}{{ metric.suffix }}</strong>
+                    <span>{{ metric.label }}</span>
                 </article>
-                <article class="hero-proof-item">
-                    <span>{{ home_ab.what_label }}</span>
-                    <p>{{ home_ab.what_text }}</p>
-                </article>
-                <article class="hero-proof-item">
-                    <span>{{ home_ab.why_label }}</span>
-                    <p>{{ home_ab.why_text }}</p>
-                </article>
-            </div>
-
-            <div class="hero-chip-row" aria-label="Industries Nexalix serves">
-                {% for industry_name in hero_industry_tags %}
-                <span class="hero-chip">{{ industry_name }}</span>
                 {% endfor %}
             </div>
 
@@ -58,100 +66,9 @@
             </div>
             <p class="hero-action-note">{{ home_ab.action_note }}</p>
 
-            <div class="hero-microcopy-list" aria-label="Why teams engage Nexalix">
-                {% for item in hero_microcopy %}
-                <span class="hero-microcopy-item"><i class="{{ item.icon }}"></i>{{ item.text }}</span>
-                {% endfor %}
-            </div>
-
-            <div class="hero-trust-row" aria-label="Trust signals">
-                {% if hero_partner_logos %}
-                <div class="hero-trust-logos">
-                    <span class="hero-trust-label">Trusted in active delivery ecosystems</span>
-                    <div class="hero-trust-logo-list">
-                        {% for partner in hero_partner_logos %}
-                        <span class="hero-trust-logo-pill" title="{{ partner.name }}">
-                            <img
-                                src="{{ partner.logo.url|optimized_media:'thumb' }}"
-                                alt="{{ partner.name }} logo"
-                                loading="lazy"
-                                onerror="this.onerror=null;this.closest('.hero-trust-logo-pill').textContent='{{ partner.name|slice:":1"|upper }}';"
-                            >
-                        </span>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-
-                {% if hero_testimonial %}
-                <div class="hero-trust-quote">
-                    <span class="hero-trust-label">Client signal</span>
-                    <p>"{{ hero_testimonial.content|truncatechars:130 }}"</p>
-                    <strong>{{ hero_testimonial.name }}{% if hero_testimonial.company %}, {{ hero_testimonial.company }}{% endif %}</strong>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <aside class="hero-visual-card" aria-label="Nexalix delivery overview">
-            <div class="hero-visual-header">
-                <div>
-                    <p class="hero-visual-eyebrow">Delivery Overview</p>
-                    <h2>Consulting-led delivery for AI, products, and automation</h2>
-                </div>
-                <div class="hero-visual-status">
-                    <span></span>
-                    Production ready
-                </div>
-            </div>
-
-            <div class="hero-metric-grid">
-                {% for metric in hero_metrics %}
-                <article class="hero-metric-card">
-                    <strong>{{ metric.value }}{{ metric.suffix }}</strong>
-                    <span>{{ metric.label }}</span>
-                </article>
-                {% endfor %}
-            </div>
-
-            <div class="hero-architecture-card">
-                <p class="hero-architecture-title">System stack</p>
-                <div class="hero-architecture-layer">
-                    <strong>Digital Products</strong>
-                    <span>Portals, apps, customer workflows</span>
-                </div>
-                <div class="hero-architecture-layer">
-                    <strong>AI & Automation</strong>
-                    <span>Decision support, integrations, process orchestration</span>
-                </div>
-                <div class="hero-architecture-layer">
-                    <strong>Data & Reporting</strong>
-                    <span>Dashboards, analytics, operational visibility</span>
-                </div>
-            </div>
-
-            <div class="hero-outcomes-card">
-                <p class="hero-workflow-title">Recent delivery outcomes</p>
-                <div class="hero-outcomes-list">
-                    {% for outcome in hero_outcomes|slice:":2" %}
-                    <article class="hero-outcome-item">
-                        <strong>{{ outcome.title }}</strong>
-                        <span>{{ outcome.result }}</span>
-                        {% if outcome.tags %}
-                        <div class="hero-outcome-tags">
-                            {% for tag in outcome.tags %}
-                            <span>{{ tag }}</span>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </article>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="hero-solution-tags" aria-label="Nexalix solution focus">
-                {% for service_name in hero_service_tags %}
-                <span class="hero-solution-tag">{{ service_name }}</span>
+            <div class="hero-mini-points" aria-label="Core Nexalix capabilities">
+                {% for service_name in hero_service_tags|slice:":3" %}
+                <span>{{ service_name }}</span>
                 {% endfor %}
             </div>
         </div>

@@ -1,5 +1,7 @@
 # admin.py
-from django.contrib import admin
+import logging
+
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.admin.sites import NotRegistered
@@ -15,6 +17,7 @@ from .models import (
 )
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 # ========== EXISTING MODELS (NON-SERVICE) ==========
 @admin.register(HeroSection)
@@ -377,10 +380,81 @@ class ChatbotLeadAdmin(admin.ModelAdmin):
     readonly_fields = ("session_key", "created_at", "updated_at")
 
 
+def send_staff_access_granted_email(user):
+    recipient = (user.email or "").strip()
+    if not recipient:
+        return False, "missing_email"
+
+    site_url = getattr(settings, "SITE_URL", "http://localhost:8000").rstrip("/")
+    login_url = f"{site_url}/admin/login/"
+    first_name = (user.first_name or user.username or "there").strip()
+
+    subject = "Your Nexalix admin access is ready"
+    body = f"""
+Hi {first_name},
+
+Your Nexalix account has been approved for staff access.
+
+You can now sign in to the admin area here:
+{login_url}
+
+Username: {user.username}
+
+If you did not request this access, please contact the Nexalix team immediately.
+
+Regards,
+Nexalix Technologies
+    """.strip()
+
+    try:
+        email = EmailMessage(
+            subject=subject,
+            body=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[recipient],
+        )
+        email.send(fail_silently=False)
+        return True, ""
+    except Exception as exc:
+        logger.exception("Failed to send staff approval email for user %s: %s", user.pk, exc)
+        return False, "send_failed"
+
+
 @admin.action(description="Approve staff access for selected users")
 def approve_staff_access(modeladmin, request, queryset):
-    updated = queryset.exclude(is_staff=True).update(is_staff=True)
-    modeladmin.message_user(request, f"Granted staff access to {updated} user(s).")
+    pending_users = list(queryset.exclude(is_staff=True))
+    approved_count = 0
+    emailed_count = 0
+    missing_email_count = 0
+    failed_email_count = 0
+
+    for user in pending_users:
+        user.is_staff = True
+        user.save(update_fields=["is_staff"])
+        approved_count += 1
+
+        sent, reason = send_staff_access_granted_email(user)
+        if sent:
+            emailed_count += 1
+        elif reason == "missing_email":
+            missing_email_count += 1
+        else:
+            failed_email_count += 1
+
+    modeladmin.message_user(
+        request,
+        f"Granted staff access to {approved_count} user(s). Approval email sent to {emailed_count}.",
+        level=messages.SUCCESS,
+    )
+    if missing_email_count or failed_email_count:
+        modeladmin.message_user(
+            request,
+            (
+                f"{missing_email_count} user(s) had no email address and "
+                f"{failed_email_count} approval email(s) could not be delivered."
+            ),
+            level=messages.WARNING,
+        )
 
 
 @admin.action(description="Remove staff access for selected users")
@@ -398,6 +472,37 @@ class NexalixUserAdmin(BaseUserAdmin):
     search_fields = ("username", "first_name", "last_name", "email")
     ordering = ("-date_joined",)
     actions = [approve_staff_access, remove_staff_access]
+
+    def save_model(self, request, obj, form, change):
+        should_send_approval_email = False
+        if change:
+            original = User.objects.filter(pk=obj.pk).only("is_staff").first()
+            should_send_approval_email = bool(original and not original.is_staff and obj.is_staff)
+
+        super().save_model(request, obj, form, change)
+
+        if not should_send_approval_email:
+            return
+
+        sent, reason = send_staff_access_granted_email(obj)
+        if sent:
+            self.message_user(
+                request,
+                f"Approval email sent to {obj.email}.",
+                level=messages.SUCCESS,
+            )
+        elif reason == "missing_email":
+            self.message_user(
+                request,
+                "Staff access was granted, but the user does not have an email address to notify.",
+                level=messages.WARNING,
+            )
+        else:
+            self.message_user(
+                request,
+                "Staff access was granted, but the approval email could not be sent.",
+                level=messages.WARNING,
+            )
 
 
 try:

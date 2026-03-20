@@ -3904,15 +3904,15 @@ textarea:focus-visible {
 
 .services-solution-showcase .solution-cluster-copy,
 .services-solution-pages .solution-cluster-copy {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 12px;
 }
 
 .services-solution-showcase .solution-cluster-copy > div,
 .services-solution-pages .solution-cluster-copy > div {
     display: grid;
     gap: 7px;
-    padding: 12px 13px;
+    padding: 14px 15px;
     background: #f8fbff;
     border: 1px solid #dce7f2;
     border-radius: 14px;
@@ -4877,6 +4877,7 @@ textarea:focus-visible {
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 16px 34px rgba(17, 39, 78, 0.08);
+    gap: 14px;
 }
 
 .services-solution-showcase .solution-cluster-top,

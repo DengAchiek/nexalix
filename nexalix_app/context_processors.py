@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from .cache_utils import FOOTER_CONTEXT_CACHE_KEY, SEARCH_INDEX_CACHE_KEY, SEARCH_INDEX_CACHE_TTL
-from .models import BlogPost, CaseStudy, Industry, NewsletterSignup, Service
+from .models import BlogPost, CaseStudy, Industry, NewsletterSignup, Service, SolutionPage
 
 
 def _search_entry(title, description, url, category, keywords=None):
@@ -41,6 +41,17 @@ def global_site_context(_request):
                     url=service_url,
                     category="Service",
                     keywords=keywords,
+                )
+            )
+
+        for page in SolutionPage.objects.filter(is_active=True).order_by("order", "nav_title")[:20]:
+            search_index.append(
+                _search_entry(
+                    title=page.nav_title,
+                    description=(page.subheadline or "")[:180],
+                    url=reverse("solution_landing", args=[page.slug]),
+                    category="Solution",
+                    keywords=page.get_keywords_list()[:8],
                 )
             )
 

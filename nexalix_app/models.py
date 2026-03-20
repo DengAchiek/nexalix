@@ -41,6 +41,14 @@ class Service(models.Model):
         blank=True  # Added blank=True to match the first definition
     )
     category = models.CharField(max_length=50, choices=SERVICE_CATEGORIES, default='development')
+    solution_cluster = models.ForeignKey(
+        'ServiceSolutionCluster',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='services',
+        help_text="Optional manual mapping to a solution cluster used across the public site."
+    )
     featured_image = models.ImageField(upload_to='services/', blank=True, null=True)
     order = models.IntegerField(default=0, help_text="Display order on services page")
     is_active = models.BooleanField(default=True)
@@ -116,6 +124,105 @@ class Service(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class ServiceSolutionCluster(models.Model):
+    slug = models.SlugField(unique=True)
+    title = models.CharField(max_length=150)
+    icon = models.CharField(max_length=100, default='fas fa-layer-group')
+    value_statement = models.TextField(help_text="Short outcome-led statement shown on solution cards.")
+    business_problem = models.TextField()
+    who_for = models.TextField(help_text="Describe who this solution cluster is best suited for.")
+    deliverables = models.TextField(help_text="One deliverable per line")
+    keywords = models.TextField(
+        blank=True,
+        help_text="Comma-separated keywords used to match related services and proof."
+    )
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    show_on_homepage = models.BooleanField(default=True)
+    primary_cta_text = models.CharField(max_length=60, default='Get Proposal')
+    secondary_cta_text = models.CharField(max_length=60, default='Book Consultation')
+
+    class Meta:
+        ordering = ['order', 'title']
+        verbose_name = "Service Solution Cluster"
+        verbose_name_plural = "Service Solution Clusters"
+
+    def __str__(self):
+        return self.title
+
+    def get_deliverables_list(self):
+        return [item.strip() for item in (self.deliverables or "").splitlines() if item.strip()]
+
+    def get_keywords_list(self):
+        raw = (self.keywords or "").replace("\n", ",")
+        return [item.strip() for item in raw.split(",") if item.strip()]
+
+
+class SolutionPage(models.Model):
+    slug = models.SlugField(unique=True)
+    nav_title = models.CharField(max_length=160)
+    headline = models.CharField(max_length=255)
+    subheadline = models.TextField()
+    solution_cluster = models.ForeignKey(
+        ServiceSolutionCluster,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='solution_pages'
+    )
+    problems = models.TextField(help_text="One problem statement per line")
+    deliverables = models.TextField(help_text="One deliverable per line")
+    technologies = models.TextField(help_text="One technology per line")
+    keywords = models.TextField(
+        blank=True,
+        help_text="Comma-separated keywords used to match services and case studies."
+    )
+    faq_items = models.TextField(
+        blank=True,
+        help_text="One FAQ per line using the format: Question | Answer"
+    )
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    meta_title = models.CharField(max_length=200, blank=True)
+    meta_description = models.TextField(blank=True)
+    canonical_url = models.URLField(blank=True)
+    social_share_image = models.ImageField(upload_to='seo/', blank=True, null=True)
+    schema_markup_json = models.TextField(blank=True, help_text="Optional JSON-LD override or supplemental schema.")
+
+    class Meta:
+        ordering = ['order', 'nav_title']
+        verbose_name = "Solution Page"
+        verbose_name_plural = "Solution Pages"
+
+    def __str__(self):
+        return self.nav_title
+
+    def get_problems_list(self):
+        return [item.strip() for item in (self.problems or "").splitlines() if item.strip()]
+
+    def get_deliverables_list(self):
+        return [item.strip() for item in (self.deliverables or "").splitlines() if item.strip()]
+
+    def get_technologies_list(self):
+        return [item.strip() for item in (self.technologies or "").splitlines() if item.strip()]
+
+    def get_keywords_list(self):
+        raw = (self.keywords or "").replace("\n", ",")
+        return [item.strip() for item in raw.split(",") if item.strip()]
+
+    def get_faq_items_list(self):
+        items = []
+        for line in (self.faq_items or "").splitlines():
+            if "|" not in line:
+                continue
+            question, answer = line.split("|", 1)
+            question = question.strip()
+            answer = answer.strip()
+            if question and answer:
+                items.append({"question": question, "answer": answer})
+        return items
 
 
 class ServiceFeature(models.Model):
@@ -195,7 +302,9 @@ class AboutSection(models.Model):
 class ProcessStep(models.Model):
     number = models.CharField(max_length=10)
     title = models.CharField(max_length=100)
+    icon = models.CharField(max_length=100, blank=True, help_text="Font Awesome icon class, e.g. fas fa-rocket")
     description = models.TextField()
+    outputs = models.TextField(blank=True, help_text="One expected output per line")
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -203,6 +312,9 @@ class ProcessStep(models.Model):
 
     def __str__(self):
         return f"{self.number}. {self.title}"
+
+    def get_outputs_list(self):
+        return [item.strip() for item in (self.outputs or "").splitlines() if item.strip()]
 
 
 class Industry(models.Model):

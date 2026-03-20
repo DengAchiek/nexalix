@@ -42,6 +42,7 @@ from .models import (
     HeroSection, Service, Testimonial, AboutSection, ProcessStep,
     Industry, TechnologyCategory, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
+    ServiceSolutionCluster, SolutionPage,
     ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
     QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead, UpdatesSubscriber
 )
@@ -286,12 +287,16 @@ SERVICE_CATEGORY_CLUSTER_MAP = {
 }
 LEGACY_PROCESS_TITLE_MAP = {
     "requirement gathering": "Discovery",
+    "discovery & analysis": "Discovery",
     "research & analysis": "Solution Planning",
     "research": "Solution Planning",
+    "planning & architecture": "Solution Planning",
     "design & development": "Build and QA",
     "design & build": "Build and QA",
+    "development & implementation": "Build and QA",
     "qa & delivery": "Launch and Support",
     "delivery": "Launch and Support",
+    "support & optimization": "Launch and Support",
 }
 PROCESS_PLAYBOOK = [
     {
@@ -375,7 +380,91 @@ def _normalize_label(value):
     return slugify((value or "").strip())
 
 
-def _infer_service_cluster_slug(service):
+def _serialize_service_solution_cluster(cluster):
+    return {
+        "object": cluster,
+        "slug": cluster.slug,
+        "title": cluster.title,
+        "icon": cluster.icon,
+        "value_statement": cluster.value_statement,
+        "business_problem": cluster.business_problem,
+        "deliverables": cluster.get_deliverables_list(),
+        "who_for": cluster.who_for,
+        "keywords": tuple(cluster.get_keywords_list()),
+        "primary_cta_text": cluster.primary_cta_text or "Get Proposal",
+        "secondary_cta_text": cluster.secondary_cta_text or "Book Consultation",
+        "show_on_homepage": cluster.show_on_homepage,
+    }
+
+
+def _serialize_solution_page(page):
+    return {
+        "object": page,
+        "slug": page.slug,
+        "nav_title": page.nav_title,
+        "headline": page.headline,
+        "subheadline": page.subheadline,
+        "problems": page.get_problems_list(),
+        "deliverables": page.get_deliverables_list(),
+        "technologies": page.get_technologies_list(),
+        "keywords": tuple(page.get_keywords_list()),
+        "faqs": [(item["question"], item["answer"]) for item in page.get_faq_items_list()],
+        "solution_cluster_slug": page.solution_cluster.slug if page.solution_cluster else "",
+        "meta_title": page.meta_title,
+        "meta_description": page.meta_description,
+        "canonical_url": page.canonical_url,
+        "social_share_image": page.social_share_image,
+        "schema_markup_json": page.schema_markup_json,
+    }
+
+
+def _get_solution_cluster_configs(include_inactive=False):
+    queryset = ServiceSolutionCluster.objects.all().order_by("order", "title")
+    if not include_inactive:
+        queryset = queryset.filter(is_active=True)
+    records = list(queryset)
+    if records:
+        return [_serialize_service_solution_cluster(cluster) for cluster in records]
+
+    return [
+        {
+            "slug": slug,
+            **config,
+            "primary_cta_text": "Get Proposal",
+            "secondary_cta_text": "Book Consultation",
+            "show_on_homepage": True,
+        }
+        for slug, config in SERVICE_SOLUTION_CLUSTER_CONFIG.items()
+    ]
+
+
+def _get_solution_page_configs(include_inactive=False):
+    queryset = SolutionPage.objects.select_related("solution_cluster").all().order_by("order", "nav_title")
+    if not include_inactive:
+        queryset = queryset.filter(is_active=True)
+    records = list(queryset)
+    if records:
+        return [_serialize_solution_page(page) for page in records]
+    return [
+        {
+            "slug": slug,
+            **config,
+            "solution_cluster_slug": "",
+            "meta_title": "",
+            "meta_description": "",
+            "canonical_url": "",
+            "social_share_image": None,
+            "schema_markup_json": "",
+        }
+        for slug, config in SOLUTION_PAGE_CONFIG.items()
+    ]
+
+
+def _infer_service_cluster_slug(service, cluster_configs=None):
+    if getattr(service, "solution_cluster_id", None) and getattr(service, "solution_cluster", None):
+        return service.solution_cluster.slug
+
+    cluster_configs = cluster_configs or _get_solution_cluster_configs()
     haystack = " ".join([
         service.title or "",
         service.short_description or "",
@@ -383,9 +472,9 @@ def _infer_service_cluster_slug(service):
         service.key_features or "",
         service.technologies or "",
     ]).lower()
-    for cluster_slug, config in SERVICE_SOLUTION_CLUSTER_CONFIG.items():
-        if any(keyword in haystack for keyword in config["keywords"]):
-            return cluster_slug
+    for config in cluster_configs:
+        if any(keyword.lower() in haystack for keyword in config.get("keywords", ())):
+            return config["slug"]
     return SERVICE_CATEGORY_CLUSTER_MAP.get(service.category, "software-development")
 
 
@@ -404,16 +493,22 @@ def _derive_service_engagement_type(service, cluster_slug):
 
 
 def _build_service_solution_clusters(services):
+    cluster_configs = _get_solution_cluster_configs()
     clusters = []
     cluster_index = {}
-    for key, config in SERVICE_SOLUTION_CLUSTER_CONFIG.items():
+    solution_pages = _get_solution_page_configs()
+    solution_page_map = {}
+    for page in solution_pages:
+        cluster_slug = page.get("solution_cluster_slug") or page["slug"]
+        solution_page_map.setdefault(cluster_slug, page["slug"])
+    for config in cluster_configs:
+        key = config["slug"]
         cluster = {
             "slug": key,
             **config,
             "services": [],
             "service_titles": [],
-            "landing_slug": SOLUTION_CLUSTER_TO_PAGE.get(key, key),
-            "cta_primary_text": "Get Proposal",
+            "landing_slug": solution_page_map.get(key, SOLUTION_CLUSTER_TO_PAGE.get(key, key)),
             "cta_primary_url": reverse("quote_generator"),
             "cta_secondary_text": "Book Consultation",
             "cta_secondary_url": f"{reverse('contact')}?solution={key}",
@@ -422,8 +517,8 @@ def _build_service_solution_clusters(services):
         cluster_index[key] = cluster
 
     for service in services:
-        cluster_slug = _infer_service_cluster_slug(service)
-        cluster = cluster_index.get(cluster_slug, cluster_index["software-development"])
+        cluster_slug = _infer_service_cluster_slug(service, cluster_configs)
+        cluster = cluster_index.get(cluster_slug) or cluster_index.get("software-development") or clusters[0]
         outcomes = service.get_key_features_list()[:3] or cluster["deliverables"][:3]
         service_card = {
             "object": service,
@@ -450,26 +545,39 @@ def _build_service_solution_clusters(services):
 
 
 def _solution_page_links():
-    return [
-        {"slug": slug, **config}
-        for slug, config in SOLUTION_PAGE_CONFIG.items()
-    ]
+    return _get_solution_page_configs()
 
 
 def _build_process_journey(process_steps):
     steps = []
     source_steps = list(process_steps or [])
+    remaining_steps = source_steps[:]
     for index, blueprint in enumerate(PROCESS_PLAYBOOK):
-        source = source_steps[index] if index < len(source_steps) else None
-        source_title = (source.title or "").strip().lower() if source else ""
-        resolved_title = LEGACY_PROCESS_TITLE_MAP.get(source_title, source.title if source else blueprint["title"])
-        resolved_description = source.description if source and source.description else blueprint["description"]
+        blueprint_number = (blueprint["number"] or "").lstrip("0") or "0"
+        matched_step = None
+        for candidate in remaining_steps:
+            candidate_title = (candidate.title or "").strip().lower()
+            canonical_title = LEGACY_PROCESS_TITLE_MAP.get(candidate_title, candidate.title or "")
+            candidate_number = (candidate.number or "").strip().lstrip("0") or "0"
+            if (
+                _normalize_label(canonical_title) == _normalize_label(blueprint["title"])
+                or candidate_number == blueprint_number
+            ):
+                matched_step = candidate
+                break
+
+        if matched_step:
+            remaining_steps.remove(matched_step)
+
+        source_title = (matched_step.title or "").strip().lower() if matched_step else ""
+        resolved_title = LEGACY_PROCESS_TITLE_MAP.get(source_title, matched_step.title if matched_step else blueprint["title"])
+        resolved_description = matched_step.description if matched_step and matched_step.description else blueprint["description"]
         steps.append({
-            "number": source.number if source and source.number else blueprint["number"],
+            "number": matched_step.number if matched_step and matched_step.number else blueprint["number"],
             "title": resolved_title,
-            "icon": blueprint["icon"],
+            "icon": matched_step.icon if matched_step and matched_step.icon else blueprint["icon"],
             "description": resolved_description,
-            "outputs": blueprint["outputs"],
+            "outputs": matched_step.get_outputs_list() if matched_step and matched_step.get_outputs_list() else blueprint["outputs"],
         })
     return steps
 
@@ -574,7 +682,7 @@ def _solution_page_schema(request, slug, page):
 
 
 def _build_solution_page_context(request, slug):
-    config = SOLUTION_PAGE_CONFIG.get(slug)
+    config = next((page for page in _get_solution_page_configs() if page["slug"] == slug), None)
     if not config:
         return None
 
@@ -590,6 +698,9 @@ def _build_solution_page_context(request, slug):
         ]).lower()
         if any(keyword in haystack for keyword in config["keywords"]):
             matching_services.append(service)
+
+    if not matching_services and config.get("solution_cluster_slug"):
+        matching_services = [service for service in services if _infer_service_cluster_slug(service) == config["solution_cluster_slug"]]
 
     if not matching_services:
         cluster_fallbacks = _build_service_solution_clusters(services)
@@ -644,8 +755,13 @@ def _build_solution_page_context(request, slug):
     if faq_schema:
         schemas.append(faq_schema)
     share_image = ""
+    if config.get("social_share_image"):
+        try:
+            share_image = config["social_share_image"].url
+        except Exception:
+            share_image = ""
     if matching_services:
-        share_image = _service_share_image_url(matching_services[0])
+        share_image = share_image or _service_share_image_url(matching_services[0])
     if not share_image and related_case_studies:
         top_case = related_case_studies[0]
         if top_case.social_share_image:
@@ -657,7 +773,7 @@ def _build_solution_page_context(request, slug):
         "solution_slug": slug,
         "solution_page": config,
         "solution_services": matching_services[:4],
-        "solution_process": PROCESS_PLAYBOOK,
+        "solution_process": _build_process_journey(ProcessStep.objects.all().order_by("order", "id")),
         "solution_technologies": config["technologies"],
         "solution_faqs": faq_items,
         "related_case_studies": related_case_studies,
@@ -665,12 +781,14 @@ def _build_solution_page_context(request, slug):
     }
     page_context.update(_seo_context(
         request,
-        title=f"{config['nav_title']} | Nexalix Technologies",
-        description=config["subheadline"],
+        title=config.get("meta_title") or f"{config['nav_title']} | Nexalix Technologies",
+        description=config.get("meta_description") or config["subheadline"],
         keywords=_build_keywords(config["nav_title"], config["deliverables"], config["keywords"]),
         og_type="article",
         image_url=share_image,
+        canonical_override=config.get("canonical_url") or "",
         schemas=schemas,
+        custom_schema_json=config.get("schema_markup_json") or "",
     ))
     return page_context
 
@@ -4029,8 +4147,8 @@ def sitemap_xml(request):
         request.build_absolute_uri(reverse("privacy_policy")),
         request.build_absolute_uri(reverse("terms_of_service")),
     ]
-    for solution_slug in SOLUTION_PAGE_CONFIG.keys():
-        pages.append(request.build_absolute_uri(reverse("solution_landing", args=[solution_slug])))
+    for solution_page in _get_solution_page_configs():
+        pages.append(request.build_absolute_uri(reverse("solution_landing", args=[solution_page["slug"]])))
     for service in Service.objects.filter(is_active=True):
         pages.append(request.build_absolute_uri(reverse("service_detail", args=[service.slug])))
     for case in CaseStudy.objects.filter(is_active=True, is_published=True):

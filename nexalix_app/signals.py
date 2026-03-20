@@ -16,6 +16,8 @@ from .models import (
     ProcessStep,
     QuoteRequest,
     Service,
+    ServiceSolutionCluster,
+    SolutionPage,
     Statistic,
     Technology,
     TechnologyCategory,
@@ -25,6 +27,8 @@ from .models import (
 HOME_CACHE_MODELS = (
     HeroSection,
     Service,
+    ServiceSolutionCluster,
+    SolutionPage,
     Testimonial,
     AboutSection,
     ProcessStep,

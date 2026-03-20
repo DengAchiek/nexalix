@@ -13,6 +13,7 @@ from .models import (
     Industry, TechnologyCategory, Technology, CaseStudy, NewsletterSignup,
     Statistic, BlogPost, Partner, Award, ContactCTA,
     Service, ServiceFeature, ServiceTechnology, PricingPlan, ContactMessage,
+    ServiceSolutionCluster, SolutionPage,
     QuoteAddon, QuoteRequest, DashboardSavedFilter, ChatbotLead, UpdatesSubscriber
 )
 
@@ -40,8 +41,38 @@ class AboutSectionAdmin(admin.ModelAdmin):
 
 @admin.register(ProcessStep)
 class ProcessStepAdmin(admin.ModelAdmin):
-    list_display = ['number', 'title', 'order']
+    list_display = ['number', 'title', 'icon', 'order']
     ordering = ['order']
+    search_fields = ['number', 'title', 'description', 'outputs']
+
+
+@admin.register(ServiceSolutionCluster)
+class ServiceSolutionClusterAdmin(admin.ModelAdmin):
+    list_display = ['title', 'slug', 'order', 'is_active', 'show_on_homepage']
+    list_editable = ['order', 'is_active', 'show_on_homepage']
+    search_fields = ['title', 'slug', 'value_statement', 'business_problem', 'who_for', 'keywords']
+    ordering = ['order', 'title']
+
+
+@admin.register(SolutionPage)
+class SolutionPageAdmin(admin.ModelAdmin):
+    list_display = ['nav_title', 'slug', 'solution_cluster', 'order', 'is_active']
+    list_editable = ['order', 'is_active']
+    search_fields = ['nav_title', 'slug', 'headline', 'subheadline', 'keywords']
+    list_filter = ['solution_cluster', 'is_active']
+    ordering = ['order', 'nav_title']
+    fieldsets = (
+        ('Content', {
+            'fields': ('nav_title', 'slug', 'headline', 'subheadline', 'solution_cluster', 'order', 'is_active')
+        }),
+        ('Structured Content', {
+            'fields': ('problems', 'deliverables', 'technologies', 'keywords', 'faq_items')
+        }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'schema_markup_json'),
+            'classes': ('collapse',)
+        }),
+    )
 
 @admin.register(Industry)
 class IndustryAdmin(admin.ModelAdmin):
@@ -151,7 +182,7 @@ class ServiceAdmin(admin.ModelAdmin):
     inlines = [ServiceFeatureInline, ServiceTechnologyInline, PricingPlanInline]
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'slug', 'short_description', 'full_description', 'category', 'order', 'is_active')
+            'fields': ('title', 'slug', 'short_description', 'full_description', 'category', 'solution_cluster', 'order', 'is_active')
         }),
         ('Visuals', {
             'fields': ('icon', 'featured_image', 'icon_preview')

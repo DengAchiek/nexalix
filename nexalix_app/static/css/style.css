@@ -2206,6 +2206,263 @@ a {
     }
 }
 
+/* -----------------------------
+   Public Typography & CTA Consistency
+------------------------------ */
+.page-block,
+.about-page,
+.how-we-work,
+.why-choose-us,
+.contact-container,
+.industries,
+.services-overview,
+.about-us,
+.process,
+.technology-stack,
+.case-studies,
+.newsletter,
+.stats,
+.blog-preview,
+.partners,
+.awards,
+.contact-cta {
+    padding: clamp(56px, 6vw, 82px) 0;
+}
+
+.section-heading {
+    max-width: 760px;
+    display: grid;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.section-eyebrow {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.section-heading h2,
+.services-hero-modern h1,
+.case-studies-hero h1,
+.industries-hero-modern h1,
+.why-hero-modern h1,
+.about-hero-modern h1,
+.service-detail-main h1,
+.solution-hero-copy h1,
+.case-study-detail-top h1 {
+    margin: 0;
+    font-size: clamp(1.88rem, 1.45vw + 1.24rem, 3.08rem);
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    color: #172d57;
+}
+
+.services-hero-modern p:not(.section-eyebrow),
+.industries-hero-modern p:not(.section-eyebrow),
+.why-hero-modern p:not(.section-eyebrow),
+.about-hero-modern p:not(.section-eyebrow),
+.section-subtitle,
+.hero-subtitle,
+.hero-side-copy,
+.service-description,
+.case-description,
+.project-summary-text,
+.project-completed-content p,
+.portfolio-content p,
+.partner-home-content p,
+.service-detail-subheading,
+.service-detail-copy,
+.service-detail-card p,
+.technology-capability-head p,
+.industry-media-body p,
+.unified-testimonial-card .testimonial-quote,
+.unified-testimonial-card .testimonial-author span,
+.testimonial-card-modern .testimonial-quote,
+.case-results span,
+.case-solution-line,
+.about-hero-text,
+.about-story-cards p,
+.industry-outcome-panel p,
+.outcome-item p {
+    font-size: clamp(0.98rem, 0.24vw + 0.92rem, 1.05rem);
+    line-height: 1.68;
+    color: #5b718b;
+}
+
+.service-title,
+.case-title,
+.project-completed-content h3,
+.portfolio-content h3,
+.partner-home-content h3,
+.industry-media-card h3,
+.technology-capability-card h3,
+.unified-testimonial-card .testimonial-author h4,
+.testimonial-card-modern h4,
+.service-detail-panel h2,
+.case-study-tech h2,
+.about-story-cards h4,
+.why-modern-card h3,
+.pillar-card h3,
+.process-journey-card h3 {
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: #172d57;
+}
+
+.service-title,
+.case-title,
+.project-completed-content h3,
+.portfolio-content h3,
+.partner-home-content h3,
+.industry-media-card h3,
+.technology-capability-card h3 {
+    font-size: clamp(1.06rem, 0.36vw + 0.98rem, 1.32rem);
+}
+
+.btn,
+.project-link-btn,
+.secondary-link {
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover,
+.project-link-btn:hover,
+.secondary-link:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary,
+.btn.btn-primary,
+.project-link-btn {
+    background: linear-gradient(135deg, var(--nx-primary), var(--nx-accent));
+    color: #ffffff;
+    border: 0;
+    box-shadow: 0 12px 26px rgba(54, 84, 211, 0.24);
+}
+
+.btn-primary:hover,
+.btn.btn-primary:hover,
+.project-link-btn:hover {
+    background: linear-gradient(135deg, var(--nx-primary-dark), #c742ea);
+    color: #ffffff;
+}
+
+.btn-outline-primary,
+.btn.btn-outline-primary,
+.secondary-link {
+    background: #f6f9ff;
+    border: 1px solid #cad8eb;
+    color: #385475;
+    box-shadow: none;
+}
+
+.btn-outline-primary:hover,
+.btn.btn-outline-primary:hover,
+.secondary-link:hover {
+    background: #eaf2ff;
+    border-color: #b4c8e4;
+    color: #183863;
+}
+
+.hero-actions,
+.project-proof-actions,
+.service-actions,
+.media-cluster-actions,
+.service-cluster-cta {
+    gap: 12px;
+}
+
+.project-proof-actions .project-link-btn,
+.project-proof-actions .secondary-link,
+.service-actions .project-link-btn,
+.service-actions .secondary-link,
+.media-cluster-actions .project-link-btn,
+.media-cluster-actions .secondary-link {
+    min-width: 152px;
+}
+
+@media (max-width: 900px) {
+    .section-heading h2,
+    .services-hero-modern h1,
+    .case-studies-hero h1,
+    .industries-hero-modern h1,
+    .why-hero-modern h1,
+    .about-hero-modern h1,
+    .service-detail-main h1,
+    .solution-hero-copy h1,
+    .case-study-detail-top h1 {
+        font-size: clamp(1.76rem, 3.8vw, 2.56rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .page-block,
+    .about-page,
+    .how-we-work,
+    .why-choose-us,
+    .contact-container,
+    .industries,
+    .services-overview,
+    .about-us,
+    .process,
+    .technology-stack,
+    .case-studies,
+    .newsletter,
+    .stats,
+    .blog-preview,
+    .partners,
+    .awards,
+    .contact-cta {
+        padding: 46px 0;
+    }
+
+    .section-heading {
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .section-heading h2,
+    .services-hero-modern h1,
+    .case-studies-hero h1,
+    .industries-hero-modern h1,
+    .why-hero-modern h1,
+    .about-hero-modern h1,
+    .service-detail-main h1,
+    .solution-hero-copy h1,
+    .case-study-detail-top h1 {
+        font-size: clamp(1.56rem, 5vw, 2.06rem);
+        line-height: 1.08;
+    }
+
+    .btn,
+    .project-link-btn,
+    .secondary-link {
+        min-height: 42px;
+        padding: 0 16px;
+        font-size: 0.92rem;
+    }
+
+    .project-proof-actions .project-link-btn,
+    .project-proof-actions .secondary-link,
+    .service-actions .project-link-btn,
+    .service-actions .secondary-link,
+    .media-cluster-actions .project-link-btn,
+    .media-cluster-actions .secondary-link {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
 @media (max-width: 980px) {
     .quote-layout {
         grid-template-columns: 1fr;

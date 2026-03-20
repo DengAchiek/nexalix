@@ -4859,6 +4859,219 @@ textarea:focus-visible {
     justify-content: center;
 }
 
+/* -----------------------------
+   Targeted Public Card Polish
+------------------------------ */
+.services-solution-showcase .solution-clusters-grid,
+.services-solution-pages .solution-clusters-grid,
+.projects-completed-grid,
+.partners-home-grid,
+.case-grid,
+.technology-capability-grid,
+.testimonial-strip {
+    gap: 16px;
+}
+
+.services-solution-showcase .solution-cluster-card,
+.services-solution-pages .solution-cluster-card {
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 16px 34px rgba(17, 39, 78, 0.08);
+}
+
+.services-solution-showcase .solution-cluster-top,
+.services-solution-pages .solution-cluster-top {
+    gap: 12px;
+}
+
+.services-solution-showcase .solution-cluster-copy > div,
+.services-solution-pages .solution-cluster-copy > div,
+.service-summary-card {
+    background: linear-gradient(180deg, #fbfdff, #f6faff);
+}
+
+.service-category-block {
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    border-color: #d9e5f2;
+    box-shadow: 0 14px 32px rgba(17, 39, 78, 0.08);
+    padding: 18px;
+}
+
+.service-cluster-header {
+    margin-bottom: 2px;
+}
+
+.service-cluster-cta .btn {
+    min-height: 40px;
+    padding-inline: 16px;
+    font-size: 0.84rem;
+}
+
+.service-cluster-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.service-summary-card {
+    border: 1px solid #dfe8f4;
+}
+
+.service-category-block .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(244px, 1fr));
+    align-items: stretch;
+    gap: 14px;
+}
+
+.service-category-block .service-card {
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    border-color: #d8e4f2;
+}
+
+.solution-service-card .service-card-inner {
+    height: 100%;
+}
+
+.service-category-block .service-content {
+    justify-content: flex-start;
+}
+
+.solution-service-top {
+    align-items: flex-start;
+}
+
+.solution-service-meta {
+    justify-items: start;
+    align-self: flex-start;
+}
+
+.solution-service-meta strong {
+    font-size: 0.82rem;
+}
+
+.service-outcome-list {
+    gap: 7px;
+}
+
+.service-outcome-list li {
+    font-size: 0.87rem;
+    line-height: 1.48;
+}
+
+.service-category-block .service-technologies {
+    gap: 7px;
+}
+
+.service-category-block .service-actions {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #e5edf7;
+}
+
+.service-category-block .service-actions .btn {
+    min-height: 39px;
+    font-size: 0.81rem;
+}
+
+.projects-completed-summary {
+    margin-bottom: 16px;
+}
+
+.project-total-card {
+    min-width: min(240px, 100%);
+}
+
+.projects-completed-grid {
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+}
+
+.project-completed-card,
+.case-card {
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    border: 1px solid #dbe7f3;
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgba(17, 39, 78, 0.08);
+}
+
+.project-completed-media,
+.case-image-wrapper {
+    padding: 12px 12px 0;
+}
+
+.project-completed-media img,
+.case-image {
+    border-radius: 12px;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    min-height: 180px;
+}
+
+.project-completed-content,
+.case-content.compact-card-content {
+    padding: 14px 16px 16px;
+    gap: 10px;
+}
+
+.project-proof-top,
+.case-card-meta {
+    gap: 7px;
+}
+
+.project-summary-text,
+.case-description {
+    font-size: 0.9rem;
+}
+
+.case-solution-line,
+.case-results {
+    font-size: 0.88rem;
+}
+
+.project-proof-actions {
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid #e5edf7;
+}
+
+.project-proof-actions .project-link-btn,
+.project-proof-actions .secondary-link {
+    min-height: 38px;
+}
+
+.partners-home-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.partner-home-card {
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    border-color: #dbe7f3;
+    border-radius: 18px;
+}
+
+.partner-home-content {
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.partner-home-link {
+    margin-top: auto;
+    color: #1459b8;
+    font-weight: 800;
+}
+
+.technology-capability-card {
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    border-color: #dbe7f3;
+}
+
+.technology-capability-tags {
+    margin-top: auto;
+}
+
+.testimonial-card-modern {
+    background: linear-gradient(180deg, #ffffff, #f9fbff);
+    border: 1px solid #dbe7f3;
+}
+
 @media (max-width: 1080px) {
     .home-services-grid.solution-clusters-grid,
     .solution-clusters-grid,
@@ -4910,5 +5123,21 @@ textarea:focus-visible {
     .projects-completed-grid,
     .partners-home-grid {
         grid-template-columns: 1fr;
+    }
+
+    .services-solution-showcase .solution-cluster-card,
+    .services-solution-pages .solution-cluster-card,
+    .service-category-block,
+    .case-card,
+    .project-completed-card,
+    .partner-home-card,
+    .technology-capability-card,
+    .testimonial-card-modern {
+        padding: 16px;
+    }
+
+    .project-completed-media img,
+    .case-image {
+        min-height: 164px;
     }
 }

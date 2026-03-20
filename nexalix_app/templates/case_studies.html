@@ -26,7 +26,7 @@
 
         <div class="case-grid case-study-grid-strong">
             {% for case in featured_cases %}
-            <article class="case-card case-study-card-strong">
+            <article class="case-card case-study-card-strong proof-media-card">
                 <div class="case-image-wrapper">
                     {% if case.image %}
                     <img
@@ -65,7 +65,7 @@
                 </div>
             </article>
             {% empty %}
-            <article class="case-card case-study-card-strong">
+            <article class="case-card case-study-card-strong proof-media-card">
                 <div class="case-content compact-card-content">
                     <span class="project-proof-type">Solution Example</span>
                     <h3 class="case-title">Published case studies will appear here</h3>
@@ -89,7 +89,7 @@
 
         <div class="case-grid">
             {% for case in case_studies %}
-            <article class="case-card">
+            <article class="case-card proof-media-card">
                 <div class="case-image-wrapper">
                     {% if case.image %}
                     <img

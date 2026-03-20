@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}{{ meta_title|default:'Industries - Nexalix Technologies' }}{% endblock %}
 
@@ -26,14 +26,40 @@
 
         <div class="industry-modern-grid">
             {% for industry in industries %}
-            <article class="industry-modern-card">
-                <h3><i class="{{ industry.icon|default:'fas fa-briefcase' }}"></i> {{ industry.name }}</h3>
-                <p>{{ industry.description }}</p>
+            <article class="industry-modern-card industry-media-card">
+                <div class="industry-media-visual">
+                    {% if industry.image %}
+                    <img
+                        src="{{ industry.image.url|optimized_media:'card' }}"
+                        alt="{{ industry.name }}"
+                        class="industry-media-image"
+                        loading="lazy"
+                    >
+                    {% else %}
+                    <div class="service-visual-placeholder">
+                        <span class="service-visual-grid"></span>
+                        <span class="service-visual-glow"></span>
+                        <span class="service-visual-icon"><i class="{{ industry.icon|default:'fas fa-briefcase' }}"></i></span>
+                        <span class="service-visual-badge">{{ industry.name }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="industry-media-body">
+                    <p class="media-cluster-kicker">Industry Focus</p>
+                    <h3>{{ industry.name }}</h3>
+                    <p>{{ industry.description }}</p>
+                    <div class="media-cluster-actions">
+                        <a href="{% url 'services' %}" class="project-link-btn">Explore Services</a>
+                    </div>
+                </div>
             </article>
             {% empty %}
-            <article class="industry-modern-card">
-                <h3><i class="fas fa-circle-info"></i> No Industries Yet</h3>
-                <p>Add and activate industries in Django Admin to populate this section dynamically.</p>
+            <article class="industry-modern-card industry-media-card">
+                <div class="industry-media-body">
+                    <p class="media-cluster-kicker">Industry Focus</p>
+                    <h3>No Industries Yet</h3>
+                    <p>Add and activate industries in Django Admin to populate this section dynamically.</p>
+                </div>
             </article>
             {% endfor %}
         </div>

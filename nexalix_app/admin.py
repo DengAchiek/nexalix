@@ -20,6 +20,17 @@ from .models import (
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
+
+def render_image_preview(image_field, label="Image preview"):
+    if image_field:
+        return format_html(
+            '<div style="display:grid;gap:8px;"><img src="{}" alt="{}" style="max-width:220px;border-radius:14px;border:1px solid #d9e4f2;box-shadow:0 10px 24px rgba(17,39,78,.08);" /><span style="font-size:12px;color:#5b718b;">{}</span></div>',
+            image_field.url,
+            label,
+            label,
+        )
+    return format_html('<span style="color:#8aa0bc;">No image uploaded yet.</span>')
+
 # ========== EXISTING MODELS (NON-SERVICE) ==========
 @admin.register(HeroSection)
 class HeroSectionAdmin(admin.ModelAdmin):
@@ -34,6 +45,22 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'is_published', 'rating']
     search_fields = ['name', 'company', 'position', 'content', 'review_source']
     ordering = ['sort_order', '-created_at']
+    readonly_fields = ['avatar_preview']
+    fieldsets = (
+        ('Profile', {
+            'fields': ('name', 'position', 'company', 'review_source', 'rating', 'avatar', 'avatar_preview')
+        }),
+        ('Review', {
+            'fields': ('content',)
+        }),
+        ('Publishing', {
+            'fields': ('sort_order', 'is_active', 'is_published')
+        }),
+    )
+
+    def avatar_preview(self, obj):
+        return render_image_preview(obj.avatar, "Avatar preview")
+    avatar_preview.short_description = "Avatar preview"
 
 @admin.register(AboutSection)
 class AboutSectionAdmin(admin.ModelAdmin):
@@ -61,6 +88,7 @@ class SolutionPageAdmin(admin.ModelAdmin):
     search_fields = ['nav_title', 'slug', 'headline', 'subheadline', 'keywords']
     list_filter = ['solution_cluster', 'is_active']
     ordering = ['order', 'nav_title']
+    readonly_fields = ['social_share_preview']
     fieldsets = (
         ('Content', {
             'fields': ('nav_title', 'slug', 'headline', 'subheadline', 'solution_cluster', 'order', 'is_active')
@@ -68,17 +96,37 @@ class SolutionPageAdmin(admin.ModelAdmin):
         ('Structured Content', {
             'fields': ('problems', 'deliverables', 'technologies', 'keywords', 'faq_items')
         }),
+        ('Visuals', {
+            'fields': ('social_share_image', 'social_share_preview')
+        }),
         ('SEO', {
-            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'schema_markup_json'),
+            'fields': ('meta_title', 'meta_description', 'canonical_url', 'schema_markup_json'),
             'classes': ('collapse',)
         }),
     )
 
+    def social_share_preview(self, obj):
+        return render_image_preview(obj.social_share_image, "Solution image preview")
+    social_share_preview.short_description = "Solution image preview"
+
 @admin.register(Industry)
 class IndustryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'order', 'is_active']
+    list_display = ['name', 'order', 'is_active', 'image_preview']
     list_editable = ['order', 'is_active']
     ordering = ['order']
+    readonly_fields = ['image_preview']
+    fieldsets = (
+        ('Content', {
+            'fields': ('name', 'description', 'icon', 'image', 'image_preview')
+        }),
+        ('Publishing', {
+            'fields': ('order', 'is_active')
+        }),
+    )
+
+    def image_preview(self, obj):
+        return render_image_preview(obj.image, "Industry image preview")
+    image_preview.short_description = "Industry image preview"
 
 class TechnologyInline(admin.TabularInline):
     model = Technology
@@ -98,21 +146,33 @@ class CaseStudyAdmin(admin.ModelAdmin):
     list_filter = ['industry', 'proof_type', 'is_featured', 'is_active', 'is_published']
     search_fields = ['title', 'client_name', 'description', 'challenge', 'solution', 'results', 'tags', 'tech_stack']
     ordering = ['-is_featured', 'order', '-created_at']
+    readonly_fields = ['image_preview', 'social_share_preview']
     fieldsets = (
         ('Core Story', {
-            'fields': ('title', 'client_name', 'industry', 'proof_type', 'description', 'image')
+            'fields': ('title', 'client_name', 'industry', 'proof_type', 'description', 'image', 'image_preview')
         }),
         ('Delivery Details', {
             'fields': ('challenge', 'solution', 'results', 'tech_stack', 'tags', 'engagement_type', 'link')
         }),
+        ('Social Share Visual', {
+            'fields': ('social_share_image', 'social_share_preview')
+        }),
         ('SEO', {
-            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'schema_markup_json'),
+            'fields': ('meta_title', 'meta_description', 'canonical_url', 'schema_markup_json'),
             'classes': ('collapse',)
         }),
         ('Publishing', {
             'fields': ('is_featured', 'is_active', 'is_published', 'order')
         }),
     )
+
+    def image_preview(self, obj):
+        return render_image_preview(obj.image, "Case study image preview")
+    image_preview.short_description = "Case study image preview"
+
+    def social_share_preview(self, obj):
+        return render_image_preview(obj.social_share_image, "Social share image preview")
+    social_share_preview.short_description = "Social share image preview"
 
 @admin.register(NewsletterSignup)
 class NewsletterSignupAdmin(admin.ModelAdmin):
@@ -141,11 +201,24 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'industry', 'website', 'order', 'is_active', 'is_published']
+    list_display = ['name', 'industry', 'website', 'order', 'is_active', 'is_published', 'logo_preview']
     list_editable = ['order', 'is_active', 'is_published']
     list_filter = ['industry', 'is_active', 'is_published']
     search_fields = ['name', 'industry', 'description', 'website']
     ordering = ['order', 'name']
+    readonly_fields = ['logo_preview']
+    fieldsets = (
+        ('Partner', {
+            'fields': ('name', 'industry', 'description', 'website', 'logo', 'logo_preview')
+        }),
+        ('Publishing', {
+            'fields': ('order', 'is_active', 'is_published')
+        }),
+    )
+
+    def logo_preview(self, obj):
+        return render_image_preview(obj.logo, "Partner logo preview")
+    logo_preview.short_description = "Partner logo preview"
 
 @admin.register(Award)
 class AwardAdmin(admin.ModelAdmin):
@@ -185,7 +258,7 @@ class ServiceAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'short_description', 'full_description', 'category', 'solution_cluster', 'order', 'is_active')
         }),
         ('Visuals', {
-            'fields': ('icon', 'featured_image', 'icon_preview')
+            'fields': ('icon', 'featured_image', 'featured_image_preview', 'icon_preview')
         }),
         ('Details', {
             'fields': (
@@ -199,18 +272,26 @@ class ServiceAdmin(admin.ModelAdmin):
             )
         }),
         ('SEO', {
-            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'schema_markup_json'),
+            'fields': ('meta_title', 'meta_description', 'canonical_url', 'social_share_image', 'social_share_preview', 'schema_markup_json'),
             'classes': ('collapse',)
         }),
     )
     
-    readonly_fields = ['icon_preview']
+    readonly_fields = ['icon_preview', 'featured_image_preview', 'social_share_preview']
     
     def icon_preview(self, obj):
         if obj.icon:
             return format_html(f'<i class="{obj.icon} fa-2x"></i> <span>{obj.icon}</span>')
         return "-"
     icon_preview.short_description = 'Icon Preview'
+
+    def featured_image_preview(self, obj):
+        return render_image_preview(obj.featured_image, "Service image preview")
+    featured_image_preview.short_description = "Service image preview"
+
+    def social_share_preview(self, obj):
+        return render_image_preview(obj.social_share_image, "Social share image preview")
+    social_share_preview.short_description = "Social share image preview"
 
 @admin.register(ServiceFeature)
 class ServiceFeatureAdmin(admin.ModelAdmin):

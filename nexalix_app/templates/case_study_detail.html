@@ -83,9 +83,25 @@
             </div>
             <div class="case-grid">
                 {% for case in related_cases %}
-                <article class="case-card">
+                <article class="case-card proof-media-card">
+                    <div class="case-image-wrapper">
+                        {% if case.image %}
+                        <img
+                            src="{{ case.image.url|optimized_media:'card' }}"
+                            alt="{{ case.title }}"
+                            class="case-image"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='{% static 'images/media-placeholder.svg' %}';"
+                        >
+                        {% else %}
+                        <div class="case-image-placeholder">{{ case.get_proof_type_display }}</div>
+                        {% endif %}
+                    </div>
                     <div class="case-content compact-card-content">
-                        <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
+                        <div class="case-card-meta">
+                            <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
+                            {% if case.industry %}<span class="project-proof-industry">{{ case.industry }}</span>{% endif %}
+                        </div>
                         <h3 class="case-title">{% if case.client_name %}{{ case.client_name }}{% else %}{{ case.title }}{% endif %}</h3>
                         <p class="case-description">{{ case.description|default:case.challenge|truncatechars:125 }}</p>
                         {% if case.results %}

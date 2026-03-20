@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}{{ meta_title|default:'Why Choose Us - Nexalix Technologies' }}{% endblock %}
 
@@ -88,12 +88,26 @@
         {% if testimonials %}
         <div class="testimonial-strip">
             {% for testimonial in testimonials %}
-            <article class="testimonial-card-modern">
-                <p class="testimonial-quote">“{{ testimonial.content|truncatechars:200 }}”</p>
-                <div class="testimonial-author">
-                    <strong>{{ testimonial.name }}</strong>
-                    <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}</span>
+            <article class="testimonial-card-modern unified-testimonial-card">
+                <div class="testimonial-card-head">
+                    <div class="testimonial-avatar-shell">
+                        {% if testimonial.avatar %}
+                        <img
+                            src="{{ testimonial.avatar.url|optimized_media:'thumb' }}"
+                            alt="{{ testimonial.name }}"
+                            class="testimonial-avatar-image"
+                            loading="lazy"
+                        >
+                        {% else %}
+                        <span class="testimonial-avatar-fallback">{{ testimonial.name|slice:":1"|upper }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="testimonial-author">
+                        <h4>{{ testimonial.name }}</h4>
+                        <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}</span>
+                    </div>
                 </div>
+                <p class="testimonial-quote">“{{ testimonial.content|truncatechars:200 }}”</p>
             </article>
             {% endfor %}
         </div>

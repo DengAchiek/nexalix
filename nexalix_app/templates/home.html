@@ -229,7 +229,7 @@
 
         <div class="projects-completed-grid">
             {% for project in featured_case_study_cards %}
-            <article class="project-completed-card">
+            <article class="project-completed-card proof-media-card">
                 <div class="project-completed-media">
                     {% if project.case_study.image %}
                     <img
@@ -267,7 +267,7 @@
                 </div>
             </article>
             {% empty %}
-            <article class="project-completed-card">
+            <article class="project-completed-card proof-media-card">
                 <div class="project-completed-content">
                     <span class="project-proof-type">Sample Implementation</span>
                     <h3>Solution showcase space</h3>
@@ -295,7 +295,7 @@
         <div class="partners-home-grid">
             {% for partner in partners %}
                 {% if partner.website %}
-                <a href="{{ partner.website }}" class="partner-home-card" target="_blank" rel="noopener">
+                <a href="{{ partner.website }}" class="partner-home-card partner-media-card" target="_blank" rel="noopener">
                     <div class="partner-home-logo-wrap">
                         {% if partner.logo %}
                         <img
@@ -325,7 +325,7 @@
                     </div>
                 </a>
                 {% else %}
-                <article class="partner-home-card partner-home-card-static">
+                <article class="partner-home-card partner-home-card-static partner-media-card">
                     <div class="partner-home-logo-wrap">
                         {% if partner.logo %}
                         <img
@@ -355,7 +355,7 @@
                 </article>
                 {% endif %}
             {% empty %}
-            <article class="partner-home-card partner-home-card-static">
+            <article class="partner-home-card partner-home-card-static partner-media-card">
                 <div class="partner-home-content">
                     <h3>Partner trust block</h3>
                     <p>Published partner logos and collaboration summaries appear here once active records are available.</p>
@@ -375,7 +375,7 @@
         </div>
         <div class="technology-capability-grid">
             {% for group in technology_capability_groups %}
-            <article class="technology-capability-card">
+            <article class="technology-capability-card capability-media-card">
                 <div class="technology-capability-head">
                     <div class="technology-capability-icon"><i class="{{ group.icon }}"></i></div>
                     <div>
@@ -390,7 +390,7 @@
                 </div>
             </article>
             {% empty %}
-            <article class="technology-capability-card">
+            <article class="technology-capability-card capability-media-card">
                 <div class="technology-capability-head">
                     <div class="technology-capability-icon"><i class="fas fa-layer-group"></i></div>
                     <div>
@@ -436,7 +436,7 @@
         </div>
         <div class="portfolio-grid">
             {% for case in case_studies %}
-            <article class="portfolio-card">
+            <article class="portfolio-card proof-media-card">
                 <div class="portfolio-image-wrap">
                     {% if case.image %}
                     <img
@@ -458,9 +458,9 @@
                 </div>
             </article>
             {% empty %}
-            <article class="portfolio-card"><div class="portfolio-content"><span class="project-proof-type">Sample Implementation</span><h3>Custom CRM Platform</h3><p>A sample implementation for lead management, quoting, invoicing, and sales operations visibility.</p></div></article>
-            <article class="portfolio-card"><div class="portfolio-content"><span class="project-proof-type">Internal Prototype</span><h3>Enterprise Web Portal</h3><p>A prototype portal pattern for customer self-service, approvals, and internal process coordination.</p></div></article>
-            <article class="portfolio-card"><div class="portfolio-content"><span class="project-proof-type">Solution Example</span><h3>Operations Automation</h3><p>An example automation stack for removing repetitive work and improving reporting accuracy.</p></div></article>
+            <article class="portfolio-card proof-media-card"><div class="portfolio-content"><span class="project-proof-type">Sample Implementation</span><h3>Custom CRM Platform</h3><p>A sample implementation for lead management, quoting, invoicing, and sales operations visibility.</p></div></article>
+            <article class="portfolio-card proof-media-card"><div class="portfolio-content"><span class="project-proof-type">Internal Prototype</span><h3>Enterprise Web Portal</h3><p>A prototype portal pattern for customer self-service, approvals, and internal process coordination.</p></div></article>
+            <article class="portfolio-card proof-media-card"><div class="portfolio-content"><span class="project-proof-type">Solution Example</span><h3>Operations Automation</h3><p>An example automation stack for removing repetitive work and improving reporting accuracy.</p></div></article>
             {% endfor %}
         </div>
     </div>
@@ -474,16 +474,39 @@
         </div>
         <div class="testimonial-strip">
             {% for testimonial in testimonials %}
-            <article class="testimonial-card-modern">
-                <p>"{{ testimonial.content }}"</p>
-                <h4>{{ testimonial.name }}</h4>
-                <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}{% if testimonial.review_source %} • {{ testimonial.review_source }}{% endif %}</span>
+            <article class="testimonial-card-modern unified-testimonial-card">
+                <div class="testimonial-card-head">
+                    <div class="testimonial-avatar-shell">
+                        {% if testimonial.avatar %}
+                        <img
+                            src="{{ testimonial.avatar.url|optimized_media:'thumb' }}"
+                            alt="{{ testimonial.name }}"
+                            class="testimonial-avatar-image"
+                            loading="lazy"
+                        >
+                        {% else %}
+                        <span class="testimonial-avatar-fallback">{{ testimonial.name|slice:":1"|upper }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="testimonial-author">
+                        <h4>{{ testimonial.name }}</h4>
+                        <span>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}{% if testimonial.review_source %} • {{ testimonial.review_source }}{% endif %}</span>
+                    </div>
+                </div>
+                <p class="testimonial-quote">“{{ testimonial.content }}”</p>
             </article>
             {% empty %}
-            <article class="testimonial-card-modern">
-                <p>Verified testimonial content appears here once published references are available. Until then, Nexalix can share relevant references during consultation.</p>
-                <h4>Reference-ready delivery</h4>
-                <span>Available on request</span>
+            <article class="testimonial-card-modern unified-testimonial-card">
+                <div class="testimonial-card-head">
+                    <div class="testimonial-avatar-shell">
+                        <span class="testimonial-avatar-fallback">N</span>
+                    </div>
+                    <div class="testimonial-author">
+                        <h4>Reference-ready delivery</h4>
+                        <span>Available on request</span>
+                    </div>
+                </div>
+                <p class="testimonial-quote">Verified testimonial content appears here once published references are available. Until then, Nexalix can share relevant references during consultation.</p>
             </article>
             {% endfor %}
         </div>

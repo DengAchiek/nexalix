@@ -321,6 +321,7 @@ class Industry(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     icon = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='industries/', blank=True, null=True)
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
 

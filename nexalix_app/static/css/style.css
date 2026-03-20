@@ -3866,59 +3866,69 @@ textarea:focus-visible {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 255, 0.98));
     border: 1px solid #d8e4f2;
     border-radius: 18px;
-    padding: 20px;
+    padding: 18px;
     box-shadow: 0 14px 32px rgba(17, 39, 78, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
 }
 
 .services-solution-showcase .solution-cluster-top,
 .services-solution-pages .solution-cluster-top {
-    align-items: flex-start;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    align-items: start;
+    justify-content: initial;
+    gap: 14px;
 }
 
 .services-solution-showcase .solution-cluster-top > div:last-child,
 .services-solution-pages .solution-cluster-top > div:last-child {
     display: grid;
-    gap: 6px;
+    gap: 5px;
     min-width: 0;
 }
 
 .services-solution-showcase .solution-cluster-top h3,
 .services-solution-pages .solution-cluster-top h3 {
-    font-size: clamp(1.18rem, 0.8vw + 0.95rem, 1.72rem);
-    line-height: 1.16;
+    font-size: clamp(1.12rem, 0.55vw + 0.96rem, 1.48rem);
+    line-height: 1.14;
 }
 
 .services-solution-showcase .solution-cluster-top p,
 .services-solution-pages .solution-cluster-top p {
-    font-size: 0.98rem;
+    font-size: 0.93rem;
     color: #5a738b;
 }
 
 .services-solution-showcase .solution-cluster-copy,
 .services-solution-pages .solution-cluster-copy {
-    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
 }
 
 .services-solution-showcase .solution-cluster-copy > div,
 .services-solution-pages .solution-cluster-copy > div {
     display: grid;
-    gap: 8px;
-    padding: 14px;
+    gap: 7px;
+    padding: 12px 13px;
     background: #f8fbff;
     border: 1px solid #dce7f2;
     border-radius: 14px;
+    min-height: 100%;
 }
 
 .services-solution-showcase .solution-cluster-copy p,
 .services-solution-pages .solution-cluster-copy p {
-    font-size: 0.97rem;
+    font-size: 0.92rem;
     color: #4f6985;
 }
 
 .services-solution-showcase .solution-cluster-list,
 .services-solution-pages .solution-cluster-list {
     margin-top: 2px;
+    gap: 7px;
 }
 
 .services-solution-showcase .solution-cluster-actions,
@@ -3926,20 +3936,122 @@ textarea:focus-visible {
     margin-top: auto;
     padding-top: 4px;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
+    justify-content: flex-start;
 }
 
 .services-solution-showcase .solution-cluster-actions .btn,
 .services-solution-pages .solution-cluster-actions .btn {
-    min-height: 42px;
-    padding-inline: 18px;
+    min-height: 40px;
+    padding-inline: 16px;
     white-space: nowrap;
+    font-size: 0.87rem;
 }
 
 .services-solution-showcase .solution-cluster-actions .home-service-link,
 .services-solution-pages .solution-cluster-actions .home-service-link {
-    min-height: 42px;
+    min-height: 40px;
+    font-size: 0.87rem;
+    margin-top: 0;
+}
+
+.services-solution-showcase .solution-cluster-list span,
+.services-solution-pages .solution-cluster-list span {
+    padding: 5px 10px;
+    font-size: 0.76rem;
+}
+
+.services-solution-showcase .solution-cluster-icon,
+.services-solution-pages .solution-cluster-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1rem;
+}
+
+.services-solution-showcase .solution-clusters-grid,
+.services-solution-pages .solution-clusters-grid {
+    align-items: stretch;
+}
+
+.service-category-block {
+    padding: 16px;
+    border-radius: 18px;
+}
+
+.service-cluster-header {
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.service-cluster-header > div:first-child {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+}
+
+.service-cluster-cta {
+    margin-left: auto;
+    gap: 8px;
+}
+
+.category-title-modern {
+    margin: 0;
+    font-size: clamp(1.08rem, 0.45vw + 0.96rem, 1.28rem);
+    line-height: 1.24;
+}
+
+.service-cluster-summary-grid {
+    gap: 12px;
+}
+
+.service-summary-card {
+    padding: 16px;
+}
+
+.service-summary-card p,
+.service-summary-card li {
     font-size: 0.92rem;
+}
+
+.service-category-block .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+}
+
+.service-category-block .service-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(12, 38, 64, 0.08);
+}
+
+.service-category-block .service-content {
+    padding: 13px 14px 14px;
+    gap: 9px;
+}
+
+.service-category-block .service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    font-size: 1rem;
+}
+
+.service-category-block .service-title {
+    font-size: 1.05rem;
+}
+
+.service-category-block .service-description,
+.service-category-block .service-features li {
+    font-size: 0.88rem;
+}
+
+.service-category-block .service-actions {
+    gap: 7px;
+}
+
+.service-category-block .service-actions .btn {
+    font-size: 0.82rem;
+    min-height: 38px;
 }
 
 .solution-cluster-top,
@@ -4397,6 +4509,9 @@ textarea:focus-visible {
 .industry-modern-grid,
 .home-services-grid.solution-clusters-grid,
 .solution-clusters-grid,
+.technology-capability-grid,
+.faq-grid,
+.testimonial-strip,
 .why-modern-grid,
 .work-process-timeline {
     align-items: stretch;
@@ -4406,12 +4521,24 @@ textarea:focus-visible {
     grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
 }
 
+.technology-capability-grid,
+.faq-grid,
+.testimonial-strip {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
 .case-card,
 .project-completed-card,
 .partner-home-card,
 .industry-modern-card,
 .solution-cluster-card,
 .service-summary-card,
+.technology-capability-card,
+.service-detail-card,
+.case-study-detail-card,
+.service-detail-panel,
+.service-detail-sidecard,
+.testimonial-card-modern,
 .work-step-card-modern,
 .why-modern-card {
     display: flex;
@@ -4429,7 +4556,11 @@ textarea:focus-visible {
 .case-content,
 .portfolio-content,
 .project-completed-content,
-.partner-home-content {
+.partner-home-content,
+.technology-capability-head,
+.service-detail-card,
+.case-study-detail-card,
+.testimonial-card-modern {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -4451,6 +4582,10 @@ textarea:focus-visible {
 .industry-modern-card h3,
 .solution-cluster-card h3,
 .service-summary-card h3,
+.technology-capability-card h3,
+.service-detail-card h3,
+.case-study-detail-card h3,
+.testimonial-card-modern h4,
 .work-step-card-modern h3,
 .why-modern-card h3 {
     overflow-wrap: anywhere;
@@ -4479,6 +4614,9 @@ textarea:focus-visible {
 .project-summary-text,
 .case-description,
 .partner-home-content p,
+.technology-capability-head p,
+.service-detail-card p,
+.case-study-detail-card p,
 .industry-modern-card p,
 .work-step-card-modern p,
 .why-modern-card p {
@@ -4495,6 +4633,12 @@ textarea:focus-visible {
 
 .partner-home-content p,
 .industry-modern-card p {
+    -webkit-line-clamp: 4;
+}
+
+.technology-capability-head p,
+.service-detail-card p,
+.case-study-detail-card p {
     -webkit-line-clamp: 4;
 }
 
@@ -4561,6 +4705,120 @@ textarea:focus-visible {
 .case-card .service-technologies,
 .project-completed-card .project-tags {
     margin-top: 2px;
+}
+
+.technology-capability-card,
+.service-detail-card,
+.case-study-detail-card,
+.service-detail-panel,
+.service-detail-sidecard,
+.testimonial-card-modern {
+    padding: 16px;
+    border-radius: 15px;
+    box-shadow: 0 10px 24px rgba(17, 39, 78, 0.08);
+}
+
+.technology-capability-head {
+    gap: 10px;
+}
+
+.technology-capability-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.technology-capability-head h3,
+.service-detail-card h3,
+.case-study-detail-card h3 {
+    margin: 0;
+    font-size: clamp(1rem, 0.3vw + 0.94rem, 1.12rem);
+    line-height: 1.22;
+}
+
+.technology-capability-head p,
+.service-detail-card p,
+.case-study-detail-card p,
+.testimonial-card-modern p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #58718a;
+}
+
+.technology-capability-tags {
+    gap: 7px;
+}
+
+.technology-chip {
+    max-width: 100%;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.testimonial-card-modern {
+    justify-content: space-between;
+    gap: 9px;
+}
+
+.testimonial-card-modern h4 {
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.22;
+}
+
+.testimonial-card-modern span {
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.project-total-card {
+    padding: 14px 18px;
+    border-radius: 12px;
+}
+
+.project-total-card h3 {
+    font-size: clamp(1.55rem, 1.6vw + 1rem, 2.15rem);
+}
+
+.project-total-card p {
+    font-size: 0.9rem;
+}
+
+.partner-home-card {
+    padding: 14px;
+    gap: 12px;
+}
+
+.partner-home-logo-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+}
+
+.partner-home-link,
+.secondary-link,
+.project-link-btn {
+    font-size: 0.86rem;
+}
+
+.service-detail-sidecard {
+    gap: 10px;
+}
+
+.service-detail-stat strong {
+    font-size: 0.96rem;
+}
+
+.service-detail-stat span,
+.case-study-detail-card span,
+.service-detail-card span {
+    font-size: 0.84rem;
 }
 
 .tech-tag,
@@ -4646,5 +4904,11 @@ textarea:focus-visible {
 
     .process-journey-card:not(:last-child)::after {
         display: none;
+    }
+
+    .testimonial-strip,
+    .projects-completed-grid,
+    .partners-home-grid {
+        grid-template-columns: 1fr;
     }
 }

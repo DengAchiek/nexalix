@@ -71,6 +71,28 @@
             </div>
             <p class="hero-action-note">{{ home_ab.action_note }}</p>
 
+            {% if hero_partner_logos %}
+            <div class="hero-logo-trust" aria-label="Trusted partner logos">
+                <p>Trusted by collaborative partners</p>
+                <div class="hero-logo-row">
+                    {% for partner in hero_partner_logos %}
+                    <span class="hero-logo-mark" title="{{ partner.name }}">
+                        {% if partner.logo %}
+                        <img
+                            src="{{ partner.logo.url|optimized_media:'thumb' }}"
+                            alt="{{ partner.name }} logo"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.closest('.hero-logo-mark').textContent='{{ partner.name|slice:":1"|upper }}';"
+                        >
+                        {% else %}
+                        <span>{{ partner.name|slice:":1"|upper }}</span>
+                        {% endif %}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
             <div class="hero-mini-points" aria-label="Core Nexalix capabilities">
                 {% for service_name in hero_service_tags|slice:":3" %}
                 <span>{{ service_name }}</span>

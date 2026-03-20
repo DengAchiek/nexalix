@@ -6168,3 +6168,995 @@ textarea:focus-visible {
         min-height: 164px;
     }
 }
+
+/* Future-ready dark public theme */
+body.theme-future {
+    background:
+        radial-gradient(circle at 20% 0%, rgba(0, 196, 214, 0.18), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(46, 114, 255, 0.16), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(0, 173, 217, 0.12), transparent 38%),
+        linear-gradient(180deg, #07121f 0%, #050c16 42%, #040a12 100%);
+    color: #eef7ff;
+    overflow-x: hidden;
+}
+
+body.theme-future .site-shell,
+body.theme-future .site-main {
+    background: transparent;
+}
+
+body.theme-future a {
+    color: inherit;
+}
+
+body.theme-future .topbar {
+    background: rgba(4, 11, 18, 0.82);
+    border-bottom: 1px solid rgba(111, 162, 204, 0.14);
+    color: #d7e7f7;
+}
+
+body.theme-future .topbar-inner a {
+    color: #f7fbff;
+}
+
+body.theme-future .site-header,
+body.theme-future .site-header.scrolled {
+    background: rgba(5, 12, 19, 0.78);
+    border-bottom: 1px solid rgba(123, 172, 210, 0.14);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(18px);
+}
+
+body.theme-future .nav-links a,
+body.theme-future .mobile-menu-links a {
+    color: #dce9f7;
+}
+
+body.theme-future .nav-links a:hover,
+body.theme-future .nav-links a.active,
+body.theme-future .mobile-menu-links a:hover {
+    color: #ffffff;
+    background: rgba(41, 101, 155, 0.16);
+}
+
+body.theme-future .search-shell input,
+body.theme-future .mobile-search-shell input {
+    background: rgba(10, 19, 30, 0.92);
+    border-color: rgba(121, 166, 201, 0.2);
+    color: #eff7ff;
+}
+
+body.theme-future .search-shell i {
+    color: #89a5c2;
+}
+
+body.theme-future .search-shell input::placeholder {
+    color: #7f97b0;
+}
+
+body.theme-future .search-results {
+    background: rgba(7, 15, 25, 0.98);
+    border-color: rgba(121, 166, 201, 0.18);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.34);
+}
+
+body.theme-future .search-result-item {
+    border-bottom-color: rgba(121, 166, 201, 0.08);
+}
+
+body.theme-future .search-result-item:hover {
+    background: rgba(37, 76, 118, 0.22);
+}
+
+body.theme-future .result-title {
+    color: #f3f8ff;
+}
+
+body.theme-future .result-description,
+body.theme-future .no-results {
+    color: #91aac0;
+}
+
+body.theme-future .mobile-menu {
+    background: rgba(4, 11, 18, 0.97);
+    border-left: 1px solid rgba(121, 166, 201, 0.12);
+}
+
+body.theme-future .page-block,
+body.theme-future .services-hero-modern,
+body.theme-future .about-hero-modern,
+body.theme-future .about-work-cta,
+body.theme-future .contact-cta,
+body.theme-future .home-cta-final {
+    background: transparent;
+}
+
+body.theme-future .page-block,
+body.theme-future .services-hero-modern,
+body.theme-future .about-hero-modern,
+body.theme-future .contact-cta,
+body.theme-future .about-work-cta {
+    padding-top: clamp(76px, 9vw, 108px);
+    padding-bottom: clamp(76px, 9vw, 108px);
+}
+
+body.theme-future .section-soft {
+    background: linear-gradient(180deg, rgba(10, 18, 29, 0.9), rgba(7, 14, 24, 0.95));
+    border-top: 1px solid rgba(118, 164, 202, 0.1);
+    border-bottom: 1px solid rgba(118, 164, 202, 0.08);
+}
+
+body.theme-future .section-heading {
+    max-width: 760px;
+    margin: 0 auto 46px;
+    text-align: center;
+}
+
+body.theme-future .section-eyebrow,
+body.theme-future .hero-kicker,
+body.theme-future .hero-side-caption,
+body.theme-future .service-cluster-kicker,
+body.theme-future .media-cluster-kicker,
+body.theme-future .project-proof-type,
+body.theme-future .home-service-category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(153, 185, 215, 0.18);
+    background: rgba(10, 18, 29, 0.68);
+    color: #d8eaff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+body.theme-future .section-heading .section-eyebrow,
+body.theme-future .services-hero-inner .section-eyebrow,
+body.theme-future .about-hero-grid .section-eyebrow,
+body.theme-future .home-hero-content .hero-kicker {
+    margin: 0 auto 18px;
+}
+
+body.theme-future .section-heading h1,
+body.theme-future .section-heading h2,
+body.theme-future .page-block h1,
+body.theme-future .page-block h2,
+body.theme-future .services-hero-inner h1,
+body.theme-future .about-hero-grid h1,
+body.theme-future .home-hero-content h1,
+body.theme-future .home-hero-content h2 {
+    color: #f4fbff;
+    letter-spacing: -0.045em;
+    line-height: 1.04;
+}
+
+body.theme-future .section-heading h2,
+body.theme-future .page-block h2 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+}
+
+body.theme-future .services-hero-inner h1,
+body.theme-future .about-hero-grid h1 {
+    font-size: clamp(2.6rem, 4.7vw, 4.6rem);
+    margin: 0 0 18px;
+}
+
+body.theme-future .section-subtitle,
+body.theme-future .page-block p,
+body.theme-future .services-hero-inner > p,
+body.theme-future .about-hero-text,
+body.theme-future .hero-subtitle,
+body.theme-future .hero-side-copy,
+body.theme-future .service-description,
+body.theme-future .case-description,
+body.theme-future .testimonial-quote,
+body.theme-future .partner-home-content p,
+body.theme-future .industry-media-body p,
+body.theme-future .contact-container .subheading,
+body.theme-future .quote-page .subheading {
+    color: #9cb2c7;
+}
+
+body.theme-future .btn,
+body.theme-future .project-link-btn,
+body.theme-future .secondary-link,
+body.theme-future .home-service-link,
+body.theme-future .case-link {
+    border-radius: 999px;
+    min-height: 48px;
+    padding: 0 22px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+body.theme-future .btn:hover,
+body.theme-future .project-link-btn:hover,
+body.theme-future .secondary-link:hover,
+body.theme-future .home-service-link:hover,
+body.theme-future .case-link:hover {
+    transform: translateY(-2px);
+}
+
+body.theme-future .btn-primary,
+body.theme-future .btn.btn-primary,
+body.theme-future .project-link-btn,
+body.theme-future .contact-form button[type="submit"],
+body.theme-future .quote-form-card button[type="submit"],
+body.theme-future .footer-updates-form .btn-primary,
+body.theme-future #nxChatSend,
+body.theme-future #nxLeadSubmit {
+    background: linear-gradient(180deg, #fbfdff 0%, #e6eff9 100%);
+    color: #07111c;
+    border: 1px solid rgba(255, 255, 255, 0.88);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
+}
+
+body.theme-future .btn-primary:hover,
+body.theme-future .btn.btn-primary:hover,
+body.theme-future .project-link-btn:hover,
+body.theme-future .contact-form button[type="submit"]:hover,
+body.theme-future .quote-form-card button[type="submit"]:hover,
+body.theme-future .footer-updates-form .btn-primary:hover {
+    background: linear-gradient(180deg, #ffffff 0%, #edf4fb 100%);
+    color: #050d16;
+}
+
+body.theme-future .btn-outline-primary,
+body.theme-future .btn.btn-outline-primary,
+body.theme-future .secondary-link,
+body.theme-future .home-service-link.secondary,
+body.theme-future .case-link {
+    background: rgba(7, 15, 25, 0.42);
+    color: #eef7ff;
+    border: 1px solid rgba(151, 183, 214, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(0, 188, 212, 0.04);
+}
+
+body.theme-future .btn-outline-primary:hover,
+body.theme-future .btn.btn-outline-primary:hover,
+body.theme-future .secondary-link:hover,
+body.theme-future .home-service-link.secondary:hover,
+body.theme-future .case-link:hover {
+    background: rgba(14, 28, 42, 0.86);
+    color: #ffffff;
+    border-color: rgba(191, 221, 248, 0.34);
+}
+
+body.theme-future .hero-actions,
+body.theme-future .home-service-actions,
+body.theme-future .media-cluster-actions,
+body.theme-future .service-actions,
+body.theme-future .project-proof-actions,
+body.theme-future .service-cluster-cta,
+body.theme-future .footer-social-row,
+body.theme-future .footer-legal-inline,
+body.theme-future .footer-bottom-links,
+body.theme-future .cta-tertiary-links {
+    gap: 14px;
+}
+
+body.theme-future .home-hero {
+    min-height: clamp(640px, 88vh, 860px);
+    border-bottom: 1px solid rgba(112, 162, 201, 0.08);
+}
+
+body.theme-future .home-hero-media::before,
+body.theme-future .home-hero-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+body.theme-future .home-hero-media::before {
+    background:
+        radial-gradient(circle at 18% 8%, rgba(0, 205, 222, 0.2), transparent 26%),
+        radial-gradient(circle at 82% 28%, rgba(47, 129, 255, 0.14), transparent 30%),
+        linear-gradient(180deg, rgba(4, 10, 17, 0.3), rgba(4, 10, 17, 0.78));
+    z-index: 1;
+}
+
+body.theme-future .video-overlay {
+    background: linear-gradient(180deg, rgba(4, 10, 17, 0.24), rgba(4, 10, 17, 0.84));
+}
+
+body.theme-future .home-hero-shell-simple {
+    min-height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 132px 0 88px;
+    position: relative;
+}
+
+body.theme-future .hero-side-intro {
+    display: none;
+}
+
+body.theme-future .home-hero-content-simple {
+    position: relative;
+    z-index: 3;
+    width: min(760px, 100%);
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-future .home-hero-content-simple h1 {
+    font-size: clamp(3rem, 6.3vw, 5.4rem);
+    max-width: 900px;
+    margin: 0 auto 18px;
+}
+
+body.theme-future .hero-subtitle {
+    max-width: 700px;
+    margin: 0 auto 24px;
+    font-size: clamp(1.08rem, 2vw, 1.35rem);
+    line-height: 1.7;
+}
+
+body.theme-future .hero-action-note {
+    margin: 18px 0 0;
+    color: #b7cadb;
+}
+
+body.theme-future .hero-inline-metrics {
+    justify-content: center;
+    gap: 16px;
+    margin: 28px auto 0;
+}
+
+body.theme-future .hero-inline-metric {
+    min-width: 160px;
+    padding: 18px 18px 16px;
+    border-radius: 24px;
+    background: rgba(10, 18, 29, 0.68);
+    border: 1px solid rgba(141, 181, 213, 0.16);
+    backdrop-filter: blur(16px);
+}
+
+body.theme-future .hero-inline-metric strong {
+    display: block;
+    font-size: 1.8rem;
+    color: #ffffff;
+    line-height: 1;
+}
+
+body.theme-future .hero-inline-metric span {
+    color: #97aec6;
+}
+
+body.theme-future .hero-center-stage {
+    position: absolute;
+    right: min(6vw, 88px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(34vw, 420px);
+    height: min(34vw, 420px);
+    opacity: 0.9;
+    z-index: 2;
+}
+
+body.theme-future .hero-center-glow {
+    background: radial-gradient(circle, rgba(97, 179, 255, 0.38) 0%, rgba(7, 15, 25, 0) 68%);
+}
+
+body.theme-future .hero-center-frame {
+    border: 1px solid rgba(168, 198, 226, 0.12);
+    background: radial-gradient(circle at 28% 22%, rgba(227, 244, 255, 0.5), rgba(68, 118, 255, 0.2) 45%, rgba(6, 13, 22, 0.2) 70%);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28);
+}
+
+body.theme-future .hero-logo-trust {
+    margin-top: 26px;
+}
+
+body.theme-future .hero-logo-trust > p {
+    margin: 0 0 14px;
+    color: #8fa8bd;
+    font-size: 0.9rem;
+}
+
+body.theme-future .hero-logo-row,
+body.theme-future .home-proof-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+body.theme-future .hero-logo-mark,
+body.theme-future .hero-trust-logo-pill {
+    min-width: 92px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(149, 184, 215, 0.14);
+    background: rgba(7, 15, 25, 0.48);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #dbeaf8;
+}
+
+body.theme-future .hero-logo-mark img,
+body.theme-future .hero-trust-logo-pill img {
+    max-height: 20px;
+    width: auto;
+    filter: grayscale(1) brightness(1.2) opacity(0.76);
+}
+
+body.theme-future .hero-logo-mark:hover img,
+body.theme-future .hero-trust-logo-pill:hover img {
+    filter: grayscale(0.2) brightness(1) opacity(1);
+}
+
+body.theme-future .hero-mini-points {
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+body.theme-future .hero-mini-points span,
+body.theme-future .hero-side-chip,
+body.theme-future .technology-chip,
+body.theme-future .tech-tag,
+body.theme-future .project-tag {
+    background: rgba(10, 19, 30, 0.82);
+    border: 1px solid rgba(145, 180, 213, 0.14);
+    color: #dbeaf8;
+}
+
+body.theme-future .services-hero-modern,
+body.theme-future .about-hero-modern,
+body.theme-future .contact-cta,
+body.theme-future .about-work-cta,
+body.theme-future .home-cta-final {
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-future .services-hero-modern::before,
+body.theme-future .about-hero-modern::before,
+body.theme-future .contact-cta::before,
+body.theme-future .about-work-cta::before,
+body.theme-future .home-cta-final::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(0, 192, 210, 0.12), transparent 22%),
+        radial-gradient(circle at 82% 18%, rgba(47, 129, 255, 0.1), transparent 24%);
+    pointer-events: none;
+}
+
+body.theme-future .services-hero-inner,
+body.theme-future .about-hero-grid,
+body.theme-future .contact-container,
+body.theme-future .quote-page .container,
+body.theme-future .home-cta-final .container,
+body.theme-future .about-work-cta .container {
+    position: relative;
+    z-index: 2;
+}
+
+body.theme-future .services-hero-inner {
+    max-width: 860px;
+    text-align: center;
+}
+
+body.theme-future .services-hero-inner > p,
+body.theme-future .services-hero-inner .hero-action-note,
+body.theme-future .about-hero-text,
+body.theme-future .contact-container .subheading {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.theme-future .solution-hero-shell,
+body.theme-future .about-hero-grid,
+body.theme-future .two-col,
+body.theme-future .service-detail-hero,
+body.theme-future .case-study-detail-top,
+body.theme-future .quote-layout {
+    gap: 28px;
+}
+
+body.theme-future .solution-hero-visual-card,
+body.theme-future .about-hero-panel,
+body.theme-future .industry-outcome-panel,
+body.theme-future .service-detail-sidecard,
+body.theme-future .service-detail-hero-visual,
+body.theme-future .case-study-hero-media {
+    background: linear-gradient(180deg, rgba(12, 21, 32, 0.95), rgba(9, 17, 28, 0.95));
+    border: 1px solid rgba(145, 180, 213, 0.12);
+    border-radius: 30px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+}
+
+body.theme-future .footer-panel,
+body.theme-future .footer-trust-item,
+body.theme-future .solution-cluster-card,
+body.theme-future .service-card,
+body.theme-future .home-service-card,
+body.theme-future .media-cluster-card,
+body.theme-future .media-service-card,
+body.theme-future .service-summary-card,
+body.theme-future .pillar-card,
+body.theme-future .strength-card,
+body.theme-future .about-stat-card,
+body.theme-future .about-story-cards article,
+body.theme-future .stat-chip,
+body.theme-future .benefit-item,
+body.theme-future .industry-media-card,
+body.theme-future .proof-media-card,
+body.theme-future .partner-media-card,
+body.theme-future .capability-media-card,
+body.theme-future .testimonial-card-modern,
+body.theme-future .why-modern-card,
+body.theme-future .service-detail-card,
+body.theme-future .quote-form-card,
+body.theme-future .quote-summary-card,
+body.theme-future .contact-form {
+    background: linear-gradient(180deg, rgba(11, 19, 30, 0.92), rgba(8, 15, 24, 0.92));
+    border: 1px solid rgba(145, 180, 213, 0.12);
+    box-shadow: 0 24px 54px rgba(0, 0, 0, 0.22);
+}
+
+body.theme-future .service-card:hover,
+body.theme-future .home-service-card:hover,
+body.theme-future .media-cluster-card:hover,
+body.theme-future .proof-media-card:hover,
+body.theme-future .partner-media-card:hover,
+body.theme-future .capability-media-card:hover,
+body.theme-future .testimonial-card-modern:hover,
+body.theme-future .why-modern-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 36px 70px rgba(0, 0, 0, 0.3);
+    border-color: rgba(178, 210, 236, 0.2);
+}
+
+body.theme-future .service-card .service-title,
+body.theme-future .home-service-card h3,
+body.theme-future .media-cluster-card h3,
+body.theme-future .service-summary-card span,
+body.theme-future .pillar-card h3,
+body.theme-future .strength-card h4,
+body.theme-future .about-stat-card h3,
+body.theme-future .about-story-cards h4,
+body.theme-future .industry-media-card h3,
+body.theme-future .proof-media-card h3,
+body.theme-future .partner-home-content h3,
+body.theme-future .technology-capability-head h3,
+body.theme-future .testimonial-card-modern h4,
+body.theme-future .why-modern-card h3,
+body.theme-future .service-detail-card h3,
+body.theme-future .quote-summary-card h3,
+body.theme-future .contact-form h3,
+body.theme-future .footer-panel h3,
+body.theme-future .footer-panel h4,
+body.theme-future .footer-trust-item strong,
+body.theme-future .service-cluster-header h3 {
+    color: #f6fbff;
+}
+
+body.theme-future .service-summary-card p,
+body.theme-future .pillar-card p,
+body.theme-future .strength-card p,
+body.theme-future .about-story-cards p,
+body.theme-future .about-hero-panel li,
+body.theme-future .industry-media-body p,
+body.theme-future .industry-outcome-panel p,
+body.theme-future .partner-home-content p,
+body.theme-future .testimonial-card-modern p,
+body.theme-future .service-detail-card p,
+body.theme-future .quote-summary-card p,
+body.theme-future .quote-breakdown dt,
+body.theme-future .quote-breakdown dd,
+body.theme-future .footer-panel p,
+body.theme-future .footer-panel li,
+body.theme-future .footer-panel a,
+body.theme-future .footer-trust-item span,
+body.theme-future .service-description,
+body.theme-future .case-description,
+body.theme-future .case-results span,
+body.theme-future .case-solution-line,
+body.theme-future .service-outcome-list li,
+body.theme-future .project-summary-text,
+body.theme-future .solution-cluster-fit,
+body.theme-future .home-service-points li,
+body.theme-future .project-proof-actions,
+body.theme-future .process-output-list li,
+body.theme-future .benefit-item {
+    color: #93a9bf;
+}
+
+body.theme-future .benefits-grid {
+    gap: 16px;
+}
+
+body.theme-future .benefit-item {
+    padding: 16px 18px;
+    border-radius: 22px;
+}
+
+body.theme-future .benefit-item i,
+body.theme-future .process-journey-icon,
+body.theme-future .pillar-icon,
+body.theme-future .technology-capability-icon,
+body.theme-future .solution-cluster-icon,
+body.theme-future .service-cluster-kicker i {
+    color: #7cdfff;
+}
+
+body.theme-future .media-cluster-visual-link,
+body.theme-future .service-media-frame,
+body.theme-future .industry-media-visual,
+body.theme-future .case-image-wrapper,
+body.theme-future .project-completed-media,
+body.theme-future .portfolio-image-wrap,
+body.theme-future .partner-home-logo-wrap {
+    background: linear-gradient(180deg, rgba(15, 25, 38, 0.96), rgba(10, 17, 27, 0.98));
+    border: 1px solid rgba(145, 180, 213, 0.12);
+}
+
+body.theme-future .service-visual-placeholder {
+    background: radial-gradient(circle at 24% 18%, rgba(0, 200, 220, 0.18), transparent 28%), linear-gradient(180deg, rgba(10, 19, 30, 0.94), rgba(8, 15, 24, 0.94));
+}
+
+body.theme-future .project-proof-industry,
+body.theme-future .solution-service-meta span,
+body.theme-future .solution-service-meta strong {
+    color: #dceaf6;
+}
+
+body.theme-future .service-cluster-summary-grid,
+body.theme-future .technology-capability-grid,
+body.theme-future .case-grid,
+body.theme-future .portfolio-grid,
+body.theme-future .projects-completed-grid,
+body.theme-future .partners-home-grid,
+body.theme-future .testimonial-strip,
+body.theme-future .pillars-grid,
+body.theme-future .about-stats-grid,
+body.theme-future .about-story-cards,
+body.theme-future .solution-clusters-grid {
+    gap: 24px;
+}
+
+body.theme-future .service-cluster-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.theme-future .faq-grid {
+    gap: 22px;
+}
+
+body.theme-future .contact-container {
+    max-width: 980px;
+    background: linear-gradient(180deg, rgba(9, 17, 27, 0.94), rgba(7, 14, 22, 0.96));
+    border: 1px solid rgba(145, 180, 213, 0.12);
+    border-radius: 34px;
+    padding: clamp(34px, 4vw, 54px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+}
+
+body.theme-future .contact-form input,
+body.theme-future .contact-form select,
+body.theme-future .contact-form textarea,
+body.theme-future .quote-form-card input,
+body.theme-future .quote-form-card select,
+body.theme-future .quote-form-card textarea,
+body.theme-future .footer-updates-form input,
+body.theme-future #nxChatInput,
+body.theme-future #nxLeadForm input,
+body.theme-future #nxLeadForm select,
+body.theme-future #nxLeadForm textarea {
+    background: rgba(6, 12, 19, 0.88);
+    border: 1px solid rgba(145, 180, 213, 0.16);
+    color: #f2f9ff;
+}
+
+body.theme-future .contact-form input::placeholder,
+body.theme-future .contact-form textarea::placeholder,
+body.theme-future .quote-form-card input::placeholder,
+body.theme-future .quote-form-card textarea::placeholder,
+body.theme-future .footer-updates-form input::placeholder,
+body.theme-future #nxChatInput::placeholder,
+body.theme-future #nxLeadForm input::placeholder,
+body.theme-future #nxLeadForm textarea::placeholder {
+    color: #7e95ac;
+}
+
+body.theme-future .contact-form label,
+body.theme-future .quote-form-card label,
+body.theme-future .quote-breakdown dt,
+body.theme-future .quote-total-row dt,
+body.theme-future .quote-summary-card h4,
+body.theme-future .contact-privacy {
+    color: #d8e7f5;
+}
+
+body.theme-future .quote-reference-box,
+body.theme-future .addon-item {
+    background: rgba(10, 18, 29, 0.74);
+    border: 1px solid rgba(145, 180, 213, 0.12);
+}
+
+body.theme-future .site-footer {
+    background: linear-gradient(180deg, rgba(5, 11, 18, 0.98), rgba(4, 9, 15, 1));
+    border-top: 1px solid rgba(112, 162, 201, 0.12);
+}
+
+body.theme-future .footer-whatsapp-cta,
+body.theme-future .footer-social-link,
+body.theme-future .back-to-top {
+    background: rgba(7, 15, 25, 0.84);
+    border: 1px solid rgba(145, 180, 213, 0.16);
+    color: #eef8ff;
+}
+
+body.theme-future .footer-whatsapp-cta:hover,
+body.theme-future .footer-social-link:hover,
+body.theme-future .back-to-top:hover {
+    background: rgba(15, 28, 41, 0.92);
+}
+
+body.theme-future .nx-chatbot-launcher {
+    background: linear-gradient(135deg, rgba(15, 108, 166, 0.96), rgba(16, 168, 198, 0.96));
+    border: 1px solid rgba(170, 224, 255, 0.18);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.22);
+}
+
+body.theme-future .nx-chatbot-panel {
+    background: rgba(7, 14, 22, 0.98);
+    border: 1px solid rgba(145, 180, 213, 0.14);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.32);
+}
+
+body.theme-future .nx-chatbot-header,
+body.theme-future .nx-chatbot-actions,
+body.theme-future .nx-lead-form {
+    background: transparent;
+    color: #edf7ff;
+}
+
+body.theme-future .nx-chat-msg-assistant {
+    background: rgba(10, 19, 30, 0.82);
+    color: #e8f3fc;
+}
+
+body.theme-future .nx-chat-msg-user {
+    background: rgba(18, 122, 188, 0.22);
+}
+
+body.theme-future .nx-chat-link {
+    background: rgba(10, 19, 30, 0.8);
+    border: 1px solid rgba(145, 180, 213, 0.12);
+    color: #e8f3fc;
+}
+
+body.theme-future .nx-chat-link:hover {
+    background: rgba(15, 28, 41, 0.92);
+}
+
+@media (max-width: 1180px) {
+    body.theme-future .home-hero-shell-simple {
+        padding-top: 118px;
+    }
+
+    body.theme-future .hero-center-stage {
+        right: 2vw;
+        width: min(32vw, 360px);
+        height: min(32vw, 360px);
+    }
+
+    body.theme-future .service-cluster-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 980px) {
+    body.theme-future .home-hero-shell-simple {
+        padding: 112px 0 78px;
+    }
+
+    body.theme-future .home-hero-content-simple h1 {
+        font-size: clamp(2.5rem, 9vw, 4.2rem);
+    }
+
+    body.theme-future .hero-center-stage {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        order: 2;
+        width: min(62vw, 300px);
+        height: min(62vw, 300px);
+        margin: 12px auto 0;
+    }
+
+    body.theme-future .home-hero-shell-simple {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    body.theme-future .solution-hero-shell,
+    body.theme-future .about-hero-grid,
+    body.theme-future .two-col,
+    body.theme-future .quote-layout {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+}
+
+@media (max-width: 768px) {
+    body.theme-future .page-block,
+    body.theme-future .services-hero-modern,
+    body.theme-future .about-hero-modern,
+    body.theme-future .contact-cta,
+    body.theme-future .about-work-cta {
+        padding-top: 64px;
+        padding-bottom: 64px;
+    }
+
+    body.theme-future .home-hero {
+        min-height: auto;
+    }
+
+    body.theme-future .home-hero-shell-simple {
+        padding: 104px 0 62px;
+    }
+
+    body.theme-future .hero-inline-metric {
+        min-width: 132px;
+        padding: 16px 14px;
+    }
+
+    body.theme-future .hero-logo-row,
+    body.theme-future .home-proof-footer {
+        gap: 10px;
+    }
+
+    body.theme-future .hero-logo-mark,
+    body.theme-future .hero-trust-logo-pill {
+        min-width: 72px;
+        min-height: 38px;
+        padding: 8px 12px;
+    }
+
+    body.theme-future .solution-cluster-card,
+    body.theme-future .service-card,
+    body.theme-future .proof-media-card,
+    body.theme-future .partner-media-card,
+    body.theme-future .capability-media-card,
+    body.theme-future .testimonial-card-modern,
+    body.theme-future .footer-panel,
+    body.theme-future .footer-trust-item,
+    body.theme-future .contact-container {
+        border-radius: 24px;
+    }
+
+    body.theme-future .hero-actions,
+    body.theme-future .home-service-actions,
+    body.theme-future .project-proof-actions,
+    body.theme-future .service-cluster-cta,
+    body.theme-future .cta-tertiary-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 560px) {
+    body.theme-future .home-hero-shell-simple {
+        padding: 92px 0 54px;
+    }
+
+    body.theme-future .home-hero-content-simple h1,
+    body.theme-future .services-hero-inner h1,
+    body.theme-future .about-hero-grid h1 {
+        font-size: clamp(2.2rem, 11vw, 3.4rem);
+    }
+
+    body.theme-future .hero-subtitle,
+    body.theme-future .services-hero-inner > p,
+    body.theme-future .about-hero-text,
+    body.theme-future .contact-container .subheading,
+    body.theme-future .quote-page .subheading {
+        font-size: 1rem;
+    }
+
+    body.theme-future .hero-inline-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.theme-future .hero-inline-metric {
+        min-width: 0;
+    }
+}
+
+body.theme-future .services-hero-inner:not(.solution-hero-shell),
+body.theme-future .case-studies-hero .services-hero-inner {
+    margin: 0 auto;
+    max-width: 860px;
+    text-align: center;
+}
+
+body.theme-future .solution-hero-shell,
+body.theme-future .about-hero-grid {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+    align-items: center;
+    text-align: left;
+}
+
+body.theme-future .solution-hero-shell .section-eyebrow,
+body.theme-future .about-hero-grid .section-eyebrow {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+body.theme-future .solution-hero-copy,
+body.theme-future .about-hero-grid > div:first-child {
+    max-width: 640px;
+}
+
+body.theme-future .solution-hero-shell .hero-actions,
+body.theme-future .about-hero-grid .hero-actions,
+body.theme-future .solution-hero-shell .cta-tertiary-links {
+    justify-content: flex-start;
+}
+
+body.theme-future .contact-container h1,
+body.theme-future .quote-page .section-heading,
+body.theme-future .legal-page .section-heading {
+    text-align: center;
+}
+
+body.theme-future .service-category-filter {
+    justify-content: center;
+}
+
+body.theme-future .footer-panel,
+body.theme-future .footer-trust-item,
+body.theme-future .solution-cluster-card,
+body.theme-future .service-card,
+body.theme-future .home-service-card,
+body.theme-future .media-cluster-card,
+body.theme-future .media-service-card,
+body.theme-future .service-summary-card,
+body.theme-future .pillar-card,
+body.theme-future .strength-card,
+body.theme-future .about-stat-card,
+body.theme-future .about-story-cards article,
+body.theme-future .stat-chip,
+body.theme-future .benefit-item,
+body.theme-future .industry-media-card,
+body.theme-future .proof-media-card,
+body.theme-future .partner-media-card,
+body.theme-future .capability-media-card,
+body.theme-future .testimonial-card-modern,
+body.theme-future .why-modern-card,
+body.theme-future .service-detail-card,
+body.theme-future .quote-form-card,
+body.theme-future .quote-summary-card,
+body.theme-future .contact-form,
+body.theme-future .solution-hero-visual-card,
+body.theme-future .about-hero-panel,
+body.theme-future .industry-outcome-panel,
+body.theme-future .service-detail-sidecard,
+body.theme-future .service-detail-hero-visual,
+body.theme-future .case-study-hero-media,
+body.theme-future .quote-reference-box,
+body.theme-future .addon-item {
+    backdrop-filter: blur(18px);
+}

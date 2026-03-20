@@ -1,22 +1,42 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static media_optimization %}
 
 {% block title %}{{ meta_title|default:solution_page.nav_title|default:'Solution - Nexalix Technologies' }}{% endblock %}
 
 {% block content %}
 <section class="services-hero-modern solution-hero">
-    <div class="container services-hero-inner">
-        <p class="section-eyebrow">Focused Solution</p>
-        <h1>{{ solution_page.headline }}</h1>
-        <p>{{ solution_page.subheadline }}</p>
-        <div class="hero-actions">
-            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
-            <a href="{% url 'contact' %}?solution={{ solution_slug }}" class="btn btn-outline-primary">Book Consultation</a>
+    <div class="container services-hero-inner solution-hero-shell theme-{{ solution_page.solution_cluster_slug|default:solution_slug }}">
+        <div class="solution-hero-copy">
+            <p class="section-eyebrow">Focused Solution</p>
+            <h1>{{ solution_page.headline }}</h1>
+            <p>{{ solution_page.subheadline }}</p>
+            <div class="hero-actions">
+                <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+                <a href="{% url 'contact' %}?solution={{ solution_slug }}" class="btn btn-outline-primary">Book Consultation</a>
+            </div>
+            <div class="cta-tertiary-links">
+                <a href="{% url 'services' %}">Explore Services</a>
+                <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
         </div>
-        <div class="cta-tertiary-links">
-            <a href="{% url 'services' %}">Explore Services</a>
-            <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
-        </div>
+        <aside class="solution-hero-visual-card">
+            {% if solution_page.social_share_image %}
+            <img
+                src="{{ solution_page.social_share_image.url|optimized_media:'case_detail' }}"
+                alt="{{ solution_page.nav_title }}"
+                class="service-detail-visual-image"
+                loading="eager"
+                fetchpriority="high"
+            >
+            {% else %}
+            <div class="service-visual-placeholder theme-{{ solution_page.solution_cluster_slug|default:solution_slug }}">
+                <span class="service-visual-grid"></span>
+                <span class="service-visual-glow"></span>
+                <span class="service-visual-icon"><i class="fas fa-layer-group"></i></span>
+                <span class="service-visual-badge">{{ solution_page.nav_title }}</span>
+            </div>
+            {% endif %}
+        </aside>
     </div>
 </section>
 

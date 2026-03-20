@@ -6,7 +6,25 @@
 {% block content %}
 <section class="page-block">
     <div class="container">
-        <div class="service-detail-hero">
+        <div class="service-detail-hero service-detail-hero-visual theme-{{ service_cluster.slug }}">
+            <aside class="service-detail-visual-card">
+                {% if service.featured_image %}
+                <img
+                    src="{{ service.featured_image.url|optimized_media:'case_detail' }}"
+                    alt="{{ service.title }}"
+                    class="service-detail-visual-image"
+                    loading="eager"
+                    fetchpriority="high"
+                >
+                {% else %}
+                <div class="service-visual-placeholder theme-{{ service_cluster.slug }}">
+                    <span class="service-visual-grid"></span>
+                    <span class="service-visual-glow"></span>
+                    <span class="service-visual-icon"><i class="{{ service.icon|default:service_cluster.icon }}"></i></span>
+                    <span class="service-visual-badge">{{ service_cluster.title }}</span>
+                </div>
+                {% endif %}
+            </aside>
             <div class="service-detail-main">
                 <p class="section-eyebrow">{{ service_cluster.title }}</p>
                 <h1>{{ service.title }}</h1>

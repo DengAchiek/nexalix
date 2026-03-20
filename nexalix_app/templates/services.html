@@ -27,33 +27,37 @@
         </div>
         <div class="solution-clusters-grid">
             {% for cluster in service_solution_clusters %}
-            <article class="solution-cluster-card">
-                <div class="solution-cluster-top">
-                    <div class="solution-cluster-icon"><i class="{{ cluster.icon }}"></i></div>
-                    <div>
-                        <h3>{{ cluster.title }}</h3>
-                        <p>{{ cluster.value_statement }}</p>
+            <article class="solution-cluster-card media-cluster-card theme-{{ cluster.slug }}">
+                <a href="{% url 'solution_landing' cluster.landing_slug %}" class="media-cluster-visual-link" aria-label="{{ cluster.title }}">
+                    {% if cluster.services.0.object.featured_image %}
+                    <img
+                        src="{{ cluster.services.0.object.featured_image.url|optimized_media:'card' }}"
+                        alt="{{ cluster.title }}"
+                        class="media-cluster-image"
+                        loading="lazy"
+                    >
+                    {% else %}
+                    <div class="service-visual-placeholder theme-{{ cluster.slug }}">
+                        <span class="service-visual-grid"></span>
+                        <span class="service-visual-glow"></span>
+                        <span class="service-visual-icon"><i class="{{ cluster.icon }}"></i></span>
+                        <span class="service-visual-badge">{{ cluster.title }}</span>
                     </div>
-                </div>
-                <div class="solution-cluster-copy">
-                    <div>
-                        <span>Business problem solved</span>
-                        <p>{{ cluster.business_problem }}</p>
+                    {% endif %}
+                </a>
+                <div class="media-cluster-body">
+                    <p class="media-cluster-kicker">Solution Cluster</p>
+                    <h3>{{ cluster.title }}</h3>
+                    <p>{{ cluster.value_statement }}</p>
+                    <ul class="media-cluster-points">
+                        {% for deliverable in cluster.deliverables|slice:":3" %}
+                        <li>{{ deliverable }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="media-cluster-actions">
+                        <a href="{% url 'solution_landing' cluster.landing_slug %}" class="project-link-btn">Learn More</a>
+                        <a href="{{ cluster.cta_primary_url }}" class="secondary-link">Get Proposal</a>
                     </div>
-                    <div>
-                        <span>Who it is for</span>
-                        <p>{{ cluster.who_for }}</p>
-                    </div>
-                </div>
-                <div class="solution-cluster-list">
-                    {% for deliverable in cluster.deliverables %}
-                    <span>{{ deliverable }}</span>
-                    {% endfor %}
-                </div>
-                <div class="solution-cluster-actions">
-                    <a href="{{ cluster.cta_primary_url }}" class="btn btn-primary">Get Proposal</a>
-                    <a href="{{ cluster.cta_secondary_url }}" class="btn btn-outline-primary">Book Consultation</a>
-                    <a href="{% url 'solution_landing' cluster.landing_slug %}" class="home-service-link">View Solution Page <i class="fas fa-arrow-right"></i></a>
                 </div>
             </article>
             {% endfor %}
@@ -70,22 +74,36 @@
         </div>
         <div class="solution-clusters-grid">
             {% for page in solution_pages %}
-            <article class="solution-cluster-card">
-                <div class="solution-cluster-top">
-                    <div class="solution-cluster-icon"><i class="fas fa-arrow-up-right-dots"></i></div>
-                    <div>
-                        <h3>{{ page.nav_title }}</h3>
-                        <p>{{ page.subheadline|truncatechars:120 }}</p>
+            <article class="solution-cluster-card media-cluster-card media-cluster-card-compact theme-{{ page.solution_cluster_slug|default:page.slug }}">
+                <a href="{% url 'solution_landing' page.slug %}" class="media-cluster-visual-link" aria-label="{{ page.nav_title }}">
+                    {% if page.social_share_image %}
+                    <img
+                        src="{{ page.social_share_image.url|optimized_media:'card' }}"
+                        alt="{{ page.nav_title }}"
+                        class="media-cluster-image"
+                        loading="lazy"
+                    >
+                    {% else %}
+                    <div class="service-visual-placeholder theme-{{ page.solution_cluster_slug|default:page.slug }}">
+                        <span class="service-visual-grid"></span>
+                        <span class="service-visual-glow"></span>
+                        <span class="service-visual-icon"><i class="fas fa-arrow-up-right-dots"></i></span>
+                        <span class="service-visual-badge">{{ page.nav_title }}</span>
                     </div>
-                </div>
-                <div class="solution-cluster-list">
-                    {% for deliverable in page.deliverables %}
-                    <span>{{ deliverable }}</span>
-                    {% endfor %}
-                </div>
-                <div class="solution-cluster-actions">
-                    <a href="{% url 'solution_landing' page.slug %}" class="btn btn-outline-primary">View Solutions</a>
-                    <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+                    {% endif %}
+                </a>
+                <div class="media-cluster-body">
+                    <p class="media-cluster-kicker">Focused Solution</p>
+                    <h3>{{ page.nav_title }}</h3>
+                    <p>{{ page.subheadline|truncatechars:120 }}</p>
+                    <ul class="media-cluster-points">
+                        {% for deliverable in page.deliverables|slice:":2" %}
+                        <li>{{ deliverable }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="media-cluster-actions">
+                        <a href="{% url 'solution_landing' page.slug %}" class="project-link-btn">Learn More</a>
+                    </div>
                 </div>
             </article>
             {% endfor %}
@@ -177,11 +195,28 @@
 
                 <div class="services-grid">
                     {% for service in cluster.services %}
-                    <article class="service-card solution-service-card" data-service-name="{{ service.title|lower }}">
+                    <article class="service-card solution-service-card media-service-card theme-{{ cluster.slug }}" data-service-name="{{ service.title|lower }}">
                         <div class="service-card-inner">
+                            <a href="{{ service.detail_url }}" class="service-media-frame" aria-label="{{ service.title }}">
+                                {% if service.object.featured_image %}
+                                <img
+                                    src="{{ service.object.featured_image.url|optimized_media:'card' }}"
+                                    alt="{{ service.title }}"
+                                    class="service-media-image"
+                                    loading="lazy"
+                                >
+                                {% else %}
+                                <div class="service-visual-placeholder theme-{{ cluster.slug }}">
+                                    <span class="service-visual-grid"></span>
+                                    <span class="service-visual-glow"></span>
+                                    <span class="service-visual-icon"><i class="{{ service.icon }}"></i></span>
+                                    <span class="service-visual-badge">{{ service.delivery_tier }}</span>
+                                </div>
+                                {% endif %}
+                            </a>
                             <div class="service-content">
                                 <div class="solution-service-top">
-                                    <div class="service-icon"><i class="{{ service.icon }}"></i></div>
+                                    <p class="media-cluster-kicker">{{ cluster.title }}</p>
                                     <div class="solution-service-meta">
                                         <span>{{ service.delivery_tier }}</span>
                                         <strong>~{{ service.delivery_weeks }} weeks</strong>
@@ -205,8 +240,8 @@
                                 {% endif %}
 
                                 <div class="service-actions">
-                                    <a href="{{ service.detail_url }}" class="btn btn-outline-primary">View Service Detail</a>
-                                    <a href="{% url 'quote_generator' %}?service={{ service.object.slug }}" class="btn btn-primary">Request Proposal</a>
+                                    <a href="{{ service.detail_url }}" class="project-link-btn">Learn More</a>
+                                    <a href="{% url 'quote_generator' %}?service={{ service.object.slug }}" class="secondary-link">Request Proposal</a>
                                 </div>
                             </div>
                         </div>

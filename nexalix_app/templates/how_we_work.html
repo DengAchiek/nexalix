@@ -25,11 +25,18 @@
         </div>
 
         <div class="work-process-timeline">
-            {% for step in process_steps %}
+            {% for step in process_journey %}
             <article class="work-step-card-modern">
                 <span class="work-step-index">{{ step.number }}</span>
                 <h3>{{ step.title }}</h3>
                 <p>{{ step.description }}</p>
+                {% if step.outputs %}
+                <ul class="service-features work-step-outputs">
+                    {% for output in step.outputs %}
+                    <li><i class="fas fa-check-circle"></i> {{ output }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </article>
             {% empty %}
             <article class="work-step-card-modern">
@@ -75,9 +82,9 @@
 
 <section class="home-cta-final">
     <div class="container">
-        <h2>Ready To Build With Nexalix?</h2>
-        <p>Share your goals and we’ll propose a practical roadmap for delivery.</p>
-        <a href="{% url 'contact' %}" class="btn btn-primary">Talk To Our Team</a>
+        <h2>{% if contact_cta %}{{ contact_cta.title }}{% else %}Ready To Build With Nexalix?{% endif %}</h2>
+        <p>{% if contact_cta %}{{ contact_cta.content }}{% else %}Share your goals and we’ll propose a practical roadmap for delivery.{% endif %}</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">{% if contact_cta %}{{ contact_cta.button_text }}{% else %}Talk To Our Team{% endif %}</a>
     </div>
 </section>
 {% endblock %}

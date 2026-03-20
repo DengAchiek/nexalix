@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.urls import reverse
 from django.utils.text import slugify
 
-from .cache_utils import SEARCH_INDEX_CACHE_KEY, SEARCH_INDEX_CACHE_TTL
+from .cache_utils import FOOTER_CONTEXT_CACHE_KEY, SEARCH_INDEX_CACHE_KEY, SEARCH_INDEX_CACHE_TTL
 from .models import BlogPost, CaseStudy, Industry, NewsletterSignup, Service
 
 
@@ -55,7 +55,7 @@ def global_site_context(_request):
                 )
             )
 
-        for case in CaseStudy.objects.filter(is_active=True).order_by("order", "-created_at")[:24]:
+        for case in CaseStudy.objects.filter(is_active=True, is_published=True).order_by("order", "-created_at")[:24]:
             search_index.append(
                 _search_entry(
                     title=case.title,
@@ -79,7 +79,7 @@ def global_site_context(_request):
 
         cache.set(SEARCH_INDEX_CACHE_KEY, search_index, SEARCH_INDEX_CACHE_TTL)
 
-    footer_context = cache.get("global_site_footer_context_v1")
+    footer_context = cache.get(FOOTER_CONTEXT_CACHE_KEY)
     if footer_context is None:
         footer_industries = list(Industry.objects.filter(is_active=True).order_by("order", "name")[:6])
         footer_newsletter = NewsletterSignup.objects.filter(is_active=True).first()
@@ -129,7 +129,7 @@ def global_site_context(_request):
             ).strip(),
             "footer_social_links": footer_social_links,
         }
-        cache.set("global_site_footer_context_v1", footer_context, 300)
+        cache.set(FOOTER_CONTEXT_CACHE_KEY, footer_context, 300)
 
     return {
         "global_search_index": search_index,

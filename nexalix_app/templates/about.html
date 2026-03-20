@@ -21,10 +21,9 @@
         <div class="about-hero-panel">
             <h3>What We Build</h3>
             <ul>
-                <li><i class="fas fa-check-circle"></i> Web & Mobile Applications</li>
-                <li><i class="fas fa-check-circle"></i> Custom Enterprise Platforms</li>
-                <li><i class="fas fa-check-circle"></i> AI & Data-Driven Solutions</li>
-                <li><i class="fas fa-check-circle"></i> Cloud & Process Automation</li>
+                {% for capability in about_capabilities %}
+                <li><i class="fas fa-check-circle"></i> {{ capability }}</li>
+                {% endfor %}
             </ul>
         </div>
     </div>
@@ -55,6 +54,14 @@
 <section class="page-block">
     <div class="container">
         <div class="about-stats-grid">
+            {% if about_statistics %}
+                {% for stat in about_statistics %}
+                <article class="about-stat-card">
+                    <h3 data-count="{{ stat.value }}" data-suffix="{{ stat.suffix|default:'' }}">0</h3>
+                    <p>{{ stat.name }}</p>
+                </article>
+                {% endfor %}
+            {% else %}
             <article class="about-stat-card">
                 <h3 data-count="15" data-suffix="+">0</h3>
                 <p>Years of Experience</p>
@@ -67,6 +74,7 @@
                 <h3 data-count="8" data-suffix="+">0</h3>
                 <p>Domain Expertise</p>
             </article>
+            {% endif %}
         </div>
     </div>
 </section>

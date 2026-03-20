@@ -2146,11 +2146,23 @@ def home(request):
 
 def about(request):
     """About page view"""
-    about_sections = AboutSection.objects.filter(is_active=True)
-    primary_about = about_sections.first()
+    about_sections = list(AboutSection.objects.filter(is_active=True))
+    primary_about = about_sections[0] if about_sections else None
+    about_services = list(Service.objects.filter(is_active=True).order_by("order")[:4])
+    about_statistics = list(Statistic.objects.filter(is_active=True).order_by("order")[:3])
+    about_capabilities = [
+        service.title for service in about_services
+    ] or [
+        "Web & Mobile Applications",
+        "Custom Enterprise Platforms",
+        "AI & Data-Driven Solutions",
+        "Cloud & Process Automation",
+    ]
     context = {
         "about_sections": about_sections,
         "primary_about": primary_about,
+        "about_capabilities": about_capabilities,
+        "about_statistics": about_statistics,
     }
     about_title = "About Nexalix | IT & Innovation Consulting"
     about_description = _text_excerpt(
@@ -2264,8 +2276,12 @@ def industries(request):
 
 def how_we_work(request):
     """How We Work page view"""
-    steps = ProcessStep.objects.all().order_by('order')
-    context = {"process_steps": steps}
+    steps = list(ProcessStep.objects.all().order_by('order'))
+    context = {
+        "process_steps": steps,
+        "process_journey": _build_process_journey(steps),
+        "contact_cta": ContactCTA.objects.filter(is_active=True).first(),
+    }
     context.update(_seo_context(
         request,
         title="How We Work | Nexalix Technologies",
@@ -2275,7 +2291,16 @@ def how_we_work(request):
 
 def why_choose_us(request):
     """Why Choose Us page view"""
-    context = {}
+    statistics = list(Statistic.objects.filter(is_active=True).order_by("order")[:4])
+    awards = list(Award.objects.filter(is_active=True).order_by("-year", "order")[:6])
+    testimonials = list(
+        Testimonial.objects.filter(is_active=True, is_published=True).order_by("sort_order", "-created_at")[:3]
+    )
+    context = {
+        "statistics": statistics,
+        "awards": awards,
+        "testimonials": testimonials,
+    }
     context.update(_seo_context(
         request,
         title="Why Choose Us | Nexalix Technologies",

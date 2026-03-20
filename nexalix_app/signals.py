@@ -1,7 +1,7 @@
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from .cache_utils import invalidate_dashboard_cache, invalidate_home_cache
+from .cache_utils import invalidate_all_view_caches, invalidate_dashboard_cache
 from .models import (
     AboutSection,
     Award,
@@ -50,7 +50,7 @@ def invalidate_dashboard_aggregates_on_submission_change(sender, **kwargs):
 
 
 def _invalidate_home_context_on_content_change(sender, **kwargs):
-    invalidate_home_cache()
+    invalidate_all_view_caches()
 
 
 for model in HOME_CACHE_MODELS:

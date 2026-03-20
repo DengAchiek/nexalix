@@ -328,6 +328,41 @@ PROCESS_PLAYBOOK = [
         "outputs": ["Deployment plan", "Support handoff", "Optimization backlog"],
     },
 ]
+
+LEGACY_SERVICE_ROUTE_MAP = {
+    "web_dev": {
+        "service_slugs": ["custom-software-development", "enterprise-application-development"],
+        "solution_slug": "software-development",
+    },
+    "mobile_app": {
+        "service_slugs": ["enterprise-application-development", "custom-software-development"],
+        "solution_slug": "software-development",
+    },
+    "digital_marketing": {
+        "service_slugs": ["digital-strategy-consulting", "business-intelligence-analytics"],
+        "solution_slug": "data-analytics",
+    },
+    "seo": {
+        "service_slugs": ["digital-strategy-consulting", "business-intelligence-analytics"],
+        "solution_slug": "technology-consulting",
+    },
+    "it_consult": {
+        "service_slugs": ["digital-strategy-consulting", "compliance-governance-solutions"],
+        "solution_slug": "technology-consulting",
+    },
+    "cloud": {
+        "service_slugs": ["cloud-migration-management", "it-infrastructure-solutions"],
+        "solution_slug": "software-development",
+    },
+    "syste_dev": {
+        "service_slugs": ["enterprise-application-development", "custom-software-development"],
+        "solution_slug": "software-development",
+    },
+    "ai_training": {
+        "service_slugs": ["ai-machine-learning-solutions", "process-automation-solutions"],
+        "solution_slug": "machine-learning-solutions",
+    },
+}
 TECHNOLOGY_GROUP_META = {
     "frontend": {
         "title": "Frontend",
@@ -580,6 +615,35 @@ def _build_process_journey(process_steps):
             "outputs": matched_step.get_outputs_list() if matched_step and matched_step.get_outputs_list() else blueprint["outputs"],
         })
     return steps
+
+
+def _legacy_service_redirect(route_name):
+    mapping = LEGACY_SERVICE_ROUTE_MAP.get(route_name, {})
+    service_slugs = mapping.get("service_slugs", [])
+    solution_slug = mapping.get("solution_slug", "")
+
+    for service_slug in service_slugs:
+        service = Service.objects.filter(slug=service_slug, is_active=True).only("slug").first()
+        if service:
+            return redirect("service_detail", slug=service.slug, permanent=True)
+
+    if solution_slug and SolutionPage.objects.filter(slug=solution_slug, is_active=True).exists():
+        return redirect("solution_landing", slug=solution_slug, permanent=True)
+
+    active_cluster = ServiceSolutionCluster.objects.filter(is_active=True).order_by("order").first()
+    if active_cluster:
+        fallback_page = SolutionPage.objects.filter(
+            is_active=True,
+            solution_cluster=active_cluster,
+        ).order_by("order").first()
+        if fallback_page:
+            return redirect("solution_landing", slug=fallback_page.slug, permanent=True)
+
+    active_service = Service.objects.filter(is_active=True).order_by("order", "title").only("slug").first()
+    if active_service:
+        return redirect("service_detail", slug=active_service.slug, permanent=True)
+
+    return redirect("services")
 
 
 def _normalize_technology_group(name):
@@ -3978,67 +4042,35 @@ The Nexalix Technologies Team
 
 def web_dev(request):
     """Legacy web development service page"""
-    try:
-        service = Service.objects.get(slug='web-development', is_active=True)
-        return service_detail(request, 'web-development')
-    except Service.DoesNotExist:
-        return render(request, 'services/web_dev.html')
+    return _legacy_service_redirect("web_dev")
 
 def mobile_app(request):
     """Legacy mobile app development service page"""
-    try:
-        service = Service.objects.get(slug='mobile-app-development', is_active=True)
-        return service_detail(request, 'mobile-app-development')
-    except Service.DoesNotExist:
-        return render(request, 'services/mobile_app.html')
+    return _legacy_service_redirect("mobile_app")
 
 def digital_marketing(request):
     """Legacy digital marketing service page"""
-    try:
-        service = Service.objects.get(slug='digital-marketing', is_active=True)
-        return service_detail(request, 'digital-marketing')
-    except Service.DoesNotExist:
-        return render(request, 'services/digital_marketing.html')
+    return _legacy_service_redirect("digital_marketing")
 
 def seo(request):
     """Legacy SEO service page"""
-    try:
-        service = Service.objects.get(slug='seo-optimization', is_active=True)
-        return service_detail(request, 'seo-optimization')
-    except Service.DoesNotExist:
-        return render(request, 'services/seo.html')
+    return _legacy_service_redirect("seo")
 
 def it_consult(request):
     """Legacy IT consulting service page"""
-    try:
-        service = Service.objects.get(slug='it-consulting', is_active=True)
-        return service_detail(request, 'it-consulting')
-    except Service.DoesNotExist:
-        return render(request, 'services/it_consult.html')
+    return _legacy_service_redirect("it_consult")
 
 def cloud(request):
     """Legacy cloud solutions service page"""
-    try:
-        service = Service.objects.get(slug='cloud-solutions', is_active=True)
-        return service_detail(request, 'cloud-solutions')
-    except Service.DoesNotExist:
-        return render(request, 'services/cloud.html')
+    return _legacy_service_redirect("cloud")
 
 def syste_dev(request):
     """Legacy systems development service page"""
-    try:
-        service = Service.objects.get(slug='systems-development', is_active=True)
-        return service_detail(request, 'systems-development')
-    except Service.DoesNotExist:
-        return render(request, 'services/syste_dev.html')
+    return _legacy_service_redirect("syste_dev")
 
 def ai_training(request):
     """Legacy AI training service page"""
-    try:
-        service = Service.objects.get(slug='ai-training', is_active=True)
-        return service_detail(request, 'ai-training')
-    except Service.DoesNotExist:
-        return render(request, 'services/ai_training.html')
+    return _legacy_service_redirect("ai_training")
 
 
 # ========================================

@@ -8635,3 +8635,252 @@ body.theme-future .case-link:hover {
         min-width: 0;
     }
 }
+
+/* Center inner heroes and compact hero scale */
+body.theme-future .home-hero {
+    min-height: clamp(490px, 64vh, 620px);
+}
+
+body.theme-future .home-hero-shell-simple {
+    grid-template-columns: minmax(150px, 0.42fr) minmax(165px, 0.42fr) minmax(340px, 0.96fr);
+    gap: clamp(16px, 1.8vw, 28px);
+    padding: 108px 0 38px;
+}
+
+body.theme-future .home-hero-content-simple {
+    width: min(590px, 100%);
+}
+
+body.theme-future .home-hero-content-simple h1 {
+    font-size: clamp(2.2rem, 4vw, 3.75rem);
+    max-width: 590px;
+    margin-bottom: 12px;
+}
+
+body.theme-future .hero-subtitle {
+    max-width: 560px;
+    margin-bottom: 16px;
+    font-size: clamp(0.98rem, 1.16vw, 1.08rem);
+    line-height: 1.56;
+}
+
+body.theme-future .hero-inline-metrics {
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+body.theme-future .hero-inline-metric {
+    min-width: 126px;
+    padding: 13px 15px;
+}
+
+body.theme-future .hero-inline-metric strong {
+    font-size: 1.28rem;
+}
+
+body.theme-future .hero-inline-metric span {
+    font-size: 0.86rem;
+}
+
+body.theme-future .hero-actions .btn {
+    min-width: 174px;
+    min-height: 50px;
+    padding: 0 24px;
+}
+
+body.theme-future .hero-action-note {
+    max-width: 520px;
+    font-size: 0.96rem;
+}
+
+body.theme-future .hero-mini-points span,
+body.theme-future .hero-side-chip {
+    font-size: 0.8rem;
+    padding: 7px 12px;
+}
+
+body.theme-future .hero-center-stage {
+    width: min(20vw, 208px);
+    height: min(20vw, 208px);
+    opacity: 0.68;
+}
+
+body.theme-future .hero-side-intro {
+    max-width: 212px;
+    padding: 18px 16px;
+}
+
+body.theme-future .services-hero-modern,
+body.theme-future .about-hero-modern,
+body.theme-future .why-hero-modern,
+body.theme-future .work-hero-modern,
+body.theme-future .industries-hero-modern,
+body.theme-future .case-studies-hero {
+    padding: 72px 0 52px;
+}
+
+body.theme-future .services-hero-inner:not(.solution-hero-shell),
+body.theme-future .case-studies-hero .services-hero-inner,
+body.theme-future .why-hero-inner,
+body.theme-future .work-hero-inner,
+body.theme-future .industries-hero-inner {
+    max-width: min(760px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+body.theme-future .services-hero-inner:not(.solution-hero-shell) .section-eyebrow,
+body.theme-future .case-studies-hero .services-hero-inner .section-eyebrow,
+body.theme-future .why-hero-inner .section-eyebrow,
+body.theme-future .work-hero-inner .section-eyebrow,
+body.theme-future .industries-hero-inner .section-eyebrow,
+body.theme-future .solution-hero-shell .section-eyebrow,
+body.theme-future .about-hero-grid .section-eyebrow {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.theme-future .services-hero-inner:not(.solution-hero-shell) h1,
+body.theme-future .case-studies-hero .services-hero-inner h1,
+body.theme-future .why-hero-inner h1,
+body.theme-future .work-hero-inner h1,
+body.theme-future .industries-hero-inner h1,
+body.theme-future .solution-hero-copy h1,
+body.theme-future .about-hero-grid h1 {
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+}
+
+body.theme-future .services-hero-inner:not(.solution-hero-shell) > p,
+body.theme-future .case-studies-hero .services-hero-inner > p,
+body.theme-future .why-hero-inner > p,
+body.theme-future .work-hero-inner > p,
+body.theme-future .industries-hero-inner > p,
+body.theme-future .solution-hero-copy p,
+body.theme-future .about-hero-text {
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 1rem;
+}
+
+body.theme-future .services-hero-inner:not(.solution-hero-shell) .hero-actions,
+body.theme-future .case-studies-hero .services-hero-inner .hero-actions,
+body.theme-future .why-hero-inner .hero-actions,
+body.theme-future .work-hero-inner .hero-actions,
+body.theme-future .industries-hero-inner .hero-actions,
+body.theme-future .solution-hero-shell .hero-actions,
+body.theme-future .about-hero-grid .hero-actions,
+body.theme-future .solution-hero-shell .cta-tertiary-links {
+    justify-content: center;
+}
+
+body.theme-future .solution-hero-shell,
+body.theme-future .about-hero-grid {
+    max-width: 900px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    justify-items: center;
+    text-align: center;
+}
+
+body.theme-future .solution-hero-copy,
+body.theme-future .about-hero-grid > div:first-child,
+body.theme-future .solution-hero-visual-card,
+body.theme-future .about-hero-panel {
+    order: initial;
+    justify-self: center;
+}
+
+body.theme-future .solution-hero-copy,
+body.theme-future .about-hero-grid > div:first-child {
+    max-width: 700px;
+}
+
+body.theme-future .solution-hero-visual-card,
+body.theme-future .about-hero-panel {
+    width: min(100%, 520px);
+}
+
+@media (max-width: 1180px) {
+    body.theme-future .home-hero-shell-simple {
+        grid-template-columns: minmax(140px, 0.36fr) minmax(150px, 0.36fr) minmax(320px, 0.92fr);
+        padding-top: 102px;
+    }
+
+    body.theme-future .home-hero-content-simple h1 {
+        font-size: clamp(2.1rem, 3.8vw, 3.4rem);
+    }
+}
+
+@media (max-width: 980px) {
+    body.theme-future .services-hero-modern,
+    body.theme-future .about-hero-modern,
+    body.theme-future .why-hero-modern,
+    body.theme-future .work-hero-modern,
+    body.theme-future .industries-hero-modern,
+    body.theme-future .case-studies-hero {
+        padding: 64px 0 46px;
+    }
+
+    body.theme-future .home-hero-shell-simple {
+        padding: 102px 0 56px;
+    }
+}
+
+@media (max-width: 768px) {
+    body.theme-future .services-hero-modern,
+    body.theme-future .about-hero-modern,
+    body.theme-future .why-hero-modern,
+    body.theme-future .work-hero-modern,
+    body.theme-future .industries-hero-modern,
+    body.theme-future .case-studies-hero {
+        padding: 56px 0 38px;
+    }
+
+    body.theme-future .home-hero-shell-simple {
+        padding: 94px 0 42px;
+    }
+
+    body.theme-future .services-hero-inner:not(.solution-hero-shell) h1,
+    body.theme-future .case-studies-hero .services-hero-inner h1,
+    body.theme-future .why-hero-inner h1,
+    body.theme-future .work-hero-inner h1,
+    body.theme-future .industries-hero-inner h1,
+    body.theme-future .solution-hero-copy h1,
+    body.theme-future .about-hero-grid h1 {
+        font-size: clamp(1.82rem, 7vw, 2.5rem);
+    }
+}
+
+@media (max-width: 560px) {
+    body.theme-future .services-hero-modern,
+    body.theme-future .about-hero-modern,
+    body.theme-future .why-hero-modern,
+    body.theme-future .work-hero-modern,
+    body.theme-future .industries-hero-modern,
+    body.theme-future .case-studies-hero {
+        padding: 48px 0 32px;
+    }
+
+    body.theme-future .home-hero-shell-simple {
+        padding: 84px 0 36px;
+    }
+
+    body.theme-future .home-hero-content-simple h1 {
+        font-size: clamp(1.88rem, 9.3vw, 2.65rem);
+    }
+
+    body.theme-future .services-hero-inner:not(.solution-hero-shell) h1,
+    body.theme-future .case-studies-hero .services-hero-inner h1,
+    body.theme-future .why-hero-inner h1,
+    body.theme-future .work-hero-inner h1,
+    body.theme-future .industries-hero-inner h1,
+    body.theme-future .solution-hero-copy h1,
+    body.theme-future .about-hero-grid h1 {
+        font-size: clamp(1.68rem, 8vw, 2.2rem);
+    }
+}

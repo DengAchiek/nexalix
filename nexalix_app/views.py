@@ -535,15 +535,19 @@ def _build_service_solution_clusters(services):
     solution_page_map = {}
     for page in solution_pages:
         cluster_slug = page.get("solution_cluster_slug") or page["slug"]
-        solution_page_map.setdefault(cluster_slug, page["slug"])
+        solution_page_map.setdefault(cluster_slug, page)
     for config in cluster_configs:
         key = config["slug"]
+        landing_page = solution_page_map.get(key)
+        landing_slug = landing_page["slug"] if landing_page else SOLUTION_CLUSTER_TO_PAGE.get(key, key)
         cluster = {
             "slug": key,
             **config,
             "services": [],
             "service_titles": [],
-            "landing_slug": solution_page_map.get(key, SOLUTION_CLUSTER_TO_PAGE.get(key, key)),
+            "landing_slug": landing_slug,
+            "detail_url": reverse("solution_landing", args=[landing_slug]),
+            "visual_image": landing_page.get("social_share_image") if landing_page else None,
             "cta_primary_url": reverse("quote_generator"),
             "cta_secondary_text": "Book Consultation",
             "cta_secondary_url": f"{reverse('contact')}?solution={key}",
@@ -568,6 +572,8 @@ def _build_service_solution_clusters(services):
         }
         cluster["services"].append(service_card)
         cluster["service_titles"].append(service.title)
+        if not cluster.get("visual_image"):
+            cluster["visual_image"] = service.featured_image or getattr(service, "social_share_image", None)
 
     for cluster in clusters:
         cluster["service_count"] = len(cluster["services"])
@@ -576,6 +582,10 @@ def _build_service_solution_clusters(services):
             cluster["sample_services"] = cluster["deliverables"]
         else:
             cluster["sample_services"] = cluster["service_titles"]
+        cluster["home_caption"] = _text_excerpt(
+            cluster.get("value_statement") or cluster.get("business_problem") or "",
+            limit=110,
+        )
     return clusters
 
 

@@ -2015,6 +2015,52 @@ a {
     align-self: flex-start;
 }
 
+.project-proof-media-link {
+    display: block;
+    text-decoration: none;
+}
+
+.home-proof-card-compact .project-completed-content,
+.home-portfolio-compact .portfolio-content {
+    gap: 8px;
+    padding: 16px;
+}
+
+.home-proof-card-compact .project-summary-text,
+.home-portfolio-compact .portfolio-content p,
+.partner-home-content p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.home-proof-card-compact .compact-proof-line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.home-proof-card-compact .project-tags,
+.home-portfolio-compact .project-tags {
+    margin-top: 0;
+    gap: 6px;
+}
+
+.home-proof-card-compact .project-tag,
+.home-portfolio-compact .project-tag {
+    font-size: 0.74rem;
+    padding: 6px 10px;
+}
+
+.home-proof-card-compact .project-proof-actions,
+.home-portfolio-compact .case-link {
+    margin-top: auto;
+}
+
 .partner-media-card {
     display: flex;
     flex-direction: column;
@@ -2797,6 +2843,11 @@ a {
     gap: 14px;
 }
 
+.home-services-grid.solution-clusters-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
 .home-service-card {
     display: grid;
     gap: 14px;
@@ -2812,6 +2863,71 @@ a {
     transform: translateY(-4px);
     box-shadow: 0 20px 34px rgba(17, 39, 78, 0.12);
     border-color: #b7cceb;
+}
+
+.home-media-cluster-card {
+    gap: 0;
+}
+
+.home-media-cluster-card .media-cluster-visual-link {
+    border-radius: 18px 18px 0 0;
+}
+
+.home-media-cluster-card .media-cluster-body {
+    gap: 9px;
+    padding: 14px 16px 16px;
+}
+
+.home-media-cluster-card h3 {
+    font-size: clamp(1.06rem, 0.38vw + 0.98rem, 1.28rem);
+}
+
+.home-media-cluster-card .media-cluster-body > p:last-of-type {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.home-media-card-title-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.home-media-card-title-link:hover {
+    color: var(--nx-primary);
+}
+
+.compact-home-service-tags {
+    margin-top: 2px;
+}
+
+.compact-home-service-tags span {
+    font-size: 0.78rem;
+    padding: 8px 12px;
+}
+
+.home-media-cluster-card .media-cluster-actions {
+    margin-top: 2px;
+}
+
+.home-media-cluster-card .project-link-btn {
+    min-width: 0;
+}
+
+body.theme-future .home-media-card-title-link {
+    color: #f6fbff;
+}
+
+body.theme-future .home-media-card-title-link:hover {
+    color: #8fc3ff;
+}
+
+body.theme-future .compact-home-service-tags span {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(151, 185, 230, 0.18);
+    color: #dceaf6;
 }
 
 .home-service-top,

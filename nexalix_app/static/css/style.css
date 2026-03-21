@@ -6324,8 +6324,6 @@ body.theme-future .home-hero-content .hero-kicker {
 
 body.theme-future .section-heading h1,
 body.theme-future .section-heading h2,
-body.theme-future .page-block h1,
-body.theme-future .page-block h2,
 body.theme-future .services-hero-inner h1,
 body.theme-future .about-hero-grid h1,
 body.theme-future .home-hero-content h1,
@@ -6335,8 +6333,7 @@ body.theme-future .home-hero-content h2 {
     line-height: 1.04;
 }
 
-body.theme-future .section-heading h2,
-body.theme-future .page-block h2 {
+body.theme-future .section-heading h2 {
     font-size: clamp(2rem, 4vw, 3.25rem);
 }
 
@@ -6347,7 +6344,6 @@ body.theme-future .about-hero-grid h1 {
 }
 
 body.theme-future .section-subtitle,
-body.theme-future .page-block p,
 body.theme-future .services-hero-inner > p,
 body.theme-future .about-hero-text,
 body.theme-future .hero-subtitle,
@@ -7159,4 +7155,128 @@ body.theme-future .case-study-hero-media,
 body.theme-future .quote-reference-box,
 body.theme-future .addon-item {
     backdrop-filter: blur(18px);
+}
+
+/* Future theme stabilization */
+body.theme-future .why-hero-modern,
+body.theme-future .work-hero-modern,
+body.theme-future .industries-hero-modern {
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-future .why-hero-modern::before,
+body.theme-future .work-hero-modern::before,
+body.theme-future .industries-hero-modern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(0, 192, 210, 0.12), transparent 22%),
+        radial-gradient(circle at 82% 18%, rgba(47, 129, 255, 0.1), transparent 24%);
+    pointer-events: none;
+}
+
+body.theme-future .why-hero-inner,
+body.theme-future .work-hero-inner,
+body.theme-future .industries-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-future .why-hero-inner h1,
+body.theme-future .work-hero-inner h1,
+body.theme-future .industries-hero-inner h1,
+body.theme-future .contact-container h1,
+body.theme-future .case-study-detail-top h1 {
+    color: #f4fbff;
+    letter-spacing: -0.04em;
+    line-height: 1.06;
+}
+
+body.theme-future .why-hero-inner h1,
+body.theme-future .work-hero-inner h1,
+body.theme-future .industries-hero-inner h1 {
+    font-size: clamp(2.5rem, 4.6vw, 4.2rem);
+    margin: 0 0 18px;
+}
+
+body.theme-future .contact-container h1 {
+    font-size: clamp(2.15rem, 4.1vw, 3.4rem);
+    margin: 0 0 16px;
+}
+
+body.theme-future .case-study-detail-top h1 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    margin: 0 0 12px;
+}
+
+body.theme-future .why-hero-inner > p,
+body.theme-future .work-hero-inner > p,
+body.theme-future .industries-hero-inner > p,
+body.theme-future .case-study-detail-top .service-detail-subheading,
+body.theme-future .case-study-detail-card p,
+body.theme-future .service-detail-card p,
+body.theme-future .service-summary-card p,
+body.theme-future .service-summary-card li,
+body.theme-future .work-step-card-modern p,
+body.theme-future .work-step-outputs li,
+body.theme-future .outcome-item p,
+body.theme-future .why-modern-card p,
+body.theme-future .about-story-cards article p,
+body.theme-future .about-stat-card p,
+body.theme-future .benefit-item,
+body.theme-future .quote-reference-box p,
+body.theme-future .addon-item p,
+body.theme-future .case-study-detail-meta span {
+    color: #9cb2c7;
+}
+
+body.theme-future .work-step-card-modern h3,
+body.theme-future .case-study-tech h2,
+body.theme-future .outcome-item h4,
+body.theme-future .case-study-detail-card span {
+    color: #f6fbff;
+}
+
+body.theme-future .contact-container,
+body.theme-future .quote-page .container,
+body.theme-future .legal-page .container {
+    max-width: 960px;
+}
+
+body.theme-future .quote-page .section-heading,
+body.theme-future .legal-page .section-heading {
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+body.theme-future .section-heading + .why-modern-grid,
+body.theme-future .section-heading + .work-process-timeline,
+body.theme-future .section-heading + .industry-modern-grid,
+body.theme-future .section-heading + .case-grid,
+body.theme-future .section-heading + .solution-clusters-grid {
+    margin-top: 8px;
+}
+
+body.theme-future .page-block .container > .two-col,
+body.theme-future .page-block .container > .about-story-grid,
+body.theme-future .page-block .container > .case-study-detail-shell {
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 980px) {
+    body.theme-future .why-hero-inner h1,
+    body.theme-future .work-hero-inner h1,
+    body.theme-future .industries-hero-inner h1,
+    body.theme-future .contact-container h1,
+    body.theme-future .case-study-detail-top h1 {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
 }

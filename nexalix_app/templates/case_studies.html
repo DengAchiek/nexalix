@@ -27,7 +27,7 @@
         <div class="case-grid case-study-grid-strong">
             {% for case in featured_cases %}
             <article class="case-card case-study-card-strong proof-media-card">
-                <div class="case-image-wrapper">
+                <a href="{% url 'case_study_detail' case.title|slugify %}" class="case-image-wrapper project-proof-media-link" aria-label="Learn more about {{ case.title }}">
                     {% if case.image %}
                     <img
                         src="{{ case.image.url|optimized_media:'card' }}"
@@ -39,7 +39,7 @@
                     {% else %}
                     <div class="case-image-placeholder">{{ case.get_proof_type_display }}</div>
                     {% endif %}
-                </div>
+                </a>
                 <div class="case-content compact-card-content">
                     <div class="case-card-meta">
                         <span class="project-proof-type">{{ case.get_proof_type_display }}</span>
@@ -90,7 +90,7 @@
         <div class="case-grid">
             {% for case in case_studies %}
             <article class="case-card proof-media-card">
-                <div class="case-image-wrapper">
+                <a href="{% url 'case_study_detail' case.title|slugify %}" class="case-image-wrapper project-proof-media-link" aria-label="Learn more about {{ case.title }}">
                     {% if case.image %}
                     <img
                         src="{{ case.image.url|optimized_media:'card' }}"
@@ -102,7 +102,7 @@
                     {% else %}
                     <div class="case-image-placeholder">{{ case.get_proof_type_display }}</div>
                     {% endif %}
-                </div>
+                </a>
                 <div class="case-content compact-card-content">
                     <div class="case-card-meta">
                         <span class="project-proof-type">{{ case.get_proof_type_display }}</span>

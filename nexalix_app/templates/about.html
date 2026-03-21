@@ -6,7 +6,7 @@
 {% block content %}
 <section class="about-hero-modern">
     <div class="container about-hero-grid">
-        <div>
+        <div class="about-hero-copy">
             <p class="section-eyebrow">About Nexalix</p>
             <h1>Cross-Platform Technology and Innovation Consulting</h1>
             <p class="about-hero-text">
@@ -16,7 +16,9 @@
                     Founded on strong business ethics and driven by practical engineering experience, Nexalix helps organizations design, develop, and scale digital products across web, mobile, cloud, data, and AI.
                 {% endif %}
             </p>
-            <a href="{% url 'contact' %}" class="btn btn-primary">Work With Us</a>
+            <div class="hero-actions">
+                <a href="{% url 'contact' %}" class="btn btn-primary">Work With Us</a>
+            </div>
         </div>
         <div class="about-hero-panel">
             <h3>What We Build</h3>

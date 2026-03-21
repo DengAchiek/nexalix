@@ -9574,3 +9574,101 @@ body.theme-future .about-hero-panel {
         justify-content: center;
     }
 }
+
+/* Final navbar spacing and process strip readability */
+body.theme-future .header-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(18px, 2vw, 30px);
+    min-height: 72px;
+}
+
+body.theme-future .brand {
+    margin-right: clamp(4px, 0.7vw, 12px);
+    padding: 8px 12px;
+}
+
+body.theme-future .brand img,
+body.theme-future .brand-logo {
+    height: clamp(30px, 2vw, 36px);
+    max-width: clamp(118px, 10vw, 150px);
+}
+
+body.theme-future .nav-links {
+    justify-content: center;
+    gap: clamp(10px, 0.95vw, 18px);
+    padding: 0 8px;
+}
+
+body.theme-future .nav-links a {
+    padding: 9px 12px;
+    font-size: clamp(0.95rem, 0.48vw + 0.76rem, 1.06rem);
+}
+
+body.theme-future .header-tools {
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: clamp(6px, 0.8vw, 16px);
+}
+
+body.theme-future .search-shell {
+    width: clamp(230px, 17vw, 315px);
+}
+
+body.theme-future .header-cta {
+    min-width: 176px;
+    padding-inline: 22px;
+}
+
+body.theme-future .pillars-risk-line {
+    margin-top: 20px;
+    padding: 15px 18px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(14, 25, 48, 0.96), rgba(8, 16, 31, 0.98));
+    border: 1px solid rgba(129, 173, 255, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 18px 36px rgba(3, 8, 22, 0.18);
+}
+
+body.theme-future .pillars-risk-line i {
+    color: #80d9ff;
+}
+
+body.theme-future .pillars-risk-line p {
+    color: #e4eef8;
+    font-weight: 600;
+}
+
+@media (max-width: 1260px) {
+    body.theme-future .header-row {
+        gap: 14px;
+    }
+
+    body.theme-future .nav-links {
+        gap: 8px;
+    }
+
+    body.theme-future .nav-links a {
+        padding: 8px 10px;
+        font-size: 0.96rem;
+    }
+
+    body.theme-future .search-shell {
+        width: clamp(210px, 15vw, 270px);
+    }
+
+    body.theme-future .header-cta {
+        min-width: 160px;
+        padding-inline: 18px;
+    }
+}
+
+@media (max-width: 980px) {
+    body.theme-future .header-row {
+        display: flex;
+        gap: 12px;
+        min-height: 68px;
+    }
+}

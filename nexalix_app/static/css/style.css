@@ -9577,48 +9577,54 @@ body.theme-future .about-hero-panel {
 
 /* Final navbar spacing and process strip readability */
 body.theme-future .header-row {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    display: flex;
     align-items: center;
-    gap: clamp(18px, 2vw, 30px);
+    gap: clamp(14px, 1.5vw, 24px);
     min-height: 72px;
 }
 
 body.theme-future .brand {
-    margin-right: clamp(4px, 0.7vw, 12px);
-    padding: 8px 12px;
+    flex: 0 0 auto;
+    margin-right: 2px;
+    padding: 4px 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 body.theme-future .brand img,
 body.theme-future .brand-logo {
-    height: clamp(30px, 2vw, 36px);
-    max-width: clamp(118px, 10vw, 150px);
+    height: clamp(28px, 1.8vw, 34px);
+    max-width: clamp(106px, 8.5vw, 134px);
 }
 
 body.theme-future .nav-links {
-    justify-content: center;
-    gap: clamp(10px, 0.95vw, 18px);
-    padding: 0 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-start;
+    gap: clamp(8px, 0.82vw, 15px);
+    padding: 0;
 }
 
 body.theme-future .nav-links a {
-    padding: 9px 12px;
-    font-size: clamp(0.95rem, 0.48vw + 0.76rem, 1.06rem);
+    padding: 9px 10px;
+    font-size: clamp(0.92rem, 0.38vw + 0.8rem, 1.02rem);
 }
 
 body.theme-future .header-tools {
+    flex: 0 0 auto;
     justify-content: flex-end;
-    gap: 12px;
-    margin-left: clamp(6px, 0.8vw, 16px);
+    gap: 10px;
+    margin-left: auto;
 }
 
 body.theme-future .search-shell {
-    width: clamp(230px, 17vw, 315px);
+    width: clamp(208px, 15.5vw, 280px);
 }
 
 body.theme-future .header-cta {
-    min-width: 176px;
-    padding-inline: 22px;
+    min-width: 166px;
+    padding-inline: 20px;
 }
 
 body.theme-future .pillars-risk-line {
@@ -9643,25 +9649,25 @@ body.theme-future .pillars-risk-line p {
 
 @media (max-width: 1260px) {
     body.theme-future .header-row {
-        gap: 14px;
+        gap: 12px;
     }
 
     body.theme-future .nav-links {
-        gap: 8px;
+        gap: 6px;
     }
 
     body.theme-future .nav-links a {
-        padding: 8px 10px;
-        font-size: 0.96rem;
+        padding: 8px 8px;
+        font-size: 0.94rem;
     }
 
     body.theme-future .search-shell {
-        width: clamp(210px, 15vw, 270px);
+        width: clamp(190px, 13vw, 240px);
     }
 
     body.theme-future .header-cta {
-        min-width: 160px;
-        padding-inline: 18px;
+        min-width: 154px;
+        padding-inline: 17px;
     }
 }
 

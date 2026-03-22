@@ -9890,6 +9890,12 @@ body.theme-future .service-category-block .services-grid {
     align-items: stretch;
 }
 
+body.theme-future .services-solution-showcase .solution-clusters-grid,
+body.theme-future .services-solution-pages .solution-clusters-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
 body.theme-future .services-solution-showcase .media-cluster-card,
 body.theme-future .services-solution-pages .media-cluster-card,
 body.theme-future .service-category-block .media-service-card {
@@ -9905,6 +9911,7 @@ body.theme-future .services-solution-pages .media-cluster-visual-link,
 body.theme-future .service-category-block .service-media-frame {
     position: relative;
     isolation: isolate;
+    aspect-ratio: 16 / 8.6;
     min-width: 0;
     overflow: hidden;
 }
@@ -9931,7 +9938,8 @@ body.theme-future .service-category-block .service-media-image {
 body.theme-future .services-solution-showcase .service-visual-placeholder,
 body.theme-future .services-solution-pages .service-visual-placeholder,
 body.theme-future .service-category-block .service-visual-placeholder {
-    min-height: 100%;
+    height: 100%;
+    min-height: 148px;
     z-index: 2;
 }
 
@@ -9944,6 +9952,12 @@ body.theme-future .service-category-block .service-content {
     min-width: 0;
 }
 
+body.theme-future .services-solution-showcase .media-cluster-body,
+body.theme-future .services-solution-pages .media-cluster-body {
+    gap: 8px;
+    padding: 14px 15px 16px;
+}
+
 body.theme-future .services-solution-showcase .media-cluster-card h3,
 body.theme-future .services-solution-pages .media-cluster-card h3,
 body.theme-future .service-category-block .service-title {
@@ -9953,6 +9967,8 @@ body.theme-future .service-category-block .service-title {
 
 body.theme-future .services-solution-showcase .media-cluster-card h3,
 body.theme-future .services-solution-pages .media-cluster-card h3 {
+    font-size: clamp(0.98rem, 0.2vw + 0.94rem, 1.12rem);
+    line-height: 1.15;
     min-height: calc(1.18em * 2);
 }
 
@@ -9963,6 +9979,14 @@ body.theme-future .services-solution-pages .media-cluster-body > p:last-of-type 
     -webkit-line-clamp: 3;
     overflow: hidden;
     min-height: calc(1.55em * 3);
+}
+
+body.theme-future .services-solution-showcase .media-cluster-body > p:last-of-type,
+body.theme-future .services-solution-pages .media-cluster-body > p:last-of-type,
+body.theme-future .services-solution-showcase .media-cluster-points li,
+body.theme-future .services-solution-pages .media-cluster-points li {
+    font-size: 0.84rem;
+    line-height: 1.45;
 }
 
 body.theme-future .service-category-block .service-description {
@@ -9980,6 +10004,11 @@ body.theme-future .service-category-block .service-outcome-list {
     align-content: start;
 }
 
+body.theme-future .services-solution-showcase .media-cluster-points,
+body.theme-future .services-solution-pages .media-cluster-points {
+    gap: 6px;
+}
+
 body.theme-future .services-solution-showcase .media-cluster-actions,
 body.theme-future .services-solution-pages .media-cluster-actions,
 body.theme-future .service-category-block .service-actions {
@@ -9995,6 +10024,9 @@ body.theme-future .service-category-block .service-actions .project-link-btn,
 body.theme-future .service-category-block .service-actions .secondary-link {
     flex: 1 1 0;
     min-width: 0;
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 0.81rem;
     justify-content: center;
     text-align: center;
 }
@@ -10033,6 +10065,13 @@ body.theme-future .service-category-block .tech-tag {
     white-space: normal;
 }
 
+@media (max-width: 1280px) {
+    body.theme-future .services-solution-showcase .solution-clusters-grid,
+    body.theme-future .services-solution-pages .solution-clusters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 980px) {
     body.theme-future .service-category-block .service-cluster-header {
         flex-direction: column;
@@ -10045,6 +10084,11 @@ body.theme-future .service-category-block .tech-tag {
 }
 
 @media (max-width: 768px) {
+    body.theme-future .services-solution-showcase .solution-clusters-grid,
+    body.theme-future .services-solution-pages .solution-clusters-grid {
+        grid-template-columns: 1fr;
+    }
+
     body.theme-future .services-solution-showcase .media-cluster-card h3,
     body.theme-future .services-solution-pages .media-cluster-card h3,
     body.theme-future .services-solution-showcase .media-cluster-body > p:last-of-type,

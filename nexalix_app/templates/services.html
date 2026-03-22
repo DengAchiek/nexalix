@@ -5,20 +5,16 @@
 {% block meta_description %}{{ meta_description }}{% endblock %}
 {% block extra_css %}
 <style>
-body.theme-future .services-solution-showcase .solution-clusters-grid,
-body.theme-future .services-solution-pages .solution-clusters-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 18px !important;
-}
-
-body.theme-future .services-solution-pages .focused-landing-pages-grid {
+body.theme-future .services-showcase-grid,
+body.theme-future .focused-landing-pages-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 24px !important;
     align-items: stretch;
 }
 
-body.theme-future .services-solution-pages .focused-landing-card {
+body.theme-future .services-showcase-card,
+body.theme-future .focused-landing-card {
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -27,19 +23,45 @@ body.theme-future .services-solution-pages .focused-landing-card {
     border-radius: 24px;
 }
 
-body.theme-future .services-solution-pages .focused-landing-card .pillar-icon {
-    width: 76px;
-    height: 76px;
+body.theme-future .services-showcase-media {
+    display: block;
+    width: 88px;
+    height: 88px;
     margin-bottom: 18px;
     border-radius: 20px;
+    overflow: hidden;
     background: linear-gradient(180deg, #ecf3fb, #dbe8f6);
-    color: #69dbff;
-    font-size: 2rem;
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.8),
         0 10px 24px rgba(4, 10, 24, 0.22);
 }
 
+body.theme-future .services-showcase-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+body.theme-future .services-showcase-media .pillar-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background: transparent;
+    color: #69dbff;
+    font-size: 2rem;
+}
+
+body.theme-future .services-showcase-kicker {
+    margin: 0 0 8px;
+    color: rgba(150, 182, 214, 0.78);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+body.theme-future .services-showcase-card h3,
 body.theme-future .services-solution-pages .focused-landing-card h3 {
     margin: 0 0 10px;
     min-height: 0;
@@ -47,6 +69,7 @@ body.theme-future .services-solution-pages .focused-landing-card h3 {
     line-height: 1.1 !important;
 }
 
+body.theme-future .services-showcase-summary,
 body.theme-future .services-solution-pages .focused-landing-summary {
     margin: 0;
     color: rgba(222, 235, 247, 0.9);
@@ -54,6 +77,7 @@ body.theme-future .services-solution-pages .focused-landing-summary {
     line-height: 1.62;
 }
 
+body.theme-future .services-showcase-points,
 body.theme-future .services-solution-pages .focused-landing-points {
     display: grid;
     gap: 9px;
@@ -62,6 +86,7 @@ body.theme-future .services-solution-pages .focused-landing-points {
     list-style: none;
 }
 
+body.theme-future .services-showcase-points li,
 body.theme-future .services-solution-pages .focused-landing-points li {
     position: relative;
     padding-left: 18px;
@@ -70,6 +95,7 @@ body.theme-future .services-solution-pages .focused-landing-points li {
     line-height: 1.5;
 }
 
+body.theme-future .services-showcase-points li::before,
 body.theme-future .services-solution-pages .focused-landing-points li::before {
     content: "";
     position: absolute;
@@ -82,87 +108,46 @@ body.theme-future .services-solution-pages .focused-landing-points li::before {
     box-shadow: 0 0 12px rgba(99, 192, 255, 0.34);
 }
 
+body.theme-future .services-showcase-actions,
 body.theme-future .services-solution-pages .focused-landing-actions {
     margin-top: auto;
     padding-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
 }
 
+body.theme-future .services-showcase-actions .project-link-btn,
 body.theme-future .services-solution-pages .focused-landing-actions .project-link-btn {
     width: auto;
     min-width: 144px;
 }
 
-body.theme-future .services-solution-showcase .media-cluster-card,
-body.theme-future .services-solution-pages .media-cluster-card {
-    height: 100%;
-    min-width: 0;
-}
-
-body.theme-future .services-solution-showcase .media-cluster-visual-link,
-body.theme-future .services-solution-pages .media-cluster-visual-link {
-    aspect-ratio: 16 / 8.6 !important;
-}
-
-body.theme-future .services-solution-showcase .service-visual-placeholder,
-body.theme-future .services-solution-pages .service-visual-placeholder {
-    min-height: 148px !important;
-}
-
-body.theme-future .services-solution-showcase .media-cluster-body,
-body.theme-future .services-solution-pages .media-cluster-body {
-    gap: 8px !important;
-    padding: 14px 15px 16px !important;
-}
-
-body.theme-future .services-solution-showcase .media-cluster-card h3,
-body.theme-future .services-solution-pages .media-cluster-card h3 {
-    font-size: clamp(0.98rem, 0.2vw + 0.94rem, 1.12rem) !important;
-    line-height: 1.15 !important;
-}
-
-body.theme-future .services-solution-showcase .media-cluster-body > p:last-of-type,
-body.theme-future .services-solution-pages .media-cluster-body > p:last-of-type,
-body.theme-future .services-solution-showcase .media-cluster-points li,
-body.theme-future .services-solution-pages .media-cluster-points li {
-    font-size: 0.84rem !important;
-    line-height: 1.45 !important;
-}
-
-body.theme-future .services-solution-showcase .media-cluster-points,
-body.theme-future .services-solution-pages .media-cluster-points {
-    gap: 6px !important;
-}
-
-body.theme-future .services-solution-showcase .media-cluster-actions .project-link-btn,
-body.theme-future .services-solution-showcase .media-cluster-actions .secondary-link,
-body.theme-future .services-solution-pages .media-cluster-actions .project-link-btn,
-body.theme-future .services-solution-pages .media-cluster-actions .secondary-link {
+body.theme-future .services-showcase-actions .secondary-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     min-height: 40px !important;
-    padding: 0 14px !important;
+    padding: 0 4px !important;
     font-size: 0.81rem !important;
+    color: rgba(228, 238, 248, 0.86);
 }
 
 @media (max-width: 1280px) {
-    body.theme-future .services-solution-showcase .solution-clusters-grid,
-    body.theme-future .services-solution-pages .solution-clusters-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-
+    body.theme-future .services-showcase-grid,
     body.theme-future .services-solution-pages .focused-landing-pages-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 }
 
 @media (max-width: 768px) {
-    body.theme-future .services-solution-showcase .solution-clusters-grid,
-    body.theme-future .services-solution-pages .solution-clusters-grid {
-        grid-template-columns: 1fr !important;
-    }
-
+    body.theme-future .services-showcase-grid,
     body.theme-future .services-solution-pages .focused-landing-pages-grid {
         grid-template-columns: 1fr !important;
     }
 
+    body.theme-future .services-showcase-card,
     body.theme-future .services-solution-pages .focused-landing-card {
         padding: 22px 18px;
     }
@@ -191,39 +176,31 @@ body.theme-future .services-solution-pages .media-cluster-actions .secondary-lin
             <h2>Services packaged around business outcomes</h2>
             <p class="section-subtitle">Each cluster is designed around the problem a buyer needs solved, the deliverables we ship, and the kind of team it supports.</p>
         </div>
-        <div class="solution-clusters-grid">
+        <div class="services-showcase-grid">
             {% for cluster in service_solution_clusters %}
-            <article class="solution-cluster-card media-cluster-card theme-{{ cluster.slug }}">
-                <a href="{% url 'solution_landing' cluster.landing_slug %}" class="media-cluster-visual-link" aria-label="{{ cluster.title }}">
-                    {% if cluster.services.0.object.featured_image %}
+            <article class="pillar-card services-showcase-card theme-{{ cluster.slug }}">
+                <a href="{% url 'solution_landing' cluster.landing_slug %}" class="services-showcase-media" aria-label="{{ cluster.title }}">
+                    {% if cluster.visual_image %}
                     <img
-                        src="{{ cluster.services.0.object.featured_image.url|optimized_media:'card' }}"
+                        src="{{ cluster.visual_image.url|optimized_media:'card' }}"
                         alt="{{ cluster.title }}"
-                        class="media-cluster-image"
                         loading="lazy"
                     >
                     {% else %}
-                    <div class="service-visual-placeholder theme-{{ cluster.slug }}">
-                        <span class="service-visual-grid"></span>
-                        <span class="service-visual-glow"></span>
-                        <span class="service-visual-icon"><i class="{{ cluster.icon }}"></i></span>
-                        <span class="service-visual-badge">{{ cluster.title }}</span>
-                    </div>
+                    <span class="pillar-icon"><i class="{{ cluster.icon }}"></i></span>
                     {% endif %}
                 </a>
-                <div class="media-cluster-body">
-                    <p class="media-cluster-kicker">Solution Cluster</p>
-                    <h3>{{ cluster.title }}</h3>
-                    <p>{{ cluster.value_statement }}</p>
-                    <ul class="media-cluster-points">
-                        {% for deliverable in cluster.deliverables|slice:":3" %}
-                        <li>{{ deliverable }}</li>
-                        {% endfor %}
-                    </ul>
-                    <div class="media-cluster-actions">
-                        <a href="{% url 'solution_landing' cluster.landing_slug %}" class="project-link-btn">Learn More</a>
-                        <a href="{{ cluster.cta_primary_url }}" class="secondary-link">Get Proposal</a>
-                    </div>
+                <p class="services-showcase-kicker">Solution Cluster</p>
+                <h3>{{ cluster.title }}</h3>
+                <p class="services-showcase-summary">{{ cluster.value_statement }}</p>
+                <ul class="services-showcase-points">
+                    {% for deliverable in cluster.deliverables|slice:":3" %}
+                    <li>{{ deliverable }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="services-showcase-actions">
+                    <a href="{% url 'solution_landing' cluster.landing_slug %}" class="project-link-btn">Learn More</a>
+                    <a href="{{ cluster.cta_primary_url }}" class="secondary-link">Get Proposal</a>
                 </div>
             </article>
             {% endfor %}
@@ -241,13 +218,24 @@ body.theme-future .services-solution-pages .media-cluster-actions .secondary-lin
         <div class="focused-landing-pages-grid">
             {% for page in solution_pages %}
             <article class="pillar-card focused-landing-card theme-{{ page.theme_slug }}">
-                <div class="pillar-icon"><i class="{{ page.cluster_icon }}"></i></div>
+                <a href="{% url 'solution_landing' page.slug %}" class="services-showcase-media" aria-label="{{ page.nav_title }}">
+                    {% if page.social_share_image %}
+                    <img
+                        src="{{ page.social_share_image.url|optimized_media:'card' }}"
+                        alt="{{ page.nav_title }}"
+                        loading="lazy"
+                    >
+                    {% else %}
+                    <span class="pillar-icon"><i class="{{ page.cluster_icon }}"></i></span>
+                    {% endif %}
+                </a>
+                <p class="services-showcase-kicker">Focused Solution</p>
                 <h3>{{ page.nav_title }}</h3>
                 <p class="focused-landing-summary">{{ page.subheadline|truncatechars:140 }}</p>
                 <ul class="focused-landing-points">
-                        {% for deliverable in page.deliverables|slice:":2" %}
-                        <li>{{ deliverable }}</li>
-                        {% endfor %}
+                    {% for deliverable in page.deliverables|slice:":2" %}
+                    <li>{{ deliverable }}</li>
+                    {% endfor %}
                 </ul>
                 <div class="focused-landing-actions">
                     <a href="{% url 'solution_landing' page.slug %}" class="project-link-btn">Learn More</a>

@@ -3,6 +3,79 @@
 
 {% block title %}{{ meta_title|default:page_title|default:'Services - Nexalix Technologies' }}{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
+{% block extra_css %}
+<style>
+body.theme-future .services-solution-showcase .solution-clusters-grid,
+body.theme-future .services-solution-pages .solution-clusters-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-card,
+body.theme-future .services-solution-pages .media-cluster-card {
+    height: 100%;
+    min-width: 0;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-visual-link,
+body.theme-future .services-solution-pages .media-cluster-visual-link {
+    aspect-ratio: 16 / 8.6 !important;
+}
+
+body.theme-future .services-solution-showcase .service-visual-placeholder,
+body.theme-future .services-solution-pages .service-visual-placeholder {
+    min-height: 148px !important;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-body,
+body.theme-future .services-solution-pages .media-cluster-body {
+    gap: 8px !important;
+    padding: 14px 15px 16px !important;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-card h3,
+body.theme-future .services-solution-pages .media-cluster-card h3 {
+    font-size: clamp(0.98rem, 0.2vw + 0.94rem, 1.12rem) !important;
+    line-height: 1.15 !important;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-body > p:last-of-type,
+body.theme-future .services-solution-pages .media-cluster-body > p:last-of-type,
+body.theme-future .services-solution-showcase .media-cluster-points li,
+body.theme-future .services-solution-pages .media-cluster-points li {
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-points,
+body.theme-future .services-solution-pages .media-cluster-points {
+    gap: 6px !important;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-actions .project-link-btn,
+body.theme-future .services-solution-showcase .media-cluster-actions .secondary-link,
+body.theme-future .services-solution-pages .media-cluster-actions .project-link-btn,
+body.theme-future .services-solution-pages .media-cluster-actions .secondary-link {
+    min-height: 40px !important;
+    padding: 0 14px !important;
+    font-size: 0.81rem !important;
+}
+
+@media (max-width: 1280px) {
+    body.theme-future .services-solution-showcase .solution-clusters-grid,
+    body.theme-future .services-solution-pages .solution-clusters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body.theme-future .services-solution-showcase .solution-clusters-grid,
+    body.theme-future .services-solution-pages .solution-clusters-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="services-hero-modern">

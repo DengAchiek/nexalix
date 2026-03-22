@@ -26,72 +26,15 @@
         <div class="video-overlay"></div>
     </div>
     <div class="container home-hero-shell home-hero-shell-simple">
-        <div class="hero-side-intro" aria-label="Who Nexalix serves">
-            <p class="hero-side-caption">{{ home_ab.who_label }}</p>
-            <h2>Fast-growing teams</h2>
-            <p class="hero-side-copy">{{ home_ab.who_text }}</p>
-            <div class="hero-side-chips">
-                {% for industry_name in hero_industry_tags %}
-                <span class="hero-side-chip">{{ industry_name }}</span>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="hero-center-stage" aria-hidden="true">
-            <span class="hero-stage-ring hero-stage-ring-one"></span>
-            <span class="hero-stage-ring hero-stage-ring-two"></span>
-            <div class="hero-center-glow"></div>
-            <div class="hero-center-frame">
-                <span class="hero-core-orb"></span>
-                <span class="hero-core-orb hero-core-orb-secondary"></span>
-                <span class="hero-core-line hero-core-line-one"></span>
-                <span class="hero-core-line hero-core-line-two"></span>
-                <span class="hero-core-dot hero-core-dot-one"></span>
-                <span class="hero-core-dot hero-core-dot-two"></span>
-            </div>
-        </div>
-
         <div class="home-hero-content home-hero-content-simple">
             <p class="hero-kicker">{{ home_ab.what_label }}</p>
             <h1 id="homeHeroHeadline">{{ home_ab.headline }}</h1>
             <p class="hero-subtitle">{{ home_ab.subtitle }}</p>
 
-            <div class="hero-inline-metrics" aria-label="Nexalix delivery proof">
-                {% for metric in hero_metrics %}
-                <article class="hero-inline-metric">
-                    <strong>{{ metric.value }}{{ metric.suffix }}</strong>
-                    <span>{{ metric.label }}</span>
-                </article>
-                {% endfor %}
-            </div>
-
             <div class="hero-actions">
                 <a href="{{ home_ab.primary_cta_url }}" class="btn btn-primary" data-ab-click="primary_cta" data-ab-label="{{ home_ab.primary_cta_text }}">{{ home_ab.primary_cta_text }}</a>
                 <a href="{{ home_ab.secondary_cta_url }}" class="btn btn-outline-primary">{{ home_ab.secondary_cta_text }}</a>
             </div>
-            <p class="hero-action-note">{{ home_ab.action_note }}</p>
-
-            {% if hero_partner_logos %}
-            <div class="hero-logo-trust" aria-label="Trusted partner logos">
-                <p>Trusted by collaborative partners</p>
-                <div class="hero-logo-row">
-                    {% for partner in hero_partner_logos %}
-                    <span class="hero-logo-mark" title="{{ partner.name }}">
-                        {% if partner.logo %}
-                        <img
-                            src="{{ partner.logo.url|optimized_media:'thumb' }}"
-                            alt="{{ partner.name }} logo"
-                            loading="lazy"
-                            onerror="this.onerror=null;this.closest('.hero-logo-mark').textContent='{{ partner.name|slice:":1"|upper }}';"
-                        >
-                        {% else %}
-                        <span>{{ partner.name|slice:":1"|upper }}</span>
-                        {% endif %}
-                    </span>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
 
             <div class="hero-mini-points" aria-label="Core Nexalix capabilities">
                 {% for service_name in hero_service_tags|slice:":3" %}

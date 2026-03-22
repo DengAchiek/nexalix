@@ -116,13 +116,11 @@ LEGACY_HOME_HERO_SUBTITLE = (
     "We are an engineering and consulting partner for digital products, data platforms, automation, "
     "and enterprise transformation."
 )
-DEFAULT_HOME_HERO_HEADLINE = "AI, Software, and Automation for Fast-Growing Businesses"
+DEFAULT_HOME_HERO_HEADLINE = "Software Development, AI Solutions, and Automation for Growth"
 DEFAULT_HOME_HERO_SUBTITLE = (
-    "Nexalix helps fast-growing businesses, regulated teams, and organizations modernizing operations "
-    "design and deliver digital products, AI workflows, data platforms, and business automation with "
-    "consulting-led execution."
+    "Technology consulting, data analytics, and digital systems for fast-growing businesses."
 )
-DEFAULT_HOME_HERO_KICKER = "For fast-growing businesses, regulated teams, and organizations modernizing operations"
+DEFAULT_HOME_HERO_KICKER = "AI solutions for business growth"
 SOLUTION_PAGE_CONFIG = {
     "software-development": {
         "nav_title": "Software Development",
@@ -931,7 +929,7 @@ def _resolve_home_ab_variant(request, default_headline, default_subtitle):
         "test_name": "home_hero_primary",
         "kicker": DEFAULT_HOME_HERO_KICKER,
         "who_label": "Who we serve",
-        "what_label": "What we do",
+        "what_label": "AI solutions and software delivery",
         "why_label": "Why Nexalix",
         "who_text": "SMEs, regulated teams, and growing organizations across healthcare, education, finance, retail, logistics, and startups.",
         "what_text": "We deliver enterprise software, AI automation, data platforms, dashboards, integrations, and consulting-led execution.",
@@ -940,18 +938,15 @@ def _resolve_home_ab_variant(request, default_headline, default_subtitle):
         "primary_cta_url": reverse("quote_generator"),
         "secondary_cta_text": "Explore Services",
         "secondary_cta_url": reverse("services"),
-        "action_note": "Share your goals, timeline, and expected outcome. We respond with a practical next step.",
+        "action_note": "Share your goals and we will recommend the right next step.",
     }
 
     if variant == "B":
         return {
             **common,
             "variant": "B",
-            "headline": "Build Smarter Digital Systems for Growth",
-            "subtitle": (
-                "Nexalix partners with ambitious teams to build digital products, automate operations, "
-                "and turn business data into decision-ready systems that scale."
-            ),
+            "headline": "AI Solutions and Software Development for Fast-Growing Businesses",
+            "subtitle": "Automation, data analytics, and technology consulting built for scalable growth.",
         }
 
     return {

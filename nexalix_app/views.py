@@ -589,13 +589,26 @@ def _build_service_solution_clusters(services):
 
 def _solution_page_links(unique_by_cluster=False):
     pages = _get_solution_page_configs()
+    cluster_configs = {
+        config["slug"]: config for config in _get_solution_cluster_configs()
+    }
+    prepared_pages = []
+    for page in pages:
+        cluster_key = page.get("solution_cluster_slug") or page.get("slug")
+        cluster_config = cluster_configs.get(cluster_key, {})
+        prepared_pages.append({
+            **page,
+            "theme_slug": cluster_key,
+            "cluster_icon": cluster_config.get("icon", "fas fa-arrow-up-right-dots"),
+        })
+
     if not unique_by_cluster:
-        return pages
+        return prepared_pages
 
     unique_pages = []
     seen_clusters = set()
-    for page in pages:
-        cluster_key = page.get("solution_cluster_slug") or page.get("slug")
+    for page in prepared_pages:
+        cluster_key = page["theme_slug"]
         if cluster_key in seen_clusters:
             continue
         seen_clusters.add(cluster_key)

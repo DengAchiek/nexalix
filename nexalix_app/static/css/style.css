@@ -9882,3 +9882,183 @@ body.theme-future .technology-capability-card .technology-capability-icon {
         padding: 6px 10px;
     }
 }
+
+/* Services page card stabilization */
+body.theme-future .services-solution-showcase .solution-clusters-grid,
+body.theme-future .services-solution-pages .solution-clusters-grid,
+body.theme-future .service-category-block .services-grid {
+    align-items: stretch;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-card,
+body.theme-future .services-solution-pages .media-cluster-card,
+body.theme-future .service-category-block .media-service-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: clip;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-visual-link,
+body.theme-future .services-solution-pages .media-cluster-visual-link,
+body.theme-future .service-category-block .service-media-frame {
+    position: relative;
+    isolation: isolate;
+    min-width: 0;
+    overflow: hidden;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-visual-link::before,
+body.theme-future .services-solution-pages .media-cluster-visual-link::before,
+body.theme-future .service-category-block .service-media-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        linear-gradient(180deg, rgba(8, 16, 30, 0.08), rgba(8, 16, 30, 0.54)),
+        radial-gradient(circle at 78% 18%, rgba(92, 126, 255, 0.18), transparent 28%);
+}
+
+body.theme-future .services-solution-showcase .media-cluster-image,
+body.theme-future .services-solution-pages .media-cluster-image,
+body.theme-future .service-category-block .service-media-image {
+    filter: saturate(0.92) brightness(0.88);
+}
+
+body.theme-future .services-solution-showcase .service-visual-placeholder,
+body.theme-future .services-solution-pages .service-visual-placeholder,
+body.theme-future .service-category-block .service-visual-placeholder {
+    min-height: 100%;
+    z-index: 2;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-body,
+body.theme-future .services-solution-pages .media-cluster-body,
+body.theme-future .service-category-block .service-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-card h3,
+body.theme-future .services-solution-pages .media-cluster-card h3,
+body.theme-future .service-category-block .service-title {
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-card h3,
+body.theme-future .services-solution-pages .media-cluster-card h3 {
+    min-height: calc(1.18em * 2);
+}
+
+body.theme-future .services-solution-showcase .media-cluster-body > p:last-of-type,
+body.theme-future .services-solution-pages .media-cluster-body > p:last-of-type {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    min-height: calc(1.55em * 3);
+}
+
+body.theme-future .service-category-block .service-description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    min-height: calc(1.55em * 4);
+}
+
+body.theme-future .services-solution-showcase .media-cluster-points,
+body.theme-future .services-solution-pages .media-cluster-points,
+body.theme-future .service-category-block .service-outcome-list {
+    margin-top: 0;
+    align-content: start;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-actions,
+body.theme-future .services-solution-pages .media-cluster-actions,
+body.theme-future .service-category-block .service-actions {
+    margin-top: auto;
+    align-items: stretch;
+}
+
+body.theme-future .services-solution-showcase .media-cluster-actions .project-link-btn,
+body.theme-future .services-solution-showcase .media-cluster-actions .secondary-link,
+body.theme-future .services-solution-pages .media-cluster-actions .project-link-btn,
+body.theme-future .services-solution-pages .media-cluster-actions .secondary-link,
+body.theme-future .service-category-block .service-actions .project-link-btn,
+body.theme-future .service-category-block .service-actions .secondary-link {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    text-align: center;
+}
+
+body.theme-future .service-visual-badge {
+    max-width: calc(100% - 30px);
+    padding: 10px 12px;
+    border-radius: 16px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: clip;
+    line-height: 1.3;
+}
+
+body.theme-future .service-category-block .service-cluster-header {
+    align-items: flex-start;
+}
+
+body.theme-future .service-category-block .solution-service-top {
+    align-items: flex-start;
+    gap: 10px;
+}
+
+body.theme-future .service-category-block .solution-service-meta {
+    min-width: 0;
+    justify-items: end;
+    text-align: right;
+}
+
+body.theme-future .service-category-block .service-technologies {
+    min-width: 0;
+}
+
+body.theme-future .service-category-block .tech-tag {
+    max-width: 100%;
+    white-space: normal;
+}
+
+@media (max-width: 980px) {
+    body.theme-future .service-category-block .service-cluster-header {
+        flex-direction: column;
+    }
+
+    body.theme-future .service-category-block .service-cluster-cta {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    body.theme-future .services-solution-showcase .media-cluster-card h3,
+    body.theme-future .services-solution-pages .media-cluster-card h3,
+    body.theme-future .services-solution-showcase .media-cluster-body > p:last-of-type,
+    body.theme-future .services-solution-pages .media-cluster-body > p:last-of-type,
+    body.theme-future .service-category-block .service-description {
+        min-height: 0;
+    }
+
+    body.theme-future .service-category-block .solution-service-top {
+        flex-direction: column;
+    }
+
+    body.theme-future .service-category-block .solution-service-meta {
+        justify-items: start;
+        text-align: left;
+    }
+}

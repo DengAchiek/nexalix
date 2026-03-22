@@ -587,8 +587,20 @@ def _build_service_solution_clusters(services):
     return clusters
 
 
-def _solution_page_links():
-    return _get_solution_page_configs()
+def _solution_page_links(unique_by_cluster=False):
+    pages = _get_solution_page_configs()
+    if not unique_by_cluster:
+        return pages
+
+    unique_pages = []
+    seen_clusters = set()
+    for page in pages:
+        cluster_key = page.get("solution_cluster_slug") or page.get("slug")
+        if cluster_key in seen_clusters:
+            continue
+        seen_clusters.add(cluster_key)
+        unique_pages.append(page)
+    return unique_pages
 
 
 def _build_process_journey(process_steps):
@@ -2388,7 +2400,7 @@ def services(request):
     context = {
         'services': services_list,
         'service_solution_clusters': service_solution_clusters,
-        'solution_pages': _solution_page_links(),
+        'solution_pages': _solution_page_links(unique_by_cluster=True),
         'technology_capability_groups': _build_technology_capability_groups(technology_categories),
         'process_journey': _build_process_journey(ProcessStep.objects.all().order_by("order")),
         'pricing_plans': pricing_plans,  # This will work now

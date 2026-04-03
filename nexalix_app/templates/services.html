@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static media_optimization %}
+{% load static %}
 
 {% block title %}{{ meta_title|default:page_title|default:'Services - Nexalix Technologies' }}{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
@@ -726,15 +726,7 @@ body.theme-future.services-page .services-cta-panel .cta-tertiary-links {
             {% for cluster in service_solution_clusters %}
             <article class="pillar-card services-showcase-card theme-{{ cluster.slug }} {% if forloop.counter0|divisibleby:'2' %}service-card-warm{% else %}service-card-light{% endif %}" data-reveal>
                 <a href="{% url 'solution_landing' cluster.landing_slug %}" class="services-showcase-media" aria-label="{{ cluster.title }}">
-                    {% if cluster.visual_image %}
-                    <img
-                        src="{{ cluster.visual_image.url|optimized_media:'card' }}"
-                        alt="{{ cluster.title }}"
-                        loading="lazy"
-                    >
-                    {% else %}
                     <span class="pillar-icon"><i class="{{ cluster.icon }}"></i></span>
-                    {% endif %}
                 </a>
                 <p class="services-showcase-kicker">Solution Cluster</p>
                 <h3>{{ cluster.title }}</h3>
@@ -765,15 +757,7 @@ body.theme-future.services-page .services-cta-panel .cta-tertiary-links {
             {% for page in solution_pages %}
             <article class="pillar-card focused-landing-card theme-{{ page.theme_slug }} {% if forloop.counter0|divisibleby:'2' %}service-card-light{% else %}service-card-warm{% endif %}" data-reveal>
                 <a href="{% url 'solution_landing' page.slug %}" class="services-showcase-media" aria-label="{{ page.nav_title }}">
-                    {% if page.social_share_image %}
-                    <img
-                        src="{{ page.social_share_image.url|optimized_media:'card' }}"
-                        alt="{{ page.nav_title }}"
-                        loading="lazy"
-                    >
-                    {% else %}
                     <span class="pillar-icon"><i class="{{ page.cluster_icon }}"></i></span>
-                    {% endif %}
                 </a>
                 <p class="services-showcase-kicker">Focused Solution</p>
                 <h3>{{ page.nav_title }}</h3>
@@ -879,21 +863,12 @@ body.theme-future.services-page .services-cta-panel .cta-tertiary-links {
                     <article class="service-card solution-service-card media-service-card theme-{{ cluster.slug }}" data-service-name="{{ service.title|lower }}">
                         <div class="service-card-inner">
                             <a href="{{ service.detail_url }}" class="service-media-frame" aria-label="{{ service.title }}">
-                                {% if service.object.featured_image %}
-                                <img
-                                    src="{{ service.object.featured_image.url|optimized_media:'card' }}"
-                                    alt="{{ service.title }}"
-                                    class="service-media-image"
-                                    loading="lazy"
-                                >
-                                {% else %}
                                 <div class="service-visual-placeholder theme-{{ cluster.slug }}">
                                     <span class="service-visual-grid"></span>
                                     <span class="service-visual-glow"></span>
                                     <span class="service-visual-icon"><i class="{{ service.icon }}"></i></span>
                                     <span class="service-visual-badge">{{ service.delivery_tier }}</span>
                                 </div>
-                                {% endif %}
                             </a>
                             <div class="service-content">
                                 <div class="solution-service-top">

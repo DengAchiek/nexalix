@@ -22,6 +22,21 @@
         </nav>
 
         <div class="header-tools nx-header-tools">
+            <div class="search-shell nx-site-search" role="search">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input
+                    type="search"
+                    id="desktopSearch"
+                    placeholder="Search services, industries, case studies..."
+                    aria-label="Search Nexalix content"
+                    aria-controls="desktopSearchResults"
+                    aria-expanded="false"
+                    aria-autocomplete="list"
+                    role="combobox"
+                    autocomplete="off"
+                >
+                <div class="search-results" id="desktopSearchResults" role="listbox" aria-label="Search suggestions"></div>
+            </div>
             <a href="{% url 'quote_generator' %}" class="btn btn-primary header-cta">Get Proposal</a>
             <button
                 class="mobile-menu-btn"
@@ -52,6 +67,22 @@
                     >
                 </a>
                 <p>Consulting-led software, AI, and digital transformation.</p>
+            </div>
+
+            <div class="search-shell mobile-search-shell nx-mobile-search" role="search">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input
+                    type="search"
+                    id="mobileSearch"
+                    placeholder="Search Nexalix content..."
+                    aria-label="Search Nexalix content"
+                    aria-controls="mobileSearchResults"
+                    aria-expanded="false"
+                    aria-autocomplete="list"
+                    role="combobox"
+                    autocomplete="off"
+                >
+                <div class="search-results" id="mobileSearchResults" role="listbox" aria-label="Search suggestions"></div>
             </div>
 
             <nav class="mobile-menu-links" aria-label="Mobile navigation">

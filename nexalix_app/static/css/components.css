@@ -149,9 +149,9 @@ body.theme-future .nx-hero::before {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 18% 28%, rgba(37, 99, 235, 0.18), transparent 26%),
-        radial-gradient(circle at 76% 30%, rgba(6, 182, 212, 0.1), transparent 20%),
-        radial-gradient(circle at 78% 72%, rgba(129, 140, 248, 0.08), transparent 22%);
+        radial-gradient(circle at 18% 28%, rgba(63, 125, 255, 0.2), transparent 28%),
+        radial-gradient(circle at 76% 30%, rgba(99, 213, 255, 0.11), transparent 22%),
+        radial-gradient(circle at 78% 72%, rgba(234, 88, 218, 0.08), transparent 24%);
     pointer-events: none;
 }
 
@@ -194,24 +194,25 @@ body.theme-future .nx-hero-badge {
     padding: 0 1rem;
     margin: 0 0 1rem;
     border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(138, 164, 255, 0.22);
+    background: rgba(14, 22, 42, 0.76);
     color: var(--accent);
     font-size: 0.76rem;
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 body.theme-future .nx-hero-copy h1 {
     margin: 0;
-    max-width: 10ch;
+    max-width: 10.75ch;
     color: #ffffff;
-    font-size: clamp(3.6rem, 2.95rem + 1.7vw, 4.1rem);
-    line-height: 0.92;
+    font-size: clamp(3.15rem, 2.65rem + 1.35vw, 3.8rem);
+    line-height: 0.9;
     letter-spacing: -0.05em;
     text-wrap: balance;
-    text-shadow: 0 10px 32px rgba(8, 15, 40, 0.18);
+    text-shadow: 0 14px 34px rgba(8, 15, 40, 0.22);
 }
 
 body.theme-future .nx-hero-supporting {
@@ -232,23 +233,23 @@ body.theme-future .nx-hero-actions .btn {
 }
 
 body.theme-future .nx-hero-actions .btn-primary {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.26);
+    background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+    box-shadow: 0 14px 30px rgba(39, 88, 235, 0.28);
 }
 
 body.theme-future .nx-hero-actions .btn-primary:hover {
-    box-shadow: 0 18px 34px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 18px 34px rgba(39, 88, 235, 0.32);
 }
 
 body.theme-future .nx-hero-actions .btn-secondary {
-    border-color: rgba(148, 163, 184, 0.2);
-    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(166, 183, 255, 0.18);
+    background: rgba(255, 255, 255, 0.035);
     color: var(--text-main);
 }
 
 body.theme-future .nx-hero-actions .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(148, 163, 184, 0.28);
+    background: rgba(255, 255, 255, 0.065);
+    border-color: rgba(184, 197, 255, 0.28);
 }
 
 body.theme-future .nx-hero-trust-list {
@@ -276,7 +277,7 @@ body.theme-future .nx-hero-trust-list li::before {
     width: 6px;
     height: 6px;
     border-radius: 999px;
-    background: linear-gradient(135deg, var(--accent), #60a5fa);
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
 }
 
 body.theme-future .nx-hero-visual {
@@ -286,173 +287,241 @@ body.theme-future .nx-hero-visual {
 body.theme-future .nx-hero-visual::before {
     content: "";
     position: absolute;
-    inset: 14% -6% 10% 18%;
+    inset: 10% -8% 10% 14%;
     background:
-        radial-gradient(circle at 34% 32%, rgba(37, 99, 235, 0.18), transparent 24%),
-        radial-gradient(circle at 70% 58%, rgba(6, 182, 212, 0.12), transparent 28%),
-        radial-gradient(circle at 72% 76%, rgba(168, 85, 247, 0.08), transparent 26%);
-    filter: blur(20px);
+        radial-gradient(circle at 32% 34%, rgba(63, 125, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 70% 58%, rgba(99, 213, 255, 0.1), transparent 28%),
+        radial-gradient(circle at 76% 70%, rgba(234, 88, 218, 0.12), transparent 28%);
+    filter: blur(28px);
     pointer-events: none;
 }
 
-body.theme-future .nx-hero-composition {
+body.theme-future .nx-hero-showcase {
     position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.04fr) minmax(240px, 0.78fr);
-    gap: 1.1rem;
-    align-items: stretch;
+    padding: 0 0.85rem 1.4rem;
     animation: nxHeroFloat 7.5s ease-in-out infinite;
 }
 
-body.theme-future .nx-hero-panel {
+body.theme-future .nx-hero-device {
     position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    background:
-        radial-gradient(circle at 18% 14%, rgba(37, 99, 235, 0.16), transparent 28%),
-        radial-gradient(circle at 82% 76%, rgba(6, 182, 212, 0.12), transparent 34%),
-        linear-gradient(180deg, rgba(9, 16, 33, 0.98) 0%, rgba(15, 23, 42, 0.96) 68%, rgba(17, 24, 45, 0.94) 100%);
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    border-radius: 28px;
+    max-width: 680px;
+    margin-left: auto;
+    border-radius: 32px;
+    background: linear-gradient(180deg, rgba(26, 36, 82, 0.58), rgba(15, 21, 45, 0.9));
+    border: 1px solid rgba(150, 172, 255, 0.16);
+    padding: 0.8rem 0.8rem 0.95rem;
     box-shadow:
-        0 18px 42px rgba(2, 8, 23, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        0 20px 50px rgba(2, 8, 23, 0.28),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
-body.theme-future .nx-hero-panel::before {
-    content: "";
+body.theme-future .nx-hero-device-rim {
     position: absolute;
-    left: 16%;
-    right: 16%;
-    bottom: -12%;
-    height: 18%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(6, 182, 212, 0.26), rgba(255, 255, 255, 0));
-    filter: blur(22px);
-    opacity: 0.55;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.06), transparent 35%),
+        radial-gradient(circle at 20% 20%, rgba(63, 125, 255, 0.12), transparent 26%),
+        radial-gradient(circle at 80% 30%, rgba(234, 88, 218, 0.12), transparent 30%);
     pointer-events: none;
 }
 
-body.theme-future .nx-hero-panel > * {
+body.theme-future .nx-hero-device-screen {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    background:
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(15, 24, 52, 0.96)),
+        radial-gradient(circle at 72% 38%, rgba(234, 88, 218, 0.18), transparent 28%);
+    border: 1px solid rgba(150, 172, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+body.theme-future .nx-hero-device-meta,
+body.theme-future .nx-hero-device-nav,
+body.theme-future .nx-hero-device-body,
+body.theme-future .nx-hero-proof-grid {
     position: relative;
     z-index: 1;
 }
 
-body.theme-future .nx-hero-panel-primary {
-    padding: 1.75rem 1.55rem;
-}
-
-body.theme-future .nx-hero-workflow-card {
-    min-height: 500px;
-}
-
-body.theme-future .nx-panel-label-row {
+body.theme-future .nx-hero-device-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.8rem;
-    margin-bottom: 1.1rem;
-    color: var(--text-soft);
-    font-size: 0.8rem;
+    gap: 1rem;
+    padding: 0.9rem 1.35rem 0.65rem;
+    color: rgba(226, 232, 240, 0.7);
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
 }
 
-body.theme-future .nx-panel-status,
-body.theme-future .nx-hero-mini-badge {
+body.theme-future .nx-hero-device-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1.35rem 1.25rem;
+}
+
+body.theme-future .nx-hero-device-brand {
     display: inline-flex;
     align-items: center;
-    min-height: 30px;
-    padding: 0 0.8rem;
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    background: rgba(15, 23, 42, 0.72);
+    gap: 0.65rem;
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+body.theme-future .nx-hero-device-brand img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+body.theme-future .nx-hero-device-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.1rem;
+    color: rgba(226, 232, 240, 0.78);
+    font-size: 0.82rem;
+}
+
+body.theme-future .nx-hero-device-body {
+    position: relative;
+    min-height: 340px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.8fr);
+    gap: 1rem;
+    padding: 0 1.35rem 1.5rem;
+}
+
+body.theme-future .nx-hero-device-body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(9, 15, 34, 0.72) 24%, rgba(9, 15, 34, 0.16) 72%),
+        radial-gradient(circle at 78% 34%, rgba(234, 88, 218, 0.16), transparent 28%);
+    pointer-events: none;
+}
+
+body.theme-future .nx-hero-device-copy {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+    max-width: 360px;
+}
+
+body.theme-future .nx-hero-device-kicker {
+    margin: 0 0 0.9rem;
     color: var(--accent);
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
 }
 
-body.theme-future .nx-hero-workflow-list {
-    display: grid;
-    gap: 0;
+body.theme-future .nx-hero-device-copy h3 {
     margin: 0;
-    padding: 0;
-    list-style: none;
+    max-width: 11ch;
+    color: #ffffff;
+    font-size: clamp(2rem, 1.65rem + 0.9vw, 2.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
 }
 
-body.theme-future .nx-hero-workflow-list li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-    align-items: start;
-    padding: 0.95rem 0;
-    border-top: 1px solid rgba(148, 163, 184, 0.12);
-}
-
-body.theme-future .nx-hero-workflow-list li:first-child {
-    padding-top: 0;
-    border-top: 0;
-}
-
-body.theme-future .nx-hero-workflow-index {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.86rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-}
-
-body.theme-future .nx-hero-workflow-list strong {
-    display: block;
-    margin-bottom: 0.22rem;
-    color: var(--text-main);
-    font-size: 1rem;
-}
-
-body.theme-future .nx-hero-step-output {
-    display: block;
-    color: var(--text-muted);
-    font-size: 0.84rem;
-    line-height: 1.45;
-}
-
-body.theme-future .nx-hero-support-stack {
-    display: grid;
-    align-content: center;
-    gap: 0.9rem;
-    transform: translateY(0.75rem);
-}
-
-body.theme-future .nx-hero-enterprise-card {
-    min-height: 196px;
-    padding: 1.35rem;
-}
-
-body.theme-future .nx-hero-mini-badge {
-    margin: 0 0 1rem;
-}
-
-body.theme-future .nx-hero-enterprise-copy {
-    margin: 0 0 1rem;
-    color: var(--text-soft);
+body.theme-future .nx-hero-device-copy p {
+    max-width: 320px;
+    margin: 1rem 0 1.15rem;
+    color: rgba(226, 232, 240, 0.82);
     font-size: 0.96rem;
-    line-height: 1.58;
+    line-height: 1.62;
 }
 
-body.theme-future .nx-reference-meta {
-    display: grid;
-    gap: 0.1rem;
-}
-
-body.theme-future .nx-reference-meta strong {
-    font-size: 0.95rem;
-}
-
-body.theme-future .nx-reference-meta span {
-    color: var(--text-soft);
+body.theme-future .nx-hero-device-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(99, 213, 255, 0.28);
+    background: rgba(63, 125, 255, 0.14);
+    color: #e2f7ff;
     font-size: 0.88rem;
+    font-weight: 600;
+    transition: background-color 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+body.theme-future .nx-hero-device-cta:hover {
+    transform: translateY(-2px);
+    background: rgba(63, 125, 255, 0.19);
+    border-color: rgba(99, 213, 255, 0.4);
+}
+
+body.theme-future .nx-hero-device-visual {
+    position: relative;
+    min-height: 100%;
+}
+
+body.theme-future .nx-hero-device-orb {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(6px);
+}
+
+body.theme-future .nx-hero-device-orb-primary {
+    inset: 6% 12% 18% 18%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08), rgba(63, 125, 255, 0.24) 34%, transparent 70%);
+}
+
+body.theme-future .nx-hero-device-orb-secondary {
+    inset: 36% 0 0 26%;
+    background: radial-gradient(circle, rgba(234, 88, 218, 0.22), transparent 62%);
+}
+
+body.theme-future .nx-hero-device-grid {
+    position: absolute;
+    inset: 4% 6% 8% 20%;
+    border-radius: 20px;
+    background-image:
+        linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.7), transparent 78%);
+    opacity: 0.32;
+}
+
+body.theme-future .nx-hero-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+    padding: 0 1.35rem 1.35rem;
+}
+
+body.theme-future .nx-hero-proof-card {
+    min-height: 116px;
+    padding: 1rem 0.95rem;
+    border-radius: 18px;
+    background: rgba(248, 250, 252, 0.96);
+    border-top: 3px solid rgba(63, 125, 255, 0.88);
+    color: #0f172a;
+    box-shadow: 0 14px 28px rgba(8, 15, 40, 0.18);
+}
+
+body.theme-future .nx-hero-proof-card strong {
+    display: block;
+    margin-bottom: 0.55rem;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+body.theme-future .nx-hero-proof-card p {
+    margin: 0;
+    color: rgba(15, 23, 42, 0.76);
+    font-size: 0.82rem;
+    line-height: 1.5;
 }
 
 @keyframes nxHeroFloat {
@@ -550,8 +619,10 @@ body.theme-future .nx-workflow-card h3,
 body.theme-future .nx-capability-card h3,
 body.theme-future .nx-testimonial-card strong {
     margin: 0 0 0.65rem;
+    color: var(--text-main);
     font-size: 1.28rem;
     line-height: 1.18;
+    text-shadow: 0 8px 24px rgba(8, 15, 40, 0.18);
 }
 
 body.theme-future .nx-service-card p,
@@ -592,7 +663,7 @@ body.theme-future .nx-card-list li::before {
     width: 6px;
     height: 6px;
     border-radius: 999px;
-    background: linear-gradient(135deg, #60a5fa, #22d3ee);
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
 }
 
 body.theme-future .nx-workflow-top {
@@ -665,6 +736,7 @@ body.theme-future .nx-case-meta span {
 
 body.theme-future .nx-case-card h3 {
     margin: 0 0 1rem;
+    color: var(--text-main);
     font-size: 1.45rem;
     line-height: 1.16;
 }
@@ -806,6 +878,7 @@ body.theme-future .footer-panel {
 
 body.theme-future .footer-panel h4 {
     margin-bottom: 1rem;
+    color: var(--text-main);
     font-size: 1rem;
 }
 
@@ -889,17 +962,17 @@ body.theme-future .footer-bottom-links {
         max-width: 640px;
     }
 
-    body.theme-future .nx-hero-composition {
+    body.theme-future .nx-hero-showcase {
         max-width: 860px;
-        grid-template-columns: minmax(0, 1.04fr) minmax(250px, 0.78fr);
+        margin-left: auto;
     }
 
-    body.theme-future .nx-hero-workflow-card {
-        min-height: 460px;
+    body.theme-future .nx-hero-device {
+        max-width: 860px;
     }
 
-    body.theme-future .nx-hero-support-stack {
-        transform: none;
+    body.theme-future .nx-hero-device-body {
+        min-height: 320px;
     }
 
     body.theme-future .nx-case-card.is-featured {
@@ -916,13 +989,27 @@ body.theme-future .footer-bottom-links {
 }
 
 @media (max-width: 900px) {
-    body.theme-future .nx-hero-composition {
-        grid-template-columns: 1fr;
+    body.theme-future .nx-hero-device-meta {
+        padding-inline: 1.15rem;
     }
 
-    body.theme-future .nx-hero-workflow-card,
-    body.theme-future .nx-hero-enterprise-card {
-        min-height: auto;
+    body.theme-future .nx-hero-device-nav,
+    body.theme-future .nx-hero-device-body,
+    body.theme-future .nx-hero-proof-grid {
+        padding-inline: 1.15rem;
+    }
+
+    body.theme-future .nx-hero-device-body {
+        grid-template-columns: 1fr;
+        min-height: 280px;
+    }
+
+    body.theme-future .nx-hero-device-visual {
+        min-height: 180px;
+    }
+
+    body.theme-future .nx-hero-proof-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -951,7 +1038,7 @@ body.theme-future .footer-bottom-links {
     body.theme-future .nx-hero-copy h1 {
         max-width: 9.5ch;
         font-size: clamp(2.125rem, 1.95rem + 2vw, 2.4rem);
-        line-height: 1;
+        line-height: 0.96;
     }
 
     body.theme-future .nx-hero-supporting {
@@ -979,16 +1066,56 @@ body.theme-future .footer-bottom-links {
         gap: 0.65rem 0.9rem;
     }
 
-    body.theme-future .nx-hero-composition {
-        gap: 0;
+    body.theme-future .nx-hero-showcase {
+        width: 100%;
+        padding: 0;
     }
 
-    body.theme-future .nx-hero-panel-primary,
-    body.theme-future .nx-hero-enterprise-card {
-        padding: 1.25rem 1.05rem;
+    body.theme-future .nx-hero-device {
+        max-width: none;
+        padding: 0.7rem;
+        border-radius: 24px;
     }
 
-    body.theme-future .nx-hero-support-stack {
+    body.theme-future .nx-hero-device-screen {
+        border-radius: 20px;
+    }
+
+    body.theme-future .nx-hero-device-meta,
+    body.theme-future .nx-hero-device-nav,
+    body.theme-future .nx-hero-device-body,
+    body.theme-future .nx-hero-proof-grid {
+        padding-inline: 1rem;
+    }
+
+    body.theme-future .nx-hero-device-meta {
+        display: none;
+    }
+
+    body.theme-future .nx-hero-device-links {
+        display: none;
+    }
+
+    body.theme-future .nx-hero-device-body {
+        min-height: auto;
+        padding-bottom: 1.1rem;
+    }
+
+    body.theme-future .nx-hero-device-copy h3 {
+        max-width: 12ch;
+        font-size: clamp(1.8rem, 1.6rem + 1vw, 2.05rem);
+    }
+
+    body.theme-future .nx-hero-device-copy p {
+        max-width: none;
+        font-size: 0.92rem;
+    }
+
+    body.theme-future .nx-hero-device-visual {
+        min-height: 140px;
+    }
+
+    body.theme-future .nx-hero-proof-grid {
         display: none;
     }
 

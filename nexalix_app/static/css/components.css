@@ -517,7 +517,12 @@ body.theme-future .nx-trust-points span {
     font-weight: 600;
 }
 
-body.theme-future .nx-services-grid,
+body.theme-future .nx-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+}
+
 body.theme-future .nx-industries-grid,
 body.theme-future .nx-workflow-grid,
 body.theme-future .nx-capability-grid,

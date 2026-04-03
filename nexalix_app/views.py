@@ -2589,8 +2589,15 @@ def solution_landing(request, slug):
 
 def industries(request):
     """Industries page view"""
-    industries_list = list(Industry.objects.filter(is_active=True).order_by('order'))
-    context = {"industries": industries_list}
+    industries_list = list(
+        Industry.objects.filter(is_active=True)
+        .only("name", "description", "icon", "is_active", "order")
+        .order_by('order')
+    )
+    context = {
+        "industries": industries_list,
+        "industry_cards": _build_home_industry_cards(industries_list),
+    }
     description = "Explore the industries where Nexalix delivers digital transformation solutions."
     if industries_list:
         description = "Industries we support: " + ", ".join([industry.name for industry in industries_list])

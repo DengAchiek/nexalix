@@ -1,14 +1,261 @@
 {% extends "base.html" %}
-{% load static media_optimization %}
+{% load static %}
 
 {% block title %}{{ meta_title|default:'Industries - Nexalix Technologies' }}{% endblock %}
+{% block body_class %}industries-page{% endblock %}
+
+{% block extra_css %}
+<style>
+body.theme-future.industries-page .industries-hero-modern {
+    position: relative;
+    overflow: hidden;
+    padding-top: clamp(88px, 10vw, 132px);
+    padding-bottom: clamp(76px, 9vw, 110px);
+    border-bottom: 1px solid rgba(150, 172, 255, 0.08);
+}
+
+body.theme-future.industries-page .industries-hero-modern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 16% 18%, rgba(63, 125, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 84% 20%, rgba(99, 213, 255, 0.1), transparent 22%),
+        radial-gradient(circle at 62% 78%, rgba(234, 88, 218, 0.08), transparent 26%);
+    pointer-events: none;
+}
+
+body.theme-future.industries-page .industries-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    text-align: left;
+}
+
+body.theme-future.industries-page .industries-hero-inner .section-eyebrow {
+    margin: 0 0 1rem;
+}
+
+body.theme-future.industries-page .industries-hero-inner h1 {
+    max-width: 12ch;
+    margin: 0 0 1rem;
+    font-size: clamp(3rem, 4.8vw, 5rem);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+}
+
+body.theme-future.industries-page .industries-hero-inner > p {
+    max-width: 760px;
+    margin: 0 0 1.4rem;
+    color: var(--text-soft);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+body.theme-future.industries-page .page-block {
+    padding-top: clamp(76px, 8vw, 102px);
+    padding-bottom: clamp(76px, 8vw, 102px);
+}
+
+body.theme-future.industries-page .section-heading {
+    margin-bottom: 3rem;
+}
+
+body.theme-future.industries-page .industry-page-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.4rem;
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-industry-card,
+body.theme-future.industries-page .industry-approach-panel,
+body.theme-future.industries-page .industry-outcome-panel,
+body.theme-future.industries-page .industry-outcome-card,
+body.theme-future.industries-page .industries-cta-panel {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+        radial-gradient(circle at 18% 14%, rgba(63, 125, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 82% 82%, rgba(234, 88, 218, 0.18), transparent 34%),
+        radial-gradient(circle at 50% 100%, rgba(229, 234, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(14, 23, 48, 0.96) 62%, rgba(39, 25, 78, 0.92) 100%);
+    border: 1px solid rgba(150, 172, 255, 0.16);
+    box-shadow:
+        0 26px 58px rgba(2, 8, 23, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-industry-card::before,
+body.theme-future.industries-page .industry-approach-panel::before,
+body.theme-future.industries-page .industry-outcome-panel::before,
+body.theme-future.industries-page .industry-outcome-card::before,
+body.theme-future.industries-page .industries-cta-panel::before {
+    content: "";
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: -12%;
+    height: 20%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(99, 213, 255, 0.16), rgba(234, 88, 218, 0.14), rgba(255, 255, 255, 0));
+    filter: blur(24px);
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-industry-card > *,
+body.theme-future.industries-page .industry-approach-panel > *,
+body.theme-future.industries-page .industry-outcome-panel > *,
+body.theme-future.industries-page .industry-outcome-card > *,
+body.theme-future.industries-page .industries-cta-panel > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-industry-card {
+    min-height: 100%;
+    padding: 1.8rem 1.6rem 2rem;
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-industry-card h3,
+body.theme-future.industries-page .industry-approach-panel h2,
+body.theme-future.industries-page .industry-outcome-panel h3,
+body.theme-future.industries-page .industry-outcome-card h4,
+body.theme-future.industries-page .industries-cta-panel h2 {
+    color: var(--text-main);
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-industry-card p,
+body.theme-future.industries-page .industry-approach-panel p,
+body.theme-future.industries-page .industry-outcome-panel p,
+body.theme-future.industries-page .industry-outcome-card p,
+body.theme-future.industries-page .industry-benefits-list li,
+body.theme-future.industries-page .industries-cta-panel p {
+    color: var(--text-soft);
+}
+
+body.theme-future.industries-page .industry-page-grid .nx-text-link {
+    margin-top: auto;
+}
+
+body.theme-future.industries-page .industry-approach-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+body.theme-future.industries-page .industry-approach-panel,
+body.theme-future.industries-page .industry-outcome-panel {
+    padding: 1.8rem;
+    border-radius: 32px;
+}
+
+body.theme-future.industries-page .industry-benefits-list {
+    display: grid;
+    gap: 0.9rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.theme-future.industries-page .industry-benefits-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    line-height: 1.6;
+}
+
+body.theme-future.industries-page .industry-benefits-list i {
+    margin-top: 0.2rem;
+    color: var(--accent);
+}
+
+body.theme-future.industries-page .industry-outcome-stack {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+body.theme-future.industries-page .industry-outcome-card {
+    padding: 1.1rem 1.15rem;
+    border-radius: 24px;
+}
+
+body.theme-future.industries-page .industry-outcome-card h4 {
+    margin: 0 0 0.45rem;
+    font-size: 1.04rem;
+}
+
+body.theme-future.industries-page .industry-outcome-card p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+body.theme-future.industries-page .industries-cta-final {
+    padding-top: 0;
+}
+
+body.theme-future.industries-page .industries-cta-panel {
+    padding: clamp(1.8rem, 2vw, 3rem);
+    text-align: center;
+    border-radius: 32px;
+}
+
+body.theme-future.industries-page .industries-cta-panel p {
+    max-width: 720px;
+    margin: 0 auto 1.4rem;
+}
+
+body.theme-future.industries-page .industries-cta-panel .hero-actions {
+    justify-content: center;
+}
+
+@media (max-width: 1120px) {
+    body.theme-future.industries-page .industry-page-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.theme-future.industries-page .industry-approach-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    body.theme-future.industries-page .industries-hero-inner {
+        text-align: left;
+    }
+
+    body.theme-future.industries-page .industry-page-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.theme-future.industries-page .industry-approach-panel,
+    body.theme-future.industries-page .industry-outcome-panel,
+    body.theme-future.industries-page .industries-cta-panel,
+    body.theme-future.industries-page .industry-page-grid .nx-industry-card {
+        padding: 22px 18px;
+    }
+
+    body.theme-future.industries-page .industries-hero-inner .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body.theme-future.industries-page .industries-hero-inner .hero-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="industries-hero-modern">
-    <div class="container industries-hero-inner">
+    <div class="container industries-hero-inner" data-reveal>
         <p class="section-eyebrow">Industries We Serve</p>
-        <h1>Sector-Focused Consulting and Digital Delivery</h1>
-        <p>We combine domain understanding with practical engineering to solve industry-specific operational and growth challenges.</p>
+        <h1>Sector-focused delivery for teams with real operational complexity</h1>
+        <p>Nexalix helps organizations modernize workflows, improve reporting, and implement software, automation, and analytics systems tailored to their industry realities.</p>
         <div class="hero-actions">
             <a href="{% url 'contact' %}" class="btn btn-primary">Discuss Your Industry Needs</a>
             <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore Services</a>
@@ -18,48 +265,19 @@
 
 <section class="page-block">
     <div class="container">
-        <div class="section-heading">
+        <div class="section-heading" data-reveal>
             <p class="section-eyebrow">Our Coverage</p>
-            <h2>Industries We Transform</h2>
-            <p class="section-subtitle">Inspired by modern IT consulting layouts, focused on clarity of outcomes and capabilities.</p>
+            <h2>Industries where process quality and execution matter</h2>
+            <p class="section-subtitle">We adapt the same consulting-led delivery model to the compliance, customer, operational, and reporting demands of each sector.</p>
         </div>
 
-        <div class="industry-modern-grid">
-            {% for industry in industries %}
-            <article class="industry-modern-card industry-media-card">
-                <div class="industry-media-visual">
-                    {% if industry.image %}
-                    <img
-                        src="{{ industry.image.url|optimized_media:'card' }}"
-                        alt="{{ industry.name }}"
-                        class="industry-media-image"
-                        loading="lazy"
-                    >
-                    {% else %}
-                    <div class="service-visual-placeholder">
-                        <span class="service-visual-grid"></span>
-                        <span class="service-visual-glow"></span>
-                        <span class="service-visual-icon"><i class="{{ industry.icon|default:'fas fa-briefcase' }}"></i></span>
-                        <span class="service-visual-badge">{{ industry.name }}</span>
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="industry-media-body">
-                    <p class="media-cluster-kicker">Industry Focus</p>
-                    <h3>{{ industry.name }}</h3>
-                    <p>{{ industry.description }}</p>
-                    <div class="media-cluster-actions">
-                        <a href="{% url 'services' %}" class="project-link-btn">Explore Services</a>
-                    </div>
-                </div>
-            </article>
-            {% empty %}
-            <article class="industry-modern-card industry-media-card">
-                <div class="industry-media-body">
-                    <p class="media-cluster-kicker">Industry Focus</p>
-                    <h3>No Industries Yet</h3>
-                    <p>Add and activate industries in Django Admin to populate this section dynamically.</p>
-                </div>
+        <div class="nx-industries-grid industry-page-grid">
+            {% for industry in industry_cards %}
+            <article class="nx-card nx-industry-card" data-reveal>
+                <div class="nx-icon-badge"><i class="{{ industry.icon|default:'fas fa-briefcase' }}"></i></div>
+                <h3>{{ industry.title }}</h3>
+                <p>{{ industry.summary }}</p>
+                <a href="{% url 'services' %}" class="nx-text-link">Explore Services</a>
             </article>
             {% endfor %}
         </div>
@@ -67,42 +285,48 @@
 </section>
 
 <section class="page-block section-soft">
-    <div class="container two-col">
-        <div>
+    <div class="container industry-approach-grid">
+        <div class="industry-approach-panel" data-reveal>
             <p class="section-eyebrow">Engagement Approach</p>
-            <h2>How We Deliver Across Industries</h2>
-            <p>Every industry has unique regulatory, operational, and customer constraints. Our teams align delivery strategy, architecture, and rollout planning to those realities from the start.</p>
-            <div class="benefits-grid">
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Domain-first discovery and planning</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Compliance-aware engineering practices</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Scalable architecture and integrations</div>
-                <div class="benefit-item"><i class="fas fa-check-circle"></i> Continuous optimization and support</div>
-            </div>
+            <h2>How we shape delivery across industries</h2>
+            <p>Every engagement starts with business context, operational constraints, and the workflows that matter most. That keeps implementation practical, measurable, and aligned to the way teams actually work.</p>
+            <ul class="industry-benefits-list">
+                <li><i class="fas fa-check-circle"></i><span>Domain-first discovery and planning</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Compliance-aware engineering and delivery choices</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Scalable integrations, reporting, and automation design</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Post-launch optimization and support for evolving operations</span></li>
+            </ul>
         </div>
 
-        <div class="industry-outcome-panel">
-            <h3>Typical Outcomes</h3>
-            <div class="outcome-item">
-                <h4>Faster Operations</h4>
-                <p>Reduced cycle times through workflow automation and better system interoperability.</p>
-            </div>
-            <div class="outcome-item">
-                <h4>Better Decisions</h4>
-                <p>Improved visibility through real-time dashboards and reliable business intelligence.</p>
-            </div>
-            <div class="outcome-item">
-                <h4>Stronger User Experience</h4>
-                <p>Modern and intuitive products for staff, customers, and stakeholders.</p>
+        <div class="industry-outcome-panel" data-reveal>
+            <p class="section-eyebrow">Typical Outcomes</p>
+            <h3>What organizations usually improve</h3>
+            <div class="industry-outcome-stack">
+                <article class="industry-outcome-card">
+                    <h4>Faster Operations</h4>
+                    <p>Reduce delays through clearer workflows, better system coordination, and less manual follow-up.</p>
+                </article>
+                <article class="industry-outcome-card">
+                    <h4>Better Decision Support</h4>
+                    <p>Give leadership and operational teams more reliable visibility through dashboards and structured reporting.</p>
+                </article>
+                <article class="industry-outcome-card">
+                    <h4>Stronger Service Experience</h4>
+                    <p>Improve the systems used by staff, customers, and stakeholders with modern and easier-to-use digital tools.</p>
+                </article>
             </div>
         </div>
     </div>
 </section>
 
-<section class="home-cta-final">
-    <div class="container">
-        <h2>Need an Industry-Specific Solution?</h2>
-        <p>Tell us your domain, constraints, and goals. We will propose an implementation roadmap tailored to your organization.</p>
-        <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
+<section class="home-cta-final industries-cta-final">
+    <div class="container industries-cta-panel" data-reveal>
+        <h2>Need a solution shaped around your industry?</h2>
+        <p>Tell us your domain, operating constraints, and growth priorities, and we’ll map out the right software, automation, or analytics approach.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore Services</a>
+        </div>
     </div>
 </section>
 {% endblock %}

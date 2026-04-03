@@ -121,11 +121,16 @@
                 </div>
             </article>
             {% empty %}
-            <div class="about-section">
-                <h3>More delivery stories will appear here</h3>
-                <p>If the current proof set is still small, the featured stories above represent the active published portfolio. Additional case studies, prototypes, and solution examples will expand this grid over time.</p>
-                <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
-            </div>
+            <article class="case-card proof-media-card proof-empty-card">
+                <div class="case-content compact-card-content">
+                    <span class="project-proof-type">Delivery Story</span>
+                    <h3 class="case-title">More delivery stories will appear here</h3>
+                    <p class="case-description">If the current proof set is still small, the featured stories above represent the active published portfolio. Additional case studies, prototypes, and solution examples will expand this grid over time.</p>
+                    <div class="project-proof-actions">
+                        <a href="{% url 'contact' %}" class="project-link-btn">Book Consultation</a>
+                    </div>
+                </div>
+            </article>
             {% endfor %}
         </div>
     </div>

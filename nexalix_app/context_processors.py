@@ -102,11 +102,13 @@ def global_site_context(_request):
             .order_by("order", "name")[:6]
         )
         footer_newsletter = NewsletterSignup.objects.filter(is_active=True).first()
+        footer_whatsapp_url = getattr(settings, "CHATBOT_WHATSAPP_URL", "https://wa.me/254768774232").strip()
         configured_socials = [
             ("LinkedIn", "fab fa-linkedin-in", getattr(settings, "FOOTER_LINKEDIN_URL", "").strip()),
-            ("Facebook", "fab fa-facebook-f", getattr(settings, "FOOTER_FACEBOOK_URL", "").strip()),
             ("Instagram", "fab fa-instagram", getattr(settings, "FOOTER_INSTAGRAM_URL", "").strip()),
+            ("Facebook", "fab fa-facebook-f", getattr(settings, "FOOTER_FACEBOOK_URL", "").strip()),
             ("X", "fab fa-x-twitter", getattr(settings, "FOOTER_X_URL", "").strip()),
+            ("WhatsApp", "fab fa-whatsapp", footer_whatsapp_url),
         ]
         footer_social_links = [
             {"label": label, "icon": icon, "url": url}
@@ -125,7 +127,7 @@ def global_site_context(_request):
             "footer_contact_phone": getattr(settings, "CONTACT_PHONE", "+254768774232").strip(),
             "footer_contact_phone_display": getattr(settings, "CONTACT_PHONE_DISPLAY", "+254 768 774 232").strip(),
             "footer_contact_location": getattr(settings, "CONTACT_LOCATION", "Kenya").strip(),
-            "footer_whatsapp_url": getattr(settings, "CHATBOT_WHATSAPP_URL", "https://wa.me/254768774232").strip(),
+            "footer_whatsapp_url": footer_whatsapp_url,
             "footer_service_regions": getattr(
                 settings,
                 "FOOTER_SERVICE_REGIONS",

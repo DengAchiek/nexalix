@@ -59,10 +59,30 @@
         <div class="footer-panel">
             <h4>Contact</h4>
             <ul class="footer-contact-list">
-                <li><a href="mailto:{{ footer_contact_email }}">{{ footer_contact_email }}</a></li>
-                <li><a href="tel:{{ footer_contact_phone }}">{{ footer_contact_phone_display }}</a></li>
-                <li>{{ footer_contact_location }}</li>
-                <li><a href="{{ footer_whatsapp_url }}" target="_blank" rel="noopener">WhatsApp</a></li>
+                <li>
+                    <a href="mailto:{{ footer_contact_email }}">
+                        <i class="fas fa-envelope" aria-hidden="true"></i>
+                        <span>{{ footer_contact_email }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="tel:{{ footer_contact_phone }}">
+                        <i class="fas fa-phone" aria-hidden="true"></i>
+                        <span>{{ footer_contact_phone_display }}</span>
+                    </a>
+                </li>
+                <li>
+                    <span class="nx-footer-contact-text">
+                        <i class="fas fa-location-dot" aria-hidden="true"></i>
+                        <span>{{ footer_contact_location }}</span>
+                    </span>
+                </li>
+                <li>
+                    <a href="{{ footer_whatsapp_url }}" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

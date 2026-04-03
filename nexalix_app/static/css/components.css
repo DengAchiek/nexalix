@@ -829,6 +829,18 @@ body.theme-future .footer-panel ul {
     list-style: none;
 }
 
+body.theme-future .footer-contact-list a,
+body.theme-future .nx-footer-contact-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+body.theme-future .footer-contact-list i,
+body.theme-future .nx-footer-socials i {
+    color: var(--accent);
+}
+
 body.theme-future .nx-footer-socials {
     display: flex;
     flex-wrap: wrap;
@@ -845,6 +857,11 @@ body.theme-future .nx-footer-socials a {
     border-radius: 12px;
     border: 1px solid rgba(148, 163, 184, 0.12);
     background: rgba(17, 24, 45, 0.7);
+}
+
+body.theme-future .nx-footer-socials a:hover {
+    border-color: rgba(184, 197, 255, 0.22);
+    background: rgba(21, 33, 67, 0.9);
 }
 
 body.theme-future .nx-footer-bottom {

@@ -1,4 +1,3 @@
-{% load static %}
 <section class="section nx-hero" id="homeHero">
     <div class="container nx-hero-grid">
         <div class="nx-hero-copy" data-reveal>
@@ -17,55 +16,32 @@
         </div>
 
         <div class="nx-hero-visual" data-reveal>
-            <div class="nx-hero-showcase">
-                <div class="nx-hero-device">
-                    <div class="nx-hero-device-rim"></div>
-                    <div class="nx-hero-device-screen">
-                        <div class="nx-hero-device-meta">
-                            <span>Consulting-led delivery</span>
-                            <span>{{ home_hero.primary_cta_text }}</span>
-                        </div>
+            <div class="nx-hero-composition">
+                <div class="nx-hero-panel nx-hero-panel-primary nx-hero-workflow-card">
+                    <div class="nx-panel-label-row">
+                        <span>Delivery Workflow</span>
+                        <span class="nx-panel-status">Structured</span>
+                    </div>
+                    <ol class="nx-hero-workflow-list">
+                        {% for step in home_workflow_steps %}
+                        <li>
+                            <span class="nx-hero-workflow-index">{{ step.number }}</span>
+                            <div>
+                                <strong>{{ step.title }}</strong>
+                                <span class="nx-hero-step-output">{{ step.deliverable|truncatechars:44 }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
 
-                        <div class="nx-hero-device-nav">
-                            <div class="nx-hero-device-brand">
-                                <img src="{% static 'images/logo1.png' %}?v=20260309c" alt="Nexalix logo" loading="lazy" decoding="async">
-                                <span>Nexalix</span>
-                            </div>
-                            <div class="nx-hero-device-links" aria-hidden="true">
-                                <span>Home</span>
-                                <span>Services</span>
-                                <span>About</span>
-                                <span>Contact</span>
-                            </div>
-                        </div>
-
-                        <div class="nx-hero-device-body">
-                            <div class="nx-hero-device-copy">
-                                <p class="nx-hero-device-kicker">Software, AI, and digital operations</p>
-                                <h3>Technology systems for growing businesses</h3>
-                                <p>Build, automate, and improve delivery with consulting-led implementation.</p>
-                                <a href="{{ home_hero.primary_cta_url }}" class="nx-hero-device-cta">Schedule a Consultation</a>
-                            </div>
-                            <div class="nx-hero-device-visual" aria-hidden="true">
-                                <span class="nx-hero-device-orb nx-hero-device-orb-primary"></span>
-                                <span class="nx-hero-device-orb nx-hero-device-orb-secondary"></span>
-                                <span class="nx-hero-device-grid"></span>
-                            </div>
-                        </div>
-
-                        <div class="nx-hero-proof-grid">
-                            <article class="nx-hero-proof-card">
-                                <strong>Structured delivery</strong>
-                                <p>Clear scoping and implementation planning.</p>
-                            </article>
-                            <article class="nx-hero-proof-card">
-                                <strong>Business-first execution</strong>
-                                <p>Technology decisions tied to business goals.</p>
-                            </article>
-                            <article class="nx-hero-proof-card">
-                                <strong>Post-launch support</strong>
-                                <p>Ongoing iteration after go-live.</p>
-                            </article>
+                <div class="nx-hero-support-stack">
+                    <div class="nx-hero-panel nx-hero-enterprise-card">
+                        <p class="nx-hero-mini-badge">Enterprise Focus</p>
+                        <p class="nx-hero-enterprise-copy">Structured planning and disciplined delivery support for business teams.</p>
+                        <div class="nx-reference-meta">
+                            <strong>Nexalix delivery model</strong>
+                            <span>Business-first execution</span>
                         </div>
                     </div>
                 </div>

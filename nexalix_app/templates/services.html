@@ -153,11 +153,17 @@ body.theme-future.services-page .process-journey-card {
 
 body.theme-future.services-page .services-showcase-card,
 body.theme-future.services-page .focused-landing-card {
-    --service-card-surface: linear-gradient(180deg, #faf8f2 0%, #f3f5fb 100%);
-    --service-card-border: rgba(21, 33, 63, 0.14);
-    --service-card-title: #172445;
-    --service-card-body: rgba(24, 33, 59, 0.84);
-    --service-card-shadow: 0 18px 36px rgba(8, 15, 40, 0.16);
+    --service-card-surface:
+        radial-gradient(circle at 18% 14%, rgba(63, 125, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 82% 82%, rgba(234, 88, 218, 0.18), transparent 34%),
+        radial-gradient(circle at 50% 100%, rgba(229, 234, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(14, 23, 48, 0.96) 62%, rgba(39, 25, 78, 0.92) 100%);
+    --service-card-border: rgba(150, 172, 255, 0.16);
+    --service-card-title: var(--text-main);
+    --service-card-body: rgba(226, 235, 247, 0.88);
+    --service-card-shadow:
+        0 26px 58px rgba(2, 8, 23, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
     align-items: center;
     padding: 34px 26px 28px;
     border-radius: 42px 16px 42px 16px;
@@ -170,31 +176,41 @@ body.theme-future.services-page .focused-landing-card {
 
 body.theme-future.services-page .services-showcase-card::before,
 body.theme-future.services-page .focused-landing-card::before {
-    display: none;
+    display: block;
 }
 
 body.theme-future.services-page .service-card-warm {
-    --service-card-surface: linear-gradient(180deg, #ffbf30 0%, #f7ac1d 100%);
-    --service-card-border: rgba(116, 76, 9, 0.18);
-    --service-card-title: #182544;
-    --service-card-body: rgba(24, 37, 68, 0.82);
-    --service-card-shadow: 0 18px 34px rgba(245, 173, 25, 0.18);
+    --service-card-surface:
+        radial-gradient(circle at 18% 14%, rgba(63, 125, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 82% 82%, rgba(234, 88, 218, 0.22), transparent 34%),
+        radial-gradient(circle at 50% 100%, rgba(229, 234, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(14, 23, 48, 0.96) 62%, rgba(45, 24, 82, 0.93) 100%);
 }
 
 body.theme-future.services-page .service-card-light {
-    --service-card-surface: linear-gradient(180deg, #fbfaf6 0%, #f3f5fb 100%);
+    --service-card-surface:
+        radial-gradient(circle at 14% 14%, rgba(63, 125, 255, 0.22), transparent 30%),
+        radial-gradient(circle at 78% 78%, rgba(99, 213, 255, 0.14), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(229, 234, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(14, 23, 48, 0.96) 62%, rgba(24, 38, 74, 0.94) 100%);
 }
 
 body.theme-future.services-page .pillars-grid .pillar-card,
 body.theme-future.services-page .technology-capability-grid .technology-capability-card,
 body.theme-future.services-page .process-flow-journey .process-journey-card {
-    --service-card-surface: linear-gradient(180deg, #fbfaf6 0%, #f3f5fb 100%);
-    --service-card-border: rgba(21, 33, 63, 0.14);
-    --service-card-title: #172445;
-    --service-card-body: rgba(24, 33, 59, 0.84);
+    --service-card-surface:
+        radial-gradient(circle at 18% 14%, rgba(63, 125, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 82% 82%, rgba(234, 88, 218, 0.18), transparent 34%),
+        radial-gradient(circle at 50% 100%, rgba(229, 234, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(14, 23, 48, 0.96) 62%, rgba(39, 25, 78, 0.92) 100%);
+    --service-card-border: rgba(150, 172, 255, 0.16);
+    --service-card-title: var(--text-main);
+    --service-card-body: rgba(226, 235, 247, 0.88);
     background: var(--service-card-surface);
     border: 1px solid var(--service-card-border);
-    box-shadow: 0 18px 36px rgba(8, 15, 40, 0.16);
+    box-shadow:
+        0 26px 58px rgba(2, 8, 23, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
     color: var(--service-card-title);
     border-radius: 42px 16px 42px 16px;
 }
@@ -202,14 +218,17 @@ body.theme-future.services-page .process-flow-journey .process-journey-card {
 body.theme-future.services-page .pillars-grid .pillar-card::before,
 body.theme-future.services-page .technology-capability-grid .technology-capability-card::before,
 body.theme-future.services-page .process-flow-journey .process-journey-card::before {
-    display: none;
+    display: block;
 }
 
 body.theme-future.services-page .pillars-grid .pillar-card:nth-child(odd),
 body.theme-future.services-page .technology-capability-grid .technology-capability-card:nth-child(odd),
 body.theme-future.services-page .process-flow-journey .process-journey-card:nth-child(odd) {
-    --service-card-surface: linear-gradient(180deg, #ffbf30 0%, #f7ac1d 100%);
-    --service-card-border: rgba(116, 76, 9, 0.18);
+    --service-card-surface:
+        radial-gradient(circle at 18% 14%, rgba(63, 125, 255, 0.14), transparent 28%),
+        radial-gradient(circle at 82% 82%, rgba(234, 88, 218, 0.22), transparent 34%),
+        radial-gradient(circle at 50% 100%, rgba(229, 234, 255, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(8, 14, 34, 0.98), rgba(14, 23, 48, 0.96) 62%, rgba(45, 24, 82, 0.93) 100%);
 }
 
 body.theme-future.services-page .services-showcase-media {

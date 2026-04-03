@@ -1,0 +1,35 @@
+{% if home_case_study_cards %}
+<section class="section nx-section-shell nx-section-soft">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Case Studies</p>
+            <h2>Recent delivery stories with practical outcomes</h2>
+            <p class="section-subtitle">A closer look at the business problems we help teams solve through software, automation, and delivery discipline.</p>
+        </div>
+
+        <div class="nx-case-studies-grid">
+            {% for case in home_case_study_cards %}
+            <article class="nx-card nx-case-card{% if forloop.first %} is-featured{% endif %}" data-reveal>
+                <div class="nx-case-meta">
+                    <span>{{ case.industry|default:"Delivery Story" }}</span>
+                </div>
+                <h3>{{ case.title }}</h3>
+                <div class="nx-case-row">
+                    <strong>Challenge</strong>
+                    <p>{{ case.challenge }}</p>
+                </div>
+                <div class="nx-case-row">
+                    <strong>Solution</strong>
+                    <p>{{ case.solution }}</p>
+                </div>
+                <div class="nx-case-row">
+                    <strong>Outcome</strong>
+                    <p>{{ case.outcome }}</p>
+                </div>
+                <a href="{{ case.detail_url }}" class="nx-text-link">View More</a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

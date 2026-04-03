@@ -1,0 +1,30 @@
+<section class="section nx-section-shell">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">How We Work</p>
+            <h2>One clear workflow from planning to post-launch support</h2>
+            <p class="section-subtitle">We use a simple four-step delivery model that keeps scope, execution, and support aligned to business goals.</p>
+        </div>
+
+        <div class="nx-workflow-grid">
+            {% for step in home_workflow_steps %}
+            <article class="nx-card nx-workflow-card" data-reveal>
+                <div class="nx-workflow-top">
+                    <span class="nx-step-number">{{ step.number }}</span>
+                    <div class="nx-icon-badge"><i class="{{ step.icon }}"></i></div>
+                </div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.summary }}</p>
+                <div class="nx-workflow-meta">
+                    <strong>Deliverable</strong>
+                    <span>{{ step.deliverable }}</span>
+                </div>
+                <div class="nx-workflow-meta is-reassurance">
+                    <strong>Reassurance</strong>
+                    <span>{{ step.reassurance }}</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>

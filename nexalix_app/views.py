@@ -394,6 +394,102 @@ TECHNOLOGY_GROUP_META = {
     },
 }
 
+HOME_HERO_CONTENT = {
+    "eyebrow": "Consulting-led software, AI, and digital transformation",
+    "headline": "Build smarter systems. Automate operations. Scale with confidence.",
+    "supporting_text": (
+        "Nexalix helps businesses design, build, and improve software, AI workflows, analytics systems, "
+        "and digital operations that drive measurable growth."
+    ),
+    "primary_cta_text": "Get Proposal",
+    "secondary_cta_text": "Explore Services",
+}
+
+HOME_TRUST_POINTS = (
+    "Business-first delivery",
+    "Structured implementation",
+    "Scalable architecture",
+    "Post-launch support",
+)
+
+HOME_FALLBACK_INDUSTRIES = (
+    {
+        "title": "Finance & FinTech",
+        "icon": "fas fa-building-columns",
+        "summary": "Support secure customer workflows, reporting visibility, and internal operational efficiency.",
+    },
+    {
+        "title": "Retail & E-commerce",
+        "icon": "fas fa-cart-shopping",
+        "summary": "Improve customer journeys, order operations, and multi-channel visibility as demand grows.",
+    },
+    {
+        "title": "Healthcare",
+        "icon": "fas fa-heart-pulse",
+        "summary": "Design reliable digital workflows for patient-facing services, reporting, and internal coordination.",
+    },
+    {
+        "title": "Education",
+        "icon": "fas fa-graduation-cap",
+        "summary": "Build systems that simplify admissions, learning delivery, and academic operations.",
+    },
+    {
+        "title": "Real Estate",
+        "icon": "fas fa-city",
+        "summary": "Streamline lead management, property workflows, and reporting for modern real estate teams.",
+    },
+    {
+        "title": "Agriculture",
+        "icon": "fas fa-seedling",
+        "summary": "Digitize supplier coordination, field operations, and performance reporting across agri-business workflows.",
+    },
+)
+
+HOME_CAPABILITY_FALLBACKS = (
+    {
+        "slug": "frontend",
+        "title": "Frontend",
+        "icon": "fas fa-desktop",
+        "description": "Customer portals, dashboards, and polished interfaces designed for adoption and clarity.",
+        "items": ("Customer portals", "Dashboards", "Responsive UI"),
+    },
+    {
+        "slug": "backend",
+        "title": "Backend",
+        "icon": "fas fa-server",
+        "description": "Business logic, APIs, and integration layers built for resilience and maintainability.",
+        "items": ("Business logic", "APIs", "System integrations"),
+    },
+    {
+        "slug": "cloud-devops",
+        "title": "Cloud & DevOps",
+        "icon": "fas fa-cloud",
+        "description": "Deployment, hosting, and monitoring patterns that support secure and stable operations.",
+        "items": ("Secure hosting", "Deployment pipelines", "Monitoring"),
+    },
+    {
+        "slug": "data-analytics",
+        "title": "Data & Analytics",
+        "icon": "fas fa-chart-line",
+        "description": "Reporting, dashboards, and pipelines that turn raw operational data into usable visibility.",
+        "items": ("Dashboards", "Reporting", "Data pipelines"),
+    },
+    {
+        "slug": "ai-automation",
+        "title": "AI & Automation",
+        "icon": "fas fa-robot",
+        "description": "Workflow automation and AI-assisted systems that reduce manual work and improve response speed.",
+        "items": ("Workflow automation", "Assistants", "Decision support"),
+    },
+)
+
+HOME_WORKFLOW_REASSURANCE = {
+    "Discovery": "We align on the real problem before scope and spend increase.",
+    "Solution Planning": "Architecture and delivery decisions are clarified before build starts.",
+    "Build and QA": "Progress stays visible through disciplined implementation and testing.",
+    "Launch and Support": "Teams are supported beyond go-live with monitoring and iteration.",
+}
+
 logger = logging.getLogger("nexalix_app.views")
 User = get_user_model()
 
@@ -711,6 +807,95 @@ def _build_technology_capability_groups(categories):
             "primary_technologies": technologies[:2],
         })
     return groups
+
+
+def _build_home_service_cards(clusters):
+    cards = []
+    for cluster in list(clusters or [])[:4]:
+        cards.append({
+            "slug": cluster["slug"],
+            "title": cluster["title"],
+            "icon": cluster["icon"],
+            "summary": _text_excerpt(cluster.get("value_statement"), limit=112),
+            "bullets": list(cluster.get("deliverables", []))[:3],
+            "url": cluster.get("detail_url") or reverse("services"),
+        })
+    return cards
+
+
+def _build_home_industry_cards(industries):
+    industry_records = list(industries or [])
+    if industry_records:
+        cards = []
+        for industry in industry_records[:6]:
+            cards.append({
+                "title": industry.name,
+                "icon": industry.icon or "fas fa-industry",
+                "summary": _text_excerpt(industry.description, limit=112),
+            })
+        return cards
+    return [dict(item) for item in HOME_FALLBACK_INDUSTRIES]
+
+
+def _build_home_workflow_steps(process_journey):
+    steps = []
+    source_steps = list(process_journey or [])
+    if not source_steps:
+        source_steps = [
+            {
+                "number": item["number"],
+                "title": item["title"],
+                "icon": item["icon"],
+                "description": item["description"],
+                "outputs": item["outputs"],
+            }
+            for item in PROCESS_PLAYBOOK
+        ]
+    for step in source_steps[:4]:
+        outputs = list(step.get("outputs") or [])
+        title = step.get("title") or "Delivery Step"
+        steps.append({
+            "number": step.get("number") or "",
+            "title": title,
+            "icon": step.get("icon") or "fas fa-circle",
+            "summary": _text_excerpt(step.get("description"), limit=112),
+            "deliverable": outputs[0] if outputs else "Structured implementation output",
+            "reassurance": HOME_WORKFLOW_REASSURANCE.get(
+                title,
+                "The work stays structured, visible, and aligned to business outcomes.",
+            ),
+        })
+    return steps
+
+
+def _build_home_capability_cards(groups):
+    capability_groups = list(groups or [])
+    if capability_groups:
+        cards = []
+        for group in capability_groups[:5]:
+            cards.append({
+                "slug": group["slug"],
+                "title": group["title"],
+                "icon": group["icon"],
+                "description": group["description"],
+                "items": [tech.name for tech in list(group.get("technologies", []))[:4]],
+            })
+        return cards
+    return [dict(item) for item in HOME_CAPABILITY_FALLBACKS]
+
+
+def _build_home_case_study_cards(case_studies):
+    cards = []
+    for case in list(case_studies or [])[:3]:
+        cards.append({
+            "title": case.client_name or case.title,
+            "industry": case.industry,
+            "challenge": _text_excerpt(case.challenge or case.description, limit=105),
+            "solution": _text_excerpt(case.solution or case.description, limit=105),
+            "outcome": _text_excerpt(case.results or case.description, limit=105),
+            "detail_url": reverse("case_study_detail", args=[slugify(case.title)]),
+        })
+    return cards
 
 
 def _parse_schema_markup(raw_value):
@@ -2193,7 +2378,11 @@ def home(request):
             "about": AboutSection.objects.filter(is_active=True).first(),
             "process_steps": list(ProcessStep.objects.all().order_by("order")),
             "process_journey": _build_process_journey(ProcessStep.objects.all().order_by("order")),
-            "industries": list(Industry.objects.filter(is_active=True).order_by("order")[:6]),
+            "industries": list(
+                Industry.objects.filter(is_active=True)
+                .only("id", "name", "description", "icon", "order", "is_active")
+                .order_by("order")[:6]
+            ),
             "technology_categories": technology_categories,
             "technology_capability_groups": _build_technology_capability_groups(technology_categories),
             "case_studies": portfolio_case_studies,
@@ -2211,113 +2400,35 @@ def home(request):
         }
         cache.set(HOME_CONTEXT_CACHE_KEY, context, HOME_CONTEXT_CACHE_TTL)
     hero = context.get("hero")
-    hero_copy = _resolve_home_hero_copy(hero)
-    home_ab = _resolve_home_ab_variant(request, hero_copy["headline"], hero_copy["subtitle"])
     services_for_keywords = context.get("services", [])
     industries_for_keywords = context.get("industries", [])
     case_studies_for_keywords = context.get("case_studies", [])
-    hero_industry_tags = [item.name for item in industries_for_keywords[:4]] or [
-        "Healthcare",
-        "Finance",
-        "Education",
-        "Logistics",
-    ]
-    hero_service_tags = [item.title for item in services_for_keywords[:4]] or [
-        "Software Delivery",
-        "AI Automation",
-        "Data Platforms",
-        "Technology Consulting",
-    ]
-    hero_metrics = []
-    for stat in context.get("statistics", [])[:3]:
-        hero_metrics.append({
-            "value": stat.value,
-            "suffix": stat.suffix or "",
-            "label": stat.name,
-        })
-    fallback_metrics = [
+    solution_pillars = _build_home_service_cards(context.get("service_solution_clusters"))
+    industry_cards = _build_home_industry_cards(context.get("industries"))
+    workflow_steps = _build_home_workflow_steps(context.get("process_journey"))
+    capability_cards = _build_home_capability_cards(context.get("technology_capability_groups"))
+    case_study_cards = _build_home_case_study_cards(context.get("featured_case_studies"))
+    hero_partner_logos = [partner for partner in context.get("partners", []) if partner.logo][:5]
+    trust_points = [{"label": item} for item in HOME_TRUST_POINTS]
+    hero_solution_snapshots = [
         {
-            "value": context.get("services_total", len(services_for_keywords) or 0),
-            "suffix": "+",
-            "label": "service lines",
-        },
-        {
-            "value": context.get("industries_total", len(industries_for_keywords) or 0),
-            "suffix": "+",
-            "label": "industries served",
-        },
-        {
-            "value": context.get("completed_projects_count", 0),
-            "suffix": "+",
-            "label": "projects completed",
-        },
+            "title": item["title"],
+            "icon": item["icon"],
+            "summary": _text_excerpt(item["summary"], limit=72),
+        }
+        for item in solution_pillars[:3]
     ]
-    existing_labels = {str(item["label"]).strip().lower() for item in hero_metrics}
-    for metric in fallback_metrics:
-        if len(hero_metrics) >= 3:
-            break
-        if metric["label"].strip().lower() in existing_labels:
-            continue
-        hero_metrics.append(metric)
-        existing_labels.add(metric["label"].strip().lower())
-
-    hero_microcopy = [
-        {"icon": "fas fa-clock", "text": "Response within 24 hours"},
-        {"icon": "fas fa-clipboard-check", "text": "Consulting-led project planning"},
-        {"icon": "fas fa-server", "text": "Built with scalable modern stacks"},
-        {"icon": "fas fa-shield-alt", "text": "Trusted for digital product execution"},
-    ]
-    hero_partner_logos = [partner for partner in context.get("partners", []) if partner.logo][:4]
-    hero_testimonial = context.get("testimonials", [None])[0] if context.get("testimonials") else None
-    hero_outcomes = []
-    for project in context.get("completed_projects", []):
-        outcome_text = _text_excerpt(project.results or project.solution or project.description, limit=110)
-        if not outcome_text:
-            continue
-        hero_outcomes.append({
-            "title": project.client_name or project.title,
-            "result": outcome_text,
-            "tags": project.get_tags_list()[:2],
-        })
-        if len(hero_outcomes) == 2:
-            break
-
-    if not hero_outcomes and hero_testimonial:
-        hero_outcomes.append({
-            "title": hero_testimonial.company or "Client feedback",
-            "result": _text_excerpt(hero_testimonial.content, limit=110),
-            "tags": [],
-        })
-    featured_case_study_cards = []
-    for case in context.get("featured_case_studies", []):
-        brief_description = _text_excerpt(
-            case.description or case.challenge or case.solution or case.results,
-            limit=132,
-        )
-        summary_text = _text_excerpt(
-            case.solution or case.results or case.challenge,
-            limit=118,
-        )
-        summary_label = "Summary"
-        if case.results:
-            summary_label = "Outcome"
-        elif case.solution:
-            summary_label = "Solution"
-        elif case.challenge:
-            summary_label = "Challenge"
-        if not brief_description and summary_text:
-            brief_description = summary_text
-            summary_text = ""
-        elif summary_text == brief_description:
-            summary_text = ""
-        featured_case_study_cards.append({
-            "case_study": case,
-            "title": case.client_name or case.title,
-            "brief_description": brief_description,
-            "summary_text": summary_text,
-            "summary_label": summary_label,
-            "detail_url": reverse("case_study_detail", args=[slugify(case.title)]),
-        })
+    hero_reference = None
+    testimonials = context.get("testimonials", [])
+    if testimonials:
+        primary_testimonial = testimonials[0]
+        hero_reference = {
+            "quote": _text_excerpt(primary_testimonial.content, limit=118),
+            "name": primary_testimonial.name,
+            "role": ", ".join(
+                [piece for piece in [primary_testimonial.position, primary_testimonial.company] if piece]
+            ) or "Client reference",
+        }
     home_schemas = []
     featured_services = services_for_keywords
     if featured_services:
@@ -2336,19 +2447,37 @@ def home(request):
 
     page_context = {
         **context,
-        "home_ab": home_ab,
-        "hero_industry_tags": hero_industry_tags,
-        "hero_service_tags": hero_service_tags,
-        "hero_metrics": hero_metrics,
-        "hero_microcopy": hero_microcopy,
+        "home_hero": {
+            **HOME_HERO_CONTENT,
+            "primary_cta_url": reverse("quote_generator"),
+            "secondary_cta_url": reverse("services"),
+        },
         "hero_partner_logos": hero_partner_logos,
-        "hero_testimonial": hero_testimonial,
-        "hero_outcomes": hero_outcomes,
-        "featured_case_study_cards": featured_case_study_cards,
+        "hero_solution_snapshots": hero_solution_snapshots,
+        "hero_reference": hero_reference,
+        "trust_points": trust_points,
+        "home_service_pillars": solution_pillars,
+        "home_industry_cards": industry_cards,
+        "home_workflow_steps": workflow_steps,
+        "home_capability_cards": capability_cards,
+        "home_case_study_cards": case_study_cards,
+        "home_testimonials": testimonials,
+        "home_final_cta": {
+            "title": context.get("contact_cta").title if context.get("contact_cta") else "Ready to modernize your business systems?",
+            "content": context.get("contact_cta").content if context.get("contact_cta") else (
+                "Let’s discuss how Nexalix can help you build, automate, and scale with confidence."
+            ),
+            "primary_url": reverse("contact"),
+            "secondary_url": (
+                f"mailto:{getattr(settings, 'CONTACT_EMAIL', '').strip() or getattr(settings, 'CONTACT_NOTIFICATION_EMAIL', '').strip()}"
+                if (getattr(settings, 'CONTACT_EMAIL', '').strip() or getattr(settings, 'CONTACT_NOTIFICATION_EMAIL', '').strip())
+                else reverse("contact")
+            ),
+        },
         **_seo_context(
             request,
-            title=f"{home_ab['headline']} | Nexalix Technologies",
-            description=home_ab["subtitle"],
+            title="Consulting-Led Software, AI, and Digital Transformation | Nexalix Technologies",
+            description=HOME_HERO_CONTENT["supporting_text"],
             keywords=dynamic_keywords,
             image_url=(hero.video_poster.url if hero and hero.video_poster else ""),
             schemas=home_schemas,

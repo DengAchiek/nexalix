@@ -1,0 +1,72 @@
+{% load static %}
+<header class="site-header nx-site-header" id="siteHeader">
+    <div class="container header-row nx-header-row">
+        <a href="{% url 'home' %}" class="brand nx-brand" aria-label="Nexalix home">
+            <img
+                src="{% static 'images/logo1.png' %}?v=20260309c"
+                alt="Nexalix logo"
+                class="brand-logo"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+            >
+        </a>
+
+        <nav class="nav-links nx-nav-links" aria-label="Primary navigation">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'services' %}">Services</a>
+            <a href="{% url 'industries' %}">Industries</a>
+            <a href="{% url 'case_studies' %}">Case Studies</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </nav>
+
+        <div class="header-tools nx-header-tools">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary header-cta">Get Proposal</a>
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                type="button"
+                aria-label="Open menu"
+                aria-controls="mobileMenu"
+                aria-expanded="false"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
+    <div class="mobile-menu nx-mobile-menu" id="mobileMenu" aria-hidden="true">
+        <div class="nx-mobile-menu-shell">
+            <div class="nx-mobile-menu-top">
+                <a href="{% url 'home' %}" class="brand nx-brand" aria-label="Nexalix home">
+                    <img
+                        src="{% static 'images/logo1.png' %}?v=20260309c"
+                        alt="Nexalix logo"
+                        class="brand-logo"
+                        loading="eager"
+                        decoding="async"
+                    >
+                </a>
+                <p>Consulting-led software, AI, and digital transformation.</p>
+            </div>
+
+            <nav class="mobile-menu-links" aria-label="Mobile navigation">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'services' %}">Services</a>
+                <a href="{% url 'industries' %}">Industries</a>
+                <a href="{% url 'case_studies' %}">Case Studies</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'contact' %}">Contact</a>
+            </nav>
+
+            <div class="nx-mobile-menu-actions">
+                <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+                <a href="{% url 'contact' %}" class="btn btn-secondary">Book Consultation</a>
+            </div>
+        </div>
+    </div>
+</header>

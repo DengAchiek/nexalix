@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.' }}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}{{ meta_keywords|default:'technology consulting, AI solutions, software development, cloud services, cybersecurity' }}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:'Nexalix helps businesses design, build, and improve software, AI workflows, analytics systems, and digital operations that drive measurable growth.' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{{ meta_keywords|default:'technology consulting, AI automation, software development, data analytics, digital transformation' }}{% endblock %}">
     <meta name="author" content="Nexalix Technologies">
     <meta name="robots" content="index, follow">
+
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}?v=20260309c">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon.png' %}?v=20260309c">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}?v=20260309c">
-
     <link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
 
     <meta property="og:site_name" content="Nexalix Technologies">
     <meta property="og:title" content="{{ og_title|default:meta_title|default:'Nexalix Technologies' }}">
-    <meta property="og:description" content="{{ og_description|default:meta_description|default:'Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.' }}">
+    <meta property="og:description" content="{{ og_description|default:meta_description|default:'Nexalix helps businesses design, build, and improve software, AI workflows, analytics systems, and digital operations that drive measurable growth.' }}">
     <meta property="og:type" content="{{ og_type|default:'website' }}">
     <meta property="og:url" content="{{ og_url|default:canonical_url|default:request.build_absolute_uri }}">
     {% if og_image %}
@@ -27,7 +27,7 @@
 
     <meta name="twitter:card" content="{{ twitter_card|default:'summary_large_image' }}">
     <meta name="twitter:title" content="{{ og_title|default:meta_title|default:'Nexalix Technologies' }}">
-    <meta name="twitter:description" content="{{ og_description|default:meta_description|default:'Nexalix Technologies - Intelligent, secure, and data-driven technology solutions.' }}">
+    <meta name="twitter:description" content="{{ og_description|default:meta_description|default:'Nexalix helps businesses design, build, and improve software, AI workflows, analytics systems, and digital operations that drive measurable growth.' }}">
     {% if og_image %}
     <meta name="twitter:image" content="{{ og_image }}">
     {% else %}
@@ -36,12 +36,13 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20260322e">
     <link rel="stylesheet" href="{% static 'css/chatbot.css' %}?v=20260312c">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20260403a">
 
     <title>{% block title %}{{ meta_title|default:'Nexalix Technologies' }}{% endblock %}</title>
     {% block extra_css %}{% endblock %}
@@ -52,68 +53,10 @@
     {% endif %}
     {% block extra_head %}{% endblock %}
 </head>
-<body class="theme-future" data-ux-event-url="{% url 'ux_event_api' %}" data-page-path="{{ request.path }}">
+<body class="theme-future {% block body_class %}{% endblock %}" data-ux-event-url="{% url 'ux_event_api' %}" data-page-path="{{ request.path }}">
 <a class="skip-link" href="#mainContent">Skip to content</a>
 <div class="site-shell">
-    <div class="topbar">
-        <div class="container topbar-inner">
-            <p><i class="fas fa-shield-alt"></i> Trusted technology delivery for regulated and fast-growing teams</p>
-            <a href="{% url 'contact' %}">Book Consultation</a>
-        </div>
-    </div>
-
-    <header class="site-header" id="siteHeader">
-        <div class="container header-row">
-            <a href="{% url 'home' %}" class="brand" aria-label="Nexalix home">
-                <img src="{% static 'images/logo1.png' %}?v=20260309c" alt="Nexalix logo" class="brand-logo" loading="eager" fetchpriority="high" decoding="async">
-            </a>
-
-            <nav class="nav-links" aria-label="Primary navigation">
-                <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'about' %}">About</a>
-                <a href="{% url 'services' %}">Services</a>
-                <a href="{% url 'quote_generator' %}">Quote</a>
-                <a href="{% url 'industries' %}">Industries</a>
-                <a href="{% url 'how_we_work' %}">How We Work</a>
-                <a href="{% url 'why_choose_us' %}">Why Us</a>
-                <a href="{% url 'contact' %}">Contact</a>
-            </nav>
-
-            <div class="header-tools">
-                <form class="search-shell" role="search" onsubmit="return false;" aria-label="Site search">
-                    <i class="fas fa-search"></i>
-                    <input type="search" id="desktopSearch" placeholder="Search pages and services" autocomplete="off" aria-label="Search pages and services" aria-controls="desktopSearchResults" aria-expanded="false">
-                    <div class="search-results" id="desktopSearchResults" role="listbox" aria-label="Search results"></div>
-                </form>
-                <a href="{% url 'contact' %}" class="btn btn-primary header-cta">Get Proposal</a>
-                <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-
-        <div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"></div>
-        <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-            <form class="search-shell mobile-search-shell" role="search" onsubmit="return false;" aria-label="Mobile site search">
-                <i class="fas fa-search"></i>
-                <input type="search" id="mobileSearch" placeholder="Search pages and services" autocomplete="off" aria-label="Search pages and services" aria-controls="mobileSearchResults" aria-expanded="false">
-                <div class="search-results" id="mobileSearchResults" role="listbox" aria-label="Search results"></div>
-            </form>
-
-            <nav class="mobile-menu-links" aria-label="Mobile navigation">
-                <a href="{% url 'home' %}"><i class="fas fa-house"></i> Home</a>
-                <a href="{% url 'about' %}"><i class="fas fa-circle-info"></i> About</a>
-                <a href="{% url 'services' %}"><i class="fas fa-gears"></i> Services</a>
-                <a href="{% url 'quote_generator' %}"><i class="fas fa-file-invoice-dollar"></i> Quote</a>
-                <a href="{% url 'industries' %}"><i class="fas fa-industry"></i> Industries</a>
-                <a href="{% url 'how_we_work' %}"><i class="fas fa-list-check"></i> How We Work</a>
-                <a href="{% url 'why_choose_us' %}"><i class="fas fa-star"></i> Why Us</a>
-                <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact</a>
-            </nav>
-        </div>
-    </header>
+    {% include "includes/header.html" %}
 
     {% if messages %}
     <div class="site-flash-wrap" aria-live="polite">
@@ -131,106 +74,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="site-footer">
-        <div class="container footer-top">
-            <div class="footer-brand-block footer-panel">
-                <h3>Nexalix Technologies</h3>
-                <p>{{ footer_positioning }}</p>
-                <div class="footer-social-row">
-                    <a href="{{ footer_whatsapp_url }}" class="footer-whatsapp-cta" target="_blank" rel="noopener">
-                        <i class="fab fa-whatsapp"></i>
-                        <span>WhatsApp Us</span>
-                    </a>
-                    {% for item in footer_social_links %}
-                    <a href="{{ item.url }}" class="footer-social-link" target="_blank" rel="noopener" aria-label="{{ item.label }}">
-                        <i class="{{ item.icon }}"></i>
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="footer-links-block footer-panel">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'services' %}">Services</a></li>
-                    <li><a href="{% url 'industries' %}">Industries</a></li>
-                    <li><a href="{% url 'how_we_work' %}">How We Work</a></li>
-                    <li><a href="{% url 'quote_generator' %}">Get Proposal</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-links-block footer-panel">
-                <h4>Industries Served</h4>
-                <ul>
-                    {% for industry in footer_industries %}
-                    <li><a href="{% url 'industries' %}">{{ industry.name }}</a></li>
-                    {% empty %}
-                    <li><a href="{% url 'industries' %}">Healthcare</a></li>
-                    <li><a href="{% url 'industries' %}">Finance</a></li>
-                    <li><a href="{% url 'industries' %}">Education</a></li>
-                    <li><a href="{% url 'industries' %}">Retail</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="footer-contact-block footer-panel">
-                <h4>Contact</h4>
-                <ul class="footer-contact-list">
-                    <li><a href="mailto:{{ footer_contact_email }}">{{ footer_contact_email }}</a></li>
-                    <li><a href="tel:{{ footer_contact_phone }}">{{ footer_contact_phone_display }}</a></li>
-                    <li>{{ footer_contact_location }}</li>
-                </ul>
-            </div>
-            <div class="footer-updates-block footer-panel" id="footerUpdates">
-                <h4>{% if footer_newsletter %}{{ footer_newsletter.title }}{% else %}Get Nexalix Updates{% endif %}</h4>
-                <p>{% if footer_newsletter %}{{ footer_newsletter.subtitle }}{% else %}Receive practical insights on software delivery, AI automation, and digital transformation planning.{% endif %}</p>
-                <form method="post" action="{% url 'updates_subscribe' %}" class="footer-updates-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                    <label class="visually-hidden" for="footerUpdatesEmail">Email address</label>
-                    <input id="footerUpdatesEmail" type="email" name="email" placeholder="Enter your email" required>
-                    <button type="submit" class="btn btn-primary">Join Updates</button>
-                </form>
-                <p class="footer-updates-note">{% if footer_newsletter %}{{ footer_newsletter.privacy_note }}{% else %}We respect your privacy. Unsubscribe at any time.{% endif %}</p>
-                <div class="footer-legal-inline">
-                    <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
-                    <a href="{% url 'terms_of_service' %}">Terms of Service</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="container footer-trust-strip">
-            <div class="footer-trust-list footer-trust-list-wide">
-                <div class="footer-trust-item">
-                    <strong>Registered Entity</strong>
-                    <span>{{ footer_legal_name }}</span>
-                </div>
-                <div class="footer-trust-item">
-                    <strong>Regions</strong>
-                    <span>{{ footer_service_regions }}</span>
-                </div>
-                <div class="footer-trust-item">
-                    <strong>Response</strong>
-                    <span>{{ footer_response_promise }}</span>
-                </div>
-                <div class="footer-trust-item">
-                    <strong>Support</strong>
-                    <span>{{ footer_support_hours }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="container footer-bottom">
-            <p>&copy; {% now "Y" %} {{ footer_legal_name }}. All rights reserved.</p>
-            <div class="footer-bottom-links">
-                <a href="{% url 'privacy_policy' %}">Privacy</a>
-                <a href="{% url 'terms_of_service' %}">Terms</a>
-                <a href="{{ footer_whatsapp_url }}" target="_blank" rel="noopener">WhatsApp</a>
-                <a href="{% url 'contact' %}">Contact</a>
-            </div>
-            <a href="#" id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
-        </div>
-    </footer>
+    {% include "includes/footer.html" %}
 </div>
 
 <section class="nx-chatbot" id="nxChatbot"
@@ -297,7 +141,7 @@
 
 {{ global_search_index|json_script:"globalSearchIndexData" }}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static 'js/main.js' %}?v=20260312d"></script>
+<script src="{% static 'js/main.js' %}?v=20260403a"></script>
 <script src="{% static 'js/chatbot.js' %}?v=20260312c"></script>
 {% block extra_js %}{% endblock %}
 </body>

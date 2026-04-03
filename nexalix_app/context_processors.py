@@ -55,7 +55,11 @@ def global_site_context(_request):
                 )
             )
 
-        for industry in Industry.objects.filter(is_active=True).order_by("order", "name")[:24]:
+        for industry in (
+            Industry.objects.filter(is_active=True)
+            .only("id", "name", "description", "order", "is_active")
+            .order_by("order", "name")[:24]
+        ):
             search_index.append(
                 _search_entry(
                     title=industry.name,
@@ -92,7 +96,11 @@ def global_site_context(_request):
 
     footer_context = cache.get(FOOTER_CONTEXT_CACHE_KEY)
     if footer_context is None:
-        footer_industries = list(Industry.objects.filter(is_active=True).order_by("order", "name")[:6])
+        footer_industries = list(
+            Industry.objects.filter(is_active=True)
+            .only("id", "name", "order", "is_active")
+            .order_by("order", "name")[:6]
+        )
         footer_newsletter = NewsletterSignup.objects.filter(is_active=True).first()
         configured_socials = [
             ("LinkedIn", "fab fa-linkedin-in", getattr(settings, "FOOTER_LINKEDIN_URL", "").strip()),

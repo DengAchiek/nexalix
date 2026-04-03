@@ -1,0 +1,24 @@
+<section class="section nx-section-shell">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Technology Capabilities</p>
+            <h2>Curated capability groups, not raw stack noise</h2>
+            <p class="section-subtitle">We organize technology around business delivery needs so decision-makers can quickly see how the platform, cloud, data, and automation layers fit together.</p>
+        </div>
+
+        <div class="nx-capability-grid">
+            {% for capability in home_capability_cards %}
+            <article class="nx-card nx-capability-card" data-reveal>
+                <div class="nx-icon-badge"><i class="{{ capability.icon }}"></i></div>
+                <h3>{{ capability.title }}</h3>
+                <p>{{ capability.description }}</p>
+                <div class="nx-chip-row">
+                    {% for item in capability.items %}
+                    <span class="nx-chip">{{ item }}</span>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>

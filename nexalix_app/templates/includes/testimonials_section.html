@@ -1,0 +1,37 @@
+{% if home_testimonials %}
+{% load media_optimization %}
+<section class="section nx-section-shell nx-section-soft">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Testimonials</p>
+            <h2>Client feedback that is easier to scan and trust</h2>
+            <p class="section-subtitle">Short, practical feedback from teams that have worked with Nexalix on delivery, implementation, and operational improvement.</p>
+        </div>
+
+        <div class="nx-testimonial-grid">
+            {% for testimonial in home_testimonials %}
+            <article class="nx-card nx-testimonial-card" data-reveal>
+                <p class="nx-testimonial-quote">“{{ testimonial.content|truncatechars:190 }}”</p>
+                <div class="nx-testimonial-footer">
+                    <div class="nx-testimonial-avatar">
+                        {% if testimonial.avatar %}
+                        <img
+                            src="{{ testimonial.avatar.url|optimized_media:'thumb' }}"
+                            alt="{{ testimonial.name }}"
+                            loading="lazy"
+                        >
+                        {% else %}
+                        <span>{{ testimonial.name|slice:":1"|upper }}</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong>{{ testimonial.name }}</strong>
+                        <p>{{ testimonial.position }}{% if testimonial.company %}, {{ testimonial.company }}{% endif %}</p>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

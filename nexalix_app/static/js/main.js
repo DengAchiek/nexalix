@@ -347,9 +347,12 @@ document.addEventListener("DOMContentLoaded", () => {
             ".award-card", ".pricing-plan-card", ".step-card", ".contact-form",
             ".quote-form-card", ".quote-summary-card", ".project-completed-card",
             ".partner-home-card", ".portfolio-card", ".industry-modern-card",
+            ".nx-card", ".nx-hero-copy", ".nx-hero-visual", ".nx-trust-strip-row",
         ];
 
-        const elements = document.querySelectorAll(selectors.join(","));
+        const explicitRevealElements = Array.from(document.querySelectorAll("[data-reveal]"));
+        const automaticRevealElements = Array.from(document.querySelectorAll(selectors.join(",")));
+        const elements = Array.from(new Set([...explicitRevealElements, ...automaticRevealElements]));
         if (!elements.length) return;
 
         elements.forEach((element, index) => {

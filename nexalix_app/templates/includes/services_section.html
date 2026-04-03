@@ -1,0 +1,25 @@
+<section class="section nx-section-shell">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Services</p>
+            <h2>Four solution pillars built for business outcomes</h2>
+            <p class="section-subtitle">Nexalix combines consulting, engineering, data, and automation delivery into focused service lines that help teams reduce friction and move faster.</p>
+        </div>
+
+        <div class="nx-services-grid">
+            {% for service in home_service_pillars %}
+            <article class="nx-card nx-service-card" data-reveal>
+                <div class="nx-icon-badge"><i class="{{ service.icon }}"></i></div>
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.summary }}</p>
+                <ul class="nx-card-list">
+                    {% for bullet in service.bullets %}
+                    <li>{{ bullet }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="{{ service.url }}" class="nx-text-link">View Service</a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>

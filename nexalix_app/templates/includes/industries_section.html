@@ -1,0 +1,19 @@
+<section class="section nx-section-shell nx-section-soft">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Industries We Serve</p>
+            <h2>Built for sectors where workflow quality matters</h2>
+            <p class="section-subtitle">We tailor software, automation, and reporting systems to the operational realities of regulated, service-heavy, and fast-scaling industries.</p>
+        </div>
+
+        <div class="nx-industries-grid">
+            {% for industry in home_industry_cards %}
+            <article class="nx-card nx-industry-card" data-reveal>
+                <div class="nx-icon-badge"><i class="{{ industry.icon }}"></i></div>
+                <h3>{{ industry.title }}</h3>
+                <p>{{ industry.summary }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>

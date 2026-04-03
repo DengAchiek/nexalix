@@ -1,9 +1,23 @@
 .nx-chatbot {
     position: fixed;
-    right: 18px;
-    bottom: 18px;
+    right: 22px;
+    bottom: 22px;
     z-index: 1200;
-    font-family: "Manrope", "Segoe UI", sans-serif;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+body.page-home .nx-chatbot {
+    opacity: 0;
+    transform: translateY(18px);
+    pointer-events: none;
+}
+
+body.page-home.hero-chat-ready .nx-chatbot,
+body.page-home .nx-chatbot.open {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
 }
 
 .nx-chatbot-launcher {

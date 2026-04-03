@@ -376,6 +376,37 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.forEach((element) => observer.observe(element));
     }
 
+    function wireHeroChatVisibility() {
+        const hero = document.getElementById("homeHero");
+        const chatbot = document.getElementById("nxChatbot");
+        if (!hero || !chatbot || !body?.classList.contains("page-home")) return;
+
+        const setReady = (isReady) => {
+            body.classList.toggle("hero-chat-ready", isReady);
+        };
+
+        if (!("IntersectionObserver" in window)) {
+            const update = () => {
+                const heroRect = hero.getBoundingClientRect();
+                setReady(heroRect.bottom <= window.innerHeight * 0.35);
+            };
+
+            update();
+            window.addEventListener("scroll", update, { passive: true });
+            window.addEventListener("resize", update);
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const pastHero = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+                setReady(pastHero);
+            });
+        }, { threshold: 0.12 });
+
+        observer.observe(hero);
+    }
+
     function wireBackToTop() {
         const backToTop = document.getElementById("backToTop");
         if (!backToTop) return;
@@ -694,6 +725,7 @@ document.addEventListener("DOMContentLoaded", () => {
     wireSearchClose();
     wireCounters();
     wireRevealAnimation();
+    wireHeroChatVisibility();
     wireBackToTop();
     wireTechToggle();
     wireFormValidation();

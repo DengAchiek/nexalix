@@ -1,60 +1,61 @@
-<section class="section nx-hero">
+<section class="section nx-hero" id="homeHero">
     <div class="container nx-hero-grid">
         <div class="nx-hero-copy" data-reveal>
-            <p class="section-eyebrow">{{ home_hero.eyebrow }}</p>
+            <p class="nx-hero-badge">{{ home_hero.eyebrow }}</p>
             <h1>{{ home_hero.headline }}</h1>
             <p class="nx-hero-supporting">{{ home_hero.supporting_text }}</p>
-            <div class="nx-button-row">
+            <div class="nx-button-row nx-hero-actions">
                 <a href="{{ home_hero.primary_cta_url }}" class="btn btn-primary">{{ home_hero.primary_cta_text }}</a>
                 <a href="{{ home_hero.secondary_cta_url }}" class="btn btn-secondary">{{ home_hero.secondary_cta_text }}</a>
             </div>
+            <ul class="nx-hero-trust-list" aria-label="Hero trust markers">
+                {% for marker in home_hero_trust_markers %}
+                <li>{{ marker.label }}</li>
+                {% endfor %}
+            </ul>
         </div>
 
         <div class="nx-hero-visual" data-reveal>
-            <div class="nx-hero-panel nx-hero-panel-primary">
-                <div class="nx-panel-label-row">
-                    <span>Delivery Workflow</span>
-                    <span>Structured</span>
-                </div>
-                <ol class="nx-hero-workflow-list">
-                    {% for step in home_workflow_steps %}
-                    <li>
-                        <span class="nx-hero-workflow-index">{{ step.number }}</span>
-                        <div>
-                            <strong>{{ step.title }}</strong>
-                            <p>{{ step.deliverable }}</p>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ol>
-            </div>
-
-            <div class="nx-hero-panel-stack">
-                <div class="nx-hero-panel nx-hero-panel-secondary">
-                    <p class="section-eyebrow">Enterprise Focus</p>
-                    {% if hero_reference %}
-                    <blockquote>{{ hero_reference.quote }}</blockquote>
-                    <div class="nx-reference-meta">
-                        <strong>{{ hero_reference.name }}</strong>
-                        <span>{{ hero_reference.role }}</span>
+            <div class="nx-hero-composition">
+                <div class="nx-hero-panel nx-hero-panel-primary nx-hero-workflow-card">
+                    <div class="nx-panel-label-row">
+                        <span>Delivery Workflow</span>
+                        <span class="nx-panel-status">Structured</span>
                     </div>
-                    {% else %}
-                    <blockquote>Structured planning, disciplined implementation, and post-launch support designed for business teams.</blockquote>
-                    <div class="nx-reference-meta">
-                        <strong>Nexalix delivery model</strong>
-                        <span>Business-first execution</span>
+                    <ol class="nx-hero-workflow-list">
+                        {% for step in home_workflow_steps %}
+                        <li>
+                            <span class="nx-hero-workflow-index">{{ step.number }}</span>
+                            <div>
+                                <strong>{{ step.title }}</strong>
+                                <span class="nx-hero-step-output">{{ step.deliverable }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+                <div class="nx-hero-support-stack">
+                    <div class="nx-hero-panel nx-hero-panel-secondary nx-hero-enterprise-card">
+                        <p class="nx-hero-mini-badge">Enterprise Focus</p>
+                        <p class="nx-hero-enterprise-copy">Structured planning, disciplined implementation, and post-launch support designed for business teams.</p>
+                        <div class="nx-reference-meta">
+                            <strong>Nexalix delivery model</strong>
+                            <span>Business-first execution</span>
+                        </div>
+                    </div>
+
+                    {% if hero_micro_cards %}
+                    <div class="nx-hero-micro-grid">
+                        {% for item in hero_micro_cards %}
+                        <article class="nx-hero-micro-card">
+                            <div class="nx-icon-badge"><i class="{{ item.icon }}"></i></div>
+                            <h3>{{ item.title }}</h3>
+                            <p>{{ item.summary }}</p>
+                        </article>
+                        {% endfor %}
                     </div>
                     {% endif %}
-                </div>
-
-                <div class="nx-hero-snapshot-grid">
-                    {% for item in hero_solution_snapshots %}
-                    <article class="nx-hero-snapshot-card">
-                        <div class="nx-icon-badge"><i class="{{ item.icon }}"></i></div>
-                        <h3>{{ item.title }}</h3>
-                        <p>{{ item.summary }}</p>
-                    </article>
-                    {% endfor %}
                 </div>
             </div>
         </div>

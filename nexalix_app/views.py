@@ -412,6 +412,12 @@ HOME_TRUST_POINTS = (
     "Post-launch support",
 )
 
+HOME_HERO_TRUST_MARKERS = (
+    "Structured delivery",
+    "Business-first execution",
+    "Post-launch support",
+)
+
 HOME_FALLBACK_INDUSTRIES = (
     {
         "title": "Finance & FinTech",
@@ -821,6 +827,34 @@ def _build_home_service_cards(clusters):
             "url": cluster.get("detail_url") or reverse("services"),
         })
     return cards
+
+
+def _build_home_hero_micro_cards(service_cards):
+    cards = []
+    preferred_slugs = ("software-development", "ai-automation")
+    service_records = list(service_cards or [])
+
+    for slug in preferred_slugs:
+        match = next((item for item in service_records if item.get("slug") == slug), None)
+        if not match:
+            continue
+        cards.append({
+            "title": match["title"],
+            "icon": match["icon"],
+            "summary": _text_excerpt(match["summary"], limit=58),
+        })
+
+    if cards:
+        return cards[:2]
+
+    return [
+        {
+            "title": item["title"],
+            "icon": item["icon"],
+            "summary": _text_excerpt(item["summary"], limit=58),
+        }
+        for item in service_records[:2]
+    ]
 
 
 def _build_home_industry_cards(industries):
@@ -2410,14 +2444,7 @@ def home(request):
     case_study_cards = _build_home_case_study_cards(context.get("featured_case_studies"))
     hero_partner_logos = [partner for partner in context.get("partners", []) if partner.logo][:5]
     trust_points = [{"label": item} for item in HOME_TRUST_POINTS]
-    hero_solution_snapshots = [
-        {
-            "title": item["title"],
-            "icon": item["icon"],
-            "summary": _text_excerpt(item["summary"], limit=72),
-        }
-        for item in solution_pillars[:3]
-    ]
+    hero_micro_cards = _build_home_hero_micro_cards(solution_pillars)
     hero_reference = None
     testimonials = context.get("testimonials", [])
     if testimonials:
@@ -2452,8 +2479,9 @@ def home(request):
             "primary_cta_url": reverse("quote_generator"),
             "secondary_cta_url": reverse("services"),
         },
+        "home_hero_trust_markers": [{"label": item} for item in HOME_HERO_TRUST_MARKERS],
         "hero_partner_logos": hero_partner_logos,
-        "hero_solution_snapshots": hero_solution_snapshots,
+        "hero_micro_cards": hero_micro_cards,
         "hero_reference": hero_reference,
         "trust_points": trust_points,
         "home_service_pillars": solution_pillars,

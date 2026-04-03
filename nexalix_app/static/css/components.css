@@ -137,10 +137,10 @@ body.theme-future .nx-mobile-menu-actions {
 
 body.theme-future .nx-hero {
     position: relative;
-    min-height: clamp(640px, calc(88vh - 82px), 820px);
+    min-height: clamp(560px, calc(80vh - 82px), 740px);
     display: flex;
     align-items: center;
-    padding: clamp(2.5rem, 4vw, 4.25rem) 0;
+    padding: clamp(2rem, 3vw, 3.25rem) 0;
     overflow: hidden;
 }
 
@@ -149,9 +149,9 @@ body.theme-future .nx-hero::before {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 18% 28%, rgba(37, 99, 235, 0.22), transparent 28%),
-        radial-gradient(circle at 76% 30%, rgba(6, 182, 212, 0.12), transparent 22%),
-        radial-gradient(circle at 78% 72%, rgba(129, 140, 248, 0.12), transparent 24%);
+        radial-gradient(circle at 18% 28%, rgba(37, 99, 235, 0.18), transparent 26%),
+        radial-gradient(circle at 76% 30%, rgba(6, 182, 212, 0.1), transparent 20%),
+        radial-gradient(circle at 78% 72%, rgba(129, 140, 248, 0.08), transparent 22%);
     pointer-events: none;
 }
 
@@ -176,12 +176,12 @@ body.theme-future .nx-hero .container {
 body.theme-future .nx-hero-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
-    gap: clamp(2rem, 3vw, 3.25rem);
+    gap: clamp(1.5rem, 2.4vw, 2.5rem);
     align-items: center;
 }
 
 body.theme-future .nx-hero-copy {
-    max-width: 640px;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -192,7 +192,7 @@ body.theme-future .nx-hero-badge {
     align-items: center;
     min-height: 40px;
     padding: 0 1rem;
-    margin: 0 0 1.25rem;
+    margin: 0 0 1rem;
     border-radius: 999px;
     border: 1px solid rgba(148, 163, 184, 0.2);
     background: rgba(15, 23, 42, 0.72);
@@ -207,34 +207,55 @@ body.theme-future .nx-hero-copy h1 {
     margin: 0;
     max-width: 10ch;
     color: #ffffff;
-    font-size: clamp(4rem, 3rem + 2.6vw, 4.5rem);
-    line-height: 0.96;
+    font-size: clamp(3.6rem, 2.95rem + 1.7vw, 4.1rem);
+    line-height: 0.92;
     letter-spacing: -0.05em;
     text-wrap: balance;
-    text-shadow: 0 12px 40px rgba(8, 15, 40, 0.22);
+    text-shadow: 0 10px 32px rgba(8, 15, 40, 0.18);
 }
 
 body.theme-future .nx-hero-supporting {
-    max-width: 36rem;
-    margin: 1.5rem 0 1.6rem;
+    max-width: 600px;
+    margin: 1.15rem 0 1.3rem;
     color: var(--text-muted);
-    font-size: 1.125rem;
-    line-height: 1.68;
+    font-size: 1.05rem;
+    line-height: 1.62;
 }
 
 body.theme-future .nx-hero-actions {
-    gap: 1rem;
+    gap: 0.85rem;
 }
 
 body.theme-future .nx-hero-actions .btn {
-    min-width: 168px;
+    min-width: 170px;
+    min-height: 50px;
+}
+
+body.theme-future .nx-hero-actions .btn-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.26);
+}
+
+body.theme-future .nx-hero-actions .btn-primary:hover {
+    box-shadow: 0 18px 34px rgba(37, 99, 235, 0.3);
+}
+
+body.theme-future .nx-hero-actions .btn-secondary {
+    border-color: rgba(148, 163, 184, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-main);
+}
+
+body.theme-future .nx-hero-actions .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(148, 163, 184, 0.28);
 }
 
 body.theme-future .nx-hero-trust-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.85rem 1rem;
-    margin: 1rem 0 0;
+    margin: 0.85rem 0 0;
     padding: 0;
     list-style: none;
 }
@@ -265,20 +286,20 @@ body.theme-future .nx-hero-visual {
 body.theme-future .nx-hero-visual::before {
     content: "";
     position: absolute;
-    inset: 12% -8% 8% 18%;
+    inset: 14% -6% 10% 18%;
     background:
-        radial-gradient(circle at 34% 32%, rgba(37, 99, 235, 0.24), transparent 26%),
-        radial-gradient(circle at 70% 58%, rgba(6, 182, 212, 0.16), transparent 30%),
-        radial-gradient(circle at 72% 76%, rgba(168, 85, 247, 0.12), transparent 28%);
-    filter: blur(22px);
+        radial-gradient(circle at 34% 32%, rgba(37, 99, 235, 0.18), transparent 24%),
+        radial-gradient(circle at 70% 58%, rgba(6, 182, 212, 0.12), transparent 28%),
+        radial-gradient(circle at 72% 76%, rgba(168, 85, 247, 0.08), transparent 26%);
+    filter: blur(20px);
     pointer-events: none;
 }
 
 body.theme-future .nx-hero-composition {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1.06fr) minmax(250px, 0.82fr);
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1.04fr) minmax(240px, 0.78fr);
+    gap: 1.1rem;
     align-items: stretch;
     animation: nxHeroFloat 7.5s ease-in-out infinite;
 }
@@ -291,15 +312,14 @@ body.theme-future .nx-hero-panel {
         radial-gradient(circle at 18% 14%, rgba(37, 99, 235, 0.16), transparent 28%),
         radial-gradient(circle at 82% 76%, rgba(6, 182, 212, 0.12), transparent 34%),
         linear-gradient(180deg, rgba(9, 16, 33, 0.98) 0%, rgba(15, 23, 42, 0.96) 68%, rgba(17, 24, 45, 0.94) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(148, 163, 184, 0.14);
     border-radius: 28px;
     box-shadow:
-        0 24px 58px rgba(2, 8, 23, 0.38),
+        0 18px 42px rgba(2, 8, 23, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-body.theme-future .nx-hero-panel::before,
-body.theme-future .nx-hero-micro-card::before {
+body.theme-future .nx-hero-panel::before {
     content: "";
     position: absolute;
     left: 16%;
@@ -313,18 +333,17 @@ body.theme-future .nx-hero-micro-card::before {
     pointer-events: none;
 }
 
-body.theme-future .nx-hero-panel > *,
-body.theme-future .nx-hero-micro-card > * {
+body.theme-future .nx-hero-panel > * {
     position: relative;
     z-index: 1;
 }
 
 body.theme-future .nx-hero-panel-primary {
-    padding: 1.6rem 1.45rem;
+    padding: 1.75rem 1.55rem;
 }
 
 body.theme-future .nx-hero-workflow-card {
-    min-height: 560px;
+    min-height: 500px;
 }
 
 body.theme-future .nx-panel-label-row {
@@ -332,7 +351,7 @@ body.theme-future .nx-panel-label-row {
     align-items: center;
     justify-content: space-between;
     gap: 0.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
     color: var(--text-soft);
     font-size: 0.8rem;
     font-weight: 600;
@@ -369,7 +388,7 @@ body.theme-future .nx-hero-workflow-list li {
     grid-template-columns: auto 1fr;
     gap: 1rem;
     align-items: start;
-    padding: 1.05rem 0;
+    padding: 0.95rem 0;
     border-top: 1px solid rgba(148, 163, 184, 0.12);
 }
 
@@ -387,34 +406,28 @@ body.theme-future .nx-hero-workflow-index {
 
 body.theme-future .nx-hero-workflow-list strong {
     display: block;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.22rem;
     color: var(--text-main);
-    font-size: 1.02rem;
+    font-size: 1rem;
 }
 
 body.theme-future .nx-hero-step-output {
     display: block;
     color: var(--text-muted);
-    font-size: 0.9rem;
-    line-height: 1.55;
-}
-
-body.theme-future .nx-hero-workflow-list p {
-    margin: 0;
-    color: var(--text-soft);
-    font-size: 0.88rem;
+    font-size: 0.84rem;
+    line-height: 1.45;
 }
 
 body.theme-future .nx-hero-support-stack {
     display: grid;
     align-content: center;
-    gap: 1rem;
-    transform: translateY(1.6rem);
+    gap: 0.9rem;
+    transform: translateY(0.75rem);
 }
 
 body.theme-future .nx-hero-enterprise-card {
-    min-height: 214px;
-    padding: 1.4rem;
+    min-height: 196px;
+    padding: 1.35rem;
 }
 
 body.theme-future .nx-hero-mini-badge {
@@ -422,10 +435,10 @@ body.theme-future .nx-hero-mini-badge {
 }
 
 body.theme-future .nx-hero-enterprise-copy {
-    margin: 0 0 1.2rem;
+    margin: 0 0 1rem;
     color: var(--text-soft);
-    font-size: 1rem;
-    line-height: 1.68;
+    font-size: 0.96rem;
+    line-height: 1.58;
 }
 
 body.theme-future .nx-reference-meta {
@@ -440,44 +453,6 @@ body.theme-future .nx-reference-meta strong {
 body.theme-future .nx-reference-meta span {
     color: var(--text-soft);
     font-size: 0.88rem;
-}
-
-body.theme-future .nx-hero-micro-grid {
-    display: grid;
-    gap: 0.85rem;
-}
-
-body.theme-future .nx-hero-micro-card {
-    min-height: 172px;
-    padding: 1.15rem 1.05rem 1.2rem;
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at 20% 16%, rgba(37, 99, 235, 0.14), transparent 25%),
-        radial-gradient(circle at 78% 74%, rgba(6, 182, 212, 0.12), transparent 30%),
-        linear-gradient(180deg, rgba(11, 16, 32, 0.98) 0%, rgba(17, 24, 45, 0.94) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.theme-future .nx-hero-micro-card .nx-icon-badge {
-    margin-bottom: 0.95rem;
-}
-
-body.theme-future .nx-hero-micro-card h3,
-body.theme-future .nx-hero-micro-card p {
-    margin: 0;
-}
-
-body.theme-future .nx-hero-micro-card h3 {
-    margin-bottom: 0.45rem;
-    color: var(--text-main);
-    font-size: 1rem;
-    line-height: 1.2;
-}
-
-body.theme-future .nx-hero-micro-card p {
-    color: var(--text-soft);
-    font-size: 0.88rem;
-    line-height: 1.55;
 }
 
 @keyframes nxHeroFloat {
@@ -907,20 +882,20 @@ body.theme-future .footer-bottom-links {
 
     body.theme-future .nx-hero {
         min-height: auto;
-        padding: 3rem 0 4rem;
+        padding: 2.5rem 0 3.25rem;
     }
 
     body.theme-future .nx-hero-copy {
-        max-width: 720px;
+        max-width: 640px;
     }
 
     body.theme-future .nx-hero-composition {
-        max-width: 940px;
-        grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.82fr);
+        max-width: 860px;
+        grid-template-columns: minmax(0, 1.04fr) minmax(250px, 0.78fr);
     }
 
     body.theme-future .nx-hero-workflow-card {
-        min-height: 500px;
+        min-height: 460px;
     }
 
     body.theme-future .nx-hero-support-stack {
@@ -937,10 +912,6 @@ body.theme-future .footer-bottom-links {
     body.theme-future .nx-capability-grid,
     body.theme-future .nx-testimonial-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    body.theme-future .nx-hero-micro-grid {
-        display: none;
     }
 }
 
@@ -974,18 +945,18 @@ body.theme-future .footer-bottom-links {
 
     body.theme-future .nx-hero {
         min-height: auto;
-        padding: 1.75rem 0 3.25rem;
+        padding: 1.5rem 0 2.8rem;
     }
 
     body.theme-future .nx-hero-copy h1 {
         max-width: 9.5ch;
-        font-size: clamp(2.125rem, 1.95rem + 2.1vw, 2.5rem);
+        font-size: clamp(2.125rem, 1.95rem + 2vw, 2.4rem);
         line-height: 1;
     }
 
     body.theme-future .nx-hero-supporting {
         font-size: 1rem;
-        margin: 1.1rem 0 1.3rem;
+        margin: 1rem 0 1.1rem;
     }
 
     body.theme-future .nx-hero-badge {
@@ -1009,12 +980,16 @@ body.theme-future .footer-bottom-links {
     }
 
     body.theme-future .nx-hero-composition {
-        gap: 0.85rem;
+        gap: 0;
     }
 
     body.theme-future .nx-hero-panel-primary,
     body.theme-future .nx-hero-enterprise-card {
-        padding: 1.3rem 1.15rem;
+        padding: 1.25rem 1.05rem;
+    }
+
+    body.theme-future .nx-hero-support-stack {
+        display: none;
     }
 
     body.theme-future .nx-services-grid,

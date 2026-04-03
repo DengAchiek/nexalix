@@ -28,7 +28,7 @@
                             <span class="nx-hero-workflow-index">{{ step.number }}</span>
                             <div>
                                 <strong>{{ step.title }}</strong>
-                                <span class="nx-hero-step-output">{{ step.deliverable }}</span>
+                                <span class="nx-hero-step-output">{{ step.deliverable|truncatechars:44 }}</span>
                             </div>
                         </li>
                         {% endfor %}
@@ -36,26 +36,14 @@
                 </div>
 
                 <div class="nx-hero-support-stack">
-                    <div class="nx-hero-panel nx-hero-panel-secondary nx-hero-enterprise-card">
+                    <div class="nx-hero-panel nx-hero-enterprise-card">
                         <p class="nx-hero-mini-badge">Enterprise Focus</p>
-                        <p class="nx-hero-enterprise-copy">Structured planning, disciplined implementation, and post-launch support designed for business teams.</p>
+                        <p class="nx-hero-enterprise-copy">Structured planning and disciplined delivery support for business teams.</p>
                         <div class="nx-reference-meta">
                             <strong>Nexalix delivery model</strong>
                             <span>Business-first execution</span>
                         </div>
                     </div>
-
-                    {% if hero_micro_cards %}
-                    <div class="nx-hero-micro-grid">
-                        {% for item in hero_micro_cards %}
-                        <article class="nx-hero-micro-card">
-                            <div class="nx-icon-badge"><i class="{{ item.icon }}"></i></div>
-                            <h3>{{ item.title }}</h3>
-                            <p>{{ item.summary }}</p>
-                        </article>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
                 </div>
             </div>
         </div>

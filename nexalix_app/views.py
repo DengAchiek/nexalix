@@ -398,8 +398,8 @@ HOME_HERO_CONTENT = {
     "eyebrow": "Consulting-led software, AI, and digital transformation",
     "headline": "Build smarter systems. Automate operations. Scale with confidence.",
     "supporting_text": (
-        "Nexalix helps businesses design, build, and improve software, AI workflows, analytics systems, "
-        "and digital operations that drive measurable growth."
+        "Nexalix helps growth-focused businesses design, build, and improve software, AI workflows, "
+        "and digital operations with clear delivery structure."
     ),
     "primary_cta_text": "Get Proposal",
     "secondary_cta_text": "Explore Services",
@@ -827,34 +827,6 @@ def _build_home_service_cards(clusters):
             "url": cluster.get("detail_url") or reverse("services"),
         })
     return cards
-
-
-def _build_home_hero_micro_cards(service_cards):
-    cards = []
-    preferred_slugs = ("software-development", "ai-automation")
-    service_records = list(service_cards or [])
-
-    for slug in preferred_slugs:
-        match = next((item for item in service_records if item.get("slug") == slug), None)
-        if not match:
-            continue
-        cards.append({
-            "title": match["title"],
-            "icon": match["icon"],
-            "summary": _text_excerpt(match["summary"], limit=58),
-        })
-
-    if cards:
-        return cards[:2]
-
-    return [
-        {
-            "title": item["title"],
-            "icon": item["icon"],
-            "summary": _text_excerpt(item["summary"], limit=58),
-        }
-        for item in service_records[:2]
-    ]
 
 
 def _build_home_industry_cards(industries):
@@ -2444,18 +2416,7 @@ def home(request):
     case_study_cards = _build_home_case_study_cards(context.get("featured_case_studies"))
     hero_partner_logos = [partner for partner in context.get("partners", []) if partner.logo][:5]
     trust_points = [{"label": item} for item in HOME_TRUST_POINTS]
-    hero_micro_cards = _build_home_hero_micro_cards(solution_pillars)
-    hero_reference = None
     testimonials = context.get("testimonials", [])
-    if testimonials:
-        primary_testimonial = testimonials[0]
-        hero_reference = {
-            "quote": _text_excerpt(primary_testimonial.content, limit=118),
-            "name": primary_testimonial.name,
-            "role": ", ".join(
-                [piece for piece in [primary_testimonial.position, primary_testimonial.company] if piece]
-            ) or "Client reference",
-        }
     home_schemas = []
     featured_services = services_for_keywords
     if featured_services:
@@ -2481,8 +2442,6 @@ def home(request):
         },
         "home_hero_trust_markers": [{"label": item} for item in HOME_HERO_TRUST_MARKERS],
         "hero_partner_logos": hero_partner_logos,
-        "hero_micro_cards": hero_micro_cards,
-        "hero_reference": hero_reference,
         "trust_points": trust_points,
         "home_service_pillars": solution_pillars,
         "home_industry_cards": industry_cards,

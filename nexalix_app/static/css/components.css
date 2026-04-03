@@ -35,7 +35,7 @@ body.theme-future .nav-links {
 
 body.theme-future .nav-links a,
 body.theme-future .mobile-menu-links a {
-    color: var(--text-soft);
+    color: rgba(255, 255, 255, 0.88);
     font-size: 0.95rem;
     font-weight: 500;
     transition: color 0.22s ease;
@@ -113,7 +113,7 @@ body.theme-future .nx-mobile-menu-shell {
 
 body.theme-future .nx-mobile-menu-top p {
     margin: 0.9rem 0 0;
-    color: var(--text-muted);
+    color: var(--text-soft);
     font-size: 0.95rem;
 }
 
@@ -136,44 +136,75 @@ body.theme-future .nx-mobile-menu-actions {
 }
 
 body.theme-future .nx-hero {
-    padding-top: 58px;
+    padding-top: 28px;
+    padding-bottom: 64px;
 }
 
 body.theme-future .nx-hero-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-    gap: 2rem;
+    gap: 1.5rem;
     align-items: center;
 }
 
 body.theme-future .nx-hero-copy h1 {
     margin: 0;
-    font-size: clamp(2rem, 1.4rem + 2.8vw, 3.5rem);
-    line-height: 0.96;
+    font-size: clamp(2rem, 1.35rem + 2.45vw, 3.2rem);
+    line-height: 1.02;
+    max-width: 12ch;
 }
 
 body.theme-future .nx-hero-supporting {
-    max-width: 620px;
-    margin: 1.25rem 0 1.9rem;
+    max-width: 560px;
+    margin: 1rem 0 1.45rem;
     color: var(--text-soft);
-    font-size: 1.1rem;
+    font-size: 1.03rem;
 }
 
 body.theme-future .nx-hero-visual {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
-    gap: 1rem;
+    gap: 0.85rem;
 }
 
 body.theme-future .nx-hero-panel {
-    background: linear-gradient(180deg, rgba(17, 24, 45, 0.96), rgba(11, 16, 32, 0.96));
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    border-radius: 26px;
-    box-shadow: var(--shadow-strong);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+        radial-gradient(circle at 18% 14%, rgba(59, 130, 246, 0.2), transparent 28%),
+        radial-gradient(circle at 82% 76%, rgba(232, 121, 249, 0.24), transparent 36%),
+        linear-gradient(180deg, rgba(7, 12, 30, 0.98) 0%, rgba(28, 23, 59, 0.96) 64%, rgba(195, 102, 222, 0.74) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 30px;
+    box-shadow:
+        0 22px 56px rgba(2, 8, 23, 0.44),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+body.theme-future .nx-hero-panel::before,
+body.theme-future .nx-hero-snapshot-card::before {
+    content: "";
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: -11%;
+    height: 24%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 241, 255, 0.94), rgba(255, 255, 255, 0));
+    filter: blur(26px);
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+body.theme-future .nx-hero-panel > *,
+body.theme-future .nx-hero-snapshot-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 body.theme-future .nx-hero-panel-primary {
-    padding: 1.6rem;
+    padding: 1.3rem;
 }
 
 body.theme-future .nx-panel-label-row {
@@ -181,8 +212,8 @@ body.theme-future .nx-panel-label-row {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1.1rem;
-    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+    color: var(--text-soft);
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -191,7 +222,7 @@ body.theme-future .nx-panel-label-row {
 
 body.theme-future .nx-hero-workflow-list {
     display: grid;
-    gap: 0.9rem;
+    gap: 0.55rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -202,7 +233,7 @@ body.theme-future .nx-hero-workflow-list li {
     grid-template-columns: auto 1fr;
     gap: 0.85rem;
     align-items: start;
-    padding: 0.9rem 0;
+    padding: 0.7rem 0;
     border-top: 1px solid rgba(148, 163, 184, 0.1);
 }
 
@@ -212,7 +243,7 @@ body.theme-future .nx-hero-workflow-list li:first-child {
 }
 
 body.theme-future .nx-hero-workflow-index {
-    color: rgba(148, 163, 184, 0.74);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -226,24 +257,24 @@ body.theme-future .nx-hero-workflow-list strong {
 
 body.theme-future .nx-hero-workflow-list p {
     margin: 0;
-    color: var(--text-muted);
-    font-size: 0.92rem;
+    color: var(--text-soft);
+    font-size: 0.88rem;
 }
 
 body.theme-future .nx-hero-panel-stack {
     display: grid;
-    gap: 1rem;
+    gap: 0.85rem;
 }
 
 body.theme-future .nx-hero-panel-secondary {
-    padding: 1.35rem;
+    padding: 1.15rem;
 }
 
 body.theme-future .nx-hero-panel-secondary blockquote {
-    margin: 0 0 1rem;
+    margin: 0 0 0.8rem;
     color: #eff6ff;
-    font-size: 1rem;
-    line-height: 1.65;
+    font-size: 0.95rem;
+    line-height: 1.55;
 }
 
 body.theme-future .nx-reference-meta {
@@ -256,20 +287,25 @@ body.theme-future .nx-reference-meta strong {
 }
 
 body.theme-future .nx-reference-meta span {
-    color: var(--text-muted);
+    color: var(--text-soft);
     font-size: 0.88rem;
 }
 
 body.theme-future .nx-hero-snapshot-grid {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.85rem;
 }
 
 body.theme-future .nx-hero-snapshot-card {
-    padding: 1rem 1.05rem;
-    border-radius: 20px;
-    background: rgba(17, 24, 45, 0.86);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    min-height: 170px;
+    padding: 1rem 1.05rem 1.25rem;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at 20% 16%, rgba(59, 130, 246, 0.16), transparent 25%),
+        radial-gradient(circle at 78% 74%, rgba(232, 121, 249, 0.22), transparent 34%),
+        linear-gradient(180deg, rgba(8, 13, 33, 0.98) 0%, rgba(33, 25, 63, 0.96) 66%, rgba(198, 109, 224, 0.74) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.theme-future .nx-hero-snapshot-card .nx-icon-badge {
@@ -287,8 +323,9 @@ body.theme-future .nx-hero-snapshot-card h3 {
 
 body.theme-future .nx-hero-snapshot-card p {
     margin-top: 0.4rem;
-    color: var(--text-muted);
-    font-size: 0.88rem;
+    color: var(--text-soft);
+    font-size: 0.9rem;
+    line-height: 1.55;
 }
 
 body.theme-future .nx-trust-strip {
@@ -356,7 +393,10 @@ body.theme-future .nx-workflow-card,
 body.theme-future .nx-capability-card,
 body.theme-future .nx-testimonial-card {
     height: 100%;
-    padding: 1.55rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.8rem 1.6rem 2rem;
 }
 
 body.theme-future .nx-service-card .nx-icon-badge,
@@ -372,7 +412,8 @@ body.theme-future .nx-workflow-card h3,
 body.theme-future .nx-capability-card h3,
 body.theme-future .nx-testimonial-card strong {
     margin: 0 0 0.65rem;
-    font-size: 1.2rem;
+    font-size: 1.28rem;
+    line-height: 1.18;
 }
 
 body.theme-future .nx-service-card p,
@@ -381,13 +422,14 @@ body.theme-future .nx-workflow-card p,
 body.theme-future .nx-capability-card p,
 body.theme-future .nx-testimonial-card p {
     margin: 0;
-    color: var(--text-muted);
+    color: var(--text-soft);
+    line-height: 1.65;
 }
 
 body.theme-future .nx-card-list {
     display: grid;
     gap: 0.75rem;
-    margin: 1.2rem 0 1.4rem;
+    margin: 0.65rem 0 1rem;
     padding: 0;
     list-style: none;
 }
@@ -395,7 +437,8 @@ body.theme-future .nx-card-list {
 body.theme-future .nx-card-list li,
 body.theme-future .nx-workflow-meta span {
     color: var(--text-soft);
-    font-size: 0.94rem;
+    font-size: 0.96rem;
+    line-height: 1.6;
 }
 
 body.theme-future .nx-card-list li {
@@ -432,9 +475,9 @@ body.theme-future .nx-step-number {
 body.theme-future .nx-workflow-meta {
     display: grid;
     gap: 0.2rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    margin-top: 0.25rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 body.theme-future .nx-workflow-meta strong,
@@ -456,7 +499,10 @@ body.theme-future .nx-case-studies-grid {
 }
 
 body.theme-future .nx-case-card {
-    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.8rem 1.6rem 2rem;
 }
 
 body.theme-future .nx-case-card.is-featured {
@@ -475,13 +521,14 @@ body.theme-future .nx-case-meta span {
     border-radius: 999px;
     border: 1px solid rgba(148, 163, 184, 0.14);
     background: rgba(8, 17, 33, 0.6);
-    color: var(--text-soft);
+    color: var(--text-main);
     font-size: 0.82rem;
 }
 
 body.theme-future .nx-case-card h3 {
     margin: 0 0 1rem;
-    font-size: 1.35rem;
+    font-size: 1.45rem;
+    line-height: 1.16;
 }
 
 body.theme-future .nx-case-row {
@@ -493,6 +540,15 @@ body.theme-future .nx-case-row {
 body.theme-future .nx-case-row p {
     margin: 0;
     color: var(--text-soft);
+    line-height: 1.65;
+}
+
+body.theme-future .nx-service-card .nx-text-link,
+body.theme-future .nx-workflow-card .nx-workflow-meta.is-reassurance,
+body.theme-future .nx-capability-card .nx-chip-row,
+body.theme-future .nx-testimonial-footer,
+body.theme-future .nx-case-card .nx-text-link {
+    margin-top: auto;
 }
 
 body.theme-future .nx-capability-card .nx-chip-row {
@@ -510,7 +566,7 @@ body.theme-future .nx-chip {
     border-radius: 999px;
     border: 1px solid rgba(148, 163, 184, 0.12);
     background: rgba(8, 17, 33, 0.72);
-    color: var(--text-soft);
+    color: var(--text-main);
     font-size: 0.82rem;
 }
 
@@ -526,7 +582,8 @@ body.theme-future .nx-testimonial-card {
 
 body.theme-future .nx-testimonial-quote {
     color: #eff6ff;
-    font-size: 1.02rem;
+    font-size: 1.04rem;
+    line-height: 1.75;
 }
 
 body.theme-future .nx-testimonial-footer {
@@ -566,7 +623,7 @@ body.theme-future .nx-testimonial-avatar span {
 
 body.theme-future .nx-testimonial-footer p {
     margin: 0.2rem 0 0;
-    color: var(--text-muted);
+    color: var(--text-soft);
     font-size: 0.9rem;
 }
 
@@ -617,7 +674,7 @@ body.theme-future .footer-panel h4 {
 body.theme-future .footer-panel p,
 body.theme-future .footer-panel li,
 body.theme-future .footer-panel a {
-    color: var(--text-muted);
+    color: var(--text-soft);
 }
 
 body.theme-future .footer-panel ul {
@@ -658,7 +715,7 @@ body.theme-future .nx-footer-bottom {
 
 body.theme-future .nx-footer-bottom p {
     margin: 0;
-    color: var(--text-muted);
+    color: var(--text-soft);
 }
 
 body.theme-future .footer-bottom-links {
@@ -697,6 +754,10 @@ body.theme-future .footer-bottom-links {
     body.theme-future .nx-testimonial-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    body.theme-future .nx-hero-snapshot-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
@@ -717,15 +778,20 @@ body.theme-future .footer-bottom-links {
     }
 
     body.theme-future .nx-hero {
-        padding-top: 36px;
+        padding-top: 20px;
+        padding-bottom: 48px;
     }
 
     body.theme-future .nx-hero-copy h1 {
-        font-size: clamp(2rem, 1.8rem + 3vw, 2.5rem);
+        font-size: clamp(2rem, 1.7rem + 2.7vw, 2.45rem);
     }
 
     body.theme-future .nx-hero-supporting {
         font-size: 1rem;
+    }
+
+    body.theme-future .nx-hero-snapshot-grid {
+        grid-template-columns: 1fr;
     }
 
     body.theme-future .nx-services-grid,

@@ -151,18 +151,81 @@ body.theme-future.services-page .process-journey-card {
     border-radius: 34px;
 }
 
+body.theme-future.services-page .services-showcase-card,
+body.theme-future.services-page .focused-landing-card {
+    --service-card-surface: linear-gradient(180deg, #faf8f2 0%, #f3f5fb 100%);
+    --service-card-border: rgba(21, 33, 63, 0.14);
+    --service-card-title: #172445;
+    --service-card-body: rgba(24, 33, 59, 0.84);
+    --service-card-shadow: 0 18px 36px rgba(8, 15, 40, 0.16);
+    align-items: center;
+    padding: 34px 26px 28px;
+    border-radius: 42px 16px 42px 16px;
+    background: var(--service-card-surface);
+    border: 1px solid var(--service-card-border);
+    box-shadow: var(--service-card-shadow);
+    color: var(--service-card-title);
+    text-align: center;
+}
+
+body.theme-future.services-page .services-showcase-card::before,
+body.theme-future.services-page .focused-landing-card::before {
+    display: none;
+}
+
+body.theme-future.services-page .service-card-warm {
+    --service-card-surface: linear-gradient(180deg, #ffbf30 0%, #f7ac1d 100%);
+    --service-card-border: rgba(116, 76, 9, 0.18);
+    --service-card-title: #182544;
+    --service-card-body: rgba(24, 37, 68, 0.82);
+    --service-card-shadow: 0 18px 34px rgba(245, 173, 25, 0.18);
+}
+
+body.theme-future.services-page .service-card-light {
+    --service-card-surface: linear-gradient(180deg, #fbfaf6 0%, #f3f5fb 100%);
+}
+
+body.theme-future.services-page .pillars-grid .pillar-card,
+body.theme-future.services-page .technology-capability-grid .technology-capability-card,
+body.theme-future.services-page .process-flow-journey .process-journey-card {
+    --service-card-surface: linear-gradient(180deg, #fbfaf6 0%, #f3f5fb 100%);
+    --service-card-border: rgba(21, 33, 63, 0.14);
+    --service-card-title: #172445;
+    --service-card-body: rgba(24, 33, 59, 0.84);
+    background: var(--service-card-surface);
+    border: 1px solid var(--service-card-border);
+    box-shadow: 0 18px 36px rgba(8, 15, 40, 0.16);
+    color: var(--service-card-title);
+    border-radius: 42px 16px 42px 16px;
+}
+
+body.theme-future.services-page .pillars-grid .pillar-card::before,
+body.theme-future.services-page .technology-capability-grid .technology-capability-card::before,
+body.theme-future.services-page .process-flow-journey .process-journey-card::before {
+    display: none;
+}
+
+body.theme-future.services-page .pillars-grid .pillar-card:nth-child(odd),
+body.theme-future.services-page .technology-capability-grid .technology-capability-card:nth-child(odd),
+body.theme-future.services-page .process-flow-journey .process-journey-card:nth-child(odd) {
+    --service-card-surface: linear-gradient(180deg, #ffbf30 0%, #f7ac1d 100%);
+    --service-card-border: rgba(116, 76, 9, 0.18);
+}
+
 body.theme-future.services-page .services-showcase-media {
-    display: block;
-    width: 76px;
-    height: 76px;
-    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 22px;
     border-radius: 999px;
     overflow: hidden;
-    background: radial-gradient(circle at 28% 28%, rgba(99, 213, 255, 0.24), rgba(13, 18, 42, 0.98) 70%);
-    border: 1px solid rgba(179, 196, 255, 0.18);
+    background: linear-gradient(180deg, #263861 0%, #15213f 100%);
+    border: 1px solid rgba(35, 52, 92, 0.14);
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 14px 28px rgba(4, 10, 24, 0.3);
+        0 12px 24px rgba(4, 10, 24, 0.16);
 }
 
 body.theme-future.services-page .services-showcase-media img {
@@ -178,7 +241,7 @@ body.theme-future.services-page .services-showcase-media .pillar-icon {
     height: 100%;
     border-radius: 999px;
     background: transparent;
-    color: var(--accent);
+    color: #ffffff;
     font-size: 2rem;
 }
 
@@ -203,6 +266,16 @@ body.theme-future.services-page .service-cluster-header h3 {
     text-shadow: 0 10px 24px rgba(8, 15, 40, 0.16);
 }
 
+body.theme-future.services-page .services-showcase-card h3,
+body.theme-future.services-page .services-solution-pages .focused-landing-card h3 {
+    max-width: 12ch;
+    margin-inline: auto;
+    color: var(--service-card-title);
+    font-size: clamp(1.6rem, 0.3vw + 1.45rem, 2rem) !important;
+    line-height: 1.08 !important;
+    text-shadow: none;
+}
+
 body.theme-future.services-page .services-showcase-summary,
 body.theme-future.services-page .services-solution-pages .focused-landing-summary,
 body.theme-future.services-page .pillar-card p,
@@ -219,6 +292,30 @@ body.theme-future.services-page .cta-tertiary-links a {
     color: rgba(226, 235, 247, 0.88);
     font-size: 1rem;
     line-height: 1.7;
+}
+
+body.theme-future.services-page .services-showcase-summary,
+body.theme-future.services-page .services-solution-pages .focused-landing-summary {
+    max-width: 28ch;
+    margin-inline: auto;
+    color: var(--service-card-body);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+body.theme-future.services-page .pillars-grid .pillar-card h3,
+body.theme-future.services-page .technology-capability-grid .technology-capability-card h3,
+body.theme-future.services-page .process-flow-journey .process-journey-card h3 {
+    color: var(--service-card-title);
+    text-shadow: none;
+}
+
+body.theme-future.services-page .pillars-grid .pillar-card p,
+body.theme-future.services-page .technology-capability-grid .technology-capability-card p,
+body.theme-future.services-page .technology-capability-grid .technology-chip,
+body.theme-future.services-page .process-flow-journey .process-journey-card p,
+body.theme-future.services-page .process-flow-journey .process-output-list li {
+    color: var(--service-card-body);
 }
 
 body.theme-future.services-page .services-showcase-points,
@@ -278,6 +375,13 @@ body.theme-future.services-page .service-cluster-cta {
     gap: 12px;
 }
 
+body.theme-future.services-page .services-showcase-actions,
+body.theme-future.services-page .services-solution-pages .focused-landing-actions {
+    width: 100%;
+    justify-content: center;
+    padding-top: 16px;
+}
+
 body.theme-future.services-page .services-showcase-actions .project-link-btn,
 body.theme-future.services-page .services-solution-pages .focused-landing-actions .project-link-btn {
     width: auto;
@@ -287,7 +391,7 @@ body.theme-future.services-page .services-solution-pages .focused-landing-action
     border: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
-    color: var(--text-main) !important;
+    color: var(--service-card-title) !important;
     font-size: 0.96rem !important;
     font-weight: 700;
     border-radius: 0 !important;
@@ -300,7 +404,7 @@ body.theme-future.services-page .services-showcase-actions .secondary-link {
 body.theme-future.services-page .services-showcase-actions .project-link-btn::after,
 body.theme-future.services-page .services-solution-pages .focused-landing-actions .project-link-btn::after {
     content: " ->";
-    color: var(--accent);
+    color: var(--service-card-title);
 }
 
 body.theme-future.services-page .service-category-filter {
@@ -601,7 +705,7 @@ body.theme-future.services-page .services-cta-panel .cta-tertiary-links {
         </div>
         <div class="services-showcase-grid">
             {% for cluster in service_solution_clusters %}
-            <article class="pillar-card services-showcase-card theme-{{ cluster.slug }}" data-reveal>
+            <article class="pillar-card services-showcase-card theme-{{ cluster.slug }} {% if forloop.counter0|divisibleby:'2' %}service-card-warm{% else %}service-card-light{% endif %}" data-reveal>
                 <a href="{% url 'solution_landing' cluster.landing_slug %}" class="services-showcase-media" aria-label="{{ cluster.title }}">
                     {% if cluster.visual_image %}
                     <img
@@ -640,7 +744,7 @@ body.theme-future.services-page .services-cta-panel .cta-tertiary-links {
         </div>
         <div class="focused-landing-pages-grid">
             {% for page in solution_pages %}
-            <article class="pillar-card focused-landing-card theme-{{ page.theme_slug }}" data-reveal>
+            <article class="pillar-card focused-landing-card theme-{{ page.theme_slug }} {% if forloop.counter0|divisibleby:'2' %}service-card-light{% else %}service-card-warm{% endif %}" data-reveal>
                 <a href="{% url 'solution_landing' page.slug %}" class="services-showcase-media" aria-label="{{ page.nav_title }}">
                     {% if page.social_share_image %}
                     <img

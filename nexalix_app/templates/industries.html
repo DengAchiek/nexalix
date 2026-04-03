@@ -9,8 +9,8 @@
 body.theme-future.industries-page .industries-hero-modern {
     position: relative;
     overflow: hidden;
-    padding-top: clamp(88px, 10vw, 132px);
-    padding-bottom: clamp(76px, 9vw, 110px);
+    padding-top: clamp(72px, 8vw, 104px);
+    padding-bottom: clamp(48px, 6vw, 72px);
     border-bottom: 1px solid rgba(150, 172, 255, 0.08);
 }
 
@@ -28,28 +28,35 @@ body.theme-future.industries-page .industries-hero-modern::before {
 body.theme-future.industries-page .industries-hero-inner {
     position: relative;
     z-index: 1;
-    max-width: 860px;
-    text-align: left;
+    max-width: 900px;
+    margin-inline: auto;
+    text-align: center;
 }
 
 body.theme-future.industries-page .industries-hero-inner .section-eyebrow {
-    margin: 0 0 1rem;
+    margin: 0 auto 0.95rem;
 }
 
 body.theme-future.industries-page .industries-hero-inner h1 {
-    max-width: 12ch;
-    margin: 0 0 1rem;
-    font-size: clamp(3rem, 4.8vw, 5rem);
-    line-height: 0.96;
+    max-width: 14ch;
+    margin: 0 auto 0.95rem;
+    font-size: clamp(2.55rem, 4.1vw, 4.3rem);
+    line-height: 0.98;
     letter-spacing: -0.05em;
+    text-wrap: balance;
 }
 
 body.theme-future.industries-page .industries-hero-inner > p {
-    max-width: 760px;
-    margin: 0 0 1.4rem;
+    max-width: 780px;
+    margin: 0 auto 1.15rem;
     color: var(--text-soft);
-    font-size: 1.05rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+body.theme-future.industries-page .industries-hero-inner .hero-actions {
+    justify-content: center;
+    margin-top: 0.15rem;
 }
 
 body.theme-future.industries-page .page-block {
@@ -224,7 +231,17 @@ body.theme-future.industries-page .industries-cta-panel .hero-actions {
 
 @media (max-width: 768px) {
     body.theme-future.industries-page .industries-hero-inner {
-        text-align: left;
+        text-align: center;
+    }
+
+    body.theme-future.industries-page .industries-hero-modern {
+        padding-top: 64px;
+        padding-bottom: 44px;
+    }
+
+    body.theme-future.industries-page .industries-hero-inner h1 {
+        max-width: 13ch;
+        font-size: clamp(2.2rem, 7vw, 3rem);
     }
 
     body.theme-future.industries-page .industry-page-grid {

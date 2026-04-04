@@ -17,11 +17,15 @@ body.theme-future.about-page {
 body.theme-future.about-page .site-header,
 body.theme-future.about-page .site-header.scrolled {
     top: 0;
+    height: 72px;
+    min-height: 72px;
     margin: 0;
     padding: 0;
+    overflow: visible;
 }
 
 body.theme-future.about-page .header-row {
+    height: 72px;
     min-height: 72px;
     margin: 0 auto;
     align-items: center;
@@ -130,6 +134,17 @@ body.theme-future.about-page .about-work-cta p {
 }
 
 @media (max-width: 768px) {
+    body.theme-future.about-page .site-header,
+    body.theme-future.about-page .site-header.scrolled {
+        height: auto;
+        min-height: 68px;
+    }
+
+    body.theme-future.about-page .header-row {
+        height: auto;
+        min-height: 68px;
+    }
+
     body.theme-future.about-page .about-hero-modern {
         padding: 20px 0 38px;
     }

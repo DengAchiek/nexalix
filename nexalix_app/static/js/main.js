@@ -87,8 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const linkPath = new URL(link.href, window.location.origin).pathname;
                 const isActive = currentPath === linkPath || (linkPath !== "/" && currentPath.startsWith(linkPath));
                 link.classList.toggle("active", isActive);
-                if (isActive && selector === ".mobile-menu-links a") {
+                if (isActive) {
                     link.setAttribute("aria-current", "page");
+                } else {
+                    link.removeAttribute("aria-current");
                 }
             });
         });

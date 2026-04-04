@@ -42,14 +42,21 @@ body.theme-future .mobile-menu-links a {
     color: rgba(255, 255, 255, 0.88);
     font-size: 0.95rem;
     font-weight: 500;
-    transition: color 0.22s ease;
+    transition: color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease;
 }
 
-body.theme-future .nav-links a:hover,
+body.theme-future .nav-links a:not(.active):hover,
+body.theme-future .mobile-menu-links a:not(.active):hover {
+    color: #ffffff;
+    background: rgba(41, 101, 155, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.1);
+}
+
 body.theme-future .nav-links a.active,
-body.theme-future .mobile-menu-links a:hover,
 body.theme-future .mobile-menu-links a.active {
     color: #ffffff;
+    background: rgba(41, 101, 155, 0.18);
+    box-shadow: inset 0 -3px 0 rgba(165, 118, 255, 0.9);
 }
 
 body.theme-future .header-tools {

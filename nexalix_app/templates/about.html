@@ -17,24 +17,29 @@ body.theme-future.about-page {
 body.theme-future.about-page .site-header,
 body.theme-future.about-page .site-header.scrolled {
     top: 0;
-    height: 72px;
-    min-height: 72px;
+    height: 82px;
+    min-height: 82px;
     margin: 0;
     padding: 0;
     overflow: visible;
 }
 
 body.theme-future.about-page .header-row {
-    height: 72px;
-    min-height: 72px;
+    height: 82px;
+    min-height: 82px;
     margin: 0 auto;
     align-items: center;
+}
+
+body.theme-future.about-page .site-main {
+    padding-top: 0;
 }
 
 body.theme-future.about-page .about-hero-modern {
     position: relative;
     overflow: hidden;
-    padding: clamp(26px, 4vw, 42px) 0 clamp(42px, 5vw, 60px);
+    margin-top: 0;
+    padding: clamp(12px, 2vw, 18px) 0 clamp(40px, 5vw, 56px);
     background:
         radial-gradient(circle at 14% 14%, rgba(63, 125, 255, 0.14), transparent 26%),
         radial-gradient(circle at 82% 18%, rgba(99, 213, 255, 0.08), transparent 22%),
@@ -63,6 +68,11 @@ body.theme-future.about-page .about-hero-grid {
 
 body.theme-future.about-page .about-hero-copy {
     padding-top: 0;
+}
+
+body.theme-future.about-page .about-hero-copy > :first-child,
+body.theme-future.about-page .about-hero-panel > :first-child {
+    margin-top: 0;
 }
 
 body.theme-future.about-page .about-hero-panel,
@@ -119,11 +129,12 @@ body.theme-future.about-page .about-work-cta p {
 }
 
 body.theme-future.about-page .about-work-cta {
-    padding: 0 0 clamp(76px, 8vw, 102px);
+    padding: 0 0 clamp(34px, 5vw, 52px);
+    margin-bottom: 0;
 }
 
 body.theme-future.about-page .about-work-cta .container {
-    padding: clamp(1.8rem, 2vw, 3rem);
+    padding: clamp(1.6rem, 2vw, 2.5rem);
     border-radius: 32px;
     text-align: center;
 }
@@ -131,6 +142,20 @@ body.theme-future.about-page .about-work-cta .container {
 body.theme-future.about-page .about-work-cta p {
     max-width: 720px;
     margin: 0 auto 1.4rem;
+}
+
+body.theme-future.about-page .site-footer {
+    margin-top: 0;
+}
+
+body.theme-future.about-page .nx-footer-grid {
+    padding-top: 2.35rem;
+    padding-bottom: 1.45rem;
+}
+
+body.theme-future.about-page .nx-footer-bottom {
+    padding-top: 1rem;
+    padding-bottom: 1.25rem;
 }
 
 @media (max-width: 768px) {
@@ -146,11 +171,15 @@ body.theme-future.about-page .about-work-cta p {
     }
 
     body.theme-future.about-page .about-hero-modern {
-        padding: 20px 0 38px;
+        padding: 8px 0 34px;
     }
 
     body.theme-future.about-page .about-work-cta .container {
         padding: 22px 18px;
+    }
+
+    body.theme-future.about-page .nx-footer-grid {
+        padding-top: 2rem;
     }
 }
 </style>

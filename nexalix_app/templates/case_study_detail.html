@@ -3,6 +3,118 @@
 {% load static %}
 
 {% block title %}{{ meta_title|default:page_title|default:'Case Study - Nexalix Technologies' }}{% endblock %}
+{% block body_class %}case-study-detail-page{% endblock %}
+
+{% block extra_css %}
+<style>
+body.theme-future.case-study-detail-page .case-study-detail-shell {
+    gap: clamp(1.4rem, 2.2vw, 2.3rem);
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-top {
+    align-items: end;
+    gap: 1rem 1.5rem;
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-top h1 {
+    max-width: 14ch;
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-top .service-detail-subheading {
+    max-width: 76ch;
+    font-size: clamp(1.04rem, 0.96rem + 0.3vw, 1.18rem);
+    line-height: 1.72;
+    color: var(--future-text-main);
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-meta {
+    gap: 0.55rem;
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-meta span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(16, 28, 54, 0.8);
+    border: 1px solid rgba(129, 173, 255, 0.18);
+    color: var(--future-text-medium);
+}
+
+body.theme-future.case-study-detail-page .case-image-wrapper-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: clamp(220px, 26vw, 320px);
+    max-height: clamp(260px, 38vw, 420px);
+    padding: clamp(1rem, 1.8vw, 1.5rem);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 18% 14%, rgba(63, 132, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 82% 84%, rgba(226, 84, 216, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(9, 17, 34, 0.98), rgba(6, 12, 24, 0.98));
+}
+
+body.theme-future.case-study-detail-page .case-image-wrapper-detail .case-image {
+    width: 100%;
+    height: 100%;
+    max-height: clamp(200px, 34vw, 380px);
+    object-fit: contain;
+    object-position: center;
+    border-radius: 20px;
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-grid {
+    gap: clamp(1rem, 1.5vw, 1.35rem);
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-card {
+    border-radius: 24px;
+    padding: clamp(1.15rem, 1.8vw, 1.45rem);
+    background:
+        radial-gradient(circle at 16% 14%, rgba(63, 132, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 82% 88%, rgba(226, 84, 216, 0.16), transparent 30%),
+        linear-gradient(180deg, rgba(13, 24, 46, 0.96), rgba(9, 17, 34, 0.98));
+    border: 1px solid rgba(129, 173, 255, 0.16);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 20px 44px rgba(3, 8, 22, 0.22);
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-card span {
+    margin-bottom: 0.85rem;
+    color: #b9d7ff;
+}
+
+body.theme-future.case-study-detail-page .case-study-detail-card p {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+    line-height: 1.78;
+    color: var(--future-text-medium);
+}
+
+body.theme-future.case-study-detail-page .case-study-tech {
+    gap: 0.8rem;
+}
+
+body.theme-future.case-study-detail-page .case-study-tech h2 {
+    margin-bottom: 0;
+}
+
+@media (max-width: 980px) {
+    body.theme-future.case-study-detail-page .case-study-detail-top {
+        align-items: flex-start;
+    }
+
+    body.theme-future.case-study-detail-page .case-image-wrapper-detail {
+        max-height: none;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="page-block">

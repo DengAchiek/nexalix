@@ -2,6 +2,7 @@
 {% load static media_optimization %}
 
 {% block title %}{{ meta_title|default:solution_page.nav_title|default:'Solution - Nexalix Technologies' }}{% endblock %}
+{% block body_class %}solution-landing-page{% endblock %}
 
 {% block content %}
 <section class="services-hero-modern solution-hero">

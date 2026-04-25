@@ -2,6 +2,7 @@
 {% load static media_optimization %}
 
 {% block title %}{{ meta_title|default:page_title|default:'Service - Nexalix Technologies' }}{% endblock %}
+{% block body_class %}service-detail-page{% endblock %}
 
 {% block content %}
 <section class="page-block">

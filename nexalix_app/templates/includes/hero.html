@@ -1,5 +1,5 @@
 <section class="section nx-hero" id="homeHero">
-    <div class="container nx-hero-grid">
+    <div class="container nx-hero-shell">
         <div class="nx-hero-copy" data-reveal>
             <p class="nx-hero-badge">{{ home_hero.eyebrow }}</p>
             <h1>{{ home_hero.headline }}</h1>
@@ -15,37 +15,14 @@
             </ul>
         </div>
 
-        <div class="nx-hero-visual" data-reveal>
-            <div class="nx-hero-composition">
-                <div class="nx-hero-panel nx-hero-panel-primary nx-hero-workflow-card">
-                    <div class="nx-panel-label-row">
-                        <span>Delivery Workflow</span>
-                        <span class="nx-panel-status">Structured</span>
-                    </div>
-                    <ol class="nx-hero-workflow-list">
-                        {% for step in home_workflow_steps %}
-                        <li>
-                            <span class="nx-hero-workflow-index">{{ step.number }}</span>
-                            <div>
-                                <strong>{{ step.title }}</strong>
-                                <span class="nx-hero-step-output">{{ step.deliverable|truncatechars:44 }}</span>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ol>
-                </div>
-
-                <div class="nx-hero-support-stack">
-                    <div class="nx-hero-panel nx-hero-enterprise-card">
-                        <p class="nx-hero-mini-badge">Enterprise Focus</p>
-                        <p class="nx-hero-enterprise-copy">Structured planning and disciplined delivery support for business teams.</p>
-                        <div class="nx-reference-meta">
-                            <strong>Nexalix delivery model</strong>
-                            <span>Business-first execution</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="nx-hero-feature-grid" data-reveal>
+            {% for service in home_service_pillars|slice:":3" %}
+            <article class="nx-hero-feature-card">
+                <span class="nx-hero-feature-icon"><i class="{{ service.icon }}"></i></span>
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.summary }}</p>
+            </article>
+            {% endfor %}
         </div>
     </div>
 </section>

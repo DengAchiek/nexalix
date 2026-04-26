@@ -42,6 +42,7 @@ body.theme-softy {
     --radius-lg: var(--softy-radius-lg);
     --radius-md: var(--softy-radius-md);
     --radius-sm: var(--softy-radius-sm);
+    font-size: 15px;
     background:
         radial-gradient(circle at top left, rgba(130, 97, 238, 0.08), transparent 22%),
         radial-gradient(circle at 82% 10%, rgba(255, 88, 158, 0.1), transparent 18%),
@@ -69,6 +70,7 @@ body.theme-softy input,
 body.theme-softy textarea,
 body.theme-softy select {
     color: var(--softy-text);
+    font-size: 15px;
 }
 
 body.theme-softy .site-shell {
@@ -149,16 +151,16 @@ body.theme-softy .section-heading .section-eyebrow {
 }
 
 body.theme-softy .section-heading h2 {
-    font-size: clamp(2rem, 1.4rem + 2vw, 2.95rem);
-    line-height: 1.15;
+    font-size: clamp(1.8rem, 1.35rem + 1.1vw, 2.35rem);
+    line-height: 1.35;
 }
 
 body.theme-softy .section-subtitle,
 body.theme-softy .section-heading p:last-child,
 body.theme-softy .subheading {
     color: var(--softy-text);
-    font-size: 1.02rem;
-    line-height: 1.9;
+    font-size: 15px;
+    line-height: 1.87;
 }
 
 body.theme-softy .btn,
@@ -168,8 +170,8 @@ body.theme-softy input[type="submit"] {
     padding: 0 1.6rem;
     border-radius: 999px;
     font-weight: 700;
-    font-size: 0.96rem;
-    letter-spacing: 0.01em;
+    font-size: 13px;
+    letter-spacing: 0.02em;
 }
 
 body.theme-softy .btn-primary,
@@ -245,6 +247,7 @@ body.theme-softy .mobile-menu-links a {
     border-radius: 999px;
     color: var(--softy-heading);
     font-weight: 700;
+    font-size: 13px;
 }
 
 body.theme-softy .nav-links a:not(.active):hover,
@@ -376,8 +379,8 @@ body.theme-softy .nx-hero-copy {
 
 body.theme-softy .nx-hero-copy h1 {
     color: #ffffff;
-    font-size: clamp(3rem, 6vw, 5.2rem);
-    line-height: 1.05;
+    font-size: clamp(2.1rem, 3vw, 2.7rem);
+    line-height: 1.15;
     letter-spacing: -0.055em;
     text-wrap: balance;
 }
@@ -386,8 +389,8 @@ body.theme-softy .nx-hero-supporting {
     max-width: 720px;
     margin: 1.35rem auto 0;
     color: rgba(255, 255, 255, 0.86);
-    font-size: 1.08rem;
-    line-height: 1.85;
+    font-size: 15px;
+    line-height: 1.9;
 }
 
 body.theme-softy .nx-hero-actions {
@@ -493,12 +496,14 @@ body.theme-softy .nx-hero-feature-icon i {
 
 body.theme-softy .nx-hero-feature-card h3 {
     margin-top: 1.25rem;
-    font-size: 1.32rem;
+    font-size: 17px;
+    line-height: 1.45;
 }
 
 body.theme-softy .nx-hero-feature-card p {
     margin: 0.9rem 0 0;
     color: var(--softy-text);
+    font-size: 14px;
     line-height: 1.8;
 }
 
@@ -643,6 +648,8 @@ body.theme-softy .work-step-card-modern h3,
 body.theme-softy .quote-summary-card h3,
 body.theme-softy .contact-form h3 {
     color: var(--softy-heading) !important;
+    font-size: 17px;
+    line-height: 1.45;
 }
 
 body.theme-softy .nx-card p,
@@ -672,6 +679,7 @@ body.theme-softy .industries-cta-panel p,
 body.theme-softy .nx-final-cta-card p,
 body.theme-softy .home-cta-final p {
     color: var(--softy-text) !important;
+    font-size: 15px;
 }
 
 body.theme-softy .services-showcase-card,
@@ -803,6 +811,7 @@ body.theme-softy .nx-industry-card h3,
 body.theme-softy .nx-capability-card h3,
 body.theme-softy .nx-testimonial-card strong {
     margin-top: 1.25rem;
+    font-size: 17px;
 }
 
 body.theme-softy .nx-chip-row,
@@ -1047,8 +1056,8 @@ body.theme-softy .service-detail-main h1,
 body.theme-softy .solution-hero-copy h1,
 body.theme-softy .about-hero-copy h1,
 body.theme-softy .case-study-detail-top h1 {
-    font-size: clamp(2.4rem, 4vw, 4rem);
-    line-height: 1.08;
+    font-size: clamp(2rem, 3vw, 2.55rem);
+    line-height: 1.18;
 }
 
 body.theme-softy .service-detail-subheading,
@@ -1163,6 +1172,8 @@ body.theme-softy .solution-hero-shell h1,
 body.theme-softy .about-hero-copy h1 {
     color: #ffffff !important;
     text-shadow: 0 16px 36px rgba(54, 28, 122, 0.18);
+    font-size: clamp(2rem, 3vw, 2.45rem);
+    line-height: 1.18;
 }
 
 body.theme-softy .services-hero-inner > p,
@@ -1212,7 +1223,7 @@ body.theme-softy .hero-action-note {
     max-width: 680px;
     margin: 1rem auto 0;
     color: rgba(255, 255, 255, 0.82) !important;
-    font-size: 0.96rem;
+    font-size: 15px;
     line-height: 1.7;
 }
 
@@ -1453,7 +1464,7 @@ body.theme-softy .case-study-detail-top h1 {
 
 body.theme-softy .case-study-detail-top .service-detail-subheading {
     max-width: 76ch;
-    font-size: clamp(1.04rem, 0.96rem + 0.3vw, 1.18rem);
+    font-size: 15px;
 }
 
 body.theme-softy .case-study-detail-meta {
@@ -1914,11 +1925,11 @@ body.theme-softy .skip-link {
     }
 
     body.theme-softy .nx-hero-copy h1 {
-        font-size: clamp(2.35rem, 11vw, 3.4rem);
+        font-size: clamp(1.85rem, 9vw, 2.25rem);
     }
 
     body.theme-softy .nx-hero-supporting {
-        font-size: 1rem;
+        font-size: 14px;
     }
 
     body.theme-softy .section-heading {

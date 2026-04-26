@@ -64,7 +64,7 @@
                 </a>
                 <p class="services-showcase-kicker">Focused Solution</p>
                 <h3>{{ page.nav_title }}</h3>
-                <p class="focused-landing-summary">{{ page.subheadline|truncatechars:140 }}</p>
+                <p class="focused-landing-summary">{{ page.subheadline }}</p>
                 <ul class="focused-landing-points">
                     {% for deliverable in page.deliverables|slice:":2" %}
                     <li>{{ deliverable }}</li>

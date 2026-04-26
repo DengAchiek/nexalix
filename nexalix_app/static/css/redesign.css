@@ -75,7 +75,8 @@ body.theme-softy select {
 
 body.theme-softy .site-shell {
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
 body.theme-softy .site-shell::before {
@@ -213,7 +214,7 @@ body.theme-softy .site-header {
     position: sticky;
     top: 0;
     z-index: 120;
-    padding: 0.5rem 0 0;
+    padding: 0.2rem 0 0;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0));
     backdrop-filter: blur(14px);
     border-bottom: 0;
@@ -221,8 +222,8 @@ body.theme-softy .site-header {
 }
 
 body.theme-softy .header-row {
-    min-height: 74px;
-    padding: 0.55rem 1rem 0.55rem 1.15rem;
+    min-height: 70px;
+    padding: 0.45rem 0.95rem 0.45rem 1.05rem;
     background: rgba(255, 255, 255, 0.96);
     border: 1px solid rgba(130, 97, 238, 0.12);
     border-radius: 999px;
@@ -239,6 +240,7 @@ body.theme-softy .brand-logo {
 
 body.theme-softy .nav-links {
     gap: 0.5rem;
+    align-items: center;
 }
 
 body.theme-softy .nav-links a,
@@ -349,7 +351,7 @@ body.theme-softy .mobile-menu-links a {
 
 body.theme-softy .nx-hero {
     position: relative;
-    padding: clamp(7.5rem, 10vw, 10rem) 0 clamp(6rem, 8vw, 8rem);
+    padding: clamp(5.8rem, 7vw, 6.8rem) 0 clamp(4.2rem, 5vw, 5.2rem);
     overflow: hidden;
     background:
         linear-gradient(135deg, rgba(110, 84, 213, 0.9), rgba(255, 88, 158, 0.86)),
@@ -372,8 +374,19 @@ body.theme-softy .nx-hero-shell {
 }
 
 body.theme-softy .nx-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 1120px;
     margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-softy .nx-hero-badge {
+    width: fit-content;
+    max-width: min(100%, 56rem);
+    margin-inline: auto;
+    justify-content: center;
     text-align: center;
 }
 
@@ -382,7 +395,7 @@ body.theme-softy .nx-hero-copy h1 {
     font-size: clamp(2.1rem, 3vw, 2.7rem);
     line-height: 1.15;
     letter-spacing: -0.055em;
-    max-width: 20ch;
+    max-width: 28ch;
     margin-inline: auto;
     text-wrap: balance;
 }
@@ -431,7 +444,7 @@ body.theme-softy .nx-hero-feature-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.6rem;
-    margin-top: 3.4rem;
+    margin-top: 2.5rem;
 }
 
 body.theme-softy .nx-hero-feature-card {
@@ -1948,12 +1961,12 @@ body.theme-softy .skip-link {
 
 @media (max-width: 920px) {
     body.theme-softy .site-header {
-        padding-top: 0.65rem;
+        padding-top: 0.15rem;
     }
 
     body.theme-softy .header-row {
-        min-height: 72px;
-        padding-inline: 1rem;
+        min-height: 68px;
+        padding-inline: 0.9rem;
     }
 
     body.theme-softy .nav-links,
@@ -1987,11 +2000,12 @@ body.theme-softy .skip-link {
     }
 
     body.theme-softy .nx-hero {
-        padding: 6.5rem 0 4.5rem;
+        padding: 5.35rem 0 3.8rem;
     }
 
     body.theme-softy .nx-hero-copy h1 {
         font-size: clamp(1.85rem, 9vw, 2.25rem);
+        max-width: 16ch;
     }
 
     body.theme-softy .nx-hero-supporting {

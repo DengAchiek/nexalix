@@ -14,6 +14,8 @@
     --softy-border-strong: #ddd9ff;
     --softy-shadow: 0 18px 45px rgba(130, 97, 238, 0.12);
     --softy-shadow-lg: 0 28px 70px rgba(130, 97, 238, 0.17);
+    --softy-card-shadow: 0 18px 36px rgba(130, 97, 238, 0.12);
+    --softy-card-offset: rgba(130, 97, 238, 0.18);
     --softy-radius-lg: 30px;
     --softy-radius-md: 24px;
     --softy-radius-sm: 18px;
@@ -450,6 +452,7 @@ body.theme-softy .nx-hero-feature-card::before {
 body.theme-softy .nx-hero-feature-icon,
 body.theme-softy .nx-icon-badge,
 body.theme-softy .services-showcase-media,
+body.theme-softy .pillar-icon,
 body.theme-softy .technology-capability-icon,
 body.theme-softy .process-journey-icon,
 body.theme-softy .solution-cluster-icon,
@@ -458,32 +461,34 @@ body.theme-softy .testimonial-avatar-shell {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 72px;
-    height: 72px;
-    border-radius: 23px;
-    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
-    color: #ffffff;
-    box-shadow: 0 18px 32px rgba(130, 97, 238, 0.18);
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff, #f9f7ff);
+    border: 1px solid rgba(130, 97, 238, 0.16);
+    color: var(--softy-primary);
+    box-shadow: 0 12px 26px rgba(130, 97, 238, 0.1);
 }
 
 body.theme-softy .nx-icon-badge,
 body.theme-softy .services-showcase-media,
+body.theme-softy .pillar-icon,
 body.theme-softy .technology-capability-icon,
 body.theme-softy .process-journey-icon,
 body.theme-softy .solution-cluster-icon,
 body.theme-softy .service-visual-icon {
     border-radius: 20px;
-    border: 0;
 }
 
 body.theme-softy .nx-icon-badge i,
 body.theme-softy .services-showcase-media i,
+body.theme-softy .pillar-icon i,
 body.theme-softy .technology-capability-icon i,
 body.theme-softy .process-journey-icon i,
 body.theme-softy .solution-cluster-icon i,
 body.theme-softy .service-visual-icon i,
 body.theme-softy .nx-hero-feature-icon i {
-    color: #ffffff;
+    color: var(--softy-primary);
 }
 
 body.theme-softy .nx-hero-feature-card h3 {
@@ -575,11 +580,15 @@ body.theme-softy .services-cta-panel,
 body.theme-softy .industries-cta-panel,
 body.theme-softy .home-cta-final .container,
 body.theme-softy .nx-final-cta-card {
+    position: relative;
+    isolation: isolate;
     background: #ffffff !important;
     border: 1px solid var(--softy-border) !important;
     box-shadow: var(--softy-shadow) !important;
     border-radius: 26px !important;
     color: var(--softy-heading);
+    overflow: visible;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 body.theme-softy .nx-card::before,
@@ -663,6 +672,59 @@ body.theme-softy .industries-cta-panel p,
 body.theme-softy .nx-final-cta-card p,
 body.theme-softy .home-cta-final p {
     color: var(--softy-text) !important;
+}
+
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-stat-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.55rem;
+    border-radius: 20px !important;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfbff 100%) !important;
+    box-shadow: var(--softy-card-shadow) !important;
+}
+
+body.theme-softy .services-showcase-card::before,
+body.theme-softy .focused-landing-card::before,
+body.theme-softy .pillar-card::before,
+body.theme-softy .technology-capability-card::before,
+body.theme-softy .process-journey-card::before,
+body.theme-softy .work-step-card-modern::before,
+body.theme-softy .nx-industry-card::before,
+body.theme-softy .why-modern-card::before,
+body.theme-softy .testimonial-card-modern::before,
+body.theme-softy .about-stat-card::before {
+    content: "";
+    display: block !important;
+    position: absolute;
+    inset: 12px -14px -14px 12px;
+    border-radius: 20px;
+    background: var(--softy-card-offset);
+    opacity: 0.26;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.theme-softy .services-showcase-card:hover,
+body.theme-softy .focused-landing-card:hover,
+body.theme-softy .pillar-card:hover,
+body.theme-softy .technology-capability-card:hover,
+body.theme-softy .process-journey-card:hover,
+body.theme-softy .work-step-card-modern:hover,
+body.theme-softy .nx-industry-card:hover,
+body.theme-softy .why-modern-card:hover,
+body.theme-softy .testimonial-card-modern:hover,
+body.theme-softy .about-stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 22px 42px rgba(130, 97, 238, 0.16) !important;
 }
 
 body.theme-softy .nx-card-list,
@@ -1125,6 +1187,10 @@ body.theme-softy .about-hero-copy .hero-actions {
 
 body.theme-softy .services-showcase-grid .services-showcase-card,
 body.theme-softy .focused-landing-pages-grid .focused-landing-card,
+body.theme-softy .pillars-grid .pillar-card,
+body.theme-softy .technology-capability-grid .technology-capability-card,
+body.theme-softy .process-flow-journey .process-journey-card,
+body.theme-softy .work-process-timeline .work-step-card-modern,
 body.theme-softy .industry-page-grid .nx-industry-card,
 body.theme-softy .why-modern-card,
 body.theme-softy .pricing-plan-card {
@@ -1678,14 +1744,19 @@ body.theme-softy .nx-footer-grid {
 }
 
 body.theme-softy .nx-site-footer .footer-panel {
-    padding: 1.5rem;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
 }
 
 body.theme-softy .nx-site-footer .brand-logo {
     height: 42px;
+}
+
+body.theme-softy .nx-site-footer .nx-footer-brand {
+    padding-right: 1rem;
 }
 
 body.theme-softy .nx-site-footer h4,

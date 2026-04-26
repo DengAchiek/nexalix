@@ -75,8 +75,7 @@ body.theme-softy select {
 
 body.theme-softy .site-shell {
     position: relative;
-    overflow-x: hidden;
-    overflow-y: visible;
+    overflow: visible;
 }
 
 body.theme-softy .site-shell::before {
@@ -211,14 +210,12 @@ body.theme-softy .btn.btn-secondary:hover {
 }
 
 body.theme-softy .site-header {
-    position: fixed;
-    top: 0.75rem;
-    left: 0;
-    right: 0;
+    position: sticky;
+    top: 0;
     z-index: 180;
-    padding: 0;
-    background: transparent;
-    backdrop-filter: none;
+    padding: 0.2rem 0 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(14px);
     border-bottom: 0;
     box-shadow: none;
 }
@@ -353,7 +350,7 @@ body.theme-softy .mobile-menu-links a {
 
 body.theme-softy .nx-hero {
     position: relative;
-    padding: clamp(4.8rem, 5.8vw, 5.8rem) 0 clamp(4rem, 5vw, 5rem);
+    padding: clamp(5.8rem, 7vw, 6.8rem) 0 clamp(4.2rem, 5vw, 5.2rem);
     overflow: hidden;
     background:
         linear-gradient(135deg, rgba(110, 84, 213, 0.9), rgba(255, 88, 158, 0.86)),
@@ -1965,7 +1962,7 @@ body.theme-softy .skip-link {
 
 @media (max-width: 920px) {
     body.theme-softy .site-header {
-        top: 0.5rem;
+        padding-top: 0.15rem;
     }
 
     body.theme-softy .header-row {
@@ -2004,7 +2001,7 @@ body.theme-softy .skip-link {
     }
 
     body.theme-softy .nx-hero {
-        padding: 4.9rem 0 3.4rem;
+        padding: 5.35rem 0 3.8rem;
     }
 
     body.theme-softy .nx-hero-copy h1 {

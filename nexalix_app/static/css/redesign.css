@@ -947,6 +947,191 @@ body.theme-softy .process-journey-card {
     text-align: center;
 }
 
+body.theme-softy .nx-reference-process-card {
+    align-items: center;
+    min-height: 100%;
+    padding: 2.15rem 1.55rem 1.9rem !important;
+    border-radius: 24px !important;
+    text-align: center;
+    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.12) !important;
+}
+
+body.theme-softy .nx-reference-process-card::before {
+    inset: 14px -14px -14px 14px !important;
+    border-radius: 24px !important;
+    background: rgba(130, 97, 238, 0.17) !important;
+    opacity: 0.45 !important;
+}
+
+body.theme-softy .nx-reference-process-card .nx-icon-badge {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1.25rem;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+body.theme-softy .nx-reference-process-card .nx-icon-badge i {
+    font-size: 1.9rem;
+    color: #b27af7;
+}
+
+body.theme-softy .nx-reference-process-card h3 {
+    margin: 0 0 0.8rem;
+    font-size: 15px !important;
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+}
+
+body.theme-softy .nx-reference-process-card p {
+    margin: 0;
+    max-width: 20ch;
+    color: #8a8fb0 !important;
+    font-size: 14px !important;
+    line-height: 1.6;
+}
+
+body.theme-softy .nx-reference-process-card .nx-card-list {
+    width: 100%;
+    gap: 0.55rem;
+    margin-top: 1rem;
+}
+
+body.theme-softy .nx-reference-process-card .nx-card-list li {
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+body.theme-softy .nx-reference-process-card .nx-card-list li::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex: 0 0 auto;
+    margin-top: 0.42rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+}
+
+body.theme-softy .nx-reference-process-card .nx-text-link {
+    margin-top: auto;
+    padding-top: 1.2rem;
+    color: var(--softy-primary);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+body.theme-softy .nx-home-services .nx-services-grid,
+body.theme-softy .nx-home-industries .nx-industries-grid,
+body.theme-softy .nx-home-capabilities .nx-capability-grid,
+body.theme-softy .nx-home-process .nx-workflow-grid {
+    align-items: stretch;
+}
+
+body.theme-softy .nx-home-services .nx-services-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.8rem 1.55rem;
+}
+
+body.theme-softy .nx-home-industries .nx-industries-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.8rem 1.55rem;
+}
+
+body.theme-softy .nx-home-capabilities .nx-capability-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.8rem 1.25rem;
+}
+
+body.theme-softy .nx-home-process .nx-workflow-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.6rem 1.25rem;
+    align-items: start;
+}
+
+body.theme-softy .nx-service-card,
+body.theme-softy .nx-industry-card,
+body.theme-softy .nx-capability-card,
+body.theme-softy .nx-workflow-card {
+    position: relative;
+}
+
+body.theme-softy .nx-service-card p,
+body.theme-softy .nx-industry-card p,
+body.theme-softy .nx-capability-card p {
+    max-width: 24ch;
+}
+
+body.theme-softy .nx-capability-card .nx-chip-row {
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+body.theme-softy .nx-capability-card .nx-chip {
+    min-height: 32px;
+    padding: 0.4rem 0.7rem;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+body.theme-softy .nx-workflow-card {
+    padding-top: 1.9rem !important;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-top {
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.9rem;
+}
+
+body.theme-softy .nx-workflow-card .nx-step-number {
+    min-width: auto;
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--softy-primary);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta {
+    width: 100%;
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(130, 97, 238, 0.1);
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta strong,
+body.theme-softy .nx-workflow-card .nx-workflow-meta span {
+    display: block;
+    text-align: center;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta strong {
+    margin-bottom: 0.3rem;
+    color: var(--softy-heading);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta span {
+    max-width: 22ch;
+    margin: 0 auto;
+    color: var(--softy-text);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
 body.theme-softy .nx-workflow-top,
 body.theme-softy .solution-cluster-top,
 body.theme-softy .technology-capability-head,
@@ -1956,6 +2141,7 @@ body.theme-softy .skip-link {
 
 @media (max-width: 1200px) {
     body.theme-softy .nx-hero-feature-grid,
+    body.theme-softy .nx-services-grid,
     body.theme-softy .nx-industries-grid,
     body.theme-softy .nx-capability-grid,
     body.theme-softy .nx-testimonial-grid,
@@ -2134,6 +2320,7 @@ body.theme-softy .skip-link {
 
     body.theme-softy .services-showcase-card,
     body.theme-softy .focused-landing-card,
+    body.theme-softy .nx-reference-process-card,
     body.theme-softy .pillar-card,
     body.theme-softy .technology-capability-card,
     body.theme-softy .process-journey-card,

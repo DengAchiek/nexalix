@@ -21,6 +21,112 @@
     --softy-radius-sm: 18px;
 }
 
+/* Match non-home hero sections to the centered home-hero language. */
+body.theme-softy.solution-landing-page .solution-hero-shell,
+body.theme-softy.about-page .about-hero-grid,
+body.theme-softy.service-detail-page .service-detail-hero {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    align-items: center;
+    max-width: 980px;
+    margin: 0 auto;
+    gap: clamp(1.75rem, 3vw, 2.65rem);
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy,
+body.theme-softy.about-page .about-hero-copy,
+body.theme-softy.service-detail-page .service-detail-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center !important;
+    max-width: 760px;
+    margin: 0 auto;
+    gap: 1rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .section-eyebrow,
+body.theme-softy.about-page .about-hero-copy .section-eyebrow,
+body.theme-softy.service-detail-page .service-detail-main .section-eyebrow {
+    margin: 0 auto 0.4rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy h1,
+body.theme-softy.about-page .about-hero-copy h1,
+body.theme-softy.service-detail-page .service-detail-main h1 {
+    max-width: 14ch;
+    margin: 0 auto;
+    font-size: clamp(2.15rem, 3.2vw, 2.85rem) !important;
+    line-height: 1.14 !important;
+    text-align: center !important;
+    text-wrap: balance;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy > p,
+body.theme-softy.about-page .about-hero-copy > p,
+body.theme-softy.service-detail-page .service-detail-main .service-detail-subheading,
+body.theme-softy.service-detail-page .service-detail-main .service-detail-copy {
+    max-width: 40ch;
+    margin: 0 auto;
+    text-align: center !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    line-height: 1.85;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .hero-actions,
+body.theme-softy.about-page .about-hero-copy .hero-actions,
+body.theme-softy.service-detail-page .service-detail-main .hero-actions {
+    justify-content: center !important;
+    margin-top: 1rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .cta-tertiary-links,
+body.theme-softy.about-page .about-hero-copy .cta-tertiary-links,
+body.theme-softy.service-detail-page .service-detail-main .cta-tertiary-links {
+    justify-content: center !important;
+    margin-top: 0.35rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-visual-card,
+body.theme-softy.about-page .about-hero-panel,
+body.theme-softy.service-detail-page .service-detail-visual-card {
+    width: min(100%, 560px);
+    margin: 0 auto;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-visual-card,
+body.theme-softy.service-detail-page .service-detail-visual-card {
+    padding: 1.55rem;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard {
+    width: min(100%, 900px);
+    margin: 0 auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1rem;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard .service-detail-pill {
+    grid-column: 1 / -1;
+    justify-self: center;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard .service-detail-stat {
+    text-align: center;
+}
+
+@media (max-width: 920px) {
+    body.theme-softy.solution-landing-page .solution-hero-copy h1,
+    body.theme-softy.about-page .about-hero-copy h1,
+    body.theme-softy.service-detail-page .service-detail-main h1 {
+        max-width: 15ch;
+    }
+
+    body.theme-softy.service-detail-page .service-detail-sidecard {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 body.theme-softy .solution-hero-shell,
 body.theme-softy .about-hero-grid,
 body.theme-softy .service-detail-hero {

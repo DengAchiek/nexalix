@@ -1376,6 +1376,14 @@ body.theme-softy .about-story-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+body.theme-softy .solution-clusters-grid,
+body.theme-softy .service-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem;
+    align-items: stretch;
+}
+
 body.theme-softy .nx-case-card,
 body.theme-softy .case-card,
 body.theme-softy .proof-media-card,
@@ -1484,6 +1492,86 @@ body.theme-softy .service-detail-columns,
 body.theme-softy .two-col,
 body.theme-softy .quote-layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card,
+body.theme-softy .service-detail-grid .service-detail-card,
+body.theme-softy .faq-grid .service-detail-card,
+body.theme-softy .case-study-detail-grid .case-study-detail-card,
+body.theme-softy .solution-landing-page .technology-capability-grid .technology-capability-card,
+body.theme-softy .services-page .technology-capability-grid .technology-capability-card,
+body.theme-softy .solution-landing-page .process-flow-journey .process-journey-card,
+body.theme-softy .services-page .process-flow-journey .process-journey-card,
+body.theme-softy .how-we-work-page .work-process-timeline .work-step-card-modern {
+    align-items: flex-start;
+    text-align: left !important;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card,
+body.theme-softy .service-detail-grid .service-detail-card,
+body.theme-softy .faq-grid .service-detail-card,
+body.theme-softy .case-study-detail-grid .case-study-detail-card {
+    padding: 1.45rem 1.5rem;
+    border-radius: 24px;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-top,
+body.theme-softy .solution-landing-page .technology-capability-head,
+body.theme-softy .services-page .technology-capability-head,
+body.theme-softy .solution-landing-page .process-flow-journey .process-node,
+body.theme-softy .services-page .process-flow-journey .process-node,
+body.theme-softy .how-we-work-page .work-step-card-modern {
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-icon,
+body.theme-softy .solution-landing-page .technology-capability-icon,
+body.theme-softy .services-page .technology-capability-icon,
+body.theme-softy .solution-landing-page .process-journey-icon,
+body.theme-softy .services-page .process-journey-icon,
+body.theme-softy .how-we-work-page .work-step-index {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    flex: 0 0 auto;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card h3,
+body.theme-softy .service-detail-grid .service-detail-card h3,
+body.theme-softy .faq-grid .service-detail-card h3,
+body.theme-softy .case-study-detail-grid .case-study-detail-card h3,
+body.theme-softy .solution-landing-page .technology-capability-card h3,
+body.theme-softy .services-page .technology-capability-card h3,
+body.theme-softy .solution-landing-page .process-journey-card h3,
+body.theme-softy .services-page .process-journey-card h3,
+body.theme-softy .how-we-work-page .work-step-card-modern h3 {
+    margin: 0;
+    text-align: left;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card p,
+body.theme-softy .service-detail-grid .service-detail-card p,
+body.theme-softy .faq-grid .service-detail-card p,
+body.theme-softy .case-study-detail-grid .case-study-detail-card p,
+body.theme-softy .solution-landing-page .technology-capability-card p,
+body.theme-softy .services-page .technology-capability-card p,
+body.theme-softy .solution-landing-page .process-journey-card p,
+body.theme-softy .services-page .process-journey-card p,
+body.theme-softy .how-we-work-page .work-step-card-modern p {
+    text-align: left;
+}
+
+body.theme-softy .solution-landing-page .technology-capability-tags,
+body.theme-softy .services-page .technology-capability-tags {
+    justify-content: flex-start;
+}
+
+body.theme-softy .solution-landing-page .process-output-list li,
+body.theme-softy .services-page .process-output-list li,
+body.theme-softy .how-we-work-page .work-step-outputs li {
+    justify-content: flex-start;
 }
 
 body.theme-softy .service-detail-main h1,
@@ -1621,6 +1709,15 @@ body.theme-softy .about-hero-copy h1 {
     line-height: 1.18;
 }
 
+body.theme-softy .solution-hero-copy h1,
+body.theme-softy .about-hero-copy h1,
+body.theme-softy .service-detail-main h1 {
+    max-width: 14ch;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
+}
+
 body.theme-softy .services-hero-inner > p,
 body.theme-softy .industries-hero-inner > p,
 body.theme-softy .case-studies-hero p,
@@ -1639,6 +1736,140 @@ body.theme-softy .why-hero-inner .hero-actions,
 body.theme-softy .solution-hero-copy .hero-actions,
 body.theme-softy .about-hero-copy .hero-actions {
     justify-content: center;
+}
+
+body.theme-softy .solution-hero-shell,
+body.theme-softy .about-hero-grid {
+    max-width: 1140px;
+    align-items: center;
+    gap: clamp(1.8rem, 3vw, 3rem);
+}
+
+body.theme-softy .solution-hero-copy,
+body.theme-softy .about-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-softy .solution-hero-copy .section-eyebrow,
+body.theme-softy .about-hero-copy .section-eyebrow,
+body.theme-softy .service-detail-main .section-eyebrow {
+    margin-inline: auto;
+}
+
+body.theme-softy .solution-hero-copy > p,
+body.theme-softy .about-hero-copy > p,
+body.theme-softy .service-detail-main .service-detail-subheading,
+body.theme-softy .service-detail-main .service-detail-copy {
+    max-width: 40ch;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+body.theme-softy .solution-hero-copy .cta-tertiary-links,
+body.theme-softy .about-hero-copy .cta-tertiary-links,
+body.theme-softy .service-detail-main .cta-tertiary-links {
+    justify-content: center;
+}
+
+body.theme-softy .solution-hero-visual-card,
+body.theme-softy .about-hero-panel {
+    padding: clamp(1.4rem, 2vw, 1.9rem);
+    border-radius: 32px;
+}
+
+body.theme-softy .about-hero-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+body.theme-softy .service-detail-page .page-block:first-child {
+    position: relative;
+    overflow: hidden;
+    margin-top: calc(-1 * var(--page-hero-overlap));
+    padding-top: calc(clamp(7rem, 10vw, 8.5rem) + var(--page-hero-overlap)) !important;
+    padding-bottom: clamp(4.25rem, 6vw, 5.35rem) !important;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.92), rgba(255, 88, 158, 0.88)),
+        url("../images/reference/softy-banner-bg.png") center top / cover no-repeat !important;
+}
+
+body.theme-softy .service-detail-page .page-block:first-child::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 82%, rgba(255, 255, 255, 0.08), transparent 18%);
+    pointer-events: none;
+}
+
+body.theme-softy .service-detail-hero {
+    position: relative;
+    z-index: 1;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
+    grid-template-areas:
+        "main visual"
+        "side side";
+    align-items: center;
+    gap: clamp(1.6rem, 3vw, 2.6rem);
+    padding: 0;
+}
+
+body.theme-softy .service-detail-main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+body.theme-softy .service-detail-visual-card {
+    grid-area: visual;
+    padding: 1.45rem;
+}
+
+body.theme-softy .service-detail-sidecard {
+    grid-area: side;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1.35rem 1.45rem;
+}
+
+body.theme-softy .service-detail-sidecard .service-detail-pill {
+    grid-column: 1 / -1;
+    justify-self: center;
+}
+
+body.theme-softy .service-detail-sidecard .service-detail-stat {
+    margin-top: 0;
+    text-align: left;
+}
+
+body.theme-softy .service-detail-main h1,
+body.theme-softy .service-detail-main .service-detail-subheading,
+body.theme-softy .service-detail-main .service-detail-copy,
+body.theme-softy .service-detail-main .cta-tertiary-links a {
+    color: #ffffff !important;
+}
+
+body.theme-softy .service-detail-main .hero-actions {
+    justify-content: center;
+}
+
+body.theme-softy .service-detail-main .btn-outline-primary {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(255, 255, 255, 0.72);
+    color: var(--softy-heading) !important;
 }
 
 body.theme-softy .services-showcase-grid .services-showcase-card,
@@ -2387,6 +2618,256 @@ body.theme-softy .contact-container {
     text-align: center;
 }
 
+body.theme-softy .service-detail-container {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 0 0 clamp(52px, 7vw, 88px);
+}
+
+body.theme-softy .service-detail-container .service-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: calc(-1 * var(--page-hero-overlap));
+    padding: calc(clamp(7rem, 10vw, 8.5rem) + var(--page-hero-overlap)) 1.5rem clamp(3.75rem, 5vw, 4.75rem);
+    border-radius: 0 0 40px 40px;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.92), rgba(255, 88, 158, 0.88)),
+        url("../images/reference/softy-banner-bg.png") center top / cover no-repeat;
+    text-align: center;
+}
+
+body.theme-softy .service-detail-container .service-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 82%, rgba(255, 255, 255, 0.08), transparent 18%);
+    pointer-events: none;
+}
+
+body.theme-softy .service-detail-container .service-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.theme-softy .service-detail-container .service-hero h1 {
+    max-width: 14ch;
+    margin: 0 auto;
+    color: #ffffff;
+    font-size: clamp(2rem, 3vw, 2.55rem);
+    line-height: 1.16;
+    text-shadow: 0 16px 36px rgba(54, 28, 122, 0.18);
+}
+
+body.theme-softy .service-detail-container .hero-subtitle {
+    max-width: 42ch;
+    margin: 1.2rem auto 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+body.theme-softy .service-detail-container .service-content {
+    display: grid;
+    gap: 1.45rem;
+    margin-top: 1.75rem;
+}
+
+body.theme-softy .service-detail-container .service-content > section {
+    background: #ffffff;
+    border: 1px solid var(--softy-border);
+    border-radius: 28px;
+    box-shadow: var(--softy-shadow);
+    padding: clamp(1.45rem, 2vw, 1.9rem);
+}
+
+body.theme-softy .service-detail-container .service-content > section > h2 {
+    margin: 0 0 1rem;
+    color: var(--softy-heading);
+    font-size: clamp(1.45rem, 1.1rem + 0.7vw, 1.9rem);
+    line-height: 1.28;
+}
+
+body.theme-softy .service-detail-container .service-content > section > p {
+    margin: 0;
+    color: var(--softy-text);
+    line-height: 1.8;
+}
+
+body.theme-softy .service-detail-container .tech-grid,
+body.theme-softy .service-detail-container .process-steps,
+body.theme-softy .service-detail-container .marketing-services,
+body.theme-softy .service-detail-container .approach-steps,
+body.theme-softy .service-detail-container .tools-grid,
+body.theme-softy .service-detail-container .results-grid,
+body.theme-softy .service-detail-container .platforms-grid,
+body.theme-softy .service-detail-container .platform-grid,
+body.theme-softy .service-detail-container .process-container,
+body.theme-softy .service-detail-container .tools-metrics-grid,
+body.theme-softy .service-detail-container .methodology-grid,
+body.theme-softy .service-detail-container .methodology-steps,
+body.theme-softy .service-detail-container .training-programs,
+body.theme-softy .service-detail-container .expertise-grid,
+body.theme-softy .service-detail-container .app-types-grid,
+body.theme-softy .service-detail-container .services-grid,
+body.theme-softy .service-detail-container .corporate-features,
+body.theme-softy .service-detail-container .consulting-areas,
+body.theme-softy .service-detail-container .system-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+body.theme-softy .service-detail-container .tech-category,
+body.theme-softy .service-detail-container .step,
+body.theme-softy .service-detail-container .process-step,
+body.theme-softy .service-detail-container .marketing-service,
+body.theme-softy .service-detail-container .approach-step,
+body.theme-softy .service-detail-container .tool-category,
+body.theme-softy .service-detail-container .platform,
+body.theme-softy .service-detail-container .case-study,
+body.theme-softy .service-detail-container .expertise-area,
+body.theme-softy .service-detail-container .app-type,
+body.theme-softy .service-detail-container .feature,
+body.theme-softy .service-detail-container .consulting-area,
+body.theme-softy .service-detail-container .system-type,
+body.theme-softy .service-detail-container .program,
+body.theme-softy .service-detail-container .cloud-service,
+body.theme-softy .service-detail-container .seo-service-category,
+body.theme-softy .service-detail-container .tools-section,
+body.theme-softy .service-detail-container .metrics-section,
+body.theme-softy .service-detail-container .method-step,
+body.theme-softy .service-detail-container .result-stat,
+body.theme-softy .service-detail-container .platform-icon,
+body.theme-softy .service-detail-container .timeline-item,
+body.theme-softy .service-detail-container .stage,
+body.theme-softy .service-detail-container .program-details,
+body.theme-softy .service-detail-container .program-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 100%;
+    gap: 0.8rem;
+    padding: 1.35rem 1.4rem;
+    border-radius: 24px;
+    border: 1px solid rgba(130, 97, 238, 0.12);
+    background: linear-gradient(180deg, #ffffff 0%, #fcfbff 100%);
+    box-shadow: var(--softy-card-shadow);
+    text-align: left;
+}
+
+body.theme-softy .service-detail-container .cloud-service-header,
+body.theme-softy .service-detail-container .seo-service-header,
+body.theme-softy .service-detail-container .area-header,
+body.theme-softy .service-detail-container .system-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+body.theme-softy .service-detail-container .service-icon,
+body.theme-softy .service-detail-container .cloud-service-header i,
+body.theme-softy .service-detail-container .seo-service-header i,
+body.theme-softy .service-detail-container .area-header i,
+body.theme-softy .service-detail-container .system-header i,
+body.theme-softy .service-detail-container .platform-logo,
+body.theme-softy .service-detail-container .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 auto;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #f8f6ff);
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    color: var(--softy-primary);
+    box-shadow: 0 12px 24px rgba(130, 97, 238, 0.12);
+}
+
+body.theme-softy .service-detail-container .tech-category h3,
+body.theme-softy .service-detail-container .step h3,
+body.theme-softy .service-detail-container .process-step h3,
+body.theme-softy .service-detail-container .marketing-service h3,
+body.theme-softy .service-detail-container .approach-step h3,
+body.theme-softy .service-detail-container .tool-category h3,
+body.theme-softy .service-detail-container .platform h3,
+body.theme-softy .service-detail-container .case-study h3,
+body.theme-softy .service-detail-container .expertise-area h3,
+body.theme-softy .service-detail-container .app-type h3,
+body.theme-softy .service-detail-container .feature h3,
+body.theme-softy .service-detail-container .consulting-area h3,
+body.theme-softy .service-detail-container .system-type h3,
+body.theme-softy .service-detail-container .program h3,
+body.theme-softy .service-detail-container .cloud-service h3,
+body.theme-softy .service-detail-container .seo-service-category h3,
+body.theme-softy .service-detail-container .tools-section h3,
+body.theme-softy .service-detail-container .metrics-section h3,
+body.theme-softy .service-detail-container .method-step h3,
+body.theme-softy .service-detail-container .result-stat h3 {
+    margin: 0;
+    color: var(--softy-heading);
+    font-size: 1.08rem;
+    line-height: 1.35;
+}
+
+body.theme-softy .service-detail-container .tech-category p,
+body.theme-softy .service-detail-container .step p,
+body.theme-softy .service-detail-container .process-step p,
+body.theme-softy .service-detail-container .marketing-service p,
+body.theme-softy .service-detail-container .approach-step p,
+body.theme-softy .service-detail-container .tool-category p,
+body.theme-softy .service-detail-container .platform p,
+body.theme-softy .service-detail-container .case-study p,
+body.theme-softy .service-detail-container .expertise-area p,
+body.theme-softy .service-detail-container .app-type p,
+body.theme-softy .service-detail-container .feature p,
+body.theme-softy .service-detail-container .consulting-area p,
+body.theme-softy .service-detail-container .system-type p,
+body.theme-softy .service-detail-container .program p,
+body.theme-softy .service-detail-container .cloud-service p,
+body.theme-softy .service-detail-container .seo-service-category p,
+body.theme-softy .service-detail-container .tools-section p,
+body.theme-softy .service-detail-container .metrics-section p,
+body.theme-softy .service-detail-container .method-step p,
+body.theme-softy .service-detail-container .result-stat p,
+body.theme-softy .service-detail-container li {
+    margin: 0;
+    color: var(--softy-text);
+    line-height: 1.75;
+}
+
+body.theme-softy .service-detail-container ul {
+    display: grid;
+    gap: 0.65rem;
+    width: 100%;
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+body.theme-softy .service-detail-container .cta-section {
+    text-align: center;
+}
+
+body.theme-softy .service-detail-container .cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.78rem 1.35rem;
+    margin-top: 1.2rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 16px 30px rgba(130, 97, 238, 0.18);
+}
+
 body.theme-softy .contact-form,
 body.theme-softy .quote-form-card,
 body.theme-softy .quote-summary-card {
@@ -2607,6 +3088,8 @@ body.theme-softy .skip-link {
     body.theme-softy .nx-testimonial-grid,
     body.theme-softy .nx-case-studies-grid,
     body.theme-softy .case-grid,
+    body.theme-softy .solution-clusters-grid,
+    body.theme-softy .service-detail-grid,
     body.theme-softy .services-showcase-grid,
     body.theme-softy .focused-landing-pages-grid,
     body.theme-softy .industry-page-grid,
@@ -2623,7 +3106,7 @@ body.theme-softy .skip-link {
     }
 
     body.theme-softy .service-detail-hero {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 0.85fr);
     }
 
     body.theme-softy .pillars-grid,
@@ -2651,6 +3134,10 @@ body.theme-softy .skip-link {
     body.theme-softy .service-cluster-summary-grid,
     body.theme-softy .service-category-block .services-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.theme-softy .service-detail-sidecard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -2695,6 +3182,22 @@ body.theme-softy .skip-link {
         padding: 1.45rem !important;
     }
 
+    body.theme-softy .solution-hero-shell,
+    body.theme-softy .about-hero-grid,
+    body.theme-softy .service-detail-hero {
+        grid-template-columns: 1fr;
+    }
+
+    body.theme-softy .service-detail-hero {
+        grid-template-areas:
+            "main"
+            "visual"
+            "side";
+    }
+
+    body.theme-softy .service-detail-sidecard,
+    body.theme-softy .solution-clusters-grid,
+    body.theme-softy .service-detail-grid,
     body.theme-softy .legal-sections,
     body.theme-softy .service-cluster-summary-grid,
     body.theme-softy .service-category-block .services-grid {
@@ -2704,6 +3207,16 @@ body.theme-softy .skip-link {
     body.theme-softy .service-cluster-cta,
     body.theme-softy .service-category-block .service-actions {
         justify-content: flex-start;
+    }
+
+    body.theme-softy .service-detail-page .page-block:first-child {
+        padding-bottom: 4rem !important;
+    }
+
+    body.theme-softy .service-detail-main,
+    body.theme-softy .solution-hero-copy,
+    body.theme-softy .about-hero-copy {
+        max-width: 100%;
     }
 }
 
@@ -2757,6 +3270,11 @@ body.theme-softy .skip-link {
         padding-bottom: 4rem !important;
     }
 
+    body.theme-softy .service-detail-container .service-hero {
+        padding: calc(6.2rem + var(--page-hero-overlap)) 1rem 3.5rem;
+        border-radius: 0 0 28px 28px;
+    }
+
     body.theme-softy .nx-hero-copy h1 {
         font-size: clamp(1.85rem, 9vw, 2.25rem);
         max-width: 16ch;
@@ -2795,6 +3313,12 @@ body.theme-softy .skip-link {
     body.theme-softy .contact-page .hero-actions,
     body.theme-softy .quote-generator-page .hero-actions {
         justify-content: center;
+    }
+
+    body.theme-softy .service-detail-main h1,
+    body.theme-softy .solution-hero-copy h1,
+    body.theme-softy .about-hero-copy h1 {
+        max-width: 100%;
     }
 
     body.theme-softy .nx-hero-trust-list {

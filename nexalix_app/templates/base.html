@@ -46,7 +46,7 @@
 
     <title>{% block title %}{{ meta_title|default:'Nexalix Technologies' }}{% endblock %}</title>
     {% block extra_css %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'css/redesign.css' %}?v=20260427g">
+    <link rel="stylesheet" href="{% static 'css/redesign.css' %}?v=20260427h">
     {% if structured_data_json %}
         {% for schema in structured_data_json %}
     <script type="application/ld+json">{{ schema|safe }}</script>

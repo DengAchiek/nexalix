@@ -209,15 +209,18 @@ body.theme-softy .btn.btn-secondary:hover {
     border-color: rgba(130, 97, 238, 0.35);
 }
 
-body.theme-softy .site-header {
+body.theme-future.theme-softy .site-header,
+body.theme-future.theme-softy .site-header.scrolled,
+body.theme-softy .site-header,
+body.theme-softy .site-header.scrolled {
     position: sticky;
     top: 1.2rem;
     z-index: 180;
     padding: 0;
-    background: transparent;
-    backdrop-filter: none;
-    border-bottom: 0;
-    box-shadow: none;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
 }
 
 body.theme-softy .header-row {

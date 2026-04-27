@@ -1173,62 +1173,86 @@ body.theme-softy .service-description {
     line-height: 1.82;
 }
 
-body.theme-softy .about-reference-grid {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    align-items: start;
-    gap: 2.2rem;
+body.theme-softy .about-reference-section {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(135deg, rgba(130, 97, 238, 0.86), rgba(170, 112, 231, 0.84), rgba(123, 116, 255, 0.84)),
+        url("../images/reference/softy-process-bg.png") center center / cover no-repeat;
 }
 
-body.theme-softy .about-reference-copy {
-    max-width: 540px;
+body.theme-softy .about-reference-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
 }
 
-body.theme-softy .about-reference-copy .section-eyebrow {
-    margin-bottom: 1.1rem;
+body.theme-softy .about-reference-shell {
+    position: relative;
+    z-index: 1;
 }
 
-body.theme-softy .about-reference-copy h2 {
-    margin-bottom: 1.35rem;
-    max-width: 11ch;
+body.theme-softy .about-reference-heading {
+    max-width: 760px;
+    margin: 0 auto 3rem;
+    text-align: center;
 }
 
-body.theme-softy .about-reference-copy p + p {
-    margin-top: 1.45rem;
+body.theme-softy .about-reference-heading .section-eyebrow {
+    margin: 0 auto 1.2rem;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.26) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-softy .about-reference-heading h2 {
+    color: #ffffff !important;
+    max-width: 12ch;
+    margin: 0 auto 1.2rem;
+}
+
+body.theme-softy .about-reference-heading p {
+    max-width: 44ch;
+    margin: 0.65rem auto 0;
+    color: rgba(255, 255, 255, 0.92) !important;
+    line-height: 1.8;
 }
 
 body.theme-softy .about-reference-cards {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem 1.15rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1rem;
     align-items: start;
 }
 
 body.theme-softy .about-reference-card {
-    min-height: 220px;
-    padding: 1.85rem 1.2rem 1.6rem !important;
-    border-radius: 24px !important;
+    min-height: 260px;
+    padding: 1.8rem 1.1rem 1.5rem !important;
+    border-radius: 22px !important;
     align-items: center !important;
     justify-content: flex-start;
     text-align: center !important;
-    gap: 0.8rem;
-    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.12) !important;
+    gap: 0.75rem;
+    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.16) !important;
 }
 
 body.theme-softy .about-reference-card::before {
     content: "";
     position: absolute;
-    inset: 12px -12px -12px 12px;
-    border-radius: 24px;
-    background: rgba(130, 97, 238, 0.16);
-    opacity: 0.42;
+    inset: 14px -14px -14px 14px;
+    border-radius: 22px;
+    background: rgba(130, 97, 238, 0.17);
+    opacity: 0.46;
     z-index: -1;
     pointer-events: none;
 }
 
 body.theme-softy .about-reference-card .about-reference-icon {
-    width: 46px;
-    height: 46px;
-    margin: 0 auto 0.25rem;
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 0.35rem;
     border: 0;
     background: transparent;
     box-shadow: none;
@@ -1236,50 +1260,41 @@ body.theme-softy .about-reference-card .about-reference-icon {
 }
 
 body.theme-softy .about-reference-card .about-reference-icon i {
-    font-size: 1.9rem;
+    font-size: 1.7rem;
     color: #b27af7 !important;
 }
 
 body.theme-softy .about-reference-card h4 {
     margin: 0;
-    color: var(--softy-heading) !important;
-    font-size: 15px !important;
+    color: #2a2d54 !important;
+    font-size: 14px !important;
     font-weight: 700;
-    line-height: 1.45;
+    line-height: 1.4;
     text-align: center !important;
 }
 
 body.theme-softy .about-reference-card p {
-    max-width: 16ch;
+    max-width: 14ch;
     margin: 0 auto;
     color: #8a8fb0 !important;
-    font-size: 14px !important;
-    line-height: 1.65 !important;
+    font-size: 13px !important;
+    line-height: 1.58 !important;
     text-align: center !important;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
     body.theme-softy .about-reference-cards {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 920px) {
-    body.theme-softy .about-reference-grid {
-        grid-template-columns: 1fr;
-        gap: 1.8rem;
+    body.theme-softy .about-reference-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    body.theme-softy .about-reference-copy {
-        max-width: 680px;
-        margin: 0 auto;
-        text-align: center;
-    }
-
-    body.theme-softy .about-reference-copy h2 {
-        max-width: 12ch;
-        margin-left: auto;
-        margin-right: auto;
+    body.theme-softy .about-reference-heading h2 {
+        max-width: 13ch;
     }
 }
 

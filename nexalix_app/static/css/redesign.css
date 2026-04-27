@@ -1173,6 +1173,122 @@ body.theme-softy .service-description {
     line-height: 1.82;
 }
 
+body.theme-softy .about-reference-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: start;
+    gap: 2.2rem;
+}
+
+body.theme-softy .about-reference-copy {
+    max-width: 540px;
+}
+
+body.theme-softy .about-reference-copy .section-eyebrow {
+    margin-bottom: 1.1rem;
+}
+
+body.theme-softy .about-reference-copy h2 {
+    margin-bottom: 1.35rem;
+    max-width: 11ch;
+}
+
+body.theme-softy .about-reference-copy p + p {
+    margin-top: 1.45rem;
+}
+
+body.theme-softy .about-reference-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem 1.15rem;
+    align-items: start;
+}
+
+body.theme-softy .about-reference-card {
+    min-height: 220px;
+    padding: 1.85rem 1.2rem 1.6rem !important;
+    border-radius: 24px !important;
+    align-items: center !important;
+    justify-content: flex-start;
+    text-align: center !important;
+    gap: 0.8rem;
+    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.12) !important;
+}
+
+body.theme-softy .about-reference-card::before {
+    content: "";
+    position: absolute;
+    inset: 12px -12px -12px 12px;
+    border-radius: 24px;
+    background: rgba(130, 97, 238, 0.16);
+    opacity: 0.42;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.theme-softy .about-reference-card .about-reference-icon {
+    width: 46px;
+    height: 46px;
+    margin: 0 auto 0.25rem;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+body.theme-softy .about-reference-card .about-reference-icon i {
+    font-size: 1.9rem;
+    color: #b27af7 !important;
+}
+
+body.theme-softy .about-reference-card h4 {
+    margin: 0;
+    color: var(--softy-heading) !important;
+    font-size: 15px !important;
+    font-weight: 700;
+    line-height: 1.45;
+    text-align: center !important;
+}
+
+body.theme-softy .about-reference-card p {
+    max-width: 16ch;
+    margin: 0 auto;
+    color: #8a8fb0 !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    text-align: center !important;
+}
+
+@media (max-width: 1180px) {
+    body.theme-softy .about-reference-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 920px) {
+    body.theme-softy .about-reference-grid {
+        grid-template-columns: 1fr;
+        gap: 1.8rem;
+    }
+
+    body.theme-softy .about-reference-copy {
+        max-width: 680px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    body.theme-softy .about-reference-copy h2 {
+        max-width: 12ch;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 640px) {
+    body.theme-softy .about-reference-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
 body.theme-softy .services-showcase-card,
 body.theme-softy .focused-landing-card,
 body.theme-softy .pillar-card,

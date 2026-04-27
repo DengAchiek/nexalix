@@ -653,6 +653,7 @@ body.theme-softy .case-study-detail-card,
 body.theme-softy .quote-form-card,
 body.theme-softy .quote-summary-card,
 body.theme-softy .contact-form,
+body.theme-softy .legal-card,
 body.theme-softy .services-cta-panel,
 body.theme-softy .industries-cta-panel,
 body.theme-softy .home-cta-final .container,
@@ -693,6 +694,7 @@ body.theme-softy .service-detail-sidecard::before,
 body.theme-softy .quote-form-card::before,
 body.theme-softy .quote-summary-card::before,
 body.theme-softy .contact-form::before,
+body.theme-softy .legal-card::before,
 body.theme-softy .services-cta-panel::before,
 body.theme-softy .industries-cta-panel::before,
 body.theme-softy .nx-final-cta-card::before,
@@ -718,7 +720,8 @@ body.theme-softy .about-stat-card h3,
 body.theme-softy .why-modern-card h3,
 body.theme-softy .work-step-card-modern h3,
 body.theme-softy .quote-summary-card h3,
-body.theme-softy .contact-form h3 {
+body.theme-softy .contact-form h3,
+body.theme-softy .legal-card h2 {
     color: var(--softy-heading) !important;
     font-size: 17px;
     line-height: 1.45;
@@ -746,6 +749,8 @@ body.theme-softy .why-modern-card p,
 body.theme-softy .work-step-card-modern p,
 body.theme-softy .quote-summary-card p,
 body.theme-softy .contact-form p,
+body.theme-softy .legal-card p,
+body.theme-softy .legal-card li,
 body.theme-softy .services-cta-panel p,
 body.theme-softy .industries-cta-panel p,
 body.theme-softy .nx-final-cta-card p,
@@ -814,6 +819,169 @@ body.theme-softy .testimonial-card-modern:hover,
 body.theme-softy .about-stat-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 22px 42px rgba(130, 97, 238, 0.16) !important;
+}
+
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-stat-card,
+body.theme-softy .service-summary-card,
+body.theme-softy .case-card,
+body.theme-softy .proof-media-card,
+body.theme-softy .service-detail-card,
+body.theme-softy .service-detail-panel,
+body.theme-softy .service-detail-sidecard,
+body.theme-softy .solution-cluster-card,
+body.theme-softy .case-study-detail-card,
+body.theme-softy .about-story-cards article,
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel,
+body.theme-softy .industry-outcome-card,
+body.theme-softy .quote-form-card,
+body.theme-softy .quote-summary-card,
+body.theme-softy .contact-form,
+body.theme-softy .legal-card,
+body.theme-softy .services-cta-panel,
+body.theme-softy .industries-cta-panel,
+body.theme-softy .home-cta-final .container,
+body.theme-softy .nx-final-cta-card {
+    min-height: 100%;
+}
+
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-stat-card {
+    align-items: center;
+    text-align: center;
+    gap: 0.95rem;
+}
+
+body.theme-softy .service-summary-card,
+body.theme-softy .case-card,
+body.theme-softy .proof-media-card,
+body.theme-softy .service-detail-card,
+body.theme-softy .service-detail-panel,
+body.theme-softy .service-detail-sidecard,
+body.theme-softy .solution-cluster-card,
+body.theme-softy .case-study-detail-card,
+body.theme-softy .about-story-cards article,
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel,
+body.theme-softy .industry-outcome-card,
+body.theme-softy .quote-form-card,
+body.theme-softy .quote-summary-card,
+body.theme-softy .contact-form,
+body.theme-softy .legal-card,
+body.theme-softy .services-cta-panel,
+body.theme-softy .industries-cta-panel,
+body.theme-softy .home-cta-final .container,
+body.theme-softy .nx-final-cta-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 0.95rem;
+}
+
+body.theme-softy .case-content,
+body.theme-softy .compact-card-content,
+body.theme-softy .service-content,
+body.theme-softy .technology-capability-head > div,
+body.theme-softy .solution-cluster-top > div,
+body.theme-softy .testimonial-author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+body.theme-softy .case-content h3,
+body.theme-softy .compact-card-content h3,
+body.theme-softy .service-content h3,
+body.theme-softy .technology-capability-head h3,
+body.theme-softy .solution-cluster-top h3,
+body.theme-softy .testimonial-author h4,
+body.theme-softy .service-detail-card h3,
+body.theme-softy .case-study-detail-card h3,
+body.theme-softy .legal-card h2 {
+    margin: 0;
+}
+
+body.theme-softy .case-content p,
+body.theme-softy .compact-card-content p,
+body.theme-softy .service-content p,
+body.theme-softy .technology-capability-head p,
+body.theme-softy .solution-cluster-top p,
+body.theme-softy .testimonial-author span,
+body.theme-softy .service-detail-card p,
+body.theme-softy .case-study-detail-card p,
+body.theme-softy .legal-card p,
+body.theme-softy .legal-card li {
+    margin: 0;
+}
+
+body.theme-softy .legal-sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+body.theme-softy .legal-card {
+    padding: 1.85rem;
+}
+
+body.theme-softy .legal-card ul {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0.35rem 0 0;
+    padding-left: 1.15rem;
+}
+
+body.theme-softy .legal-card li {
+    line-height: 1.7;
+}
+
+body.theme-softy .service-summary-card > *:last-child,
+body.theme-softy .case-card > *:last-child,
+body.theme-softy .proof-media-card > *:last-child,
+body.theme-softy .service-detail-card > *:last-child,
+body.theme-softy .service-detail-panel > *:last-child,
+body.theme-softy .service-detail-sidecard > *:last-child,
+body.theme-softy .solution-cluster-card > *:last-child,
+body.theme-softy .case-study-detail-card > *:last-child,
+body.theme-softy .about-story-cards article > *:last-child,
+body.theme-softy .industry-approach-panel > *:last-child,
+body.theme-softy .industry-outcome-panel > *:last-child,
+body.theme-softy .industry-outcome-card > *:last-child,
+body.theme-softy .quote-form-card > *:last-child,
+body.theme-softy .quote-summary-card > *:last-child,
+body.theme-softy .contact-form > *:last-child,
+body.theme-softy .legal-card > *:last-child,
+body.theme-softy .services-cta-panel > *:last-child,
+body.theme-softy .industries-cta-panel > *:last-child,
+body.theme-softy .home-cta-final .container > *:last-child,
+body.theme-softy .nx-final-cta-card > *:last-child {
+    margin-bottom: 0;
+}
+
+body.theme-softy .case-card .project-proof-actions,
+body.theme-softy .proof-media-card .project-proof-actions {
+    justify-content: flex-start;
+    margin-top: auto;
 }
 
 body.theme-softy .nx-card-list,
@@ -2521,10 +2689,13 @@ body.theme-softy .skip-link {
     body.theme-softy .service-category-block,
     body.theme-softy .service-summary-card,
     body.theme-softy .service-category-block .media-service-card,
-    body.theme-softy .service-category-block .solution-service-card {
+    body.theme-softy .service-category-block .solution-service-card,
+    body.theme-softy .case-study-detail-card,
+    body.theme-softy .legal-card {
         padding: 1.45rem !important;
     }
 
+    body.theme-softy .legal-sections,
     body.theme-softy .service-cluster-summary-grid,
     body.theme-softy .service-category-block .services-grid {
         grid-template-columns: 1fr !important;

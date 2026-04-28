@@ -2105,6 +2105,75 @@ body.theme-softy .quote-layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel {
+    padding: 2.2rem 2rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.2rem;
+}
+
+body.theme-softy .industry-approach-panel h2,
+body.theme-softy .industry-outcome-panel h3,
+body.theme-softy .industry-outcome-card h4 {
+    margin: 0;
+    color: var(--softy-heading) !important;
+    opacity: 1 !important;
+    text-align: left !important;
+    line-height: 1.18;
+}
+
+body.theme-softy .industry-approach-panel h2 {
+    font-size: clamp(2.2rem, 4vw, 3.1rem);
+    max-width: 11ch;
+}
+
+body.theme-softy .industry-outcome-panel h3 {
+    font-size: clamp(1.95rem, 3.2vw, 2.65rem);
+    max-width: 12ch;
+}
+
+body.theme-softy .industry-outcome-card h4 {
+    font-size: 1.1rem;
+}
+
+body.theme-softy .industry-outcome-stack {
+    width: 100%;
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.2rem;
+}
+
+body.theme-softy .industry-approach-panel > p,
+body.theme-softy .industry-outcome-panel > p {
+    max-width: none;
+    margin: 0;
+    line-height: 1.72;
+}
+
+body.theme-softy .industry-outcome-card {
+    min-height: 0;
+    margin-top: 0;
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+}
+
+body.theme-softy .industry-outcome-card p {
+    max-width: none;
+    margin: 0;
+    line-height: 1.72 !important;
+}
+
+body.theme-softy .industry-benefits-list {
+    width: 100%;
+    margin-top: 0.35rem;
+}
+
 body.theme-softy .solution-clusters-grid .solution-cluster-card,
 body.theme-softy .service-detail-grid .service-detail-card,
 body.theme-softy .faq-grid .service-detail-card,

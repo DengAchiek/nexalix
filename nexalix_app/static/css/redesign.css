@@ -1238,9 +1238,9 @@ body.theme-softy .about-reference-card {
     max-width: 180px;
     padding: 1.05rem 0.9rem 0.95rem !important;
     border-radius: 20px !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     justify-content: flex-start;
-    text-align: center !important;
+    text-align: left !important;
     gap: 0.45rem;
     box-shadow: 0 12px 26px rgba(130, 97, 238, 0.16) !important;
 }
@@ -1259,7 +1259,7 @@ body.theme-softy .about-reference-card::before {
 body.theme-softy .about-reference-card .about-reference-icon {
     width: 34px;
     height: 34px;
-    margin: 0 auto 0.2rem;
+    margin: 0 0 0.2rem;
     border: 0;
     background: transparent;
     box-shadow: none;
@@ -1277,16 +1277,16 @@ body.theme-softy .about-reference-card h4 {
     font-size: 12.75px !important;
     font-weight: 700;
     line-height: 1.32;
-    text-align: center !important;
+    text-align: left !important;
 }
 
 body.theme-softy .about-reference-card p {
-    max-width: 14ch;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     color: #8a8fb0 !important;
     font-size: 12px !important;
     line-height: 1.45 !important;
-    text-align: center !important;
+    text-align: left !important;
 }
 
 @media (max-width: 1280px) {

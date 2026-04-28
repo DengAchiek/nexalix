@@ -1792,6 +1792,45 @@ body.theme-softy .nx-home-services .nx-services-grid {
     gap: 1.8rem 1.55rem;
 }
 
+body.theme-softy .nx-home-services .nx-reference-process-card {
+    align-items: flex-start;
+    text-align: left;
+    gap: 0.8rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-icon-badge {
+    margin: 0 0 1rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card h3 {
+    width: 100%;
+    margin: 0;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card p {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-card-list {
+    width: 100%;
+    margin-top: 0.85rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-card-list li {
+    justify-content: flex-start;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-text-link {
+    width: 100%;
+    padding-top: 1rem;
+    text-align: left;
+}
+
 body.theme-softy .nx-home-industries .nx-industries-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.8rem 1.55rem;

@@ -1130,6 +1130,7 @@ body.theme-softy .legal-card h2 {
     color: var(--softy-heading) !important;
     font-size: 17px;
     line-height: 1.45;
+    text-align: left !important;
 }
 
 body.theme-softy .nx-card p,
@@ -1162,6 +1163,7 @@ body.theme-softy .nx-final-cta-card p,
 body.theme-softy .home-cta-final p {
     color: var(--softy-text) !important;
     font-size: 15px;
+    text-align: left !important;
 }
 
 body.theme-softy .services-showcase-summary,
@@ -1432,8 +1434,8 @@ body.theme-softy .nx-industry-card,
 body.theme-softy .why-modern-card,
 body.theme-softy .testimonial-card-modern,
 body.theme-softy .about-stat-card {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     gap: 0.95rem;
 }
 
@@ -1573,8 +1575,10 @@ body.theme-softy .industry-benefits-list li,
 body.theme-softy .process-output-list li {
     display: flex;
     align-items: flex-start;
+    justify-content: flex-start;
     gap: 0.7rem;
     color: var(--softy-text);
+    text-align: left !important;
 }
 
 body.theme-softy .service-features i,
@@ -2449,12 +2453,12 @@ body.theme-softy .work-process-timeline .work-step-card-modern,
 body.theme-softy .industry-page-grid .nx-industry-card,
 body.theme-softy .why-modern-card,
 body.theme-softy .pricing-plan-card {
-    text-align: center;
+    text-align: left;
 }
 
 body.theme-softy .services-showcase-media,
 body.theme-softy .services-showcase-card .services-showcase-media {
-    margin: 0 auto 1.25rem;
+    margin: 0 0 1.25rem;
 }
 
 body.theme-softy .services-showcase-card h3,
@@ -2484,10 +2488,11 @@ body.theme-softy .services-showcase-points li,
 body.theme-softy .focused-landing-points li {
     display: flex;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.75rem;
     color: var(--softy-text);
     line-height: 1.65;
+    text-align: left !important;
 }
 
 body.theme-softy .services-showcase-points li::before,
@@ -2507,7 +2512,7 @@ body.theme-softy .project-proof-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.75rem 1rem;
     margin-top: auto;
     padding-top: 1.35rem;

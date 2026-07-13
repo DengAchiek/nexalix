@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ meta_title|default:'Industries - Nexalix Technologies' }}{% endblock %}
+{% block body_class %}industries-page{% endblock %}
+
+{% block content %}
+<section class="industries-hero-modern">
+    <div class="container industries-hero-inner">
+        <p class="section-eyebrow">Industries We Serve</p>
+        <h1>Sector-focused delivery for teams with real operational complexity</h1>
+        <p>Nexalix helps organizations modernize workflows, improve reporting, and implement software, automation, and analytics systems tailored to their industry realities.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Discuss Your Industry Needs</a>
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore Services</a>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Our Coverage</p>
+            <h2>Industries where process quality and execution matter</h2>
+            <p class="section-subtitle">We adapt the same consulting-led delivery model to the compliance, customer, operational, and reporting demands of each sector.</p>
+        </div>
+
+        <div class="nx-industries-grid industry-page-grid">
+            {% for industry in industry_cards %}
+            <article class="nx-card nx-industry-card" data-reveal>
+                <div class="nx-icon-badge"><i class="{{ industry.icon|default:'fas fa-briefcase' }}"></i></div>
+                <h3>{{ industry.title }}</h3>
+                <p>{{ industry.summary }}</p>
+                <a href="{% url 'services' %}" class="nx-text-link">Explore Services</a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container industry-approach-grid">
+        <div class="industry-approach-panel" data-reveal>
+            <p class="section-eyebrow">Engagement Approach</p>
+            <h2>How we shape delivery across industries</h2>
+            <p>Every engagement starts with business context, operational constraints, and the workflows that matter most. That keeps implementation practical, measurable, and aligned to the way teams actually work.</p>
+            <ul class="industry-benefits-list">
+                <li><i class="fas fa-check-circle"></i><span>Domain-first discovery and planning</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Compliance-aware engineering and delivery choices</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Scalable integrations, reporting, and automation design</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Post-launch optimization and support for evolving operations</span></li>
+            </ul>
+        </div>
+
+        <div class="industry-outcome-panel" data-reveal>
+            <p class="section-eyebrow">Typical Outcomes</p>
+            <h3>What organizations usually improve</h3>
+            <div class="industry-outcome-stack">
+                <article class="industry-outcome-card">
+                    <h4>Faster Operations</h4>
+                    <p>Reduce delays through clearer workflows, better system coordination, and less manual follow-up.</p>
+                </article>
+                <article class="industry-outcome-card">
+                    <h4>Better Decision Support</h4>
+                    <p>Give leadership and operational teams more reliable visibility through dashboards and structured reporting.</p>
+                </article>
+                <article class="industry-outcome-card">
+                    <h4>Stronger Service Experience</h4>
+                    <p>Improve the systems used by staff, customers, and stakeholders with modern and easier-to-use digital tools.</p>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="home-cta-final industries-cta-final">
+    <div class="container industries-cta-panel" data-reveal>
+        <h2>Need a solution shaped around your industry?</h2>
+        <p>Tell us your domain, operating constraints, and growth priorities, and we’ll map out the right software, automation, or analytics approach.</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact' %}" class="btn btn-primary">Book Consultation</a>
+            <a href="{% url 'services' %}" class="btn btn-outline-primary">Explore Services</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

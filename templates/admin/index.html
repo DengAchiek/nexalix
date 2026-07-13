@@ -1,0 +1,63 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+.nx-admin-hero {
+    background: linear-gradient(120deg, #0f3f73, #1269b7);
+    border-radius: 14px;
+    padding: 18px;
+    color: #f7fbff;
+    margin: 0 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nx-admin-hero h2 {
+    margin: 0 0 4px;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+.nx-admin-hero p {
+    margin: 0;
+    color: #d6e8fb;
+}
+
+.nx-admin-hero a {
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 700;
+    color: #0f4880;
+    background: #fff;
+    border: 1px solid #fff;
+}
+
+.nx-admin-hero a:hover {
+    background: #e8f3ff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <section class="nx-admin-hero">
+        <div>
+            <h2>Nexalix Operations Dashboard</h2>
+            <p>Track client interactions, quote pipeline, and admin activity in one place.</p>
+        </div>
+        <a href="{% url 'activity_dashboard' %}">Open Activity Dashboard</a>
+    </section>
+
+    {% if app_list %}
+        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    {% else %}
+        <p>{% translate "You don’t have permission to view or edit anything." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

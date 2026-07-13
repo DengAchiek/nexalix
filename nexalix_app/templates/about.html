@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ meta_title|default:'About Nexalix | IT & Innovation Consulting' }}{% endblock %}
+{% block body_class %}about-page{% endblock %}
+
+{% block content %}
+<section class="about-hero-modern">
+    <div class="container about-hero-grid">
+        <div class="about-hero-copy">
+            <p class="section-eyebrow">About Nexalix</p>
+            <h1>Cross-Platform Technology and Innovation Consulting</h1>
+            <p class="about-hero-text">
+                {% if primary_about %}
+                    {{ primary_about.content }}
+                {% else %}
+                    Founded on strong business ethics and driven by practical engineering experience, Nexalix helps organizations design, develop, and scale digital products across web, mobile, cloud, data, and AI.
+                {% endif %}
+            </p>
+            <div class="hero-actions">
+                <a href="{% url 'contact' %}" class="btn btn-primary">Work With Us</a>
+            </div>
+        </div>
+        <div class="about-hero-panel">
+            <h3>What We Build</h3>
+            <ul>
+                {% for capability in about_capabilities %}
+                <li><i class="fas fa-check-circle"></i> {{ capability }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading">
+            <p class="section-eyebrow">From Admin Content</p>
+            <h2>About Sections</h2>
+        </div>
+        <div class="about-story-cards">
+            {% for section in about_sections %}
+            <article>
+                <h4>{{ section.title }}</h4>
+                <p>{{ section.content }}</p>
+            </article>
+            {% empty %}
+            <article>
+                <h4>No About Content Yet</h4>
+                <p>Add and activate records in Django Admin under About Section to populate this block dynamically.</p>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="about-stats-grid">
+            {% if about_statistics %}
+                {% for stat in about_statistics %}
+                <article class="about-stat-card">
+                    <h3 data-count="{{ stat.value }}" data-suffix="{{ stat.suffix|default:'' }}">0</h3>
+                    <p>{{ stat.name }}</p>
+                </article>
+                {% endfor %}
+            {% else %}
+            <article class="about-stat-card">
+                <h3 data-count="15" data-suffix="+">0</h3>
+                <p>Years of Experience</p>
+            </article>
+            <article class="about-stat-card">
+                <h3 data-count="100" data-suffix="+">0</h3>
+                <p>Projects Delivered</p>
+            </article>
+            <article class="about-stat-card">
+                <h3 data-count="8" data-suffix="+">0</h3>
+                <p>Domain Expertise</p>
+            </article>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block about-reference-section">
+    <div class="container about-reference-grid">
+        <div class="about-reference-copy">
+            <p class="section-eyebrow">Who We Are</p>
+            <h2>Living up to your creative and operational potential</h2>
+            <p>You can call us a product team, engineering team, innovation team, or technology partner. We are a consulting-led engineering company that turns ideas into scalable digital products and efficient business systems.</p>
+            <p>Our team combines strategic thinking and hands-on execution, so clients get both direction and delivery from one partner.</p>
+        </div>
+        <div class="about-story-cards about-reference-cards">
+            <article class="about-reference-card nx-reference-process-card">
+                <span class="about-reference-icon nx-icon-badge"><i class="fas fa-lightbulb"></i></span>
+                <h4>Innovative</h4>
+                <p>We think outside the box to create practical and high-impact solutions.</p>
+            </article>
+            <article class="about-reference-card nx-reference-process-card">
+                <span class="about-reference-icon nx-icon-badge"><i class="fas fa-bolt"></i></span>
+                <h4>Disruptive</h4>
+                <p>We modernize outdated processes and improve how information flows.</p>
+            </article>
+            <article class="about-reference-card nx-reference-process-card">
+                <span class="about-reference-icon nx-icon-badge"><i class="fas fa-star"></i></span>
+                <h4>Excellence</h4>
+                <p>We push for quality through detail, ownership, and engineering discipline.</p>
+            </article>
+            <article class="about-reference-card nx-reference-process-card">
+                <span class="about-reference-icon nx-icon-badge"><i class="fas fa-arrows-rotate"></i></span>
+                <h4>Agile</h4>
+                <p>We adapt quickly while maintaining consistency and delivery focus.</p>
+            </article>
+            <article class="about-reference-card nx-reference-process-card">
+                <span class="about-reference-icon nx-icon-badge"><i class="fas fa-handshake"></i></span>
+                <h4>Committed</h4>
+                <p>We treat every engagement like a product we own and are proud of.</p>
+            </article>
+            <article class="about-reference-card nx-reference-process-card">
+                <span class="about-reference-icon nx-icon-badge"><i class="fas fa-scale-balanced"></i></span>
+                <h4>Fair</h4>
+                <p>We build long-term trust through transparent and fair business practices.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container about-values-modern">
+        <div class="section-heading">
+            <p class="section-eyebrow">Why Teams Choose Nexalix</p>
+            <h2>Consulting Mindset. Engineering Execution.</h2>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Quality commitment across full lifecycle</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Industry-specific solution strategy</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Secure, robust, and scalable platforms</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Cost-effective and milestone-driven delivery</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Professional multi-disciplinary team</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Flexible engagement and support model</div>
+        </div>
+    </div>
+</section>
+
+<section class="about-work-cta">
+    <div class="container">
+        <h2>Work With Us</h2>
+        <p>Nexalix is a diverse group of technology and design professionals focused on high standards, continuous improvement, and measurable client value.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary">Get In Touch</a>
+    </div>
+</section>
+{% endblock %}

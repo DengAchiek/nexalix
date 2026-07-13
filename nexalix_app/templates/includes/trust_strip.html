@@ -1,0 +1,24 @@
+{% load static media_optimization %}
+<section class="nx-trust-strip" aria-label="Trust signals">
+    <div class="container nx-trust-strip-row" data-reveal>
+        {% if hero_partner_logos %}
+        <div class="nx-trust-logos">
+            {% for partner in hero_partner_logos %}
+            <span class="nx-trust-logo-pill" title="{{ partner.name }}">
+                <img
+                    src="{{ partner.logo.url|optimized_media:'thumb' }}"
+                    alt="{{ partner.name }} logo"
+                    loading="lazy"
+                >
+            </span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="nx-trust-points">
+            {% for point in trust_points %}
+            <span>{{ point.label }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</section>

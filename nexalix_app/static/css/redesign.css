@@ -1,0 +1,4215 @@
+:root {
+    --softy-primary: #8261ee;
+    --softy-primary-deep: #6f49e8;
+    --softy-secondary: #ff589e;
+    --softy-secondary-deep: #ff4b91;
+    --softy-accent: #5b6df8;
+    --softy-heading: #1e2a63;
+    --softy-text: #6f7a9a;
+    --softy-muted: #8f99b7;
+    --softy-surface: #ffffff;
+    --softy-surface-alt: #f7f5ff;
+    --softy-surface-soft: #f2f1ff;
+    --softy-border: #ecebff;
+    --softy-border-strong: #ddd9ff;
+    --softy-shadow: 0 18px 45px rgba(130, 97, 238, 0.12);
+    --softy-shadow-lg: 0 28px 70px rgba(130, 97, 238, 0.17);
+    --softy-card-shadow: 0 18px 36px rgba(130, 97, 238, 0.12);
+    --softy-card-offset: rgba(130, 97, 238, 0.18);
+    --softy-radius-lg: 30px;
+    --softy-radius-md: 24px;
+    --softy-radius-sm: 18px;
+}
+
+/* Match non-home hero sections to the centered home-hero language. */
+body.theme-softy.solution-landing-page .solution-hero-shell,
+body.theme-softy.about-page .about-hero-grid,
+body.theme-softy.service-detail-page .service-detail-hero {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    align-items: center;
+    max-width: 980px;
+    margin: 0 auto;
+    gap: clamp(1.75rem, 3vw, 2.65rem);
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy,
+body.theme-softy.about-page .about-hero-copy,
+body.theme-softy.service-detail-page .service-detail-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center !important;
+    max-width: 760px;
+    margin: 0 auto;
+    gap: 1rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .section-eyebrow,
+body.theme-softy.about-page .about-hero-copy .section-eyebrow,
+body.theme-softy.service-detail-page .service-detail-main .section-eyebrow {
+    margin: 0 auto 0.4rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy h1,
+body.theme-softy.about-page .about-hero-copy h1,
+body.theme-softy.service-detail-page .service-detail-main h1 {
+    max-width: 14ch;
+    margin: 0 auto;
+    font-size: clamp(2.15rem, 3.2vw, 2.85rem) !important;
+    line-height: 1.14 !important;
+    text-align: center !important;
+    text-wrap: balance;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy > p,
+body.theme-softy.about-page .about-hero-copy > p,
+body.theme-softy.service-detail-page .service-detail-main .service-detail-subheading,
+body.theme-softy.service-detail-page .service-detail-main .service-detail-copy {
+    max-width: 40ch;
+    margin: 0 auto;
+    text-align: center !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    line-height: 1.85;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .hero-actions,
+body.theme-softy.about-page .about-hero-copy .hero-actions,
+body.theme-softy.service-detail-page .service-detail-main .hero-actions {
+    justify-content: center !important;
+    margin-top: 1rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .cta-tertiary-links,
+body.theme-softy.about-page .about-hero-copy .cta-tertiary-links,
+body.theme-softy.service-detail-page .service-detail-main .cta-tertiary-links {
+    justify-content: center !important;
+    margin-top: 0.35rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-visual-card,
+body.theme-softy.about-page .about-hero-panel,
+body.theme-softy.service-detail-page .service-detail-visual-card {
+    width: min(100%, 560px);
+    margin: 0 auto;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-visual-card,
+body.theme-softy.service-detail-page .service-detail-visual-card {
+    padding: 1.55rem;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard {
+    width: min(100%, 900px);
+    margin: 0 auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1rem;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard .service-detail-pill {
+    grid-column: 1 / -1;
+    justify-self: center;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard .service-detail-stat {
+    text-align: center;
+}
+
+@media (max-width: 920px) {
+    body.theme-softy.solution-landing-page .solution-hero-copy h1,
+    body.theme-softy.about-page .about-hero-copy h1,
+    body.theme-softy.service-detail-page .service-detail-main h1 {
+        max-width: 15ch;
+    }
+
+    body.theme-softy.service-detail-page .service-detail-sidecard {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Clean single-column page heroes to match the home hero more closely. */
+body.theme-softy.solution-landing-page .solution-hero-shell,
+body.theme-softy.service-detail-page .service-detail-hero,
+body.theme-softy.about-page .about-hero-grid {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    max-width: 900px;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-visual-card,
+body.theme-softy.service-detail-page .service-detail-visual-card,
+body.theme-softy.about-page .about-hero-panel {
+    display: none !important;
+}
+
+body.theme-softy.service-detail-page .service-detail-sidecard {
+    display: none !important;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy,
+body.theme-softy.service-detail-page .service-detail-main,
+body.theme-softy.about-page .about-hero-copy {
+    max-width: 860px;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1.05rem;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy h1,
+body.theme-softy.service-detail-page .service-detail-main h1,
+body.theme-softy.about-page .about-hero-copy h1 {
+    max-width: 20ch;
+    font-size: clamp(2.35rem, 4vw, 3.35rem) !important;
+    line-height: 1.12 !important;
+    text-align: center !important;
+    text-wrap: balance;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy > p,
+body.theme-softy.service-detail-page .service-detail-main .service-detail-subheading,
+body.theme-softy.service-detail-page .service-detail-main .service-detail-copy,
+body.theme-softy.about-page .about-hero-copy > p {
+    max-width: 48ch;
+    text-align: center !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.theme-softy.solution-landing-page .solution-hero-copy .hero-actions,
+body.theme-softy.service-detail-page .service-detail-main .hero-actions,
+body.theme-softy.about-page .about-hero-copy .hero-actions,
+body.theme-softy.solution-landing-page .solution-hero-copy .cta-tertiary-links,
+body.theme-softy.service-detail-page .service-detail-main .cta-tertiary-links {
+    justify-content: center !important;
+}
+
+@media (max-width: 920px) {
+    body.theme-softy.solution-landing-page .solution-hero-copy h1,
+    body.theme-softy.service-detail-page .service-detail-main h1,
+    body.theme-softy.about-page .about-hero-copy h1 {
+        max-width: 16ch;
+        font-size: clamp(2rem, 7vw, 2.7rem) !important;
+    }
+
+    body.theme-softy.solution-landing-page .solution-hero-copy > p,
+    body.theme-softy.service-detail-page .service-detail-main .service-detail-subheading,
+    body.theme-softy.service-detail-page .service-detail-main .service-detail-copy,
+    body.theme-softy.about-page .about-hero-copy > p {
+        max-width: 34ch;
+    }
+}
+
+body.theme-softy .solution-hero-shell,
+body.theme-softy .about-hero-grid,
+body.theme-softy .service-detail-hero {
+    max-width: 1160px;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.4rem);
+}
+
+body.theme-softy .solution-hero-copy,
+body.theme-softy .about-hero-copy,
+body.theme-softy .service-detail-main {
+    gap: 1.05rem;
+}
+
+body.theme-softy .solution-hero-copy h1,
+body.theme-softy .about-hero-copy h1,
+body.theme-softy .service-detail-main h1 {
+    max-width: 18ch;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: clamp(2.25rem, 3.3vw, 3.05rem);
+    line-height: 1.12;
+    text-wrap: balance;
+}
+
+body.theme-softy .solution-hero-copy > p,
+body.theme-softy .about-hero-copy > p,
+body.theme-softy .service-detail-main .service-detail-subheading,
+body.theme-softy .service-detail-main .service-detail-copy {
+    max-width: 38ch;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgba(255, 255, 255, 0.92) !important;
+    line-height: 1.82;
+}
+
+body.theme-softy .solution-hero-copy .hero-actions,
+body.theme-softy .about-hero-copy .hero-actions,
+body.theme-softy .service-detail-main .hero-actions {
+    margin-top: 1.1rem;
+}
+
+body.theme-softy .solution-hero-copy .cta-tertiary-links,
+body.theme-softy .about-hero-copy .cta-tertiary-links,
+body.theme-softy .service-detail-main .cta-tertiary-links {
+    margin-top: 0.55rem;
+    gap: 0.95rem 1.3rem;
+}
+
+body.theme-softy .solution-hero-visual-card,
+body.theme-softy .service-detail-visual-card,
+body.theme-softy .about-hero-panel {
+    padding: clamp(1.55rem, 2vw, 2rem);
+    border-radius: 34px;
+}
+
+body.theme-softy .solution-hero-visual-card .service-detail-visual-image,
+body.theme-softy .service-detail-visual-card .service-detail-visual-image {
+    min-height: 100%;
+    object-fit: cover;
+}
+
+body.theme-softy .solution-clusters-grid,
+body.theme-softy .service-detail-grid,
+body.theme-softy .faq-grid,
+body.theme-softy .solution-landing-page .technology-capability-grid,
+body.theme-softy .services-page .technology-capability-grid,
+body.theme-softy .solution-landing-page .process-flow-journey,
+body.theme-softy .services-page .process-flow-journey,
+body.theme-softy .how-we-work-page .work-process-timeline,
+body.theme-softy .service-category-block .service-cluster-summary-grid,
+body.theme-softy .service-category-block .services-grid,
+body.theme-softy .case-study-detail-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+    gap: 1.35rem !important;
+    align-items: stretch;
+}
+
+body.theme-softy .solution-cluster-card,
+body.theme-softy .service-detail-card,
+body.theme-softy .solution-landing-page .technology-capability-card,
+body.theme-softy .services-page .technology-capability-card,
+body.theme-softy .solution-landing-page .process-journey-card,
+body.theme-softy .services-page .process-journey-card,
+body.theme-softy .how-we-work-page .work-step-card-modern,
+body.theme-softy .service-summary-card,
+body.theme-softy .service-category-block .media-service-card,
+body.theme-softy .service-category-block .solution-service-card,
+body.theme-softy .case-study-detail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    justify-content: flex-start;
+    padding: 1.55rem !important;
+    border-radius: 24px !important;
+    text-align: left !important;
+    gap: 0.9rem;
+}
+
+body.theme-softy .solution-cluster-top,
+body.theme-softy .solution-landing-page .technology-capability-head,
+body.theme-softy .services-page .technology-capability-head,
+body.theme-softy .solution-landing-page .process-flow-journey .process-node,
+body.theme-softy .services-page .process-flow-journey .process-node,
+body.theme-softy .how-we-work-page .work-step-card-modern,
+body.theme-softy .service-category-block .service-content,
+body.theme-softy .service-category-block .service-card-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    justify-content: flex-start;
+    text-align: left !important;
+    gap: 0.8rem;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-icon,
+body.theme-softy .solution-landing-page .technology-capability-icon,
+body.theme-softy .services-page .technology-capability-icon,
+body.theme-softy .solution-landing-page .process-journey-icon,
+body.theme-softy .services-page .process-journey-icon,
+body.theme-softy .how-we-work-page .work-step-index {
+    margin: 0 0 0.35rem;
+}
+
+body.theme-softy .solution-cluster-card h3,
+body.theme-softy .service-detail-card h3,
+body.theme-softy .solution-landing-page .technology-capability-card h3,
+body.theme-softy .services-page .technology-capability-card h3,
+body.theme-softy .solution-landing-page .process-journey-card h3,
+body.theme-softy .services-page .process-journey-card h3,
+body.theme-softy .how-we-work-page .work-step-card-modern h3,
+body.theme-softy .service-summary-card h3,
+body.theme-softy .service-category-block .service-title,
+body.theme-softy .case-study-detail-card h3 {
+    margin: 0;
+    color: var(--softy-heading) !important;
+    text-align: left !important;
+    font-size: 1.12rem !important;
+    line-height: 1.4 !important;
+}
+
+body.theme-softy .solution-cluster-card span,
+body.theme-softy .service-detail-card span,
+body.theme-softy .service-summary-card span,
+body.theme-softy .service-category-block .solution-service-meta span,
+body.theme-softy .service-category-block .media-cluster-kicker,
+body.theme-softy .case-study-detail-card span {
+    color: var(--softy-primary-deep) !important;
+    font-size: 0.78rem !important;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+body.theme-softy .solution-cluster-card p,
+body.theme-softy .service-detail-card p,
+body.theme-softy .solution-landing-page .technology-capability-card p,
+body.theme-softy .services-page .technology-capability-card p,
+body.theme-softy .solution-landing-page .process-journey-card p,
+body.theme-softy .services-page .process-journey-card p,
+body.theme-softy .how-we-work-page .work-step-card-modern p,
+body.theme-softy .service-summary-card p,
+body.theme-softy .service-category-block .service-description,
+body.theme-softy .service-category-block .service-outcome-list li,
+body.theme-softy .case-study-detail-card p,
+body.theme-softy .service-detail-card li,
+body.theme-softy .service-summary-card li {
+    color: #566487 !important;
+    opacity: 1 !important;
+    text-align: left !important;
+    line-height: 1.72 !important;
+}
+
+body.theme-softy .solution-cluster-card p,
+body.theme-softy .service-detail-card p,
+body.theme-softy .solution-landing-page .technology-capability-card p,
+body.theme-softy .services-page .technology-capability-card p,
+body.theme-softy .solution-landing-page .process-journey-card p,
+body.theme-softy .services-page .process-journey-card p,
+body.theme-softy .how-we-work-page .work-step-card-modern p,
+body.theme-softy .service-summary-card p,
+body.theme-softy .service-category-block .service-description,
+body.theme-softy .case-study-detail-card p {
+    max-width: none;
+    margin: 0;
+}
+
+body.theme-softy .solution-landing-page .technology-capability-tags,
+body.theme-softy .services-page .technology-capability-tags,
+body.theme-softy .solution-landing-page .process-output-list,
+body.theme-softy .services-page .process-output-list,
+body.theme-softy .how-we-work-page .work-step-outputs,
+body.theme-softy .service-category-block .service-outcome-list {
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+}
+
+body.theme-softy .solution-landing-page .process-output-list li,
+body.theme-softy .services-page .process-output-list li,
+body.theme-softy .how-we-work-page .work-step-outputs li,
+body.theme-softy .service-category-block .service-outcome-list li {
+    justify-content: flex-start;
+    text-align: left !important;
+}
+
+body.theme-softy .service-category-block .service-actions,
+body.theme-softy .project-proof-actions {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+@media (max-width: 920px) {
+    body.theme-softy .solution-hero-shell,
+    body.theme-softy .about-hero-grid,
+    body.theme-softy .service-detail-hero {
+        grid-template-columns: 1fr !important;
+        gap: 1.8rem;
+    }
+
+    body.theme-softy .solution-hero-copy h1,
+    body.theme-softy .about-hero-copy h1,
+    body.theme-softy .service-detail-main h1 {
+        max-width: 16ch;
+    }
+}
+
+body.theme-softy {
+    --font-heading: "Raleway", sans-serif;
+    --font-body: "Raleway", sans-serif;
+    --bg-main: #ffffff;
+    --bg-card: var(--softy-surface);
+    --bg-soft: var(--softy-surface-alt);
+    --bg-elevated: var(--softy-surface);
+    --primary: var(--softy-primary);
+    --primary-deep: var(--softy-primary-deep);
+    --accent: var(--softy-secondary);
+    --accent-strong: var(--softy-accent);
+    --text-main: var(--softy-heading);
+    --text-soft: var(--softy-text);
+    --text-muted: var(--softy-muted);
+    --border-soft: rgba(130, 97, 238, 0.12);
+    --border-strong: rgba(130, 97, 238, 0.2);
+    --shadow-soft: var(--softy-shadow);
+    --shadow-strong: var(--softy-shadow-lg);
+    --radius-lg: var(--softy-radius-lg);
+    --radius-md: var(--softy-radius-md);
+    --radius-sm: var(--softy-radius-sm);
+    font-size: 15px;
+    background:
+        radial-gradient(circle at top left, rgba(130, 97, 238, 0.08), transparent 22%),
+        radial-gradient(circle at 82% 10%, rgba(255, 88, 158, 0.1), transparent 18%),
+        linear-gradient(180deg, #ffffff 0%, #fcfbff 100%);
+    color: var(--softy-text);
+}
+
+body.theme-softy h1,
+body.theme-softy h2,
+body.theme-softy h3,
+body.theme-softy h4,
+body.theme-softy h5,
+body.theme-softy h6 {
+    color: var(--softy-heading);
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+body.theme-softy p,
+body.theme-softy li,
+body.theme-softy span,
+body.theme-softy label,
+body.theme-softy input,
+body.theme-softy textarea,
+body.theme-softy select {
+    color: var(--softy-text);
+    font-size: 15px;
+}
+
+body.theme-softy .site-shell {
+    position: relative;
+    overflow: visible;
+}
+
+body.theme-softy .site-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 0 0, rgba(130, 97, 238, 0.05), transparent 24%),
+        radial-gradient(circle at 100% 100%, rgba(255, 88, 158, 0.05), transparent 22%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+body.theme-softy .container {
+    width: min(1180px, calc(100% - 2rem));
+}
+
+body.theme-softy .section,
+body.theme-softy .nx-section-shell,
+body.theme-softy .nx-final-cta,
+body.theme-softy .page-block {
+    padding: clamp(82px, 8vw, 110px) 0;
+}
+
+body.theme-softy .section-soft,
+body.theme-softy .nx-section-soft {
+    background: linear-gradient(180deg, var(--softy-surface-alt), #ffffff);
+}
+
+body.theme-softy .section-heading {
+    max-width: 760px;
+    margin: 0 auto 3.25rem;
+    text-align: center;
+}
+
+body.theme-softy .section-heading h2,
+body.theme-softy .section-heading h3 {
+    color: var(--softy-heading) !important;
+    text-shadow: none !important;
+}
+
+body.theme-softy .section-heading p,
+body.theme-softy .section-heading .section-subtitle {
+    color: var(--softy-text) !important;
+}
+
+body.theme-softy .section-eyebrow,
+body.theme-softy .nx-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 54px;
+    padding: 0.75rem 1.55rem;
+    margin: 0 0 1.25rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+body.theme-softy .section-heading .section-eyebrow {
+    margin-bottom: 1rem;
+    color: var(--softy-primary);
+    background: rgba(130, 97, 238, 0.08);
+    border-color: rgba(130, 97, 238, 0.15);
+    box-shadow: none;
+}
+
+body.theme-softy .section-heading h2 {
+    font-size: clamp(1.8rem, 1.35rem + 1.1vw, 2.35rem);
+    line-height: 1.35;
+}
+
+body.theme-softy .section-subtitle,
+body.theme-softy .section-heading p:last-child,
+body.theme-softy .subheading {
+    color: var(--softy-text);
+    font-size: 15px;
+    line-height: 1.87;
+}
+
+body.theme-softy .btn,
+body.theme-softy button,
+body.theme-softy input[type="submit"] {
+    min-height: 52px;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+}
+
+body.theme-softy .btn-primary,
+body.theme-softy .btn.btn-primary,
+body.theme-softy .contact-form button[type="submit"],
+body.theme-softy .quote-form-card button[type="submit"] {
+    border: 0;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+    color: #ffffff;
+    box-shadow: 0 16px 34px rgba(130, 97, 238, 0.28);
+}
+
+body.theme-softy .btn-primary:hover,
+body.theme-softy .btn.btn-primary:hover,
+body.theme-softy .contact-form button[type="submit"]:hover,
+body.theme-softy .quote-form-card button[type="submit"]:hover {
+    box-shadow: 0 18px 38px rgba(130, 97, 238, 0.34);
+}
+
+body.theme-softy .btn-secondary,
+body.theme-softy .btn-outline-primary,
+body.theme-softy .btn.btn-outline-primary,
+body.theme-softy .btn.btn-secondary {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--softy-heading);
+    border: 1px solid var(--softy-border-strong);
+    box-shadow: 0 10px 26px rgba(130, 97, 238, 0.08);
+}
+
+body.theme-softy .btn-secondary:hover,
+body.theme-softy .btn-outline-primary:hover,
+body.theme-softy .btn.btn-outline-primary:hover,
+body.theme-softy .btn.btn-secondary:hover {
+    background: #ffffff;
+    border-color: rgba(130, 97, 238, 0.35);
+}
+
+body.theme-future.theme-softy .site-header,
+body.theme-future.theme-softy .site-header.scrolled,
+body.theme-softy .site-header,
+body.theme-softy .site-header.scrolled {
+    position: sticky;
+    top: 1.2rem;
+    z-index: 180;
+    padding: 0;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+}
+
+body.theme-softy .header-row {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    gap: 1.9rem;
+    padding: 0 2.45rem 0 2.1rem;
+    background: #ffffff;
+    border: 0;
+    border-radius: 41px;
+    box-shadow: 0 12px 34px rgba(16, 9, 43, 0.12);
+}
+
+body.theme-softy .site-header.scrolled .header-row {
+    box-shadow: 0 14px 38px rgba(16, 9, 43, 0.16);
+}
+
+body.theme-softy .brand {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    min-width: 150px;
+}
+
+body.theme-softy .brand-logo {
+    height: 34px;
+}
+
+body.theme-softy .nav-links {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: center;
+    gap: clamp(1.25rem, 2vw, 2.7rem);
+    align-items: center;
+}
+
+body.theme-softy .nav-links a,
+body.theme-softy .mobile-menu-links a {
+    padding: 0;
+    border-radius: 0;
+    color: var(--softy-heading);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    text-transform: none;
+}
+
+body.theme-softy .nav-links a:not(.active):hover,
+body.theme-softy .mobile-menu-links a:not(.active):hover {
+    color: var(--softy-primary);
+    background: transparent;
+    box-shadow: none;
+}
+
+body.theme-softy .nav-links a.active,
+body.theme-softy .mobile-menu-links a.active {
+    color: var(--softy-secondary);
+    background: transparent;
+    box-shadow: none;
+}
+
+body.theme-softy .header-tools {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.95rem;
+    min-width: 0;
+}
+
+body.theme-softy .nx-header-socials {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+body.theme-softy .nx-header-socials a {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: rgba(111, 122, 154, 0.85);
+    transition: color 0.22s ease, background-color 0.22s ease;
+}
+
+body.theme-softy .nx-header-socials a:hover {
+    color: var(--softy-heading);
+    background: rgba(111, 122, 154, 0.14);
+}
+
+body.theme-softy .nx-header-socials i {
+    font-size: 0.85rem;
+}
+
+body.theme-softy .header-row .search-shell,
+body.theme-softy .header-row .header-cta {
+    display: none;
+}
+
+body.theme-softy .search-shell {
+    width: clamp(240px, 22vw, 330px);
+}
+
+body.theme-softy .search-shell i {
+    color: rgba(30, 42, 99, 0.42);
+}
+
+body.theme-softy .search-shell input,
+body.theme-softy .mobile-search-shell input {
+    background: #ffffff;
+    border-color: rgba(130, 97, 238, 0.12);
+    color: var(--softy-heading);
+    box-shadow: none;
+}
+
+body.theme-softy .search-shell input::placeholder,
+body.theme-softy .mobile-search-shell input::placeholder {
+    color: rgba(111, 122, 154, 0.78);
+}
+
+body.theme-softy .search-shell input:focus,
+body.theme-softy .mobile-search-shell input:focus {
+    border-color: rgba(130, 97, 238, 0.3);
+    box-shadow: 0 0 0 5px rgba(130, 97, 238, 0.1);
+}
+
+body.theme-softy .search-results {
+    border-radius: 24px;
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 20px 50px rgba(130, 97, 238, 0.18);
+}
+
+body.theme-softy .search-result-item:hover,
+body.theme-softy .search-result-item.is-keyboard-active {
+    background: rgba(130, 97, 238, 0.06);
+}
+
+body.theme-softy .result-title {
+    color: var(--softy-heading);
+}
+
+body.theme-softy .result-description {
+    color: var(--softy-text);
+}
+
+body.theme-softy .result-tag {
+    color: var(--softy-primary);
+}
+
+body.theme-softy .mobile-menu-btn {
+    border-color: rgba(130, 97, 238, 0.12);
+    background: #ffffff;
+}
+
+body.theme-softy .mobile-menu-btn span {
+    background: var(--softy-heading);
+}
+
+body.theme-softy .mobile-menu-overlay {
+    background: rgba(45, 33, 105, 0.24);
+}
+
+body.theme-softy .mobile-menu {
+    background: rgba(255, 255, 255, 0.98);
+    border-left-color: rgba(130, 97, 238, 0.14);
+    box-shadow: -18px 0 48px rgba(130, 97, 238, 0.14);
+}
+
+body.theme-softy .nx-mobile-menu-top p {
+    color: var(--softy-text);
+}
+
+body.theme-softy .nx-mobile-socials {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+body.theme-softy .nx-mobile-socials a {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: rgba(111, 122, 154, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.14);
+    transition: color 0.22s ease, background-color 0.22s ease;
+}
+
+body.theme-softy .nx-mobile-socials a:hover {
+    color: var(--softy-heading);
+    background: rgba(111, 122, 154, 0.14);
+}
+
+body.theme-softy .nx-mobile-socials i {
+    font-size: 0.85rem;
+}
+
+body.theme-softy .mobile-menu-links a {
+    border-color: rgba(130, 97, 238, 0.1);
+    background: rgba(130, 97, 238, 0.04);
+}
+
+body.theme-softy.page-home {
+    --home-hero-overlap: clamp(6.75rem, 8vw, 7.85rem);
+    --hero-photo: url("../images/heroes/home-hero-pic.jpg");
+}
+
+body.theme-softy.services-page,
+body.theme-softy.industries-page,
+body.theme-softy.case-studies-page,
+body.theme-softy.how-we-work-page,
+body.theme-softy.why-choose-page,
+body.theme-softy.about-page,
+body.theme-softy.solution-landing-page {
+    --page-hero-overlap: clamp(6.5rem, 7.8vw, 7.6rem);
+}
+
+body.theme-softy.services-page {
+    --hero-photo: url("../images/heroes/Hero-1.png");
+}
+
+body.theme-softy.industries-page {
+    --hero-photo: url("../images/heroes/hero-4.jpg");
+}
+
+body.theme-softy.case-studies-page {
+    --hero-photo: url("../images/heroes/hero-2.jpg");
+}
+
+body.theme-softy.how-we-work-page {
+    --hero-photo: url("../images/heroes/hero-4.jpg");
+}
+
+body.theme-softy.why-choose-page {
+    --hero-photo: url("../images/heroes/hero-5.jpg");
+}
+
+body.theme-softy.about-page,
+body.theme-softy.service-detail-page {
+    --hero-photo: url("../images/heroes/home-hero-pic.jpg");
+}
+
+body.theme-softy.solution-landing-page {
+    --hero-photo: url("../images/heroes/Hero-1.png");
+}
+
+body.theme-softy .nx-hero {
+    position: relative;
+    padding: clamp(5.8rem, 7vw, 6.8rem) 0 clamp(4.2rem, 5vw, 5.2rem);
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(135deg, #8b61eb, #ec5fa4);
+}
+
+body.theme-softy.page-home .nx-hero {
+    margin-top: calc(-1 * var(--home-hero-overlap));
+    padding-top: calc(clamp(7.4rem, 8vw, 8.8rem) + var(--home-hero-overlap));
+    padding-bottom: clamp(4.6rem, 5.5vw, 5.8rem);
+}
+
+body.theme-softy .nx-hero::before {
+    content: "";
+    position: absolute;
+    inset: -3%;
+    background: var(--hero-photo) center center / cover no-repeat;
+    filter: blur(12px);
+    opacity: 0.46;
+    transform: scale(1.08);
+    pointer-events: none;
+}
+
+body.theme-softy .nx-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.78), rgba(255, 88, 158, 0.74)),
+        radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.2), transparent 24%),
+        radial-gradient(circle at 84% 78%, rgba(255, 255, 255, 0.08), transparent 18%);
+    pointer-events: none;
+}
+
+body.theme-softy .nx-hero-shell {
+    position: relative;
+    z-index: 1;
+}
+
+body.theme-softy.page-home .nx-hero-shell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.8rem;
+}
+
+body.theme-softy .nx-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1120px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-softy .nx-hero-badge {
+    align-self: center;
+    width: fit-content;
+    max-width: min(100%, 56rem);
+    margin-inline: auto;
+    margin-bottom: 1.35rem;
+    justify-content: center;
+    text-align: center;
+}
+
+body.theme-softy .nx-hero-copy h1 {
+    color: #ffffff;
+    font-size: clamp(2.1rem, 3vw, 2.7rem);
+    line-height: 1.15;
+    letter-spacing: -0.055em;
+    max-width: 28ch;
+    margin: 0 auto;
+    margin-inline: auto;
+    text-wrap: balance;
+}
+
+body.theme-softy .nx-hero-supporting {
+    max-width: 720px;
+    margin: 1.65rem auto 0;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+body.theme-softy .nx-hero-actions {
+    justify-content: center;
+    gap: 1.2rem;
+    margin-top: 2.35rem;
+}
+
+body.theme-softy .nx-hero-trust-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem 1.35rem;
+    margin: 1.85rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.theme-softy .nx-hero-trust-list li {
+    position: relative;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+body.theme-softy .nx-hero-trust-list li::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 0.65rem;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.12);
+}
+
+body.theme-softy .nx-hero-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.6rem;
+    margin-top: 2.5rem;
+}
+
+body.theme-softy .nx-hero-feature-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2rem 1.65rem 1.9rem;
+    box-shadow: var(--softy-shadow-lg);
+    text-align: center;
+}
+
+body.theme-softy .nx-hero-feature-card::before {
+    content: "";
+    position: absolute;
+    inset: auto 18% 14px;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(130, 97, 238, 0.12);
+    filter: blur(18px);
+    pointer-events: none;
+}
+
+body.theme-softy .nx-hero-feature-icon,
+body.theme-softy .nx-icon-badge,
+body.theme-softy .services-showcase-media,
+body.theme-softy .pillar-icon,
+body.theme-softy .technology-capability-icon,
+body.theme-softy .process-journey-icon,
+body.theme-softy .solution-cluster-icon,
+body.theme-softy .service-visual-icon,
+body.theme-softy .testimonial-avatar-shell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff, #f9f7ff);
+    border: 1px solid rgba(130, 97, 238, 0.16);
+    color: var(--softy-primary);
+    box-shadow: 0 12px 26px rgba(130, 97, 238, 0.1);
+}
+
+body.theme-softy .nx-icon-badge,
+body.theme-softy .services-showcase-media,
+body.theme-softy .pillar-icon,
+body.theme-softy .technology-capability-icon,
+body.theme-softy .process-journey-icon,
+body.theme-softy .solution-cluster-icon,
+body.theme-softy .service-visual-icon {
+    border-radius: 20px;
+}
+
+body.theme-softy .nx-icon-badge i,
+body.theme-softy .services-showcase-media i,
+body.theme-softy .pillar-icon i,
+body.theme-softy .technology-capability-icon i,
+body.theme-softy .process-journey-icon i,
+body.theme-softy .solution-cluster-icon i,
+body.theme-softy .service-visual-icon i,
+body.theme-softy .nx-hero-feature-icon i {
+    color: var(--softy-primary);
+}
+
+body.theme-softy .nx-hero-feature-card h3 {
+    margin-top: 1.25rem;
+    font-size: 17px;
+    line-height: 1.45;
+}
+
+body.theme-softy .nx-hero-feature-card p {
+    margin: 0.9rem 0 0;
+    color: var(--softy-text);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+body.theme-softy .nx-trust-strip {
+    padding: 1rem 0 0;
+    background: transparent;
+}
+
+body.theme-softy .nx-trust-strip-row {
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.15rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid var(--softy-border);
+    border-radius: 24px;
+    box-shadow: var(--softy-shadow);
+}
+
+body.theme-softy .nx-trust-logos,
+body.theme-softy .nx-trust-points {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+}
+
+body.theme-softy .nx-trust-logo-pill,
+body.theme-softy .nx-trust-points span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    background: var(--softy-surface-alt);
+    border: 1px solid var(--softy-border);
+    color: var(--softy-heading);
+    font-weight: 700;
+}
+
+body.theme-softy .nx-trust-logo-pill img {
+    max-height: 24px;
+    width: auto;
+}
+
+body.theme-softy .nx-card,
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .pricing-plan-card,
+body.theme-softy .service-summary-card,
+body.theme-softy .service-category-block,
+body.theme-softy .solution-service-card,
+body.theme-softy .nx-industry-card,
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel,
+body.theme-softy .industry-outcome-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .stat-chip,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-story-cards article,
+body.theme-softy .about-stat-card,
+body.theme-softy .about-values-modern,
+body.theme-softy .service-detail-card,
+body.theme-softy .service-detail-panel,
+body.theme-softy .service-detail-sidecard,
+body.theme-softy .solution-cluster-card,
+body.theme-softy .proof-media-card,
+body.theme-softy .case-card,
+body.theme-softy .case-study-detail-card,
+body.theme-softy .quote-form-card,
+body.theme-softy .quote-summary-card,
+body.theme-softy .contact-form,
+body.theme-softy .legal-card,
+body.theme-softy .services-cta-panel,
+body.theme-softy .industries-cta-panel,
+body.theme-softy .home-cta-final .container,
+body.theme-softy .nx-final-cta-card {
+    position: relative;
+    isolation: isolate;
+    background: #ffffff !important;
+    border: 1px solid var(--softy-border) !important;
+    box-shadow: var(--softy-shadow) !important;
+    border-radius: 26px !important;
+    color: var(--softy-heading);
+    overflow: visible;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.theme-softy .nx-card::before,
+body.theme-softy .nx-card::after,
+body.theme-softy .services-showcase-card::before,
+body.theme-softy .services-showcase-card::after,
+body.theme-softy .focused-landing-card::before,
+body.theme-softy .focused-landing-card::after,
+body.theme-softy .pillar-card::before,
+body.theme-softy .pillar-card::after,
+body.theme-softy .technology-capability-card::before,
+body.theme-softy .technology-capability-card::after,
+body.theme-softy .process-journey-card::before,
+body.theme-softy .process-journey-card::after,
+body.theme-softy .proof-media-card::before,
+body.theme-softy .proof-media-card::after,
+body.theme-softy .case-card::before,
+body.theme-softy .case-card::after,
+body.theme-softy .about-story-cards article::before,
+body.theme-softy .about-stat-card::before,
+body.theme-softy .about-values-modern::before,
+body.theme-softy .service-detail-card::before,
+body.theme-softy .service-detail-panel::before,
+body.theme-softy .service-detail-sidecard::before,
+body.theme-softy .quote-form-card::before,
+body.theme-softy .quote-summary-card::before,
+body.theme-softy .contact-form::before,
+body.theme-softy .legal-card::before,
+body.theme-softy .services-cta-panel::before,
+body.theme-softy .industries-cta-panel::before,
+body.theme-softy .nx-final-cta-card::before,
+body.theme-softy .home-cta-final .container::before {
+    display: none !important;
+}
+
+body.theme-softy .nx-card h3,
+body.theme-softy .services-showcase-card h3,
+body.theme-softy .focused-landing-card h3,
+body.theme-softy .pillar-card h3,
+body.theme-softy .technology-capability-card h3,
+body.theme-softy .process-journey-card h3,
+body.theme-softy .pricing-plan-card h3,
+body.theme-softy .nx-industry-card h3,
+body.theme-softy .proof-media-card h3,
+body.theme-softy .case-card h3,
+body.theme-softy .service-detail-card h3,
+body.theme-softy .service-detail-panel h2,
+body.theme-softy .service-detail-sidecard strong,
+body.theme-softy .about-story-cards h4,
+body.theme-softy .about-stat-card h3,
+body.theme-softy .why-modern-card h3,
+body.theme-softy .work-step-card-modern h3,
+body.theme-softy .quote-summary-card h3,
+body.theme-softy .contact-form h3,
+body.theme-softy .legal-card h2 {
+    color: var(--softy-heading) !important;
+    font-size: 17px;
+    line-height: 1.45;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-card p,
+body.theme-softy .services-showcase-card p,
+body.theme-softy .focused-landing-card p,
+body.theme-softy .pillar-card p,
+body.theme-softy .technology-capability-card p,
+body.theme-softy .process-journey-card p,
+body.theme-softy .pricing-plan-card p,
+body.theme-softy .nx-industry-card p,
+body.theme-softy .industry-approach-panel p,
+body.theme-softy .industry-outcome-panel p,
+body.theme-softy .industry-outcome-card p,
+body.theme-softy .proof-media-card p,
+body.theme-softy .case-card p,
+body.theme-softy .service-detail-card p,
+body.theme-softy .service-detail-panel p,
+body.theme-softy .service-detail-sidecard span,
+body.theme-softy .about-story-cards p,
+body.theme-softy .about-stat-card p,
+body.theme-softy .why-modern-card p,
+body.theme-softy .work-step-card-modern p,
+body.theme-softy .quote-summary-card p,
+body.theme-softy .contact-form p,
+body.theme-softy .legal-card p,
+body.theme-softy .legal-card li,
+body.theme-softy .services-cta-panel p,
+body.theme-softy .industries-cta-panel p,
+body.theme-softy .nx-final-cta-card p,
+body.theme-softy .home-cta-final p {
+    color: var(--softy-text) !important;
+    font-size: 15px;
+    text-align: left !important;
+}
+
+body.theme-softy .services-showcase-summary,
+body.theme-softy .focused-landing-summary,
+body.theme-softy .service-description {
+    display: block;
+    overflow: visible;
+    font-size: 15px;
+    line-height: 1.82;
+}
+
+body.theme-softy .about-reference-section {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(135deg, rgba(130, 97, 238, 0.86), rgba(170, 112, 231, 0.84), rgba(123, 116, 255, 0.84)),
+        url("../images/reference/softy-process-bg.png") center center / cover no-repeat;
+}
+
+body.theme-softy .about-reference-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+body.theme-softy .about-reference-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    align-items: start;
+    gap: 2rem 2.6rem;
+}
+
+body.theme-softy .about-reference-copy {
+    max-width: 520px;
+    text-align: left;
+}
+
+body.theme-softy .about-reference-copy .section-eyebrow {
+    margin: 0 0 1.1rem;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.26) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-softy .about-reference-copy h2 {
+    color: #ffffff !important;
+    max-width: 10ch;
+    margin: 0 0 1.2rem;
+    line-height: 1.08;
+}
+
+body.theme-softy .about-reference-copy p {
+    max-width: 32ch;
+    margin: 0.75rem 0 0;
+    color: rgba(255, 255, 255, 0.92) !important;
+    line-height: 1.8;
+    text-align: left;
+}
+
+body.theme-softy .about-reference-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 180px));
+    justify-content: end;
+    gap: 0.95rem;
+    align-items: stretch;
+}
+
+body.theme-softy .about-reference-card {
+    min-height: 162px;
+    max-width: 180px;
+    padding: 1.05rem 0.9rem 0.95rem !important;
+    border-radius: 20px !important;
+    align-items: flex-start !important;
+    justify-content: flex-start;
+    text-align: left !important;
+    gap: 0.45rem;
+    box-shadow: 0 12px 26px rgba(130, 97, 238, 0.16) !important;
+}
+
+body.theme-softy .about-reference-card::before {
+    content: "";
+    position: absolute;
+    inset: 12px -12px -12px 12px;
+    border-radius: 20px;
+    background: rgba(130, 97, 238, 0.17);
+    opacity: 0.46;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.theme-softy .about-reference-card .about-reference-icon {
+    width: 34px;
+    height: 34px;
+    margin: 0 0 0.2rem;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+body.theme-softy .about-reference-card .about-reference-icon i {
+    font-size: 1.28rem;
+    color: #b27af7 !important;
+}
+
+body.theme-softy .about-reference-card h4 {
+    margin: 0;
+    color: #2a2d54 !important;
+    font-size: 12.75px !important;
+    font-weight: 700;
+    line-height: 1.32;
+    text-align: left !important;
+}
+
+body.theme-softy .about-reference-card p {
+    max-width: none;
+    margin: 0;
+    color: #8a8fb0 !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+    text-align: left !important;
+}
+
+@media (max-width: 1280px) {
+    body.theme-softy .about-reference-grid {
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+
+    body.theme-softy .about-reference-cards {
+        grid-template-columns: repeat(2, minmax(0, 180px));
+        justify-content: center;
+    }
+}
+
+@media (max-width: 920px) {
+    body.theme-softy .about-reference-grid {
+        grid-template-columns: 1fr;
+        gap: 1.8rem;
+    }
+
+    body.theme-softy .about-reference-copy {
+        max-width: 680px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    body.theme-softy .about-reference-copy .section-eyebrow {
+        margin-inline: auto;
+    }
+
+    body.theme-softy .about-reference-copy h2 {
+        max-width: 12ch;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    body.theme-softy .about-reference-copy p {
+        max-width: 38ch;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+}
+
+@media (max-width: 640px) {
+    body.theme-softy .about-reference-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-stat-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.55rem;
+    border-radius: 20px !important;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfbff 100%) !important;
+    box-shadow: var(--softy-card-shadow) !important;
+}
+
+body.theme-softy .services-showcase-card::before,
+body.theme-softy .focused-landing-card::before,
+body.theme-softy .pillar-card::before,
+body.theme-softy .technology-capability-card::before,
+body.theme-softy .process-journey-card::before,
+body.theme-softy .work-step-card-modern::before,
+body.theme-softy .nx-industry-card::before,
+body.theme-softy .why-modern-card::before,
+body.theme-softy .testimonial-card-modern::before,
+body.theme-softy .about-stat-card::before {
+    content: "";
+    display: block !important;
+    position: absolute;
+    inset: 12px -14px -14px 12px;
+    border-radius: 20px;
+    background: var(--softy-card-offset);
+    opacity: 0.26;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.theme-softy .services-showcase-card:hover,
+body.theme-softy .focused-landing-card:hover,
+body.theme-softy .pillar-card:hover,
+body.theme-softy .technology-capability-card:hover,
+body.theme-softy .process-journey-card:hover,
+body.theme-softy .work-step-card-modern:hover,
+body.theme-softy .nx-industry-card:hover,
+body.theme-softy .why-modern-card:hover,
+body.theme-softy .testimonial-card-modern:hover,
+body.theme-softy .about-stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 22px 42px rgba(130, 97, 238, 0.16) !important;
+}
+
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-stat-card,
+body.theme-softy .service-summary-card,
+body.theme-softy .case-card,
+body.theme-softy .proof-media-card,
+body.theme-softy .service-detail-card,
+body.theme-softy .service-detail-panel,
+body.theme-softy .service-detail-sidecard,
+body.theme-softy .solution-cluster-card,
+body.theme-softy .case-study-detail-card,
+body.theme-softy .about-story-cards article,
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel,
+body.theme-softy .industry-outcome-card,
+body.theme-softy .quote-form-card,
+body.theme-softy .quote-summary-card,
+body.theme-softy .contact-form,
+body.theme-softy .legal-card,
+body.theme-softy .services-cta-panel,
+body.theme-softy .industries-cta-panel,
+body.theme-softy .home-cta-final .container,
+body.theme-softy .nx-final-cta-card {
+    min-height: 100%;
+}
+
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .process-journey-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .testimonial-card-modern,
+body.theme-softy .about-stat-card {
+    align-items: flex-start;
+    text-align: left;
+    gap: 0.95rem;
+}
+
+body.theme-softy .service-summary-card,
+body.theme-softy .case-card,
+body.theme-softy .proof-media-card,
+body.theme-softy .service-detail-card,
+body.theme-softy .service-detail-panel,
+body.theme-softy .service-detail-sidecard,
+body.theme-softy .solution-cluster-card,
+body.theme-softy .case-study-detail-card,
+body.theme-softy .about-story-cards article,
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel,
+body.theme-softy .industry-outcome-card,
+body.theme-softy .quote-form-card,
+body.theme-softy .quote-summary-card,
+body.theme-softy .contact-form,
+body.theme-softy .legal-card,
+body.theme-softy .services-cta-panel,
+body.theme-softy .industries-cta-panel,
+body.theme-softy .home-cta-final .container,
+body.theme-softy .nx-final-cta-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 0.95rem;
+}
+
+body.theme-softy .case-content,
+body.theme-softy .compact-card-content,
+body.theme-softy .service-content,
+body.theme-softy .technology-capability-head > div,
+body.theme-softy .solution-cluster-top > div,
+body.theme-softy .testimonial-author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+body.theme-softy .case-content h3,
+body.theme-softy .compact-card-content h3,
+body.theme-softy .service-content h3,
+body.theme-softy .technology-capability-head h3,
+body.theme-softy .solution-cluster-top h3,
+body.theme-softy .testimonial-author h4,
+body.theme-softy .service-detail-card h3,
+body.theme-softy .case-study-detail-card h3,
+body.theme-softy .legal-card h2 {
+    margin: 0;
+}
+
+body.theme-softy .case-content p,
+body.theme-softy .compact-card-content p,
+body.theme-softy .service-content p,
+body.theme-softy .technology-capability-head p,
+body.theme-softy .solution-cluster-top p,
+body.theme-softy .testimonial-author span,
+body.theme-softy .service-detail-card p,
+body.theme-softy .case-study-detail-card p,
+body.theme-softy .legal-card p,
+body.theme-softy .legal-card li {
+    margin: 0;
+}
+
+body.theme-softy .legal-sections {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+body.theme-softy .legal-card {
+    padding: 1.85rem;
+}
+
+body.theme-softy .legal-card ul {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0.35rem 0 0;
+    padding-left: 1.15rem;
+}
+
+body.theme-softy .legal-card li {
+    line-height: 1.7;
+}
+
+body.theme-softy .service-summary-card > *:last-child,
+body.theme-softy .case-card > *:last-child,
+body.theme-softy .proof-media-card > *:last-child,
+body.theme-softy .service-detail-card > *:last-child,
+body.theme-softy .service-detail-panel > *:last-child,
+body.theme-softy .service-detail-sidecard > *:last-child,
+body.theme-softy .solution-cluster-card > *:last-child,
+body.theme-softy .case-study-detail-card > *:last-child,
+body.theme-softy .about-story-cards article > *:last-child,
+body.theme-softy .industry-approach-panel > *:last-child,
+body.theme-softy .industry-outcome-panel > *:last-child,
+body.theme-softy .industry-outcome-card > *:last-child,
+body.theme-softy .quote-form-card > *:last-child,
+body.theme-softy .quote-summary-card > *:last-child,
+body.theme-softy .contact-form > *:last-child,
+body.theme-softy .legal-card > *:last-child,
+body.theme-softy .services-cta-panel > *:last-child,
+body.theme-softy .industries-cta-panel > *:last-child,
+body.theme-softy .home-cta-final .container > *:last-child,
+body.theme-softy .nx-final-cta-card > *:last-child {
+    margin-bottom: 0;
+}
+
+body.theme-softy .case-card .project-proof-actions,
+body.theme-softy .proof-media-card .project-proof-actions {
+    justify-content: flex-start;
+    margin-top: auto;
+}
+
+body.theme-softy .nx-card-list,
+body.theme-softy .service-features,
+body.theme-softy .features-list,
+body.theme-softy .work-step-outputs,
+body.theme-softy .industry-benefits-list,
+body.theme-softy .process-output-list {
+    display: grid;
+    gap: 0.72rem;
+    padding: 0;
+    margin: 1.25rem 0 0;
+    list-style: none;
+}
+
+body.theme-softy .nx-card-list li,
+body.theme-softy .service-features li,
+body.theme-softy .features-list li,
+body.theme-softy .work-step-outputs li,
+body.theme-softy .industry-benefits-list li,
+body.theme-softy .process-output-list li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.7rem;
+    color: var(--softy-text);
+    text-align: left !important;
+}
+
+body.theme-softy .service-features i,
+body.theme-softy .features-list i,
+body.theme-softy .work-step-outputs i,
+body.theme-softy .industry-benefits-list i,
+body.theme-softy .process-output-list i {
+    color: var(--softy-secondary);
+    margin-top: 0.15rem;
+}
+
+body.theme-softy .nx-home-services,
+body.theme-softy .nx-home-capabilities,
+body.theme-softy .nx-home-case-studies,
+body.theme-softy .nx-home-testimonials {
+    background: #ffffff;
+}
+
+body.theme-softy .nx-home-industries,
+body.theme-softy .nx-home-final-cta {
+    background: linear-gradient(180deg, var(--softy-surface-alt), #ffffff);
+}
+
+body.theme-softy .nx-services-grid,
+body.theme-softy .nx-industries-grid,
+body.theme-softy .nx-capability-grid,
+body.theme-softy .nx-testimonial-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+body.theme-softy .nx-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.theme-softy .nx-industries-grid,
+body.theme-softy .nx-capability-grid,
+body.theme-softy .nx-testimonial-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.theme-softy .nx-service-card,
+body.theme-softy .nx-industry-card,
+body.theme-softy .nx-capability-card,
+body.theme-softy .nx-testimonial-card {
+    padding: 2rem;
+}
+
+body.theme-softy .nx-service-card h3,
+body.theme-softy .nx-industry-card h3,
+body.theme-softy .nx-capability-card h3,
+body.theme-softy .nx-testimonial-card strong {
+    margin-top: 1.25rem;
+    font-size: 17px;
+}
+
+body.theme-softy .nx-chip-row,
+body.theme-softy .service-technologies,
+body.theme-softy .technology-capability-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+body.theme-softy .nx-chip,
+body.theme-softy .tech-tag,
+body.theme-softy .technology-chip,
+body.theme-softy .project-proof-type,
+body.theme-softy .project-proof-industry,
+body.theme-softy .service-detail-pill,
+body.theme-softy .case-study-detail-meta span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(130, 97, 238, 0.08);
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    color: var(--softy-heading) !important;
+    font-weight: 700;
+}
+
+body.theme-softy .nx-home-process,
+body.theme-softy .how-we-work-page .page-block:first-of-type,
+body.theme-softy .how-we-work-page .work-hero-modern + .page-block {
+    position: relative;
+}
+
+body.theme-softy .nx-home-process {
+    background:
+        linear-gradient(135deg, rgba(130, 97, 238, 0.92), rgba(255, 88, 158, 0.88)),
+        url("../images/reference/softy-process-bg.png") center / cover no-repeat;
+}
+
+body.theme-softy .nx-home-process .section-heading h2,
+body.theme-softy .nx-home-process .section-heading .section-subtitle {
+    color: #ffffff !important;
+}
+
+body.theme-softy .nx-home-process .section-heading .section-eyebrow {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+body.theme-softy .nx-workflow-grid,
+body.theme-softy .work-process-timeline,
+body.theme-softy .process-flow-journey {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+body.theme-softy .nx-workflow-card,
+body.theme-softy .work-step-card-modern,
+body.theme-softy .process-journey-card {
+    padding: 1.8rem 1.35rem;
+    text-align: center;
+}
+
+body.theme-softy .nx-reference-process-card {
+    align-items: center;
+    min-height: 100%;
+    padding: 2.15rem 1.55rem 1.9rem !important;
+    border-radius: 24px !important;
+    text-align: center;
+    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.12) !important;
+}
+
+body.theme-softy .nx-reference-process-card::before {
+    inset: 14px -14px -14px 14px !important;
+    border-radius: 24px !important;
+    background: rgba(130, 97, 238, 0.17) !important;
+    opacity: 0.45 !important;
+}
+
+body.theme-softy .nx-reference-process-card .nx-icon-badge {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1.25rem;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+body.theme-softy .nx-reference-process-card .nx-icon-badge i {
+    font-size: 1.9rem;
+    color: #b27af7;
+}
+
+body.theme-softy .nx-reference-process-card h3 {
+    margin: 0 0 0.8rem;
+    font-size: 15px !important;
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+}
+
+body.theme-softy .nx-reference-process-card p {
+    margin: 0;
+    max-width: 20ch;
+    color: #8a8fb0 !important;
+    font-size: 14px !important;
+    line-height: 1.6;
+}
+
+body.theme-softy .nx-reference-process-card .nx-card-list {
+    width: 100%;
+    gap: 0.55rem;
+    margin-top: 1rem;
+}
+
+body.theme-softy .nx-reference-process-card .nx-card-list li {
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+body.theme-softy .nx-reference-process-card .nx-card-list li::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex: 0 0 auto;
+    margin-top: 0.42rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+}
+
+body.theme-softy .nx-reference-process-card .nx-text-link {
+    margin-top: auto;
+    padding-top: 1.2rem;
+    color: var(--softy-primary);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+body.theme-softy .nx-home-services .nx-services-grid,
+body.theme-softy .nx-home-industries .nx-industries-grid,
+body.theme-softy .nx-home-capabilities .nx-capability-grid,
+body.theme-softy .nx-home-process .nx-workflow-grid {
+    align-items: stretch;
+}
+
+body.theme-softy .nx-home-services .nx-services-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.8rem 1.55rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card {
+    align-items: flex-start;
+    text-align: left;
+    gap: 0.8rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-icon-badge {
+    margin: 0 0 1rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card h3 {
+    width: 100%;
+    margin: 0;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card p {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-card-list {
+    width: 100%;
+    margin-top: 0.85rem;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-card-list li {
+    justify-content: flex-start;
+    text-align: left !important;
+}
+
+body.theme-softy .nx-home-services .nx-reference-process-card .nx-text-link {
+    width: 100%;
+    padding-top: 1rem;
+    text-align: left;
+}
+
+body.theme-softy .nx-home-industries .nx-industries-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.8rem 1.55rem;
+}
+
+body.theme-softy .nx-home-capabilities .nx-capability-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.8rem 1.25rem;
+}
+
+body.theme-softy .nx-home-process .nx-workflow-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.6rem 1.25rem;
+    align-items: start;
+}
+
+body.theme-softy .nx-service-card,
+body.theme-softy .nx-industry-card,
+body.theme-softy .nx-capability-card,
+body.theme-softy .nx-workflow-card {
+    position: relative;
+}
+
+body.theme-softy .nx-service-card p,
+body.theme-softy .nx-industry-card p,
+body.theme-softy .nx-capability-card p {
+    max-width: 24ch;
+}
+
+body.theme-softy .nx-capability-card .nx-chip-row {
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+body.theme-softy .nx-capability-card .nx-chip {
+    min-height: 32px;
+    padding: 0.4rem 0.7rem;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+body.theme-softy .nx-workflow-card {
+    padding-top: 1.9rem !important;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-top {
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.9rem;
+}
+
+body.theme-softy .nx-workflow-card .nx-step-number {
+    min-width: auto;
+    height: auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--softy-primary);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta {
+    width: 100%;
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(130, 97, 238, 0.1);
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta strong,
+body.theme-softy .nx-workflow-card .nx-workflow-meta span {
+    display: block;
+    text-align: center;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta strong {
+    margin-bottom: 0.3rem;
+    color: var(--softy-heading);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.theme-softy .nx-workflow-card .nx-workflow-meta span {
+    max-width: 22ch;
+    margin: 0 auto;
+    color: var(--softy-text);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+body.theme-softy .nx-workflow-top,
+body.theme-softy .solution-cluster-top,
+body.theme-softy .technology-capability-head,
+body.theme-softy .testimonial-card-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+body.theme-softy .nx-workflow-top {
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+body.theme-softy .nx-step-number,
+body.theme-softy .work-step-index,
+body.theme-softy .process-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(130, 97, 238, 0.08);
+    color: var(--softy-primary);
+    font-weight: 800;
+}
+
+body.theme-softy .nx-case-studies-grid,
+body.theme-softy .case-grid,
+body.theme-softy .case-study-detail-grid,
+body.theme-softy .services-showcase-grid,
+body.theme-softy .focused-landing-pages-grid,
+body.theme-softy .industry-page-grid,
+body.theme-softy .why-modern-grid,
+body.theme-softy .about-stats-grid,
+body.theme-softy .about-story-cards,
+body.theme-softy .pricing-plans-grid,
+body.theme-softy .faq-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+body.theme-softy .nx-case-studies-grid,
+body.theme-softy .case-grid,
+body.theme-softy .services-showcase-grid,
+body.theme-softy .focused-landing-pages-grid,
+body.theme-softy .industry-page-grid,
+body.theme-softy .why-modern-grid,
+body.theme-softy .pricing-plans-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+body.theme-softy .case-study-detail-grid,
+body.theme-softy .about-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.theme-softy .faq-grid,
+body.theme-softy .about-story-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.theme-softy .solution-clusters-grid,
+body.theme-softy .service-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem;
+    align-items: stretch;
+}
+
+body.theme-softy .nx-case-card,
+body.theme-softy .case-card,
+body.theme-softy .proof-media-card,
+body.theme-softy .services-showcase-card,
+body.theme-softy .focused-landing-card,
+body.theme-softy .pillar-card,
+body.theme-softy .pricing-plan-card,
+body.theme-softy .technology-capability-card,
+body.theme-softy .industry-page-grid .nx-industry-card,
+body.theme-softy .why-modern-card {
+    padding: 1.85rem;
+}
+
+body.theme-softy .case-image-wrapper,
+body.theme-softy .service-media-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #f6f5ff, #efecff);
+    border: 1px solid var(--softy-border);
+    overflow: hidden;
+}
+
+body.theme-softy .case-image,
+body.theme-softy .project-proof-media-link img,
+body.theme-softy .service-media-frame img,
+body.theme-softy .service-detail-visual-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+body.theme-softy .case-image-placeholder,
+body.theme-softy .service-visual-placeholder {
+    position: relative;
+    width: 100%;
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(130, 97, 238, 0.16), transparent 30%),
+        linear-gradient(180deg, #f8f7ff, #f1efff);
+    color: var(--softy-heading);
+    text-align: center;
+}
+
+body.theme-softy .service-visual-grid,
+body.theme-softy .service-visual-glow {
+    display: none;
+}
+
+body.theme-softy .case-card-meta,
+body.theme-softy .nx-case-meta,
+body.theme-softy .service-card-kicker,
+body.theme-softy .pricing-plan-card .plan-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+}
+
+body.theme-softy .nx-case-row,
+body.theme-softy .case-results,
+body.theme-softy .case-solution-line,
+body.theme-softy .service-detail-stat,
+body.theme-softy .industry-outcome-card,
+body.theme-softy .outcome-item {
+    padding: 1rem 1.1rem;
+    margin-top: 1rem;
+    border-radius: 18px;
+    background: var(--softy-surface-soft);
+    border: 1px solid var(--softy-border);
+}
+
+body.theme-softy .service-detail-stat strong,
+body.theme-softy .case-results span,
+body.theme-softy .nx-case-row strong {
+    display: block;
+    color: var(--softy-heading);
+}
+
+body.theme-softy .service-detail-hero,
+body.theme-softy .solution-hero-shell,
+body.theme-softy .about-hero-grid,
+body.theme-softy .two-col,
+body.theme-softy .quote-layout,
+body.theme-softy .service-detail-columns,
+body.theme-softy .industry-approach-grid {
+    display: grid;
+    gap: 1.6rem;
+    align-items: start;
+}
+
+body.theme-softy .service-detail-hero {
+    grid-template-columns: minmax(280px, 0.95fr) minmax(0, 1.3fr) minmax(250px, 0.8fr);
+    padding: 2rem;
+}
+
+body.theme-softy .solution-hero-shell,
+body.theme-softy .about-hero-grid,
+body.theme-softy .industry-approach-grid,
+body.theme-softy .service-detail-columns,
+body.theme-softy .two-col,
+body.theme-softy .quote-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.theme-softy .industry-approach-panel,
+body.theme-softy .industry-outcome-panel {
+    padding: 2.2rem 2rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.2rem;
+}
+
+body.theme-softy .industry-approach-panel h2,
+body.theme-softy .industry-outcome-panel h3,
+body.theme-softy .industry-outcome-card h4 {
+    margin: 0;
+    color: var(--softy-heading) !important;
+    opacity: 1 !important;
+    text-align: left !important;
+    line-height: 1.18;
+}
+
+body.theme-softy .industry-approach-panel h2 {
+    font-size: clamp(2.2rem, 4vw, 3.1rem);
+    max-width: 11ch;
+}
+
+body.theme-softy .industry-outcome-panel h3 {
+    font-size: clamp(1.95rem, 3.2vw, 2.65rem);
+    max-width: 12ch;
+}
+
+body.theme-softy .industry-outcome-card h4 {
+    font-size: 1.1rem;
+}
+
+body.theme-softy .industry-outcome-stack {
+    width: 100%;
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.2rem;
+}
+
+body.theme-softy .industry-approach-panel > p,
+body.theme-softy .industry-outcome-panel > p {
+    max-width: none;
+    margin: 0;
+    line-height: 1.72;
+}
+
+body.theme-softy .industry-outcome-card {
+    min-height: 0;
+    margin-top: 0;
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+}
+
+body.theme-softy .industry-outcome-card p {
+    max-width: none;
+    margin: 0;
+    line-height: 1.72 !important;
+}
+
+body.theme-softy .industry-benefits-list {
+    width: 100%;
+    margin-top: 0.35rem;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card,
+body.theme-softy .service-detail-grid .service-detail-card,
+body.theme-softy .faq-grid .service-detail-card,
+body.theme-softy .case-study-detail-grid .case-study-detail-card,
+body.theme-softy .solution-landing-page .technology-capability-grid .technology-capability-card,
+body.theme-softy .services-page .technology-capability-grid .technology-capability-card,
+body.theme-softy .solution-landing-page .process-flow-journey .process-journey-card,
+body.theme-softy .services-page .process-flow-journey .process-journey-card,
+body.theme-softy .how-we-work-page .work-process-timeline .work-step-card-modern {
+    align-items: flex-start;
+    text-align: left !important;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card,
+body.theme-softy .service-detail-grid .service-detail-card,
+body.theme-softy .faq-grid .service-detail-card,
+body.theme-softy .case-study-detail-grid .case-study-detail-card {
+    padding: 1.45rem 1.5rem;
+    border-radius: 24px;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-top,
+body.theme-softy .solution-landing-page .technology-capability-head,
+body.theme-softy .services-page .technology-capability-head,
+body.theme-softy .solution-landing-page .process-flow-journey .process-node,
+body.theme-softy .services-page .process-flow-journey .process-node,
+body.theme-softy .how-we-work-page .work-step-card-modern {
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-icon,
+body.theme-softy .solution-landing-page .technology-capability-icon,
+body.theme-softy .services-page .technology-capability-icon,
+body.theme-softy .solution-landing-page .process-journey-icon,
+body.theme-softy .services-page .process-journey-icon,
+body.theme-softy .how-we-work-page .work-step-index {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    flex: 0 0 auto;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card h3,
+body.theme-softy .service-detail-grid .service-detail-card h3,
+body.theme-softy .faq-grid .service-detail-card h3,
+body.theme-softy .case-study-detail-grid .case-study-detail-card h3,
+body.theme-softy .solution-landing-page .technology-capability-card h3,
+body.theme-softy .services-page .technology-capability-card h3,
+body.theme-softy .solution-landing-page .process-journey-card h3,
+body.theme-softy .services-page .process-journey-card h3,
+body.theme-softy .how-we-work-page .work-step-card-modern h3 {
+    margin: 0;
+    text-align: left;
+}
+
+body.theme-softy .solution-clusters-grid .solution-cluster-card p,
+body.theme-softy .service-detail-grid .service-detail-card p,
+body.theme-softy .faq-grid .service-detail-card p,
+body.theme-softy .case-study-detail-grid .case-study-detail-card p,
+body.theme-softy .solution-landing-page .technology-capability-card p,
+body.theme-softy .services-page .technology-capability-card p,
+body.theme-softy .solution-landing-page .process-journey-card p,
+body.theme-softy .services-page .process-journey-card p,
+body.theme-softy .how-we-work-page .work-step-card-modern p {
+    text-align: left;
+}
+
+body.theme-softy .solution-landing-page .technology-capability-tags,
+body.theme-softy .services-page .technology-capability-tags {
+    justify-content: flex-start;
+}
+
+body.theme-softy .solution-landing-page .process-output-list li,
+body.theme-softy .services-page .process-output-list li,
+body.theme-softy .how-we-work-page .work-step-outputs li {
+    justify-content: flex-start;
+}
+
+body.theme-softy .service-detail-main h1,
+body.theme-softy .solution-hero-copy h1,
+body.theme-softy .about-hero-copy h1,
+body.theme-softy .case-study-detail-top h1 {
+    font-size: clamp(2rem, 3vw, 2.55rem);
+    line-height: 1.18;
+}
+
+body.theme-softy .service-detail-subheading,
+body.theme-softy .service-detail-copy,
+body.theme-softy .about-hero-text,
+body.theme-softy .service-detail-card p,
+body.theme-softy .case-study-detail-card p {
+    line-height: 1.85;
+}
+
+body.theme-softy .service-detail-visual-card,
+body.theme-softy .solution-hero-visual-card,
+body.theme-softy .about-hero-panel {
+    background: #ffffff;
+    border: 1px solid var(--softy-border);
+    border-radius: 28px;
+    padding: 1.5rem;
+    box-shadow: var(--softy-shadow);
+}
+
+body.theme-softy .about-hero-panel h3 {
+    margin-bottom: 1rem;
+    color: var(--softy-heading) !important;
+    text-shadow: none !important;
+}
+
+body.theme-softy .about-hero-panel ul {
+    display: grid;
+    gap: 0.9rem;
+    padding: 0;
+    list-style: none;
+}
+
+body.theme-softy .about-hero-panel li {
+    display: flex;
+    gap: 0.8rem;
+    color: var(--softy-heading) !important;
+}
+
+body.theme-softy .about-hero-panel i {
+    color: var(--softy-secondary) !important;
+    margin-top: 0.2rem;
+}
+
+body.theme-softy .services-hero-modern,
+body.theme-softy .industries-hero-modern,
+body.theme-softy .case-studies-hero,
+body.theme-softy .work-hero-modern,
+body.theme-softy .why-hero-modern,
+body.theme-softy .about-hero-modern,
+body.theme-softy .solution-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(7rem, 10vw, 8.5rem) 0 clamp(4.25rem, 6vw, 6rem) !important;
+    margin-top: 0 !important;
+    background: linear-gradient(135deg, #8b61eb, #ec5fa4) !important;
+    border-bottom: 0 !important;
+}
+
+body.theme-softy.services-page .services-hero-modern,
+body.theme-softy.industries-page .industries-hero-modern,
+body.theme-softy.case-studies-page .case-studies-hero,
+body.theme-softy.how-we-work-page .work-hero-modern,
+body.theme-softy.why-choose-page .why-hero-modern,
+body.theme-softy.about-page .about-hero-modern,
+body.theme-softy.solution-landing-page .solution-hero {
+    margin-top: calc(-1 * var(--page-hero-overlap)) !important;
+    padding-top: calc(clamp(7rem, 10vw, 8.5rem) + var(--page-hero-overlap)) !important;
+}
+
+body.theme-softy .services-hero-modern::before,
+body.theme-softy .industries-hero-modern::before,
+body.theme-softy .case-studies-hero::before,
+body.theme-softy .work-hero-modern::before,
+body.theme-softy .why-hero-modern::before,
+body.theme-softy .about-hero-modern::before,
+body.theme-softy .solution-hero::before {
+    content: "";
+    position: absolute;
+    inset: -3%;
+    background: var(--hero-photo) center center / cover no-repeat;
+    filter: blur(14px);
+    opacity: 0.48;
+    transform: scale(1.08);
+    pointer-events: none;
+}
+
+body.theme-softy .services-hero-modern::after,
+body.theme-softy .industries-hero-modern::after,
+body.theme-softy .case-studies-hero::after,
+body.theme-softy .work-hero-modern::after,
+body.theme-softy .why-hero-modern::after,
+body.theme-softy .about-hero-modern::after,
+body.theme-softy .solution-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.8), rgba(255, 88, 158, 0.76)),
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 82%, rgba(255, 255, 255, 0.08), transparent 18%);
+    pointer-events: none;
+}
+
+body.theme-softy .services-hero-inner,
+body.theme-softy .industries-hero-inner,
+body.theme-softy .work-hero-inner,
+body.theme-softy .why-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-softy.about-page {
+    margin: 0;
+    padding: 0;
+}
+
+body.theme-softy .services-hero-inner,
+body.theme-softy .industries-hero-inner {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+body.theme-softy .solution-hero-shell,
+body.theme-softy .about-hero-grid {
+    position: relative;
+    z-index: 1;
+}
+
+body.theme-softy .services-hero-inner h1,
+body.theme-softy .industries-hero-inner h1,
+body.theme-softy .case-studies-hero h1,
+body.theme-softy .work-hero-inner h1,
+body.theme-softy .why-hero-inner h1,
+body.theme-softy .solution-hero-shell h1,
+body.theme-softy .about-hero-copy h1 {
+    color: #ffffff !important;
+    text-shadow: 0 16px 36px rgba(54, 28, 122, 0.18);
+    font-size: clamp(2rem, 3vw, 2.45rem);
+    line-height: 1.18;
+}
+
+body.theme-softy .solution-hero-copy h1,
+body.theme-softy .about-hero-copy h1,
+body.theme-softy .service-detail-main h1 {
+    max-width: 14ch;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: balance;
+}
+
+body.theme-softy .services-hero-inner > p,
+body.theme-softy .industries-hero-inner > p,
+body.theme-softy .case-studies-hero p,
+body.theme-softy .work-hero-inner > p,
+body.theme-softy .why-hero-inner > p,
+body.theme-softy .solution-hero-copy p,
+body.theme-softy .about-hero-copy p {
+    color: rgba(255, 255, 255, 0.94) !important;
+}
+
+body.theme-softy .services-hero-inner .hero-actions,
+body.theme-softy .industries-hero-inner .hero-actions,
+body.theme-softy .case-studies-hero .hero-actions,
+body.theme-softy .work-hero-inner .hero-actions,
+body.theme-softy .why-hero-inner .hero-actions,
+body.theme-softy .solution-hero-copy .hero-actions,
+body.theme-softy .about-hero-copy .hero-actions {
+    justify-content: center;
+}
+
+body.theme-softy .solution-hero-shell,
+body.theme-softy .about-hero-grid {
+    max-width: 1140px;
+    align-items: center;
+    gap: clamp(1.8rem, 3vw, 3rem);
+}
+
+body.theme-softy .solution-hero-copy,
+body.theme-softy .about-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-softy .solution-hero-copy .section-eyebrow,
+body.theme-softy .about-hero-copy .section-eyebrow,
+body.theme-softy .service-detail-main .section-eyebrow {
+    margin-inline: auto;
+}
+
+body.theme-softy .solution-hero-copy > p,
+body.theme-softy .about-hero-copy > p,
+body.theme-softy .service-detail-main .service-detail-subheading,
+body.theme-softy .service-detail-main .service-detail-copy {
+    max-width: 40ch;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+body.theme-softy .solution-hero-copy .cta-tertiary-links,
+body.theme-softy .about-hero-copy .cta-tertiary-links,
+body.theme-softy .service-detail-main .cta-tertiary-links {
+    justify-content: center;
+}
+
+body.theme-softy .solution-hero-visual-card,
+body.theme-softy .about-hero-panel {
+    padding: clamp(1.4rem, 2vw, 1.9rem);
+    border-radius: 32px;
+}
+
+body.theme-softy .about-hero-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+body.theme-softy .service-detail-page .page-block:first-child {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    margin-top: calc(-1 * var(--page-hero-overlap));
+    padding-top: calc(clamp(7rem, 10vw, 8.5rem) + var(--page-hero-overlap)) !important;
+    padding-bottom: clamp(4.25rem, 6vw, 5.35rem) !important;
+    background: linear-gradient(135deg, #8b61eb, #ec5fa4) !important;
+}
+
+body.theme-softy .service-detail-page .page-block:first-child::before {
+    content: "";
+    position: absolute;
+    inset: -3%;
+    background: var(--hero-photo) center center / cover no-repeat;
+    filter: blur(14px);
+    opacity: 0.46;
+    transform: scale(1.08);
+    pointer-events: none;
+}
+
+body.theme-softy .service-detail-page .page-block:first-child::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.8), rgba(255, 88, 158, 0.76)),
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 82%, rgba(255, 255, 255, 0.08), transparent 18%);
+    pointer-events: none;
+}
+
+body.theme-softy .service-detail-hero {
+    position: relative;
+    z-index: 1;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.88fr);
+    grid-template-areas:
+        "main visual"
+        "side side";
+    align-items: center;
+    gap: clamp(1.6rem, 3vw, 2.6rem);
+    padding: 0;
+}
+
+body.theme-softy .service-detail-main {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+body.theme-softy .service-detail-visual-card {
+    grid-area: visual;
+    padding: 1.45rem;
+}
+
+body.theme-softy .service-detail-sidecard {
+    grid-area: side;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1.35rem 1.45rem;
+}
+
+body.theme-softy .service-detail-sidecard .service-detail-pill {
+    grid-column: 1 / -1;
+    justify-self: center;
+}
+
+body.theme-softy .service-detail-sidecard .service-detail-stat {
+    margin-top: 0;
+    text-align: left;
+}
+
+body.theme-softy .service-detail-main h1,
+body.theme-softy .service-detail-main .service-detail-subheading,
+body.theme-softy .service-detail-main .service-detail-copy,
+body.theme-softy .service-detail-main .cta-tertiary-links a {
+    color: #ffffff !important;
+}
+
+body.theme-softy .service-detail-main .hero-actions {
+    justify-content: center;
+}
+
+body.theme-softy .service-detail-main .btn-outline-primary {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(255, 255, 255, 0.72);
+    color: var(--softy-heading) !important;
+}
+
+body.theme-softy .services-showcase-grid .services-showcase-card,
+body.theme-softy .focused-landing-pages-grid .focused-landing-card,
+body.theme-softy .pillars-grid .pillar-card,
+body.theme-softy .technology-capability-grid .technology-capability-card,
+body.theme-softy .process-flow-journey .process-journey-card,
+body.theme-softy .work-process-timeline .work-step-card-modern,
+body.theme-softy .industry-page-grid .nx-industry-card,
+body.theme-softy .why-modern-card,
+body.theme-softy .pricing-plan-card {
+    text-align: left;
+}
+
+body.theme-softy .services-showcase-media,
+body.theme-softy .services-showcase-card .services-showcase-media {
+    margin: 0 0 1.25rem;
+}
+
+body.theme-softy .services-showcase-card h3,
+body.theme-softy .focused-landing-card h3,
+body.theme-softy .industry-page-grid .nx-industry-card h3 {
+    margin-bottom: 0.9rem;
+}
+
+body.theme-softy .hero-action-note {
+    max-width: 680px;
+    margin: 1rem auto 0;
+    color: rgba(255, 255, 255, 0.82) !important;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+body.theme-softy .services-showcase-points,
+body.theme-softy .focused-landing-points {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.theme-softy .services-showcase-points li,
+body.theme-softy .focused-landing-points li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    color: var(--softy-text);
+    line-height: 1.65;
+    text-align: left !important;
+}
+
+body.theme-softy .services-showcase-points li::before,
+body.theme-softy .focused-landing-points li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin-top: 0.55rem;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+}
+
+body.theme-softy .services-showcase-actions,
+body.theme-softy .focused-landing-actions,
+body.theme-softy .project-proof-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem 1rem;
+    margin-top: auto;
+    padding-top: 1.35rem;
+}
+
+body.theme-softy .secondary-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--softy-text) !important;
+    font-weight: 700;
+}
+
+body.theme-softy .pillars-grid,
+body.theme-softy .technology-capability-grid,
+body.theme-softy .testimonial-strip,
+body.theme-softy .stats-ribbon {
+    display: grid;
+    gap: 1.5rem;
+}
+
+body.theme-softy .pillars-grid,
+body.theme-softy .technology-capability-grid,
+body.theme-softy .testimonial-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.theme-softy .stats-ribbon {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 2rem;
+}
+
+body.theme-softy .pillars-risk-line,
+body.theme-softy .benefit-item,
+body.theme-softy .stat-chip,
+body.theme-softy .solution-service-card {
+    background: #ffffff;
+    border: 1px solid var(--softy-border);
+    box-shadow: var(--softy-shadow);
+}
+
+body.theme-softy .pillars-risk-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: 24px;
+    text-align: center;
+}
+
+body.theme-softy .pillars-risk-line p,
+body.theme-softy .pillars-risk-line i {
+    margin: 0;
+    color: var(--softy-heading);
+}
+
+body.theme-softy .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+body.theme-softy .benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border-radius: 20px;
+    color: var(--softy-heading);
+    font-weight: 700;
+}
+
+body.theme-softy .benefit-item i {
+    color: var(--softy-secondary);
+    margin-top: 0.15rem;
+}
+
+body.theme-softy .stat-chip {
+    padding: 1.4rem 1.15rem;
+    border-radius: 24px;
+    text-align: center;
+}
+
+body.theme-softy .stat-chip h3,
+body.theme-softy .stat-chip p {
+    margin: 0;
+}
+
+body.theme-softy .stat-chip p {
+    margin-top: 0.6rem;
+}
+
+body.theme-softy .testimonial-strip {
+    margin-top: 2rem;
+}
+
+body.theme-softy .unified-testimonial-card {
+    padding: 1.65rem;
+}
+
+body.theme-softy .service-category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+}
+
+body.theme-softy .service-category-filter button {
+    min-height: 44px;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--softy-border-strong);
+    background: #ffffff;
+    color: var(--softy-heading);
+    font-weight: 700;
+}
+
+body.theme-softy .service-category-filter button.active,
+body.theme-softy .service-category-filter button:hover {
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+    border-color: transparent;
+    color: #ffffff;
+}
+
+body.theme-softy .service-categories-grid {
+    display: grid;
+    gap: 1.25rem;
+}
+
+body.theme-softy .service-category-block {
+    padding: 1.75rem;
+}
+
+body.theme-future.theme-softy .service-category-block,
+body.theme-softy .service-category-block {
+    padding: 2.2rem !important;
+    border-radius: 30px !important;
+    background: linear-gradient(180deg, rgba(130, 97, 238, 0.08), rgba(255, 88, 158, 0.06)) !important;
+    border: 1px solid rgba(130, 97, 238, 0.12) !important;
+    box-shadow: none !important;
+}
+
+body.theme-softy .service-category-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.15rem;
+}
+
+body.theme-future.theme-softy .service-cluster-header,
+body.theme-softy .service-cluster-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start !important;
+    justify-content: space-between;
+    gap: 1.35rem 1.6rem;
+    margin-bottom: 1.7rem;
+}
+
+body.theme-future.theme-softy .service-cluster-kicker,
+body.theme-softy .service-cluster-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 52px;
+    padding: 0.78rem 1.4rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #2a3c77, #1e2a63);
+    color: #ffffff !important;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: 0 14px 28px rgba(30, 42, 99, 0.22);
+}
+
+body.theme-future.theme-softy .service-cluster-kicker i,
+body.theme-softy .service-cluster-kicker i {
+    color: #6fd1ff !important;
+}
+
+body.theme-future.theme-softy .category-title-modern,
+body.theme-softy .category-title-modern {
+    margin: 1.25rem 0 0;
+    color: var(--softy-heading) !important;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    line-height: 1.22;
+    max-width: 25ch;
+}
+
+body.theme-future.theme-softy .service-cluster-cta,
+body.theme-softy .service-cluster-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    justify-content: flex-end;
+}
+
+body.theme-future.theme-softy .service-cluster-summary-grid,
+body.theme-softy .service-cluster-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.3rem;
+    margin-bottom: 1.45rem;
+}
+
+body.theme-future.theme-softy .service-summary-card,
+body.theme-softy .service-summary-card {
+    position: relative;
+    padding: 1.8rem 1.55rem !important;
+    border-radius: 24px !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(130, 97, 238, 0.12) !important;
+    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.1) !important;
+    overflow: visible;
+}
+
+body.theme-future.theme-softy .service-summary-card::before,
+body.theme-softy .service-summary-card::before {
+    content: "";
+    position: absolute;
+    inset: 12px -12px -12px 12px;
+    border-radius: 24px;
+    background: rgba(130, 97, 238, 0.14);
+    opacity: 0.42;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.theme-future.theme-softy .service-summary-card span,
+body.theme-softy .service-summary-card span {
+    display: block;
+    margin-bottom: 0.95rem;
+    color: var(--softy-primary) !important;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+body.theme-future.theme-softy .service-summary-card p,
+body.theme-future.theme-softy .service-summary-card li,
+body.theme-softy .service-summary-card p,
+body.theme-softy .service-summary-card li {
+    color: var(--softy-text) !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+}
+
+body.theme-future.theme-softy .service-summary-card ul,
+body.theme-softy .service-summary-card ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+body.theme-future.theme-softy .service-category-block .services-grid,
+body.theme-softy .service-category-block .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.3rem;
+}
+
+body.theme-future.theme-softy .service-category-block .media-service-card,
+body.theme-future.theme-softy .service-category-block .solution-service-card,
+body.theme-softy .service-category-block .media-service-card,
+body.theme-softy .service-category-block .solution-service-card {
+    position: relative;
+    padding: 1.7rem !important;
+    border-radius: 24px !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(130, 97, 238, 0.12) !important;
+    box-shadow: 0 14px 30px rgba(130, 97, 238, 0.1) !important;
+    overflow: visible;
+}
+
+body.theme-future.theme-softy .service-category-block .media-service-card::before,
+body.theme-future.theme-softy .service-category-block .solution-service-card::before,
+body.theme-softy .service-category-block .media-service-card::before,
+body.theme-softy .service-category-block .solution-service-card::before {
+    content: "";
+    position: absolute;
+    inset: 12px -12px -12px 12px;
+    border-radius: 24px;
+    background: rgba(130, 97, 238, 0.14);
+    opacity: 0.42;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body.theme-future.theme-softy .service-category-block .service-media-frame,
+body.theme-softy .service-category-block .service-media-frame {
+    min-height: 172px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #ffffff, #faf8ff);
+    border: 1px solid rgba(130, 97, 238, 0.1);
+    box-shadow: none;
+}
+
+body.theme-future.theme-softy .service-category-block .service-media-frame::before,
+body.theme-softy .service-category-block .service-media-frame::before {
+    background: linear-gradient(180deg, rgba(130, 97, 238, 0.03), rgba(130, 97, 238, 0.08)) !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-visual-placeholder,
+body.theme-softy .service-category-block .service-visual-placeholder {
+    background: linear-gradient(180deg, #fdfcff, #f6f2ff) !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-visual-icon,
+body.theme-softy .service-category-block .service-visual-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 12px 24px rgba(130, 97, 238, 0.14);
+}
+
+body.theme-future.theme-softy .service-category-block .service-visual-icon i,
+body.theme-softy .service-category-block .service-visual-icon i {
+    color: var(--softy-primary) !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-visual-badge,
+body.theme-softy .service-category-block .service-visual-badge {
+    background: rgba(255, 255, 255, 0.92) !important;
+    color: var(--softy-heading) !important;
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    box-shadow: 0 10px 22px rgba(130, 97, 238, 0.1);
+}
+
+body.theme-future.theme-softy .service-category-block .service-content,
+body.theme-softy .service-category-block .service-content {
+    gap: 1rem;
+}
+
+body.theme-future.theme-softy .service-category-block .media-cluster-kicker,
+body.theme-softy .service-category-block .solution-service-meta span,
+body.theme-softy .service-category-block .media-cluster-kicker,
+body.theme-softy .service-category-block .solution-service-meta span {
+    color: var(--softy-primary) !important;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+body.theme-future.theme-softy .service-category-block .solution-service-meta strong,
+body.theme-softy .service-category-block .solution-service-meta strong {
+    color: var(--softy-heading) !important;
+    font-size: 0.88rem;
+}
+
+body.theme-future.theme-softy .service-category-block .service-title,
+body.theme-softy .service-category-block .service-description,
+body.theme-future.theme-softy .service-category-block .service-outcome-list li,
+body.theme-softy .service-category-block .service-title,
+body.theme-softy .service-category-block .service-description,
+body.theme-softy .service-category-block .service-outcome-list li {
+    color: var(--softy-heading) !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-title,
+body.theme-softy .service-category-block .service-title {
+    font-size: 1.12rem !important;
+    line-height: 1.4 !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-description,
+body.theme-softy .service-category-block .service-description {
+    display: block !important;
+    overflow: visible !important;
+    min-height: 0 !important;
+    color: var(--softy-text) !important;
+    line-height: 1.72 !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-outcome-list li,
+body.theme-softy .service-category-block .service-outcome-list li {
+    color: var(--softy-text) !important;
+}
+
+body.theme-future.theme-softy .service-category-block .service-actions,
+body.theme-softy .service-category-block .service-actions {
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding-top: 1rem;
+}
+
+body.theme-future.theme-softy .service-category-block .service-actions .project-link-btn,
+body.theme-softy .service-category-block .service-actions .project-link-btn {
+    min-height: 44px;
+    padding: 0.72rem 1.18rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+    color: #ffffff !important;
+    box-shadow: 0 16px 30px rgba(130, 97, 238, 0.18);
+}
+
+body.theme-future.theme-softy .service-category-block .service-actions .secondary-link,
+body.theme-softy .service-category-block .service-actions .secondary-link {
+    min-height: 44px;
+    padding: 0.72rem 1.18rem;
+    border-radius: 999px;
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    background: #ffffff;
+    color: var(--softy-heading) !important;
+}
+
+body.theme-softy .service-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+body.theme-softy .service-category-headline,
+body.theme-softy .service-card-category,
+body.theme-softy .popular-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(130, 97, 238, 0.08);
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    color: var(--softy-heading);
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+body.theme-softy .solution-service-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 24px;
+}
+
+body.theme-softy .solution-service-card .service-card-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100%;
+}
+
+body.theme-softy .solution-service-card .service-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+    flex: 1;
+}
+
+body.theme-softy .solution-service-card h4 {
+    margin: 0;
+    color: var(--softy-heading);
+    font-size: 18px;
+    line-height: 1.45;
+}
+
+body.theme-softy .solution-service-meta {
+    gap: 0.75rem;
+}
+
+body.theme-softy .service-outcome-list {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.theme-softy .service-outcome-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    color: var(--softy-text);
+    line-height: 1.72;
+}
+
+body.theme-softy .service-outcome-list li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin-top: 0.55rem;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+}
+
+body.theme-softy .service-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1rem;
+    margin-top: auto;
+    padding-top: 0.8rem;
+}
+
+body.theme-softy .case-study-detail-shell {
+    display: grid;
+    gap: clamp(1.4rem, 2.2vw, 2.3rem);
+}
+
+body.theme-softy .case-study-detail-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1rem 1.5rem;
+}
+
+body.theme-softy .case-study-detail-top h1 {
+    max-width: 14ch;
+}
+
+body.theme-softy .case-study-detail-top .service-detail-subheading {
+    max-width: 76ch;
+    font-size: 15px;
+}
+
+body.theme-softy .case-study-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+body.theme-softy .case-image-wrapper-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: clamp(220px, 26vw, 320px);
+    max-height: clamp(260px, 38vw, 420px);
+    padding: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+body.theme-softy .case-image-wrapper-detail .case-image {
+    max-height: clamp(200px, 34vw, 380px);
+    object-fit: contain;
+    object-position: center;
+    border-radius: 20px;
+}
+
+body.theme-softy .case-study-detail-card {
+    padding: clamp(1.15rem, 1.8vw, 1.45rem);
+}
+
+body.theme-softy .case-study-detail-card span {
+    display: block;
+    margin-bottom: 0.85rem;
+    color: var(--softy-primary) !important;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.theme-softy .case-study-detail-card p {
+    display: block;
+    overflow: visible;
+}
+
+body.theme-softy .case-study-tech {
+    display: grid;
+    gap: 0.8rem;
+}
+
+body.theme-softy .case-study-tech h2 {
+    margin-bottom: 0;
+}
+
+body.theme-softy .about-work-cta {
+    padding: 0 0 clamp(34px, 5vw, 52px);
+    margin-bottom: 0;
+}
+
+body.theme-softy .about-work-cta .container {
+    padding: clamp(1.8rem, 2.5vw, 2.6rem);
+    text-align: center;
+}
+
+body.theme-softy .about-work-cta p {
+    max-width: 720px;
+    margin: 0 auto 1.4rem;
+}
+
+body.theme-softy .about-page .site-footer {
+    margin-top: 0;
+}
+
+body.theme-softy .service-card-action,
+body.theme-softy .nx-text-link,
+body.theme-softy .project-link-btn,
+body.theme-softy .cta-tertiary-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--softy-primary) !important;
+    font-weight: 800;
+}
+
+body.theme-softy .services-showcase-actions .project-link-btn,
+body.theme-softy .focused-landing-actions .project-link-btn,
+body.theme-softy .project-proof-actions .project-link-btn {
+    min-height: 44px;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+    color: #ffffff !important;
+    box-shadow: 0 16px 30px rgba(130, 97, 238, 0.22);
+}
+
+body.theme-softy .cta-tertiary-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 1.2rem;
+    margin-top: 1.25rem;
+}
+
+body.theme-softy .services-cta-panel,
+body.theme-softy .industries-cta-panel,
+body.theme-softy .home-cta-final .container,
+body.theme-softy .nx-final-cta-card {
+    position: relative;
+    padding: clamp(2rem, 3vw, 3rem);
+    text-align: center;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.96), rgba(255, 88, 158, 0.92)) !important;
+    border: 0 !important;
+    box-shadow: var(--softy-shadow-lg) !important;
+}
+
+body.theme-softy .services-cta-panel h2,
+body.theme-softy .industries-cta-panel h2,
+body.theme-softy .home-cta-final h2,
+body.theme-softy .nx-final-cta-card h2,
+body.theme-softy .services-cta-panel p,
+body.theme-softy .industries-cta-panel p,
+body.theme-softy .home-cta-final p,
+body.theme-softy .nx-final-cta-card p,
+body.theme-softy .home-cta-final .section-eyebrow,
+body.theme-softy .nx-final-cta-card .section-eyebrow {
+    color: #ffffff !important;
+}
+
+body.theme-softy .services-cta-panel .btn-secondary,
+body.theme-softy .industries-cta-panel .btn-secondary,
+body.theme-softy .home-cta-final .btn-outline-primary,
+body.theme-softy .nx-final-cta-card .btn-secondary {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+body.theme-softy .contact-page .page-block:first-child,
+body.theme-softy .quote-generator-page .page-block:first-child,
+body.theme-softy .service-detail-page .page-block:first-child,
+body.theme-softy .case-study-detail-page .page-block:first-child {
+    padding-top: clamp(7rem, 10vw, 8.5rem);
+}
+
+body.theme-softy .contact-container,
+body.theme-softy .quote-page .container,
+body.theme-softy .case-study-detail-shell {
+    position: relative;
+}
+
+body.theme-softy .contact-container {
+    max-width: 980px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+body.theme-softy .service-detail-container {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 0 0 clamp(52px, 7vw, 88px);
+}
+
+body.theme-softy .service-detail-container .service-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: calc(-1 * var(--page-hero-overlap));
+    padding: calc(clamp(7rem, 10vw, 8.5rem) + var(--page-hero-overlap)) 1.5rem clamp(3.75rem, 5vw, 4.75rem);
+    border-radius: 0 0 40px 40px;
+    background:
+        linear-gradient(135deg, rgba(110, 84, 213, 0.92), rgba(255, 88, 158, 0.88)),
+        url("../images/reference/softy-banner-bg.png") center top / cover no-repeat;
+    text-align: center;
+}
+
+body.theme-softy .service-detail-container .service-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 88% 82%, rgba(255, 255, 255, 0.08), transparent 18%);
+    pointer-events: none;
+}
+
+body.theme-softy .service-detail-container .service-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+body.theme-softy .service-detail-container .service-hero h1 {
+    max-width: 14ch;
+    margin: 0 auto;
+    color: #ffffff;
+    font-size: clamp(2rem, 3vw, 2.55rem);
+    line-height: 1.16;
+    text-shadow: 0 16px 36px rgba(54, 28, 122, 0.18);
+}
+
+body.theme-softy .service-detail-container .hero-subtitle {
+    max-width: 42ch;
+    margin: 1.2rem auto 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+body.theme-softy .service-detail-container .service-content {
+    display: grid;
+    gap: 1.45rem;
+    margin-top: 1.75rem;
+}
+
+body.theme-softy .service-detail-container .service-content > section {
+    background: #ffffff;
+    border: 1px solid var(--softy-border);
+    border-radius: 28px;
+    box-shadow: var(--softy-shadow);
+    padding: clamp(1.45rem, 2vw, 1.9rem);
+}
+
+body.theme-softy .service-detail-container .service-content > section > h2 {
+    margin: 0 0 1rem;
+    color: var(--softy-heading);
+    font-size: clamp(1.45rem, 1.1rem + 0.7vw, 1.9rem);
+    line-height: 1.28;
+}
+
+body.theme-softy .service-detail-container .service-content > section > p {
+    margin: 0;
+    color: var(--softy-text);
+    line-height: 1.8;
+}
+
+body.theme-softy .service-detail-container .tech-grid,
+body.theme-softy .service-detail-container .process-steps,
+body.theme-softy .service-detail-container .marketing-services,
+body.theme-softy .service-detail-container .approach-steps,
+body.theme-softy .service-detail-container .tools-grid,
+body.theme-softy .service-detail-container .results-grid,
+body.theme-softy .service-detail-container .platforms-grid,
+body.theme-softy .service-detail-container .platform-grid,
+body.theme-softy .service-detail-container .process-container,
+body.theme-softy .service-detail-container .tools-metrics-grid,
+body.theme-softy .service-detail-container .methodology-grid,
+body.theme-softy .service-detail-container .methodology-steps,
+body.theme-softy .service-detail-container .training-programs,
+body.theme-softy .service-detail-container .expertise-grid,
+body.theme-softy .service-detail-container .app-types-grid,
+body.theme-softy .service-detail-container .services-grid,
+body.theme-softy .service-detail-container .corporate-features,
+body.theme-softy .service-detail-container .consulting-areas,
+body.theme-softy .service-detail-container .system-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+body.theme-softy .service-detail-container .tech-category,
+body.theme-softy .service-detail-container .step,
+body.theme-softy .service-detail-container .process-step,
+body.theme-softy .service-detail-container .marketing-service,
+body.theme-softy .service-detail-container .approach-step,
+body.theme-softy .service-detail-container .tool-category,
+body.theme-softy .service-detail-container .platform,
+body.theme-softy .service-detail-container .case-study,
+body.theme-softy .service-detail-container .expertise-area,
+body.theme-softy .service-detail-container .app-type,
+body.theme-softy .service-detail-container .feature,
+body.theme-softy .service-detail-container .consulting-area,
+body.theme-softy .service-detail-container .system-type,
+body.theme-softy .service-detail-container .program,
+body.theme-softy .service-detail-container .cloud-service,
+body.theme-softy .service-detail-container .seo-service-category,
+body.theme-softy .service-detail-container .tools-section,
+body.theme-softy .service-detail-container .metrics-section,
+body.theme-softy .service-detail-container .method-step,
+body.theme-softy .service-detail-container .result-stat,
+body.theme-softy .service-detail-container .platform-icon,
+body.theme-softy .service-detail-container .timeline-item,
+body.theme-softy .service-detail-container .stage,
+body.theme-softy .service-detail-container .program-details,
+body.theme-softy .service-detail-container .program-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 100%;
+    gap: 0.8rem;
+    padding: 1.35rem 1.4rem;
+    border-radius: 24px;
+    border: 1px solid rgba(130, 97, 238, 0.12);
+    background: linear-gradient(180deg, #ffffff 0%, #fcfbff 100%);
+    box-shadow: var(--softy-card-shadow);
+    text-align: left;
+}
+
+body.theme-softy .service-detail-container .cloud-service-header,
+body.theme-softy .service-detail-container .seo-service-header,
+body.theme-softy .service-detail-container .area-header,
+body.theme-softy .service-detail-container .system-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+body.theme-softy .service-detail-container .service-icon,
+body.theme-softy .service-detail-container .cloud-service-header i,
+body.theme-softy .service-detail-container .seo-service-header i,
+body.theme-softy .service-detail-container .area-header i,
+body.theme-softy .service-detail-container .system-header i,
+body.theme-softy .service-detail-container .platform-logo,
+body.theme-softy .service-detail-container .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 auto;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #f8f6ff);
+    border: 1px solid rgba(130, 97, 238, 0.14);
+    color: var(--softy-primary);
+    box-shadow: 0 12px 24px rgba(130, 97, 238, 0.12);
+}
+
+body.theme-softy .service-detail-container .tech-category h3,
+body.theme-softy .service-detail-container .step h3,
+body.theme-softy .service-detail-container .process-step h3,
+body.theme-softy .service-detail-container .marketing-service h3,
+body.theme-softy .service-detail-container .approach-step h3,
+body.theme-softy .service-detail-container .tool-category h3,
+body.theme-softy .service-detail-container .platform h3,
+body.theme-softy .service-detail-container .case-study h3,
+body.theme-softy .service-detail-container .expertise-area h3,
+body.theme-softy .service-detail-container .app-type h3,
+body.theme-softy .service-detail-container .feature h3,
+body.theme-softy .service-detail-container .consulting-area h3,
+body.theme-softy .service-detail-container .system-type h3,
+body.theme-softy .service-detail-container .program h3,
+body.theme-softy .service-detail-container .cloud-service h3,
+body.theme-softy .service-detail-container .seo-service-category h3,
+body.theme-softy .service-detail-container .tools-section h3,
+body.theme-softy .service-detail-container .metrics-section h3,
+body.theme-softy .service-detail-container .method-step h3,
+body.theme-softy .service-detail-container .result-stat h3 {
+    margin: 0;
+    color: var(--softy-heading);
+    font-size: 1.08rem;
+    line-height: 1.35;
+}
+
+body.theme-softy .service-detail-container .tech-category p,
+body.theme-softy .service-detail-container .step p,
+body.theme-softy .service-detail-container .process-step p,
+body.theme-softy .service-detail-container .marketing-service p,
+body.theme-softy .service-detail-container .approach-step p,
+body.theme-softy .service-detail-container .tool-category p,
+body.theme-softy .service-detail-container .platform p,
+body.theme-softy .service-detail-container .case-study p,
+body.theme-softy .service-detail-container .expertise-area p,
+body.theme-softy .service-detail-container .app-type p,
+body.theme-softy .service-detail-container .feature p,
+body.theme-softy .service-detail-container .consulting-area p,
+body.theme-softy .service-detail-container .system-type p,
+body.theme-softy .service-detail-container .program p,
+body.theme-softy .service-detail-container .cloud-service p,
+body.theme-softy .service-detail-container .seo-service-category p,
+body.theme-softy .service-detail-container .tools-section p,
+body.theme-softy .service-detail-container .metrics-section p,
+body.theme-softy .service-detail-container .method-step p,
+body.theme-softy .service-detail-container .result-stat p,
+body.theme-softy .service-detail-container li {
+    margin: 0;
+    color: var(--softy-text);
+    line-height: 1.75;
+}
+
+body.theme-softy .service-detail-container ul {
+    display: grid;
+    gap: 0.65rem;
+    width: 100%;
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+body.theme-softy .service-detail-container .cta-section {
+    text-align: center;
+}
+
+body.theme-softy .service-detail-container .cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.78rem 1.35rem;
+    margin-top: 1.2rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--softy-primary), var(--softy-secondary));
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 16px 30px rgba(130, 97, 238, 0.18);
+}
+
+body.theme-softy .contact-form,
+body.theme-softy .quote-form-card,
+body.theme-softy .quote-summary-card {
+    padding: 2rem;
+}
+
+body.theme-softy .contact-form form,
+body.theme-softy .quote-form-card form {
+    display: grid;
+    gap: 1rem;
+}
+
+body.theme-softy .contact-form label,
+body.theme-softy .quote-form-card label {
+    color: var(--softy-heading);
+    font-weight: 700;
+}
+
+body.theme-softy .contact-form input,
+body.theme-softy .contact-form select,
+body.theme-softy .contact-form textarea,
+body.theme-softy .quote-form-card input,
+body.theme-softy .quote-form-card select,
+body.theme-softy .quote-form-card textarea {
+    min-height: 52px;
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+    border: 1px solid var(--softy-border);
+    background: var(--softy-surface-alt);
+    color: var(--softy-heading);
+}
+
+body.theme-softy .contact-form textarea,
+body.theme-softy .quote-form-card textarea {
+    min-height: 150px;
+}
+
+body.theme-softy .contact-form input:focus,
+body.theme-softy .contact-form select:focus,
+body.theme-softy .contact-form textarea:focus,
+body.theme-softy .quote-form-card input:focus,
+body.theme-softy .quote-form-card select:focus,
+body.theme-softy .quote-form-card textarea:focus {
+    outline: none;
+    border-color: rgba(130, 97, 238, 0.32);
+    box-shadow: 0 0 0 5px rgba(130, 97, 238, 0.08);
+}
+
+body.theme-softy .field-row,
+body.theme-softy .quote-layout {
+    gap: 1rem;
+}
+
+body.theme-softy .field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+body.theme-softy .addon-grid {
+    display: grid;
+    gap: 0.85rem;
+}
+
+body.theme-softy .addon-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 1.1rem;
+    border-radius: 18px;
+    border: 1px solid var(--softy-border);
+    background: var(--softy-surface-alt);
+}
+
+body.theme-softy .addon-item strong,
+body.theme-softy .addon-item em {
+    color: var(--softy-heading);
+}
+
+body.theme-softy .quote-summary-card {
+    position: sticky;
+    top: 110px;
+}
+
+body.theme-softy .quote-breakdown {
+    display: grid;
+    gap: 0.95rem;
+    margin-top: 1.4rem;
+}
+
+body.theme-softy .quote-breakdown > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.1rem;
+    border-radius: 18px;
+    background: var(--softy-surface-alt);
+    border: 1px solid var(--softy-border);
+}
+
+body.theme-softy .quote-total-row {
+    background: linear-gradient(135deg, rgba(130, 97, 238, 0.12), rgba(255, 88, 158, 0.1));
+}
+
+body.theme-softy .form-message {
+    padding: 1rem 1.1rem;
+    border-radius: 18px;
+    font-weight: 700;
+}
+
+body.theme-softy .form-message.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #166534;
+}
+
+body.theme-softy .form-message.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #991b1b;
+}
+
+body.theme-softy .nx-site-footer {
+    margin-top: 0;
+    padding: 5rem 0 1.5rem;
+    background: linear-gradient(135deg, #5f3ee4 0%, #7a49eb 45%, #ff589e 100%);
+    color: rgba(255, 255, 255, 0.84);
+}
+
+body.theme-softy .nx-footer-grid {
+    display: grid;
+    grid-template-columns: 1.25fr repeat(4, minmax(0, 1fr));
+    gap: 1.6rem;
+    padding: 0;
+}
+
+body.theme-softy .nx-site-footer .footer-panel {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+body.theme-softy .nx-site-footer .brand-logo {
+    height: 42px;
+}
+
+body.theme-softy .nx-site-footer .nx-footer-brand {
+    padding-right: 1rem;
+}
+
+body.theme-softy .nx-site-footer h4,
+body.theme-softy .nx-site-footer p,
+body.theme-softy .nx-site-footer a,
+body.theme-softy .nx-site-footer span,
+body.theme-softy .nx-site-footer li {
+    color: #ffffff !important;
+}
+
+body.theme-softy .nx-site-footer h4 {
+    margin-bottom: 1rem;
+}
+
+body.theme-softy .nx-site-footer ul {
+    display: grid;
+    gap: 0.8rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+body.theme-softy .nx-footer-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+body.theme-softy .nx-footer-socials a {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+body.theme-softy .footer-contact-list a,
+body.theme-softy .nx-footer-contact-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+body.theme-softy .nx-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+body.theme-softy .footer-bottom-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+body.theme-softy .skip-link {
+    background: var(--softy-heading);
+}
+
+@media (max-width: 1200px) {
+    body.theme-softy .nx-hero-feature-grid,
+    body.theme-softy .nx-services-grid,
+    body.theme-softy .nx-industries-grid,
+    body.theme-softy .nx-capability-grid,
+    body.theme-softy .nx-testimonial-grid,
+    body.theme-softy .nx-case-studies-grid,
+    body.theme-softy .case-grid,
+    body.theme-softy .solution-clusters-grid,
+    body.theme-softy .service-detail-grid,
+    body.theme-softy .services-showcase-grid,
+    body.theme-softy .focused-landing-pages-grid,
+    body.theme-softy .industry-page-grid,
+    body.theme-softy .why-modern-grid,
+    body.theme-softy .pricing-plans-grid,
+    body.theme-softy .faq-grid,
+    body.theme-softy .case-study-detail-grid,
+    body.theme-softy .about-stats-grid,
+    body.theme-softy .about-story-cards,
+    body.theme-softy .nx-workflow-grid,
+    body.theme-softy .work-process-timeline,
+    body.theme-softy .process-flow-journey {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.theme-softy .service-detail-hero {
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 0.85fr);
+    }
+
+    body.theme-softy .pillars-grid,
+    body.theme-softy .technology-capability-grid,
+    body.theme-softy .testimonial-strip,
+    body.theme-softy .stats-ribbon,
+    body.theme-softy .service-category-grid,
+    body.theme-softy .benefits-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.theme-softy .solution-hero-shell,
+    body.theme-softy .about-hero-grid,
+    body.theme-softy .industry-approach-grid,
+    body.theme-softy .service-detail-columns,
+    body.theme-softy .two-col,
+    body.theme-softy .quote-layout {
+        grid-template-columns: 1fr;
+    }
+
+    body.theme-softy .nx-footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.theme-softy .service-cluster-summary-grid,
+    body.theme-softy .service-category-block .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body.theme-softy .service-detail-sidecard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 920px) {
+    body.theme-softy .site-header {
+        top: 0.5rem;
+    }
+
+    body.theme-softy .header-row {
+        min-height: 70px;
+        padding-inline: 1.05rem;
+        border-radius: 28px;
+    }
+
+    body.theme-softy .nav-links,
+    body.theme-softy .header-row .search-shell,
+    body.theme-softy .header-row .header-cta {
+        display: none;
+    }
+
+    body.theme-softy .header-tools {
+        display: flex;
+        flex: 0 0 auto;
+        min-width: auto;
+        margin-left: auto;
+    }
+
+    body.theme-softy .mobile-menu-btn {
+        display: inline-flex;
+    }
+
+    body.theme-softy .field-row {
+        grid-template-columns: 1fr;
+    }
+
+    body.theme-softy .service-category-block,
+    body.theme-softy .service-summary-card,
+    body.theme-softy .service-category-block .media-service-card,
+    body.theme-softy .service-category-block .solution-service-card,
+    body.theme-softy .case-study-detail-card,
+    body.theme-softy .legal-card {
+        padding: 1.45rem !important;
+    }
+
+    body.theme-softy .solution-hero-shell,
+    body.theme-softy .about-hero-grid,
+    body.theme-softy .service-detail-hero {
+        grid-template-columns: 1fr;
+    }
+
+    body.theme-softy .service-detail-hero {
+        grid-template-areas:
+            "main"
+            "visual"
+            "side";
+    }
+
+    body.theme-softy .service-detail-sidecard,
+    body.theme-softy .solution-clusters-grid,
+    body.theme-softy .service-detail-grid,
+    body.theme-softy .legal-sections,
+    body.theme-softy .service-cluster-summary-grid,
+    body.theme-softy .service-category-block .services-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.theme-softy .service-cluster-cta,
+    body.theme-softy .service-category-block .service-actions {
+        justify-content: flex-start;
+    }
+
+    body.theme-softy .service-detail-page .page-block:first-child {
+        padding-bottom: 4rem !important;
+    }
+
+    body.theme-softy .service-detail-main,
+    body.theme-softy .solution-hero-copy,
+    body.theme-softy .about-hero-copy {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    body.theme-softy .section,
+    body.theme-softy .nx-section-shell,
+    body.theme-softy .nx-final-cta,
+    body.theme-softy .page-block {
+        padding: 72px 0;
+    }
+
+    body.theme-softy .header-row {
+        border-radius: 24px;
+    }
+
+    body.theme-softy .site-header .header-cta {
+        display: none;
+    }
+
+    body.theme-softy.page-home {
+        --home-hero-overlap: 4.8rem;
+    }
+
+    body.theme-softy.services-page,
+    body.theme-softy.industries-page,
+    body.theme-softy.case-studies-page,
+    body.theme-softy.how-we-work-page,
+    body.theme-softy.why-choose-page,
+    body.theme-softy.about-page,
+    body.theme-softy.solution-landing-page {
+        --page-hero-overlap: 4.8rem;
+    }
+
+    body.theme-softy .nx-hero {
+        padding: 5.35rem 0 3.8rem;
+    }
+
+    body.theme-softy.page-home .nx-hero {
+        padding-top: calc(5.95rem + var(--home-hero-overlap));
+        padding-bottom: 4rem;
+    }
+
+    body.theme-softy.services-page .services-hero-modern,
+    body.theme-softy.industries-page .industries-hero-modern,
+    body.theme-softy.case-studies-page .case-studies-hero,
+    body.theme-softy.how-we-work-page .work-hero-modern,
+    body.theme-softy.why-choose-page .why-hero-modern,
+    body.theme-softy.about-page .about-hero-modern,
+    body.theme-softy.solution-landing-page .solution-hero {
+        padding-top: calc(6.2rem + var(--page-hero-overlap)) !important;
+        padding-bottom: 4rem !important;
+    }
+
+    body.theme-softy .service-detail-container .service-hero {
+        padding: calc(6.2rem + var(--page-hero-overlap)) 1rem 3.5rem;
+        border-radius: 0 0 28px 28px;
+    }
+
+    body.theme-softy .nx-hero-copy h1 {
+        font-size: clamp(1.85rem, 9vw, 2.25rem);
+        max-width: 16ch;
+    }
+
+    body.theme-softy .nx-hero-supporting {
+        font-size: 14px;
+    }
+
+    body.theme-softy.page-home .nx-hero-shell {
+        gap: 2.15rem;
+    }
+
+    body.theme-softy .section-heading {
+        text-align: left;
+    }
+
+    body.theme-softy .section-heading .section-eyebrow {
+        margin-left: 0;
+    }
+
+    body.theme-softy .services-hero-inner,
+    body.theme-softy .industries-hero-inner,
+    body.theme-softy .work-hero-inner,
+    body.theme-softy .why-hero-inner {
+        text-align: center;
+    }
+
+    body.theme-softy .services-hero-inner .hero-actions,
+    body.theme-softy .industries-hero-inner .hero-actions,
+    body.theme-softy .case-studies-hero .hero-actions,
+    body.theme-softy .work-hero-inner .hero-actions,
+    body.theme-softy .why-hero-inner .hero-actions,
+    body.theme-softy .solution-hero-copy .hero-actions,
+    body.theme-softy .about-hero-copy .hero-actions,
+    body.theme-softy .contact-page .hero-actions,
+    body.theme-softy .quote-generator-page .hero-actions {
+        justify-content: center;
+    }
+
+    body.theme-softy .service-detail-main h1,
+    body.theme-softy .solution-hero-copy h1,
+    body.theme-softy .about-hero-copy h1 {
+        max-width: 100%;
+    }
+
+    body.theme-softy .nx-hero-trust-list {
+        justify-content: flex-start;
+    }
+
+    body.theme-softy .nx-hero-feature-grid,
+    body.theme-softy .nx-services-grid,
+    body.theme-softy .nx-industries-grid,
+    body.theme-softy .nx-capability-grid,
+    body.theme-softy .nx-testimonial-grid,
+    body.theme-softy .nx-case-studies-grid,
+    body.theme-softy .case-grid,
+    body.theme-softy .services-showcase-grid,
+    body.theme-softy .focused-landing-pages-grid,
+    body.theme-softy .industry-page-grid,
+    body.theme-softy .why-modern-grid,
+    body.theme-softy .pricing-plans-grid,
+    body.theme-softy .faq-grid,
+    body.theme-softy .case-study-detail-grid,
+    body.theme-softy .about-stats-grid,
+    body.theme-softy .about-story-cards,
+    body.theme-softy .nx-workflow-grid,
+    body.theme-softy .work-process-timeline,
+    body.theme-softy .process-flow-journey,
+    body.theme-softy .nx-footer-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.theme-softy .services-showcase-card,
+    body.theme-softy .focused-landing-card,
+    body.theme-softy .nx-reference-process-card,
+    body.theme-softy .pillar-card,
+    body.theme-softy .technology-capability-card,
+    body.theme-softy .process-journey-card,
+    body.theme-softy .proof-media-card,
+    body.theme-softy .case-card,
+    body.theme-softy .service-detail-card,
+    body.theme-softy .service-detail-panel,
+    body.theme-softy .service-detail-sidecard,
+    body.theme-softy .quote-form-card,
+    body.theme-softy .quote-summary-card,
+    body.theme-softy .contact-form,
+    body.theme-softy .about-story-cards article,
+    body.theme-softy .about-stat-card,
+    body.theme-softy .industry-approach-panel,
+    body.theme-softy .industry-outcome-panel,
+    body.theme-softy .industries-cta-panel,
+    body.theme-softy .services-cta-panel,
+    body.theme-softy .home-cta-final .container,
+    body.theme-softy .nx-final-cta-card {
+        padding: 1.5rem !important;
+    }
+
+    body.theme-softy .case-image-wrapper,
+    body.theme-softy .service-media-frame {
+        min-height: 190px;
+    }
+
+    body.theme-softy .services-hero-inner .hero-actions .btn,
+    body.theme-softy .industries-hero-inner .hero-actions .btn,
+    body.theme-softy .case-studies-hero .hero-actions .btn,
+    body.theme-softy .about-hero-copy .hero-actions .btn {
+        width: 100%;
+    }
+
+    body.theme-softy .service-category-grid,
+    body.theme-softy .benefits-grid,
+    body.theme-softy .stats-ribbon,
+    body.theme-softy .testimonial-strip {
+        grid-template-columns: 1fr;
+    }
+
+    body.theme-softy .pillars-risk-line,
+    body.theme-softy .service-category-head,
+    body.theme-softy .project-proof-actions {
+        justify-content: center;
+        text-align: center;
+    }
+
+    body.theme-softy .case-study-detail-top {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    body.theme-softy .case-image-wrapper-detail {
+        max-height: none;
+    }
+}

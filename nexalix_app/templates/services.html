@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ meta_title|default:page_title|default:'Services - Nexalix Technologies' }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block body_class %}services-page{% endblock %}
+{% block content %}
+<section class="services-hero-modern">
+    <div class="container services-hero-inner">
+        <p class="section-eyebrow">Nexalix Solutions</p>
+        <h1>Business solutions built through software, AI, data, and consulting-led delivery</h1>
+        <p>We help fast-growing teams replace manual processes, launch better digital systems, and execute transformation roadmaps with practical engineering support from planning through rollout.</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="#solutionClusters" class="btn btn-outline-primary">Explore Services</a>
+        </div>
+        <p class="hero-action-note">Structured scoping, consulting-led planning, and practical execution from one delivery partner.</p>
+    </div>
+</section>
+
+<section class="page-block section-soft services-solution-showcase" id="solutionClusters">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Solution Clusters</p>
+            <h2>Services packaged around business outcomes</h2>
+            <p class="section-subtitle">Each cluster is designed around the problem a buyer needs solved, the deliverables we ship, and the kind of team it supports.</p>
+        </div>
+        <div class="services-showcase-grid">
+            {% for cluster in service_solution_clusters %}
+            <article class="pillar-card services-showcase-card theme-{{ cluster.slug }} {% if forloop.counter0|divisibleby:'2' %}service-card-warm{% else %}service-card-light{% endif %}" data-reveal>
+                <a href="{% url 'solution_landing' cluster.landing_slug %}" class="services-showcase-media" aria-label="{{ cluster.title }}">
+                    <span class="pillar-icon"><i class="{{ cluster.icon }}"></i></span>
+                </a>
+                <p class="services-showcase-kicker">Solution Cluster</p>
+                <h3>{{ cluster.title }}</h3>
+                <p class="services-showcase-summary">{{ cluster.value_statement }}</p>
+                <ul class="services-showcase-points">
+                    {% for deliverable in cluster.deliverables|slice:":3" %}
+                    <li>{{ deliverable }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="services-showcase-actions">
+                    <a href="{% url 'solution_landing' cluster.landing_slug %}" class="project-link-btn">Learn More</a>
+                    <a href="{{ cluster.cta_primary_url }}" class="secondary-link">Get Proposal</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block services-solution-pages">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Focused Landing Pages</p>
+            <h2>Dedicated solution pages for buyers and search visibility</h2>
+            <p class="section-subtitle">These focused pages are designed for teams evaluating a specific service area and looking for a clear starting point.</p>
+        </div>
+        <div class="focused-landing-pages-grid">
+            {% for page in solution_pages %}
+            <article class="pillar-card focused-landing-card theme-{{ page.theme_slug }} {% if forloop.counter0|divisibleby:'2' %}service-card-light{% else %}service-card-warm{% endif %}" data-reveal>
+                <a href="{% url 'solution_landing' page.slug %}" class="services-showcase-media" aria-label="{{ page.nav_title }}">
+                    <span class="pillar-icon"><i class="{{ page.cluster_icon }}"></i></span>
+                </a>
+                <p class="services-showcase-kicker">Focused Solution</p>
+                <h3>{{ page.nav_title }}</h3>
+                <p class="focused-landing-summary">{{ page.subheadline }}</p>
+                <ul class="focused-landing-points">
+                    {% for deliverable in page.deliverables|slice:":2" %}
+                    <li>{{ deliverable }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="focused-landing-actions">
+                    <a href="{% url 'solution_landing' page.slug %}" class="project-link-btn">Learn More</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Our Delivery Model</p>
+            <h2>Design. Build. Support.</h2>
+            <p class="section-subtitle">Three linked stages that reduce risk, improve delivery visibility, and keep implementation aligned to business priorities.</p>
+        </div>
+        <div class="pillars-grid">
+            <article class="pillar-card" data-reveal>
+                <div class="pillar-icon"><i class="fas fa-compass-drafting"></i></div>
+                <h3>Design</h3>
+                <p>Clarify the business case, scope, architecture, and delivery priorities before engineering begins.</p>
+            </article>
+            <article class="pillar-card" data-reveal>
+                <div class="pillar-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Build</h3>
+                <p>Ship the software, automation, or analytics layer with disciplined testing, security, and sprint visibility.</p>
+            </article>
+            <article class="pillar-card" data-reveal>
+                <div class="pillar-icon"><i class="fas fa-headset"></i></div>
+                <h3>Support</h3>
+                <p>Launch with confidence, monitor performance, and continue improving the solution after go-live.</p>
+            </article>
+        </div>
+        <div class="pillars-risk-line" data-reveal>
+            <i class="fas fa-shield-check"></i>
+            <p>Discovery reduces rework, structured build reduces delivery risk, and post-launch support protects operational continuity.</p>
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Service Catalog</p>
+            <h2>Solution-led service breakdown</h2>
+            <p class="section-subtitle">Use the filters to focus on the service cluster most relevant to your current business need.</p>
+        </div>
+
+        <div class="service-category-filter" id="serviceCategoryFilter">
+            <button class="btn btn-outline-primary active" type="button" data-category="all">All Solutions</button>
+            {% for cluster in service_solution_clusters %}
+            <button class="btn btn-outline-primary" type="button" data-category="{{ cluster.slug }}">{{ cluster.title }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="service-sections-wrap" id="serviceSectionsWrap">
+            {% for cluster in service_solution_clusters %}
+            <section class="service-category-block" data-category="{{ cluster.slug }}" data-reveal>
+                <div class="service-cluster-header">
+                    <div>
+                        <div class="service-cluster-kicker">
+                            <i class="{{ cluster.icon }}"></i>
+                            <span>{{ cluster.title }}</span>
+                        </div>
+                        <h3 class="category-title-modern">{{ cluster.value_statement }}</h3>
+                    </div>
+                    <div class="service-cluster-cta">
+                        <a href="{{ cluster.cta_primary_url }}" class="btn btn-primary">Request Proposal</a>
+                        <a href="{{ cluster.cta_secondary_url }}" class="btn btn-outline-primary">Book Discovery Call</a>
+                    </div>
+                </div>
+
+                <div class="service-cluster-summary-grid">
+                    <article class="service-summary-card">
+                        <span>Business problem solved</span>
+                        <p>{{ cluster.business_problem }}</p>
+                    </article>
+                    <article class="service-summary-card">
+                        <span>Key deliverables</span>
+                        <ul>
+                            {% for deliverable in cluster.deliverables %}
+                            <li>{{ deliverable }}</li>
+                            {% endfor %}
+                        </ul>
+                    </article>
+                    <article class="service-summary-card">
+                        <span>Who it is for</span>
+                        <p>{{ cluster.who_for }}</p>
+                    </article>
+                </div>
+
+                <div class="services-grid">
+                    {% for service in cluster.services %}
+                    <article class="service-card solution-service-card media-service-card theme-{{ cluster.slug }}" data-service-name="{{ service.title|lower }}">
+                        <div class="service-card-inner">
+                            <a href="{{ service.detail_url }}" class="service-media-frame" aria-label="{{ service.title }}">
+                                <div class="service-visual-placeholder theme-{{ cluster.slug }}">
+                                    <span class="service-visual-grid"></span>
+                                    <span class="service-visual-glow"></span>
+                                    <span class="service-visual-icon"><i class="{{ service.icon }}"></i></span>
+                                    <span class="service-visual-badge">{{ service.delivery_tier }}</span>
+                                </div>
+                            </a>
+                            <div class="service-content">
+                                <div class="solution-service-top">
+                                    <p class="media-cluster-kicker">{{ cluster.title }}</p>
+                                    <div class="solution-service-meta">
+                                        <span>{{ service.delivery_tier }}</span>
+                                        <strong>~{{ service.delivery_weeks }} weeks</strong>
+                                    </div>
+                                </div>
+                                <h4 class="service-title">{{ service.title }}</h4>
+                                <p class="service-description">{{ service.value_statement }}</p>
+
+                                <ul class="service-outcome-list">
+                                    {% for outcome in service.outcomes %}
+                                    <li>{{ outcome }}</li>
+                                    {% endfor %}
+                                </ul>
+
+                                {% if service.technologies %}
+                                <div class="service-technologies">
+                                    {% for tech in service.technologies %}
+                                    <span class="tech-tag">{{ tech }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <div class="service-actions">
+                                    <a href="{{ service.detail_url }}" class="project-link-btn">Learn More</a>
+                                    <a href="{% url 'quote_generator' %}?service={{ service.object.slug }}" class="secondary-link">Request Proposal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <article class="service-card solution-service-card solution-service-card-empty">
+                        <div class="service-card-inner">
+                            <div class="service-content">
+                                <h4 class="service-title">{{ cluster.title }} delivery track</h4>
+                                <p class="service-description">This cluster is ready for service records in Django admin. Until then, use the consultation CTA to scope the right engagement.</p>
+                                <ul class="service-outcome-list">
+                                    {% for deliverable in cluster.deliverables %}
+                                    <li>{{ deliverable }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="service-actions">
+                                    <a href="{{ cluster.cta_secondary_url }}" class="btn btn-outline-primary">Book Discovery Call</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Capability Proof</p>
+            <h2>Technology stack aligned to active delivery</h2>
+            <p class="section-subtitle">We organize the stack by the role it plays in a solution, not as a generic list of tools.</p>
+        </div>
+        <div class="technology-capability-grid">
+            {% for group in technology_capability_groups %}
+            <article class="technology-capability-card" data-reveal>
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="{{ group.icon }}"></i></div>
+                    <div>
+                        <h3>{{ group.title }}</h3>
+                        <p>{{ group.description }}</p>
+                    </div>
+                </div>
+                <div class="technology-capability-tags">
+                    {% for tech in group.technologies %}
+                    <span class="technology-chip{% if tech in group.primary_technologies %} primary{% endif %}">{{ tech.name }}</span>
+                    {% endfor %}
+                </div>
+            </article>
+            {% empty %}
+            <article class="technology-capability-card">
+                <div class="technology-capability-head">
+                    <div class="technology-capability-icon"><i class="fas fa-layer-group"></i></div>
+                    <div>
+                        <h3>Active delivery stack</h3>
+                        <p>Technology capability cards appear here when active technologies are configured in Django admin.</p>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="page-block section-soft">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Our Process</p>
+            <h2>From discovery to launch with clear outputs at every step</h2>
+            <p class="section-subtitle">Each phase produces a concrete artifact so teams know what is being delivered and what comes next.</p>
+        </div>
+        <div class="process-flow process-flow-journey">
+            {% for step in process_journey %}
+            <article class="process-node process-journey-card" data-reveal>
+                <span class="process-index">{{ step.number }}</span>
+                <div class="process-journey-icon"><i class="{{ step.icon }}"></i></div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.description }}</p>
+                <ul class="process-output-list">
+                    {% for output in step.outputs %}
+                    <li>{{ output }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="pricing-section page-block">
+    <div class="container">
+        <div class="section-heading" data-reveal>
+            <p class="section-eyebrow">Engagement Options</p>
+            <h2>Flexible ways to start and scale delivery</h2>
+            <p class="section-description">Choose a delivery model that fits your stage, scope, and internal capacity.</p>
+        </div>
+
+        <div class="pricing-plans-grid">
+            {% for plan in pricing_plans %}
+            <article class="pricing-plan-card {% if plan.is_popular %}popular-plan{% endif %}" data-reveal>
+                {% if plan.is_popular %}<span class="popular-badge">Most Popular</span>{% endif %}
+                <div class="plan-header">
+                    <h3 class="plan-title">{{ plan.name }}</h3>
+                    <div class="plan-price">
+                        <span class="price-amount">${{ plan.price }}</span>
+                        <span class="price-period">/{{ plan.period }}</span>
+                    </div>
+                </div>
+                <div class="plan-features">
+                    <ul class="features-list">
+                        {% for feature in plan.get_features_list %}
+                        <li><i class="fas fa-check"></i><span>{{ feature }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="plan-footer">
+                    <a href="{% url 'quote_generator' %}?plan={{ plan.name|slugify }}" class="btn {% if plan.is_popular %}btn-primary{% else %}btn-outline-primary{% endif %} w-100">Start Your Project Brief</a>
+                </div>
+            </article>
+            {% empty %}
+            <div class="no-plans text-center py-5">
+                <h4>Custom pricing available</h4>
+                <p>Tell us what you are solving and we will scope the right delivery model.</p>
+                <a href="{% url 'quote_generator' %}" class="btn btn-primary">Start Your Project Brief</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="home-cta-final services-cta-final">
+    <div class="container services-cta-panel" data-reveal>
+        <h2>Need a solution mix across software, AI, data, and consulting?</h2>
+        <p>We can shape a phased engagement around your budget, internal team, timeline, and implementation priorities.</p>
+        <div class="hero-actions">
+            <a href="{% url 'quote_generator' %}" class="btn btn-primary">Get Proposal</a>
+            <a href="{% url 'contact' %}" class="btn btn-outline-primary">Book Consultation</a>
+        </div>
+        <div class="cta-tertiary-links">
+            <a href="https://wa.me/254768774232" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="{% url 'contact' %}">Contact Team</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const filterWrap = document.getElementById("serviceCategoryFilter");
+    const sectionsWrap = document.getElementById("serviceSectionsWrap");
+    if (!filterWrap || !sectionsWrap) return;
+
+    const buttons = Array.from(filterWrap.querySelectorAll("button[data-category]"));
+    const sections = Array.from(sectionsWrap.querySelectorAll(".service-category-block"));
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const target = btn.dataset.category;
+            buttons.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            sections.forEach((section) => {
+                const show = target === "all" || section.dataset.category === target;
+                section.style.display = show ? "block" : "none";
+            });
+        });
+    });
+})();
+</script>
+{% endblock %}

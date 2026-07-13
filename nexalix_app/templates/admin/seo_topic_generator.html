@@ -1,0 +1,193 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}SEO Topic Generator | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+.st-wrap {
+    max-width: 1180px;
+    margin: 16px auto;
+    display: grid;
+    gap: 14px;
+}
+
+.st-card {
+    background: #fff;
+    border: 1px solid #dde8f3;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(24, 56, 94, 0.06);
+}
+
+.st-card h1,
+.st-card h2 {
+    margin: 0 0 8px;
+    color: #1f446b;
+}
+
+.st-sub {
+    margin: 0;
+    color: #6f87a4;
+}
+
+.st-form {
+    display: grid;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.st-row {
+    display: grid;
+    gap: 6px;
+}
+
+.st-row label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #36587d;
+}
+
+.st-row textarea,
+.st-row input {
+    border: 1px solid #cfddeb;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.st-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.st-actions button {
+    border-radius: 999px;
+    border: 1px solid #c9d9ea;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.st-actions .st-primary {
+    border: 0;
+    background: linear-gradient(135deg, #2f6de2, #4f74ff);
+    color: #fff;
+}
+
+.st-table-wrap {
+    overflow: auto;
+}
+
+.st-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+}
+
+.st-table th,
+.st-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e5edf5;
+    text-align: left;
+    font-size: 12px;
+    vertical-align: top;
+}
+
+.st-table th {
+    background: #f6faff;
+    color: #264b72;
+}
+
+.st-chip {
+    border: 1px solid #d2e2f0;
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 11px;
+    background: #edf5ff;
+    color: #265d95;
+    display: inline-block;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; <a href="{% url 'activity_dashboard' %}">Activity Dashboard</a>
+    &rsaquo; SEO Topic Generator
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="st-wrap">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="messagelist">
+            <div class="{{ message.tags }}">{{ message }}</div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <section class="st-card">
+        <h1>SEO Blog Topic Generator</h1>
+        <p class="st-sub">Generate Nexalix-focused technology consulting blog topics from target keywords, then save as draft posts.</p>
+
+        <form class="st-form" method="post" action="{% url 'seo_topic_generator' %}">
+            {% csrf_token %}
+            <div class="st-row">
+                <label for="id_keywords">Target Keywords (one per line)</label>
+                <textarea id="id_keywords" name="keywords" rows="7">{{ keywords_text }}</textarea>
+            </div>
+            <div class="st-row">
+                <label for="id_topics_per_keyword">Topics Per Keyword (1-8)</label>
+                <input id="id_topics_per_keyword" name="topics_per_keyword" type="number" min="1" max="8" value="{{ topics_per_keyword }}">
+            </div>
+            <div class="st-actions">
+                <button type="submit" name="action" value="generate" class="st-primary">Generate Topics</button>
+                {% if generated_topics %}
+                <button type="submit" name="action" value="save">Save All As Draft Posts</button>
+                {% endif %}
+                <a class="button" href="{% url 'admin:nexalix_app_blogpost_changelist' %}">Open Blog Posts</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="st-card">
+        <h2>Generated Topics</h2>
+        <p class="st-sub">{% if generated_topics %}{{ generated_topics|length }} topic suggestions ready.{% else %}No generated topics yet.{% endif %}</p>
+
+        {% if generated_topics %}
+        <div class="st-table-wrap">
+            <table class="st-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Primary Keyword</th>
+                        <th>Meta Description</th>
+                        <th>Intent</th>
+                        <th>Slug</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for topic in generated_topics %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><strong>{{ topic.title }}</strong></td>
+                        <td><span class="st-chip">{{ topic.primary_keyword }}</span></td>
+                        <td>{{ topic.meta_description }}</td>
+                        <td>{{ topic.intent }} · {{ topic.funnel_stage }}</td>
+                        <td>{{ topic.slug_suggestion }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

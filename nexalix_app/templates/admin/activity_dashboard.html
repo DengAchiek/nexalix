@@ -1,0 +1,2935 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Site Activity Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+:root {
+    --mk-bg: #f4f6fd;
+    --mk-surface: #ffffff;
+    --mk-line: #dde5f2;
+    --mk-text: #1d3960;
+    --mk-soft: #6f86a4;
+    --mk-blue: #3f63f3;
+    --mk-blue-dark: #2f4fdf;
+    --mk-yellow: #f8b742;
+    --mk-green: #33d6a5;
+    --mk-violet: #7d63f0;
+    --mk-danger: #ff5f90;
+}
+
+#content {
+    margin: 0;
+    padding: 0;
+    background: var(--mk-bg);
+}
+
+#content-main {
+    padding: 0;
+}
+
+.mk-shell {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    min-height: calc(100vh - 92px);
+    color-scheme: light;
+}
+
+.mk-sidebar {
+    background: #fff;
+    border-right: 1px solid var(--mk-line);
+    padding: 20px 14px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 18px;
+}
+
+.mk-brand {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-brand-logo {
+    background: linear-gradient(150deg, #f2f8ff, #ecf3ff);
+    border: 1px solid #d9e5f1;
+    border-radius: 12px;
+    padding: 8px;
+    display: grid;
+    place-items: center;
+    min-height: 88px;
+}
+
+.mk-brand-logo img {
+    width: 114px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.mk-brand h2 {
+    margin: 0;
+    color: var(--mk-text);
+    font-size: 1rem;
+    text-align: center;
+}
+
+.mk-period {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-role-strip {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-role-strip a {
+    text-decoration: none;
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #3a5a7f;
+    background: #fff;
+    display: block;
+}
+
+.mk-role-strip a.active {
+    border-color: #c9dbf4;
+    background: #eef5ff;
+    color: #165fa7;
+}
+
+.mk-role-strip a:hover {
+    border-color: #c4d8f4;
+    color: #125ea8;
+    background: #f5faff;
+}
+
+.mk-period a {
+    text-decoration: none;
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #35557b;
+    background: #f8fbff;
+}
+
+.mk-period a.active,
+.mk-period a:hover {
+    background: linear-gradient(135deg, var(--mk-blue), var(--mk-blue-dark));
+    border-color: transparent;
+    color: #fff;
+}
+
+.mk-nav {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+}
+
+.mk-nav a {
+    text-decoration: none;
+    border-radius: 10px;
+    border: 1px solid var(--mk-line);
+    padding: 9px 10px;
+    font-weight: 600;
+    color: #3a5a7f;
+    background: #fff;
+    font-size: 0.84rem;
+}
+
+.mk-nav a:hover {
+    border-color: #c4d8f4;
+    color: #125ea8;
+    background: #f5faff;
+}
+
+.mk-nav a.current {
+    border-color: #c9dbf4;
+    background: #eef5ff;
+    color: #165fa7;
+}
+
+.mk-nav a.admin-home-link {
+    border-color: #cfd9e9;
+    background: #fff;
+    color: #2f4f6f;
+}
+
+.mk-nav a.admin-home-link:hover {
+    border-color: #bdd2ec;
+    background: #eef5ff;
+    color: #165fa7;
+}
+
+.mk-section-grid {
+    margin-top: 14px;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mk-section-grid.is-view-mode {
+    grid-template-columns: 1fr;
+}
+
+.mk-view-hidden {
+    display: none !important;
+}
+
+.mk-mini-list {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-mini-item {
+    border: 1px solid #e1e9f5;
+    border-radius: 9px;
+    padding: 8px 10px;
+    background: #fbfdff;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-mini-item strong {
+    color: #264b70;
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+.mk-mini-item span {
+    color: #5d7899;
+    font-size: 0.74rem;
+}
+
+.mk-sla-cards {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-sla-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 9px;
+    background: #f8fbff;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-sla-card strong {
+    color: #1f466e;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.mk-sla-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-sla-card.overdue {
+    border-color: #f0bcc7;
+    background: #fff4f6;
+}
+
+.mk-sla-card.overdue strong,
+.mk-sla-card.overdue span {
+    color: #b43053;
+}
+
+.mk-mini-item.sla-overdue {
+    border-color: #f2c2cd;
+    background: #fff6f8;
+}
+
+.mk-mini-item.sla-due-soon {
+    border-color: #f4d7b5;
+    background: #fffaf2;
+}
+
+.mk-mini-item.sla-due-day {
+    border-color: #d6e4f7;
+    background: #f6fbff;
+}
+
+.mk-funnel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-funnel-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8fbff;
+    display: grid;
+    gap: 3px;
+}
+
+.mk-funnel-card strong {
+    color: #1f466e;
+    font-size: 1.22rem;
+    line-height: 1;
+}
+
+.mk-funnel-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-ux-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-ux-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8fbff;
+    display: grid;
+    gap: 3px;
+}
+
+.mk-ux-card strong {
+    color: #1f466e;
+    font-size: 1.22rem;
+    line-height: 1;
+}
+
+.mk-ux-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-alert-cards,
+.mk-quality-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mk-alert-card,
+.mk-quality-card {
+    border: 1px solid #d9e5f3;
+    border-radius: 10px;
+    padding: 9px;
+    background: #f8fbff;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-alert-card strong,
+.mk-quality-card strong {
+    color: #1f466e;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.mk-alert-card span,
+.mk-quality-card span {
+    color: #5d7899;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-alert-card.critical {
+    border-color: #f0bcc7;
+    background: #fff4f6;
+}
+
+.mk-alert-card.critical strong,
+.mk-alert-card.critical span {
+    color: #b43053;
+}
+
+.mk-alert-card.high {
+    border-color: #ffd6b1;
+    background: #fff7ef;
+}
+
+.mk-alert-card.high strong,
+.mk-alert-card.high span {
+    color: #9b4d00;
+}
+
+.mk-alert-card.medium {
+    border-color: #d6e4f7;
+    background: #f6fbff;
+}
+
+.mk-alert-card.medium strong,
+.mk-alert-card.medium span {
+    color: #225f9a;
+}
+
+.mk-alert-list,
+.mk-quality-list {
+    display: grid;
+    gap: 8px;
+}
+
+.mk-alert-item,
+.mk-quality-item {
+    border: 1px solid #e1e9f5;
+    border-left: 4px solid #3a73d8;
+    border-radius: 10px;
+    padding: 9px 10px;
+    background: #fbfdff;
+}
+
+.mk-alert-item.critical {
+    border-left-color: #d84b72;
+}
+
+.mk-alert-item.high {
+    border-left-color: #dd8d2f;
+}
+
+.mk-alert-item.medium {
+    border-left-color: #4d86d9;
+}
+
+.mk-alert-item.info {
+    border-left-color: #64a0e2;
+}
+
+.mk-alert-item strong,
+.mk-quality-item strong {
+    display: block;
+    color: #224768;
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+.mk-alert-item span,
+.mk-quality-item span {
+    display: block;
+    margin-top: 2px;
+    color: #5f7898;
+    font-size: 0.74rem;
+}
+
+.mk-alert-item a,
+.mk-quality-item a {
+    margin-top: 4px;
+    display: inline-block;
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: #1d5fa8;
+    text-decoration: none;
+}
+
+.mk-funnel-rate {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.mk-funnel-rate .mk-chip {
+    font-size: 0.72rem;
+}
+
+.mk-mini-table-wrap {
+    overflow: auto;
+}
+
+.mk-mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 540px;
+}
+
+.mk-mini-table th,
+.mk-mini-table td {
+    padding: 7px;
+    border-bottom: 1px solid #e5edf6;
+    text-align: left;
+    color: #345677;
+    font-size: 0.76rem;
+}
+
+.mk-mini-table th {
+    background: #f2f7ff;
+    color: #21486d;
+    font-weight: 700;
+}
+
+.mk-mini-table tbody tr:nth-child(even) {
+    background: #fbfdff;
+}
+
+.mk-mini-table td:first-child {
+    color: #22496f;
+    font-weight: 700;
+}
+
+.mk-pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.mk-pill-small {
+    border: 1px solid #d7e3f2;
+    border-radius: 999px;
+    padding: 4px 8px;
+    background: #f8fbff;
+    color: #3d6086;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.mk-sidebar-foot {
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8fbff;
+    display: grid;
+    gap: 8px;
+}
+
+.mk-sidebar-foot p {
+    margin: 0;
+    color: #5c7696;
+    font-size: 0.79rem;
+}
+
+.mk-saved-filters {
+    border: 1px solid var(--mk-line);
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    display: grid;
+    gap: 8px;
+}
+
+.mk-saved-filters h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #284a6f;
+}
+
+.mk-save-filter-form {
+    display: flex;
+    gap: 6px;
+}
+
+.mk-save-filter-form input {
+    border: 1px solid #d4e2ef;
+    border-radius: 8px;
+    padding: 7px 9px;
+    font-size: 0.78rem;
+    width: 100%;
+}
+
+.mk-save-filter-form button {
+    border: 0;
+    border-radius: 8px;
+    background: #2f6de2;
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.mk-saved-list {
+    display: grid;
+    gap: 6px;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.mk-saved-item {
+    border: 1px solid #dde8f4;
+    border-radius: 8px;
+    padding: 7px;
+    display: grid;
+    gap: 4px;
+    background: #fbfdff;
+}
+
+.mk-saved-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.mk-saved-item-head a {
+    color: #1f5f9f;
+    text-decoration: none;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.mk-saved-item-head button {
+    border: 0;
+    border-radius: 6px;
+    background: #ffe8e8;
+    color: #a03434;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 7px;
+    cursor: pointer;
+}
+
+.mk-saved-meta {
+    font-size: 0.69rem;
+    color: #6d84a0;
+}
+
+.mk-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #395879;
+    font-weight: 700;
+}
+
+.mk-main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.mk-top {
+    background: linear-gradient(120deg, var(--mk-blue), #4f73ff);
+    padding: 22px 24px 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: start;
+}
+
+.mk-search {
+    position: relative;
+    width: min(760px, 100%);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.mk-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e2ecff;
+    font-style: normal;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.mk-search input {
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    height: 42px;
+    padding: 0 14px 0 40px;
+    color: #ebf1ff;
+    background: rgba(255, 255, 255, 0.17);
+}
+
+.mk-search input::placeholder {
+    color: #d2dfff;
+}
+
+.mk-search input:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.mk-search button {
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.45);
+    background: transparent;
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.mk-search button:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.mk-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    color: #fff;
+    padding-top: 2px;
+}
+
+.mk-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.mk-header-side {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.mk-pill {
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.45);
+    padding: 8px 12px;
+    font-size: 0.77rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.mk-pill:link,
+.mk-pill:visited,
+.mk-pill:hover,
+.mk-pill:focus,
+.mk-pill:active {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.mk-pill:hover,
+.mk-pill:focus {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mk-pill:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 2px;
+}
+
+.mk-pill span,
+.mk-pill strong {
+    color: inherit !important;
+}
+
+.mk-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.25);
+    font-weight: 800;
+}
+
+.mk-notification-wrap {
+    position: relative;
+}
+
+.mk-bell {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mk-bell:hover,
+.mk-bell:focus {
+    background: rgba(255,255,255,0.24);
+    transform: translateY(-1px);
+}
+
+.mk-bell:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.7);
+    outline-offset: 2px;
+}
+
+.mk-bell-icon {
+    font-size: 1.08rem;
+    line-height: 1;
+}
+
+.mk-bell-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    padding: 0 5px;
+    background: #ff5f90;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    box-shadow: 0 8px 18px rgba(14, 36, 72, 0.2);
+}
+
+.mk-notification-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: min(380px, calc(100vw - 48px));
+    border: 1px solid #dbe5f1;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgba(16, 44, 86, 0.18);
+    overflow: hidden;
+    z-index: 30;
+}
+
+.mk-notification-panel[hidden] {
+    display: none;
+}
+
+.mk-notification-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #e6edf7;
+}
+
+.mk-notification-head h3 {
+    margin: 0;
+    color: #1f456d;
+    font-size: 0.95rem;
+}
+
+.mk-notification-head span {
+    color: #7089a8;
+    font-size: 0.73rem;
+    font-weight: 700;
+}
+
+.mk-notification-list {
+    display: grid;
+    gap: 0;
+    max-height: 360px;
+    overflow: auto;
+}
+
+.mk-notification-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef3f9;
+    background: #fff;
+}
+
+.mk-notification-item:last-child {
+    border-bottom: 0;
+}
+
+.mk-notification-item strong {
+    display: block;
+    color: #1f456d;
+    font-size: 0.84rem;
+    line-height: 1.3;
+}
+
+.mk-notification-item time {
+    display: block;
+    margin-top: 3px;
+    color: #7a90ab;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.mk-notification-item p {
+    margin: 8px 0 0;
+    color: #5d7899;
+    font-size: 0.76rem;
+    line-height: 1.45;
+}
+
+.mk-notification-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.mk-notification-links a {
+    color: #1b61a8;
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mk-notification-links a:hover,
+.mk-notification-links a:focus {
+    text-decoration: underline;
+}
+
+.mk-notification-empty {
+    padding: 16px;
+    color: #6f86a4;
+    font-size: 0.78rem;
+}
+
+.mk-notification-toast {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 60;
+    max-width: 320px;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: #153b68;
+    color: #fff;
+    box-shadow: 0 18px 40px rgba(17, 39, 73, 0.26);
+}
+
+.mk-notification-toast[hidden] {
+    display: none;
+}
+
+.mk-notification-toast strong {
+    display: block;
+    font-size: 0.82rem;
+}
+
+.mk-notification-toast span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255,255,255,0.82);
+    font-size: 0.75rem;
+    line-height: 1.45;
+}
+
+.mk-content {
+    padding: 22px 22px;
+    display: grid;
+    gap: 18px;
+}
+
+.mk-msg {
+    border-radius: 10px;
+    border: 1px solid;
+    padding: 10px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.mk-msg.success {
+    background: #e7f8ef;
+    border-color: #b8e9cf;
+    color: #0e6b3f;
+}
+
+.mk-msg.error {
+    background: #ffeceb;
+    border-color: #ffc8c5;
+    color: #a72826;
+}
+
+.mk-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.mk-kpi {
+    background: #fff;
+    border: 1px solid var(--mk-line);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 18px rgba(16, 44, 86, 0.07);
+    cursor: pointer;
+}
+
+.mk-kpi-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+}
+
+.mk-kpi h3 {
+    margin: 0;
+    color: var(--mk-soft);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.mk-tag {
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    color: #fff;
+}
+
+.mk-tag.blue { background: var(--mk-blue); }
+.mk-tag.yellow { background: var(--mk-yellow); color: #593d00; }
+.mk-tag.green { background: var(--mk-green); color: #0f553f; }
+.mk-tag.violet { background: var(--mk-violet); }
+
+.mk-kpi strong {
+    display: block;
+    color: #1b3b63;
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.mk-kpi small {
+    color: #6d85a3;
+}
+
+.mk-progress {
+    margin-top: 10px;
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: #eaf0f8;
+    overflow: hidden;
+}
+
+.mk-progress span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+}
+
+.mk-progress .blue { background: linear-gradient(90deg, #56abff, #3479de); }
+.mk-progress .yellow { background: linear-gradient(90deg, #ffd37b, #f0af2f); }
+.mk-progress .green { background: linear-gradient(90deg, #7cefd0, #2fcf9f); }
+.mk-progress .violet { background: linear-gradient(90deg, #b7a7ff, #7b61f0); }
+
+.mk-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.55fr);
+    gap: 12px;
+}
+
+.mk-panel {
+    background: #fff;
+    border: 1px solid var(--mk-line);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 18px rgba(16, 44, 86, 0.07);
+}
+
+.mk-panel h2 {
+    margin: 0;
+    color: #224768;
+    font-size: 1.08rem;
+}
+
+.mk-email-link {
+    color: #1b61a8;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mk-email-link:hover,
+.mk-email-link:focus {
+    color: #114e89;
+    text-decoration: underline;
+}
+
+.mk-email-link:focus-visible {
+    outline: 2px solid rgba(27, 97, 168, 0.28);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.mk-sub {
+    margin: 4px 0 10px;
+    color: #7289a7;
+    font-size: 0.85rem;
+}
+
+.mk-chart-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #5f7898;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.mk-chart {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
+    align-items: end;
+    gap: 6px;
+    min-height: 190px;
+    padding-top: 8px;
+}
+
+.mk-col {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+}
+
+.mk-bars {
+    display: flex;
+    align-items: end;
+    gap: 4px;
+    height: 140px;
+}
+
+.mk-bar {
+    width: 10px;
+    border-radius: 8px 8px 2px 2px;
+    cursor: pointer;
+    border: 0;
+}
+
+.mk-bar:focus-visible {
+    outline: 2px solid #1d5fa6;
+    outline-offset: 2px;
+}
+
+.mk-bar.contacts { background: linear-gradient(180deg, #4daaff, #2f6de2); }
+.mk-bar.quotes { background: linear-gradient(180deg, #ff88ae, #7e65ec); }
+
+.mk-col small {
+    color: #7089a8;
+    font-size: 0.7rem;
+}
+
+.mk-stat-box {
+    display: grid;
+    gap: 10px;
+}
+
+.mk-mini {
+    border: 1px solid #e2eaf4;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fafcff;
+}
+
+.mk-mini strong {
+    display: block;
+    color: #1d3f67;
+    font-size: 1.45rem;
+    line-height: 1.1;
+}
+
+.mk-mini span {
+    color: #6f87a5;
+    font-size: 0.82rem;
+}
+
+.mk-profile-form {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.mk-profile-form label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #406082;
+}
+
+.mk-profile-form input {
+    border: 1px solid #d6e4f1;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.84rem;
+    color: #1f456d;
+    background: #f7fbff;
+    -webkit-text-fill-color: #1f456d;
+    caret-color: #1f456d;
+}
+
+.mk-profile-form input:focus {
+    outline: none;
+    border-color: #74a9de;
+    box-shadow: 0 0 0 3px rgba(86, 165, 245, 0.18);
+    background: #ffffff;
+}
+
+.mk-profile-form input::placeholder {
+    color: #7d93ad;
+}
+
+.mk-profile-form input:-webkit-autofill,
+.mk-profile-form input:-webkit-autofill:hover,
+.mk-profile-form input:-webkit-autofill:focus,
+.mk-profile-form input:-webkit-autofill:active {
+    -webkit-text-fill-color: #1f456d;
+    -webkit-box-shadow: 0 0 0 1000px #f7fbff inset;
+    box-shadow: 0 0 0 1000px #f7fbff inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.mk-profile-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.mk-profile-actions button,
+.mk-profile-actions a {
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mk-profile-actions button {
+    border: 0;
+    color: #fff;
+    background: linear-gradient(135deg, #2f6de2, #4f73ff);
+}
+
+.mk-profile-actions a {
+    border: 1px solid #d0deec;
+    color: #35597f;
+    background: #fff;
+}
+
+.mk-bottom {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.mk-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.mk-filter-tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.mk-filter-tabs button {
+    border: 1px solid #d3e0ee;
+    border-radius: 999px;
+    background: #fff;
+    color: #436383;
+    padding: 4px 9px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mk-filter-tabs button.active {
+    background: #eff5ff;
+    color: #1a5ba2;
+    border-color: #bfd5ee;
+}
+
+.mk-activity-list {
+    display: grid;
+    gap: 8px;
+    max-height: 360px;
+    overflow: auto;
+    padding-right: 2px;
+}
+
+.mk-activity {
+    border: 1px solid #e0e9f4;
+    border-left: 4px solid #3475dc;
+    border-radius: 10px;
+    padding: 10px;
+    background: #fbfdff;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.mk-activity.quote {
+    border-left-color: #8c5bf1;
+}
+
+.mk-activity strong {
+    color: #1d4267;
+}
+
+.mk-activity p {
+    margin: 4px 0 0;
+    color: #6a82a2;
+    font-size: 0.82rem;
+}
+
+.mk-meta {
+    text-align: right;
+    display: grid;
+    gap: 2px;
+}
+
+.mk-meta time {
+    color: #738ba8;
+    font-size: 0.74rem;
+}
+
+.mk-meta a {
+    font-size: 0.74rem;
+    font-weight: 700;
+}
+
+.mk-chip {
+    display: inline-block;
+    border-radius: 999px;
+    border: 1px solid #d4e3f3;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #235986;
+    background: #edf5ff;
+}
+
+.mk-empty {
+    border: 1px dashed #d7e3ef;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    color: #7089a8;
+    font-size: 0.84rem;
+    background: #fbfdff;
+}
+
+.mk-drill-banner {
+    border: 1px solid #c7dbf3;
+    border-radius: 10px;
+    padding: 9px 11px;
+    background: #edf6ff;
+    color: #234d77;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.82rem;
+}
+
+.mk-drill-banner a {
+    color: #1e65aa;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.mk-table-wrap {
+    overflow: auto;
+    max-height: 360px;
+}
+
+.mk-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 540px;
+}
+
+.mk-table th,
+.mk-table td {
+    padding: 8px;
+    border-bottom: 1px solid #e5edf6;
+    text-align: left;
+    color: #335575;
+    font-size: 0.8rem;
+}
+
+.mk-table th {
+    background: #f7fbff;
+    color: #21486d;
+}
+
+.mk-badge {
+    border-radius: 999px;
+    font-size: 0.67rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    display: inline-block;
+}
+
+.mk-badge.added { background: #e6f8ef; color: #0a7b47; }
+.mk-badge.updated { background: #ebf3ff; color: #1e65aa; }
+.mk-badge.deleted { background: #ffeceb; color: #b63232; }
+
+@media (max-width: 1220px) {
+    .mk-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-sla-cards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mk-funnel-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-ux-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-alert-cards,
+    .mk-quality-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-grid,
+    .mk-bottom,
+    .mk-section-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 980px) {
+    .mk-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .mk-sidebar {
+        grid-template-rows: auto auto auto auto;
+    }
+}
+
+@media (max-width: 760px) {
+    .mk-top {
+        padding: 14px;
+    }
+
+    .mk-content {
+        padding: 12px;
+    }
+
+    .mk-kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .mk-search {
+        width: 100%;
+    }
+
+    .mk-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .mk-activity {
+        flex-direction: column;
+    }
+
+    .mk-brand-logo {
+        min-height: 74px;
+        padding: 6px;
+    }
+
+    .mk-brand-logo img {
+        width: 96px;
+    }
+
+    .mk-meta {
+        text-align: left;
+    }
+
+    .mk-sla-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mk-funnel-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mk-ux-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .mk-alert-cards,
+    .mk-quality-cards {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; Site Activity Dashboard
+</div>
+{% endblock %}
+
+{% block content %}
+{% widthratio kpis.contacts_window kpis.contacts_total 100 as contacts_pct %}
+{% widthratio kpis.quotes_window kpis.quotes_total 100 as quotes_pct %}
+{% widthratio kpis.contacts_unread kpis.contacts_total 100 as unread_pct %}
+{% widthratio kpis.quotes_new kpis.quotes_total 100 as new_quotes_pct %}
+{% firstof request.user.first_name request.user.username as dashboard_user_name %}
+
+<div class="mk-shell">
+    <aside class="mk-sidebar">
+        <div class="mk-brand">
+            <div class="mk-brand-logo">
+                <img src="{% static 'images/nexalix-logo.png' %}" alt="Nexalix logo">
+            </div>
+            <h2>Operations Suite</h2>
+        </div>
+
+        <div class="mk-period">
+            {% for option in period_options %}
+            <a class="{% if option.active %}active{% endif %}" href="{% url 'activity_dashboard' %}?{{ option.query }}">Last {{ option.days }} days</a>
+            {% endfor %}
+        </div>
+
+        <div class="mk-role-strip">
+            {% for role_item in role_switches %}
+            <a class="{% if role_view == role_item.key %}active{% endif %}" href="{% url 'activity_dashboard' %}?{{ role_item.query }}">{{ role_item.label }}</a>
+            {% endfor %}
+        </div>
+
+        <nav class="mk-nav">
+            <a class="current mk-section-link" href="#" data-view="overview">Dashboard Overview</a>
+            <a class="mk-section-link" href="#" data-view="alert-center">Alert Center</a>
+            <a class="mk-section-link" href="#" data-view="data-quality">Data Quality Checks</a>
+            <a class="mk-section-link" href="#" data-view="executive-reporting">Executive Reporting</a>
+            <a class="mk-section-link" href="#" data-view="seo-topic-generator">SEO Topic Generator</a>
+            <a class="mk-section-link" href="#" data-view="funnel-analytics">Funnel Analytics</a>
+            <a class="mk-section-link" href="#" data-view="ux-analytics">UX Analytics</a>
+            <a class="mk-section-link" href="#" data-view="contact-messages" data-activity-filter="contact">Contact Messages</a>
+            <a class="mk-section-link" href="#" data-view="quote-requests" data-activity-filter="quote">Quote Requests</a>
+            <a class="mk-section-link" href="#" data-view="partners">Partners</a>
+            <a class="mk-section-link" href="#" data-view="case-studies">Case Studies</a>
+            <a class="admin-home-link" href="{% url 'admin:index' %}">Django Admin Home</a>
+        </nav>
+
+        <div class="mk-saved-filters">
+            <h3>Saved Filters</h3>
+            <form class="mk-save-filter-form" method="post" action="{% url 'activity_dashboard' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_filter">
+                <input type="hidden" name="period" value="{{ period_days }}">
+                <input type="hidden" name="q" value="{{ search_query }}">
+                <input type="hidden" name="activity" value="{{ activity_filter }}">
+                <input type="hidden" name="role" value="{{ role_view }}">
+                <input type="hidden" name="day" value="{{ selected_day_str }}">
+                <input type="text" name="filter_name" maxlength="80" placeholder="Save current view">
+                <button type="submit">Save</button>
+            </form>
+            <div class="mk-saved-list">
+                {% for saved in saved_filters %}
+                <div class="mk-saved-item">
+                    <div class="mk-saved-item-head">
+                        <a href="{% url 'activity_dashboard' %}?saved_filter={{ saved.id }}">{{ saved.name }}</a>
+                        <form method="post" action="{% url 'activity_dashboard' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete_saved_filter">
+                            <input type="hidden" name="saved_filter_id" value="{{ saved.id }}">
+                            <input type="hidden" name="period" value="{{ period_days }}">
+                            <input type="hidden" name="q" value="{{ search_query }}">
+                            <input type="hidden" name="activity" value="{{ activity_filter }}">
+                            <input type="hidden" name="role" value="{{ role_view }}">
+                            <input type="hidden" name="day" value="{{ selected_day_str }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                    <div class="mk-saved-meta">{{ saved.period_days }}d · {{ saved.role_view|title }} · {{ saved.activity_filter|title }}</div>
+                </div>
+                {% empty %}
+                <div class="mk-saved-meta">No saved filters yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mk-sidebar-foot">
+            <label class="mk-switch">
+                <input type="checkbox" id="autoRefreshToggle">
+                Live updates every 15s
+            </label>
+            <p id="autoRefreshStatus">Live updates are off.</p>
+            <p>Last rendered: {% now "M d, Y H:i" %}</p>
+        </div>
+    </aside>
+
+    <section class="mk-main">
+        <header class="mk-top">
+            <form class="mk-search" id="dashboardSearchForm" method="get" action="{% url 'activity_dashboard' %}">
+                <input type="hidden" name="period" value="{{ period_days }}">
+                <input type="hidden" name="activity" value="{{ activity_filter }}" id="activityHiddenInput">
+                <input type="hidden" name="role" value="{{ role_view }}" id="roleHiddenInput">
+                <input type="hidden" name="day" value="{{ selected_day_str }}" id="dayHiddenInput">
+                <i>🔎</i>
+                <input type="search" name="q" id="dashboardSearchInput" value="{{ search_query }}" placeholder="Search contacts, quotes, admin logs..." autocomplete="off">
+                <button type="submit">Search</button>
+            </form>
+            <div class="mk-actions">
+                <div class="mk-toolbar">
+                    <span class="mk-pill">{{ role_view|title }} Mode</span>
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ current_query }}">Refresh</a>
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ csv_activity_query }}">Export Activity CSV</a>
+                    {% if not sales_mode %}
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ csv_logs_query }}">Export Logs CSV</a>
+                    {% endif %}
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ weekly_csv_query }}">Weekly Exec CSV</a>
+                    <a class="mk-pill" href="{% url 'activity_dashboard' %}?{{ weekly_pdf_query }}">Weekly Exec PDF</a>
+                    <a class="mk-pill" href="{% url 'admin:index' %}">Admin Home</a>
+                </div>
+                <div class="mk-header-side">
+                    <div class="mk-notification-wrap">
+                        <button
+                            type="button"
+                            class="mk-bell"
+                            id="dashboardNotificationBell"
+                            aria-label="Open client message notifications"
+                            aria-controls="dashboardNotificationPanel"
+                            aria-expanded="false"
+                        >
+                            <span class="mk-bell-icon" aria-hidden="true">🔔</span>
+                            <span class="mk-bell-badge" id="notificationBellCount" {% if not dashboard_notifications.count %}hidden{% endif %}>{{ dashboard_notifications.count }}</span>
+                        </button>
+                        <div class="mk-notification-panel" id="dashboardNotificationPanel" hidden>
+                            <div class="mk-notification-head">
+                                <div>
+                                    <h3>Client Message Notifications</h3>
+                                    <span id="notificationSummary">{{ dashboard_notifications.count }} unread message{{ dashboard_notifications.count|pluralize }}</span>
+                                </div>
+                            </div>
+                            <div class="mk-notification-list" id="dashboardNotificationList">
+                                {% for item in dashboard_notifications.items %}
+                                <article class="mk-notification-item" data-notification-id="{{ item.id }}">
+                                    <strong>{{ item.title }}</strong>
+                                    <time>{{ item.timestamp_label }}</time>
+                                    <p>{{ item.service }}{% if item.preview %} · {{ item.preview }}{% endif %}</p>
+                                    <div class="mk-notification-links">
+                                        <a class="mk-email-link" href="mailto:{{ item.email }}">{{ item.email }}</a>
+                                        <a href="{{ item.admin_url }}" class="mk-notification-open" data-notification-id="{{ item.id }}">Open in admin</a>
+                                    </div>
+                                </article>
+                                {% empty %}
+                                <div class="mk-notification-empty">No unread client messages right now.</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mk-avatar">{{ dashboard_user_name|slice:":1"|upper }}</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="mk-content">
+            <div class="mk-notification-toast" id="dashboardNotificationToast" hidden role="status" aria-live="polite"></div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mk-msg {% if message.tags == 'error' %}error{% else %}success{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if selected_day %}
+            <div class="mk-drill-banner">
+                <span>Drill-down active for <strong>{{ selected_day_label }}</strong>.</span>
+                <a href="{% url 'activity_dashboard' %}?{{ clear_day_query }}">Clear drill-down</a>
+            </div>
+            {% endif %}
+
+            <div class="mk-kpis" id="kpiCards">
+                <article class="mk-kpi" data-kpi-filter="contact">
+                    <div class="mk-kpi-head">
+                        <h3>Contact Messages</h3>
+                        <span class="mk-tag blue">This Period</span>
+                    </div>
+                    <strong id="kpiContactsWindow">{{ kpis.contacts_window }}</strong>
+                    <small id="kpiContactsTotal">{{ kpis.contacts_total }} total records</small>
+                    <div class="mk-progress"><span id="kpiContactsProgress" class="blue" style="width: {% if contacts_pct > 100 %}100{% else %}{{ contacts_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+
+                <article class="mk-kpi" data-kpi-filter="quote">
+                    <div class="mk-kpi-head">
+                        <h3>Quote Requests</h3>
+                        <span class="mk-tag yellow">This Period</span>
+                    </div>
+                    <strong id="kpiQuotesWindow">{{ kpis.quotes_window }}</strong>
+                    <small id="kpiQuotesTotal">{{ kpis.quotes_total }} total records</small>
+                    <div class="mk-progress"><span id="kpiQuotesProgress" class="yellow" style="width: {% if quotes_pct > 100 %}100{% else %}{{ quotes_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+
+                <article class="mk-kpi" data-kpi-filter="contact">
+                    <div class="mk-kpi-head">
+                        <h3>Unread Contacts</h3>
+                        <span class="mk-tag green">Queue</span>
+                    </div>
+                    <strong id="kpiUnreadContacts">{{ kpis.contacts_unread }}</strong>
+                    <small>Pending review</small>
+                    <div class="mk-progress"><span id="kpiUnreadProgress" class="green" style="width: {% if unread_pct > 100 %}100{% else %}{{ unread_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+
+                <article class="mk-kpi" data-kpi-filter="quote">
+                    <div class="mk-kpi-head">
+                        <h3>New Quotes</h3>
+                        <span class="mk-tag violet">Pipeline</span>
+                    </div>
+                    <strong id="kpiNewQuotes">{{ kpis.quotes_new }}</strong>
+                    <small>Need follow-up</small>
+                    <div class="mk-progress"><span id="kpiNewQuotesProgress" class="violet" style="width: {% if new_quotes_pct > 100 %}100{% else %}{{ new_quotes_pct|default:0 }}{% endif %}%;"></span></div>
+                </article>
+            </div>
+
+            <div class="mk-grid" id="section-overview">
+                <article class="mk-panel">
+                    <h2>Activity Trend</h2>
+                    <p class="mk-sub">Contacts and quotes visualized as grouped bars. Click a bar to drill into that day.</p>
+                    <div class="mk-chart-controls">
+                        <label><input type="checkbox" id="toggleContacts" checked> Contacts</label>
+                        <label><input type="checkbox" id="toggleQuotes" checked> Quotes</label>
+                    </div>
+                    <div class="mk-chart" id="trendChart">
+                        {% for point in trend_data %}
+                        <div class="mk-col">
+                            <div class="mk-bars">
+                                <button type="button" class="mk-bar contacts" data-kind="contact" data-day="{{ point.date }}" style="height: {{ point.contacts_height }}px" title="Contacts: {{ point.contacts }} on {{ point.label }}"></button>
+                                <button type="button" class="mk-bar quotes" data-kind="quote" data-day="{{ point.date }}" style="height: {{ point.quotes_height }}px" title="Quotes: {{ point.quotes }} on {{ point.label }}"></button>
+                            </div>
+                            <small>{{ point.label }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel">
+                    <h2>Admin Profile</h2>
+                    <p class="mk-sub">Update your profile directly from this dashboard.</p>
+                    <div class="mk-stat-box">
+                        <div class="mk-mini">
+                            <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+                            <span>{{ request.user.email|default:"No email set" }}</span>
+                        </div>
+                    </div>
+                    <form class="mk-profile-form" method="post" action="{% url 'activity_dashboard' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="update_profile">
+                        <input type="hidden" name="period" value="{{ period_days }}">
+                        <input type="hidden" name="q" value="{{ search_query }}">
+                        <input type="hidden" name="activity" value="{{ activity_filter }}">
+                        <input type="hidden" name="role" value="{{ role_view }}">
+                        <input type="hidden" name="day" value="{{ selected_day_str }}">
+
+                        <label for="profile_first_name">First Name</label>
+                        <input id="profile_first_name" type="text" name="first_name" value="{{ request.user.first_name }}">
+
+                        <label for="profile_last_name">Last Name</label>
+                        <input id="profile_last_name" type="text" name="last_name" value="{{ request.user.last_name }}">
+
+                        <label for="profile_email">Email</label>
+                        <input id="profile_email" type="email" name="email" value="{{ request.user.email }}">
+
+                        <div class="mk-profile-actions">
+                            <button type="submit">Save Profile</button>
+                            <a href="{% url 'admin:password_change' %}">Change Password</a>
+                        </div>
+                    </form>
+                </article>
+            </div>
+
+            <article class="mk-panel" id="section-sla-queue">
+                <h2>Response SLA Queue</h2>
+                <p class="mk-sub">Contacts SLA: {{ contact_sla_hours }}h · Quotes SLA: {{ quote_sla_hours }}h · Overdue items are highlighted in red.</p>
+                <div class="mk-sla-cards">
+                    <div class="mk-sla-card overdue">
+                        <strong id="slaOverdue">{{ sla_summary.overdue }}</strong>
+                        <span>Overdue</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="sla1h">{{ sla_summary.within_1h }}</strong>
+                        <span>Due in 1h</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="sla4h">{{ sla_summary.within_4h }}</strong>
+                        <span>Due in 4h</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="sla24h">{{ sla_summary.within_24h }}</strong>
+                        <span>Due in 24h</span>
+                    </div>
+                    <div class="mk-sla-card">
+                        <strong id="slaPendingTotal">{{ sla_summary.pending_total }}</strong>
+                        <span>Pending Total</span>
+                    </div>
+                </div>
+
+                <div class="mk-mini-list" id="slaQueueList">
+                    {% for item in sla_queue %}
+                    <div class="mk-mini-item {% if item.bucket == 'overdue' %}sla-overdue{% elif item.bucket == 'within_1h' or item.bucket == 'within_4h' %}sla-due-soon{% elif item.bucket == 'within_24h' %}sla-due-day{% endif %}">
+                        <strong>{{ item.title }} · {{ item.kind|title }}</strong>
+                        <span>{{ item.subtitle }} · {{ item.status }}</span>
+                        <span>{{ item.remaining_label }} · due {{ item.due_at_label }} · <a href="{{ item.admin_url }}">Open</a></span>
+                    </div>
+                    {% empty %}
+                    <div class="mk-mini-item"><strong>No pending contact or quote items in this range.</strong></div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <div class="mk-section-grid mk-view-hidden" id="sectionPagesContainer">
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-alert-center" data-view-panel="alert-center">
+                    <h2>Alert Center</h2>
+                    <p class="mk-sub">Proactive alerts for spikes, overdue leads, email failures, and chatbot escalations.</p>
+
+                    <div class="mk-alert-cards">
+                        <div class="mk-alert-card critical">
+                            <strong id="alertCritical">{{ alert_summary.critical }}</strong>
+                            <span>Critical</span>
+                        </div>
+                        <div class="mk-alert-card high">
+                            <strong id="alertHigh">{{ alert_summary.high }}</strong>
+                            <span>High</span>
+                        </div>
+                        <div class="mk-alert-card medium">
+                            <strong id="alertMedium">{{ alert_summary.medium }}</strong>
+                            <span>Medium</span>
+                        </div>
+                        <div class="mk-alert-card">
+                            <strong id="alertTotal">{{ alert_summary.total }}</strong>
+                            <span>Total Alerts</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-alert-list" id="alertList">
+                        {% for alert in alerts %}
+                        <div class="mk-alert-item {{ alert.severity }}">
+                            <strong>{{ alert.title }}</strong>
+                            <span>{{ alert.message }}</span>
+                            <a href="{{ alert.action_url }}">Investigate</a>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No active alerts right now.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-data-quality" data-view-panel="data-quality">
+                    <h2>Data Quality Checks</h2>
+                    <p class="mk-sub">Duplicates, invalid records, missing fields, and stale pipeline entries.</p>
+
+                    <div class="mk-quality-cards">
+                        <div class="mk-quality-card">
+                            <strong id="qualityTotal">{{ quality_summary.total_issues }}</strong>
+                            <span>Total Issues</span>
+                        </div>
+                        <div class="mk-quality-card">
+                            <strong id="qualityDuplicate">{{ quality_summary.duplicates }}</strong>
+                            <span>Duplicates</span>
+                        </div>
+                        <div class="mk-quality-card">
+                            <strong id="qualityInvalid">{{ quality_summary.invalid_emails|add:quality_summary.invalid_phones }}</strong>
+                            <span>Invalid Email/Phone</span>
+                        </div>
+                        <div class="mk-quality-card">
+                            <strong id="qualityStale">{{ quality_summary.stale_records }}</strong>
+                            <span>Stale Records</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-quality-list" id="qualityList">
+                        {% for issue in quality_issues %}
+                        <div class="mk-quality-item">
+                            <strong>[{{ issue.category }}] {{ issue.label }}</strong>
+                            <span>{{ issue.detail }}</span>
+                            <a href="{{ issue.action_url }}">Open Record</a>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No data quality issues detected.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-executive-reporting" data-view-panel="executive-reporting">
+                    <h2>Executive Reporting</h2>
+                    <p class="mk-sub">Auto-generated weekly summaries for leadership and operations reviews.</p>
+                    <div class="mk-pill-list">
+                        <a class="mk-pill-small" href="{% url 'activity_dashboard' %}?{{ weekly_csv_query }}">Download Weekly CSV</a>
+                        <a class="mk-pill-small" href="{% url 'activity_dashboard' %}?{{ weekly_pdf_query }}">Download Weekly PDF</a>
+                    </div>
+                    <div class="mk-mini-list" style="margin-top:10px;">
+                        <div class="mk-mini-item">
+                            <strong>Weekly report includes</strong>
+                            <span>KPI totals, conversion rates, SLA exposure, alerts, data quality summary, and trend lines.</span>
+                        </div>
+                        <div class="mk-mini-item">
+                            <strong>Default window</strong>
+                            <span>Last 7 days, scoped by the active role view (All/Sales/Ops).</span>
+                        </div>
+                        <div class="mk-mini-item">
+                            <strong>Usage</strong>
+                            <span>Share CSV with analysts and PDF with executives for weekly decision reviews.</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel" id="section-seo-topic-generator" data-view-panel="seo-topic-generator">
+                    <h2>SEO Topic Generator</h2>
+                    <p class="mk-sub">Preview technology consulting topics generated for Nexalix SEO campaigns.</p>
+                    <div class="mk-pill-list">
+                        {% for keyword in seo_keywords_preview %}
+                        <span class="mk-pill-small">{{ keyword }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mk-mini-list" style="margin-top:10px;">
+                        {% for topic in seo_topics_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ topic.title }}</strong>
+                            <span>{{ topic.keyword }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No topics generated.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-funnel-analytics" data-view-panel="funnel-analytics">
+                    <h2>Funnel Analytics</h2>
+                    <p class="mk-sub">Contact → Quote → Won/Lost conversion and drop-off by service and industry.</p>
+
+                    <div class="mk-funnel-grid">
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallContacts">{{ funnel_analytics.overall.contacts }}</strong>
+                            <span>Contacts</span>
+                        </div>
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallQuotes">{{ funnel_analytics.overall.quotes }}</strong>
+                            <span>Quotes</span>
+                        </div>
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallWon">{{ funnel_analytics.overall.won }}</strong>
+                            <span>Won</span>
+                        </div>
+                        <div class="mk-funnel-card">
+                            <strong id="funnelOverallLost">{{ funnel_analytics.overall.lost }}</strong>
+                            <span>Lost</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-funnel-rate">
+                        <span class="mk-chip" id="funnelRateContactQuote">Contact→Quote: {{ funnel_analytics.overall.contact_to_quote_rate }}%</span>
+                        <span class="mk-chip" id="funnelRateQuoteWon">Quote→Won: {{ funnel_analytics.overall.quote_to_won_rate }}%</span>
+                        <span class="mk-chip" id="funnelDropContactQuote">Drop (Contact→Quote): {{ funnel_analytics.overall.drop_contact_to_quote }}</span>
+                        <span class="mk-chip" id="funnelDropQuoteWon">Drop (Quote→Won): {{ funnel_analytics.overall.drop_quote_to_won }}</span>
+                    </div>
+
+                    <h3 style="margin:0 0 8px; color:#224768; font-size:0.93rem;">By Service</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Contacts</th>
+                                    <th>Quotes</th>
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>C→Q</th>
+                                    <th>Q→W</th>
+                                    <th>Drop C→Q</th>
+                                    <th>Drop Q→W</th>
+                                </tr>
+                            </thead>
+                            <tbody id="funnelServiceBody">
+                                {% for row in funnel_analytics.service_rows %}
+                                <tr>
+                                    <td>{{ row.label }}</td>
+                                    <td>{{ row.contacts }}</td>
+                                    <td>{{ row.quotes }}</td>
+                                    <td>{{ row.won }}</td>
+                                    <td>{{ row.lost }}</td>
+                                    <td>{{ row.contact_to_quote_rate }}%</td>
+                                    <td>{{ row.quote_to_won_rate }}%</td>
+                                    <td>{{ row.drop_contact_to_quote }}</td>
+                                    <td>{{ row.drop_quote_to_won }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="9">No service funnel data.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin:12px 0 8px; color:#224768; font-size:0.93rem;">By Industry</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Industry</th>
+                                    <th>Contacts</th>
+                                    <th>Quotes</th>
+                                    <th>Won</th>
+                                    <th>Lost</th>
+                                    <th>C→Q</th>
+                                    <th>Q→W</th>
+                                    <th>Drop C→Q</th>
+                                    <th>Drop Q→W</th>
+                                </tr>
+                            </thead>
+                            <tbody id="funnelIndustryBody">
+                                {% for row in funnel_analytics.industry_rows %}
+                                <tr>
+                                    <td>{{ row.label }}</td>
+                                    <td>{{ row.contacts }}</td>
+                                    <td>{{ row.quotes }}</td>
+                                    <td>{{ row.won }}</td>
+                                    <td>{{ row.lost }}</td>
+                                    <td>{{ row.contact_to_quote_rate }}%</td>
+                                    <td>{{ row.quote_to_won_rate }}%</td>
+                                    <td>{{ row.drop_contact_to_quote }}</td>
+                                    <td>{{ row.drop_quote_to_won }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="9">No industry funnel data.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel mk-view-hidden" id="section-ux-analytics" data-view-panel="ux-analytics">
+                    <h2>UX Analytics</h2>
+                    <p class="mk-sub">Website conversion signals for {{ ux_analytics.window_label|default:"active period" }}.</p>
+
+                    <div class="mk-ux-cards">
+                        <div class="mk-ux-card">
+                            <strong id="uxCtaClicks">{{ ux_analytics.totals.cta_clicks }}</strong>
+                            <span>CTA Clicks</span>
+                        </div>
+                        <div class="mk-ux-card">
+                            <strong id="uxFormDropoff">{{ ux_analytics.totals.form_dropoff }}</strong>
+                            <span>Form Drop-off</span>
+                        </div>
+                        <div class="mk-ux-card">
+                            <strong id="uxChatLeads">{{ ux_analytics.totals.chat_lead_submits }}</strong>
+                            <span>Chatbot Leads</span>
+                        </div>
+                        <div class="mk-ux-card">
+                            <strong id="uxSearchQueries">{{ ux_analytics.totals.search_queries }}</strong>
+                            <span>Search Queries</span>
+                        </div>
+                    </div>
+
+                    <div class="mk-funnel-rate">
+                        <span class="mk-chip" id="uxFormCompletionRate">Form completion: {{ ux_analytics.conversion.form_completion_rate }}%</span>
+                        <span class="mk-chip" id="uxFormDropoffRate">Form drop-off: {{ ux_analytics.conversion.form_dropoff_rate }}%</span>
+                        <span class="mk-chip" id="uxChatLeadConversionRate">Chat lead conversion: {{ ux_analytics.conversion.chat_lead_conversion_rate }}%</span>
+                        <span class="mk-chip" id="uxCtaToQuoteRate">CTA→Quote rate: {{ ux_analytics.conversion.cta_to_quote_rate }}%</span>
+                        <span class="mk-chip" id="uxAbCtr">A/B CTR: {{ ux_analytics.conversion.ab_ctr }}%</span>
+                    </div>
+
+                    <h3 style="margin:0 0 8px; color:#224768; font-size:0.93rem;">A/B Test Performance</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Test</th>
+                                    <th>Variant</th>
+                                    <th>Exposures</th>
+                                    <th>Clicks</th>
+                                    <th>CTR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uxAbBody">
+                                {% for row in ux_analytics.ab_rows %}
+                                <tr>
+                                    <td>{{ row.test_name }}</td>
+                                    <td>{{ row.variant }}</td>
+                                    <td>{{ row.exposures }}</td>
+                                    <td>{{ row.clicks }}</td>
+                                    <td>{{ row.ctr }}%</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="5">No A/B interaction data available yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="margin:12px 0 8px; color:#224768; font-size:0.93rem;">Recent Daily UX Signals</h3>
+                    <div class="mk-mini-table-wrap">
+                        <table class="mk-mini-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>CTA Clicks</th>
+                                    <th>Form Drop-off</th>
+                                    <th>Chat Leads</th>
+                                    <th>A/B Exposures</th>
+                                    <th>A/B Clicks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="uxDailyBody">
+                                {% for row in ux_analytics.daily_rows %}
+                                <tr>
+                                    <td>{{ row.label }}</td>
+                                    <td>{{ row.cta_clicks }}</td>
+                                    <td>{{ row.form_dropoff }}</td>
+                                    <td>{{ row.chat_leads }}</td>
+                                    <td>{{ row.ab_exposures }}</td>
+                                    <td>{{ row.ab_clicks }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="6">No UX event data available yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel" id="section-contact-messages" data-view-panel="contact-messages">
+                    <h2>Contact Messages</h2>
+                    <p class="mk-sub">Latest contact submissions within the active period and filters.</p>
+                    <div class="mk-mini-list">
+                        {% for message in contacts_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ message.full_name }} · {{ message.service|default:"General inquiry" }}</strong>
+                            <span><a class="mk-email-link" href="mailto:{{ message.email }}">{{ message.email }}</a> · {{ message.submitted_at|date:"M d, Y H:i" }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No contact messages found.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel" id="section-quote-requests" data-view-panel="quote-requests">
+                    <h2>Quote Requests</h2>
+                    <p class="mk-sub">Latest quote requests within the active period and filters.</p>
+                    <div class="mk-mini-list">
+                        {% for quote in quotes_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ quote.quote_reference }} · {{ quote.service.title|default:"Service not selected" }}</strong>
+                            <span><a class="mk-email-link" href="mailto:{{ quote.email }}">{{ quote.email }}</a> · {{ quote.created_at|date:"M d, Y H:i" }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No quote requests found.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel" id="section-partners" data-view-panel="partners">
+                    <h2>Partners</h2>
+                    <p class="mk-sub">Active partners currently displayed across Nexalix pages.</p>
+                    <div class="mk-mini-list">
+                        {% for partner in partners_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ partner.name }}</strong>
+                            <span>{% if partner.website %}{{ partner.website }}{% else %}No website set{% endif %}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No partners available.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="mk-panel mk-view-panel" id="section-case-studies" data-view-panel="case-studies">
+                    <h2>Case Studies</h2>
+                    <p class="mk-sub">Recent active case studies available on the public website.</p>
+                    <div class="mk-mini-list">
+                        {% for case in case_studies_preview %}
+                        <div class="mk-mini-item">
+                            <strong>{{ case.title }}</strong>
+                            <span>{{ case.created_at|date:"M d, Y" }}{% if case.tags %} · {{ case.tags }}{% endif %}</span>
+                        </div>
+                        {% empty %}
+                        <div class="mk-mini-item"><strong>No case studies available.</strong></div>
+                        {% endfor %}
+                    </div>
+                </article>
+            </div>
+
+            <div class="mk-bottom" id="section-client-activity">
+                <article class="mk-panel">
+                    <div class="mk-panel-head">
+                        <div>
+                            <h2>Recent Client Activity</h2>
+                            <p class="mk-sub">
+                                {% if ops_mode %}
+                                Operational queue focus: unread contacts and active quote pipeline.
+                                {% else %}
+                                Latest contact and quote submissions.
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="mk-filter-tabs" id="activityFilterTabs">
+                            <button type="button" data-filter="all" class="{% if activity_filter == 'all' %}active{% endif %}">All</button>
+                            <button type="button" data-filter="contact" class="{% if activity_filter == 'contact' %}active{% endif %}">Contacts</button>
+                            <button type="button" data-filter="quote" class="{% if activity_filter == 'quote' %}active{% endif %}">Quotes</button>
+                        </div>
+                    </div>
+                    <div class="mk-activity-list" id="activityList">
+                        {% for item in client_activities %}
+                        <div class="mk-activity {% if item.type == 'quote' %}quote{% endif %}" data-type="{{ item.type }}" data-search="{{ item.search_text }}">
+                            <div>
+                                <strong>{{ item.title }}</strong>
+                                <p>{{ item.subtitle }}{% if item.detail %} · <a class="mk-email-link" href="mailto:{{ item.detail }}">{{ item.detail }}</a>{% endif %}</p>
+                            </div>
+                            <div class="mk-meta">
+                                <span class="mk-chip">{{ item.status }}</span>
+                                <time>{{ item.timestamp|date:"M d, Y H:i" }}</time>
+                                <a href="{{ item.admin_url }}">Open</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mk-empty" id="activityEmpty" {% if client_activities %}style="display:none;"{% endif %}>No client activity matches your current filters.</div>
+                </article>
+
+                {% if not sales_mode %}
+                <article class="mk-panel">
+                    <h2>Admin Change Log</h2>
+                    <p class="mk-sub">Recent model actions in Django admin.</p>
+                    <div class="mk-table-wrap">
+                        <table class="mk-table" id="adminLogTable">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Model</th>
+                                    <th>Object</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in admin_logs %}
+                                <tr data-search="{{ log.search_text }}">
+                                    <td>{{ log.time|date:"M d, H:i" }}</td>
+                                    <td>{{ log.user }}</td>
+                                    <td><span class="mk-badge {{ log.style }}">{{ log.action }}</span></td>
+                                    <td>{{ log.model }}</td>
+                                    <td>
+                                        {% if log.link %}
+                                        <a href="{{ log.link }}">{{ log.object_label }}</a>
+                                        {% else %}
+                                        {{ log.object_label }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mk-empty" id="logEmpty" {% if admin_logs %}style="display:none;"{% endif %}>No admin log entries match your search.</div>
+                </article>
+                {% else %}
+                <article class="mk-panel">
+                    <h2>Ops-Only Logs</h2>
+                    <p class="mk-sub">Switch to Ops View or All Views to inspect change logs and operational audit data.</p>
+                    <div class="mk-empty">Admin logs are hidden in Sales View for a focused workflow.</div>
+                </article>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+(function () {
+    const liveEndpoint = "{% url 'activity_dashboard_live' %}";
+    const notificationReadEndpoint = "{% url 'dashboard_mark_notification_read' %}";
+    const searchForm = document.getElementById("dashboardSearchForm");
+    const searchInput = document.getElementById("dashboardSearchInput");
+    const activityHiddenInput = document.getElementById("activityHiddenInput");
+    const dayHiddenInput = document.getElementById("dayHiddenInput");
+    const activityList = document.getElementById("activityList");
+    let activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
+    const logRows = Array.from(document.querySelectorAll("#adminLogTable tbody tr"));
+    const tabs = Array.from(document.querySelectorAll("#activityFilterTabs button"));
+    const sectionLinks = Array.from(document.querySelectorAll(".mk-nav .mk-section-link"));
+    const sectionPagesContainer = document.getElementById("sectionPagesContainer");
+    const viewPanels = Array.from(document.querySelectorAll(".mk-view-panel"));
+    const overviewBlocks = [
+        document.getElementById("kpiCards"),
+        document.getElementById("section-overview"),
+        document.getElementById("section-sla-queue"),
+        document.getElementById("section-client-activity"),
+    ].filter(Boolean);
+    const activityEmpty = document.getElementById("activityEmpty");
+    const logEmpty = document.getElementById("logEmpty");
+    const toggleContacts = document.getElementById("toggleContacts");
+    const toggleQuotes = document.getElementById("toggleQuotes");
+    const autoRefreshToggle = document.getElementById("autoRefreshToggle");
+    const autoRefreshStatus = document.getElementById("autoRefreshStatus");
+    const slaQueueList = document.getElementById("slaQueueList");
+    const alertList = document.getElementById("alertList");
+    const qualityList = document.getElementById("qualityList");
+
+    const kpiContactsWindow = document.getElementById("kpiContactsWindow");
+    const kpiContactsTotal = document.getElementById("kpiContactsTotal");
+    const kpiQuotesWindow = document.getElementById("kpiQuotesWindow");
+    const kpiQuotesTotal = document.getElementById("kpiQuotesTotal");
+    const kpiUnreadContacts = document.getElementById("kpiUnreadContacts");
+    const kpiNewQuotes = document.getElementById("kpiNewQuotes");
+    const kpiContactsProgress = document.getElementById("kpiContactsProgress");
+    const kpiQuotesProgress = document.getElementById("kpiQuotesProgress");
+    const kpiUnreadProgress = document.getElementById("kpiUnreadProgress");
+    const kpiNewQuotesProgress = document.getElementById("kpiNewQuotesProgress");
+
+    const slaOverdue = document.getElementById("slaOverdue");
+    const sla1h = document.getElementById("sla1h");
+    const sla4h = document.getElementById("sla4h");
+    const sla24h = document.getElementById("sla24h");
+    const slaPendingTotal = document.getElementById("slaPendingTotal");
+
+    const alertCritical = document.getElementById("alertCritical");
+    const alertHigh = document.getElementById("alertHigh");
+    const alertMedium = document.getElementById("alertMedium");
+    const alertTotal = document.getElementById("alertTotal");
+
+    const qualityTotal = document.getElementById("qualityTotal");
+    const qualityDuplicate = document.getElementById("qualityDuplicate");
+    const qualityInvalid = document.getElementById("qualityInvalid");
+    const qualityStale = document.getElementById("qualityStale");
+
+    const funnelOverallContacts = document.getElementById("funnelOverallContacts");
+    const funnelOverallQuotes = document.getElementById("funnelOverallQuotes");
+    const funnelOverallWon = document.getElementById("funnelOverallWon");
+    const funnelOverallLost = document.getElementById("funnelOverallLost");
+    const funnelRateContactQuote = document.getElementById("funnelRateContactQuote");
+    const funnelRateQuoteWon = document.getElementById("funnelRateQuoteWon");
+    const funnelDropContactQuote = document.getElementById("funnelDropContactQuote");
+    const funnelDropQuoteWon = document.getElementById("funnelDropQuoteWon");
+    const funnelServiceBody = document.getElementById("funnelServiceBody");
+    const funnelIndustryBody = document.getElementById("funnelIndustryBody");
+
+    const uxCtaClicks = document.getElementById("uxCtaClicks");
+    const uxFormDropoff = document.getElementById("uxFormDropoff");
+    const uxChatLeads = document.getElementById("uxChatLeads");
+    const uxSearchQueries = document.getElementById("uxSearchQueries");
+    const uxFormCompletionRate = document.getElementById("uxFormCompletionRate");
+    const uxFormDropoffRate = document.getElementById("uxFormDropoffRate");
+    const uxChatLeadConversionRate = document.getElementById("uxChatLeadConversionRate");
+    const uxCtaToQuoteRate = document.getElementById("uxCtaToQuoteRate");
+    const uxAbCtr = document.getElementById("uxAbCtr");
+    const uxAbBody = document.getElementById("uxAbBody");
+    const uxDailyBody = document.getElementById("uxDailyBody");
+    const notificationBell = document.getElementById("dashboardNotificationBell");
+    const notificationPanel = document.getElementById("dashboardNotificationPanel");
+    const notificationCount = document.getElementById("notificationBellCount");
+    const notificationSummary = document.getElementById("notificationSummary");
+    const notificationList = document.getElementById("dashboardNotificationList");
+    const notificationToast = document.getElementById("dashboardNotificationToast");
+
+    let activeType = activityHiddenInput ? activityHiddenInput.value : "all";
+    if (!["all", "contact", "quote"].includes(activeType)) {
+        activeType = "all";
+    }
+    let notificationToastTimer = null;
+    let knownNotificationIds = new Set(
+        Array.from(notificationList ? notificationList.querySelectorAll("[data-notification-id]") : [])
+            .map((node) => String(node.dataset.notificationId || "").trim())
+            .filter(Boolean)
+    );
+
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function clampPercent(value) {
+        const numeric = Number(value || 0);
+        if (!Number.isFinite(numeric)) return 0;
+        return Math.max(0, Math.min(100, numeric));
+    }
+
+    function getCookie(name) {
+        const cookieValue = document.cookie
+            .split(";")
+            .map((part) => part.trim())
+            .find((part) => part.startsWith(`${name}=`));
+        if (!cookieValue) return "";
+        return decodeURIComponent(cookieValue.split("=").slice(1).join("="));
+    }
+
+    function closeNotificationPanel() {
+        if (!notificationPanel || !notificationBell) return;
+        notificationPanel.hidden = true;
+        notificationBell.setAttribute("aria-expanded", "false");
+    }
+
+    function openNotificationPanel() {
+        if (!notificationPanel || !notificationBell) return;
+        notificationPanel.hidden = false;
+        notificationBell.setAttribute("aria-expanded", "true");
+    }
+
+    function toggleNotificationPanel() {
+        if (!notificationPanel || !notificationBell) return;
+        if (notificationPanel.hidden) openNotificationPanel();
+        else closeNotificationPanel();
+    }
+
+    function showNotificationToast(items) {
+        if (!notificationToast || !Array.isArray(items) || !items.length) return;
+        const firstItem = items[0] || {};
+        const extraCount = items.length - 1;
+        notificationToast.innerHTML = `
+            <strong>${escapeHtml(firstItem.title || "New client message")}</strong>
+            <span>${escapeHtml(firstItem.service || "General inquiry")}${extraCount > 0 ? ` · plus ${extraCount} more new message${extraCount === 1 ? "" : "s"}` : ""}</span>
+        `;
+        notificationToast.hidden = false;
+        if (notificationToastTimer) clearTimeout(notificationToastTimer);
+        notificationToastTimer = setTimeout(() => {
+            notificationToast.hidden = true;
+        }, 4200);
+    }
+
+    function renderNotifications(snapshot, options = {}) {
+        const announce = options.announce !== false;
+        const notifications = snapshot || {};
+        const items = Array.isArray(notifications.items) ? notifications.items : [];
+        const count = Number(notifications.count || 0);
+        const nextIds = new Set(
+            items
+                .map((item) => String(item.id || "").trim())
+                .filter(Boolean)
+        );
+        const newItems = announce
+            ? items.filter((item) => {
+                const itemId = String(item.id || "").trim();
+                return itemId && !knownNotificationIds.has(itemId);
+            })
+            : [];
+        knownNotificationIds = nextIds;
+
+        if (notificationCount) {
+            if (count > 0) {
+                notificationCount.hidden = false;
+                notificationCount.textContent = count > 99 ? "99+" : String(count);
+            } else {
+                notificationCount.hidden = true;
+                notificationCount.textContent = "0";
+            }
+        }
+
+        if (notificationSummary) {
+            notificationSummary.textContent = `${count} unread message${count === 1 ? "" : "s"}`;
+        }
+
+        if (notificationList) {
+            if (!items.length) {
+                notificationList.innerHTML = '<div class="mk-notification-empty">No unread client messages right now.</div>';
+            } else {
+                notificationList.innerHTML = items.map((item) => `
+                    <article class="mk-notification-item" data-notification-id="${escapeHtml(item.id)}">
+                        <strong>${escapeHtml(item.title)}</strong>
+                        <time>${escapeHtml(item.timestamp_label)}</time>
+                        <p>${escapeHtml(item.service || "General inquiry")}${item.preview ? ` · ${escapeHtml(item.preview)}` : ""}</p>
+                        <div class="mk-notification-links">
+                            <a class="mk-email-link" href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a>
+                            <a href="${escapeHtml(item.admin_url)}" class="mk-notification-open" data-notification-id="${escapeHtml(item.id)}">Open in admin</a>
+                        </div>
+                    </article>
+                `).join("");
+            }
+        }
+
+        if (announce && newItems.length) {
+            showNotificationToast(newItems);
+        }
+    }
+
+    function applyActivityFilterAndSearch() {
+        const term = (searchInput ? searchInput.value : "").trim().toLowerCase();
+        let visibleActivity = 0;
+        let visibleLogs = 0;
+
+        activityItems.forEach((item) => {
+            const matchType = activeType === "all" || item.dataset.type === activeType;
+            const matchSearch = !term || (item.dataset.search || "").includes(term);
+            const show = matchType && matchSearch;
+            item.style.display = show ? "" : "none";
+            if (show) visibleActivity += 1;
+        });
+
+        logRows.forEach((row) => {
+            const show = !term || (row.dataset.search || "").includes(term);
+            row.style.display = show ? "" : "none";
+            if (show) visibleLogs += 1;
+        });
+
+        if (activityEmpty) activityEmpty.style.display = visibleActivity ? "none" : "block";
+        if (logEmpty) logEmpty.style.display = visibleLogs ? "none" : "block";
+    }
+
+    function renderActivities(items) {
+        if (!activityList) return;
+        if (!Array.isArray(items) || !items.length) {
+            activityList.innerHTML = "";
+            activityItems = [];
+            applyActivityFilterAndSearch();
+            return;
+        }
+
+        activityList.innerHTML = items.map((item) => `
+            <div class="mk-activity ${item.type === "quote" ? "quote" : ""}" data-type="${escapeHtml(item.type)}" data-search="${escapeHtml(item.search_text || "")}">
+                <div>
+                    <strong>${escapeHtml(item.title)}</strong>
+                    <p>${escapeHtml(item.subtitle)}${item.detail ? ` · <a class="mk-email-link" href="mailto:${escapeHtml(item.detail)}">${escapeHtml(item.detail)}</a>` : ""}</p>
+                </div>
+                <div class="mk-meta">
+                    <span class="mk-chip">${escapeHtml(item.status)}</span>
+                    <time>${escapeHtml(item.timestamp_label)}</time>
+                    <a href="${escapeHtml(item.admin_url)}">Open</a>
+                </div>
+            </div>
+        `).join("");
+
+        activityItems = Array.from(document.querySelectorAll("#activityList .mk-activity"));
+        applyActivityFilterAndSearch();
+    }
+
+    function renderSlaQueue(queueItems) {
+        if (!slaQueueList) return;
+        if (!Array.isArray(queueItems) || !queueItems.length) {
+            slaQueueList.innerHTML = '<div class="mk-mini-item"><strong>No pending contact or quote items in this range.</strong></div>';
+            return;
+        }
+
+        slaQueueList.innerHTML = queueItems.map((item) => {
+            let rowClass = "";
+            if (item.bucket === "overdue") rowClass = "sla-overdue";
+            else if (item.bucket === "within_1h" || item.bucket === "within_4h") rowClass = "sla-due-soon";
+            else if (item.bucket === "within_24h") rowClass = "sla-due-day";
+            const kindLabel = String(item.kind || "").replace(/^./, (ch) => ch.toUpperCase());
+
+            return `
+                <div class="mk-mini-item ${rowClass}">
+                    <strong>${escapeHtml(item.title)} · ${escapeHtml(kindLabel)}</strong>
+                    <span>${escapeHtml(item.subtitle)} · ${escapeHtml(item.status)}</span>
+                    <span>${escapeHtml(item.remaining_label)} · due ${escapeHtml(item.due_at_label)} · <a href="${escapeHtml(item.admin_url)}">Open</a></span>
+                </div>
+            `;
+        }).join("");
+    }
+
+    function renderAlertList(items) {
+        if (!alertList) return;
+        if (!Array.isArray(items) || !items.length) {
+            alertList.innerHTML = '<div class="mk-mini-item"><strong>No active alerts right now.</strong></div>';
+            return;
+        }
+        alertList.innerHTML = items.map((item) => `
+            <div class="mk-alert-item ${escapeHtml(item.severity)}">
+                <strong>${escapeHtml(item.title)}</strong>
+                <span>${escapeHtml(item.message)}</span>
+                <a href="${escapeHtml(item.action_url)}">Investigate</a>
+            </div>
+        `).join("");
+    }
+
+    function renderQualityList(items) {
+        if (!qualityList) return;
+        if (!Array.isArray(items) || !items.length) {
+            qualityList.innerHTML = '<div class="mk-mini-item"><strong>No data quality issues detected.</strong></div>';
+            return;
+        }
+        qualityList.innerHTML = items.map((item) => `
+            <div class="mk-quality-item">
+                <strong>[${escapeHtml(item.category)}] ${escapeHtml(item.label)}</strong>
+                <span>${escapeHtml(item.detail)}</span>
+                <a href="${escapeHtml(item.action_url)}">Open Record</a>
+            </div>
+        `).join("");
+    }
+
+    function renderFunnelRows(targetBody, rows, emptyLabel) {
+        if (!targetBody) return;
+        if (!Array.isArray(rows) || !rows.length) {
+            targetBody.innerHTML = `<tr><td colspan="9">${escapeHtml(emptyLabel)}</td></tr>`;
+            return;
+        }
+        targetBody.innerHTML = rows.map((row) => `
+            <tr>
+                <td>${escapeHtml(row.label)}</td>
+                <td>${escapeHtml(row.contacts)}</td>
+                <td>${escapeHtml(row.quotes)}</td>
+                <td>${escapeHtml(row.won)}</td>
+                <td>${escapeHtml(row.lost)}</td>
+                <td>${escapeHtml(row.contact_to_quote_rate)}%</td>
+                <td>${escapeHtml(row.quote_to_won_rate)}%</td>
+                <td>${escapeHtml(row.drop_contact_to_quote)}</td>
+                <td>${escapeHtml(row.drop_quote_to_won)}</td>
+            </tr>
+        `).join("");
+    }
+
+    function renderUxAbRows(rows) {
+        if (!uxAbBody) return;
+        if (!Array.isArray(rows) || !rows.length) {
+            uxAbBody.innerHTML = '<tr><td colspan="5">No A/B interaction data available yet.</td></tr>';
+            return;
+        }
+        uxAbBody.innerHTML = rows.map((row) => `
+            <tr>
+                <td>${escapeHtml(row.test_name)}</td>
+                <td>${escapeHtml(row.variant)}</td>
+                <td>${escapeHtml(row.exposures)}</td>
+                <td>${escapeHtml(row.clicks)}</td>
+                <td>${escapeHtml(row.ctr)}%</td>
+            </tr>
+        `).join("");
+    }
+
+    function renderUxDailyRows(rows) {
+        if (!uxDailyBody) return;
+        if (!Array.isArray(rows) || !rows.length) {
+            uxDailyBody.innerHTML = '<tr><td colspan="6">No UX event data available yet.</td></tr>';
+            return;
+        }
+        uxDailyBody.innerHTML = rows.map((row) => `
+            <tr>
+                <td>${escapeHtml(row.label)}</td>
+                <td>${escapeHtml(row.cta_clicks)}</td>
+                <td>${escapeHtml(row.form_dropoff)}</td>
+                <td>${escapeHtml(row.chat_leads)}</td>
+                <td>${escapeHtml(row.ab_exposures)}</td>
+                <td>${escapeHtml(row.ab_clicks)}</td>
+            </tr>
+        `).join("");
+    }
+
+    function renderUxAnalytics(snapshot) {
+        const ux = snapshot || {};
+        const totals = ux.totals || {};
+        const conversion = ux.conversion || {};
+
+        if (uxCtaClicks) uxCtaClicks.textContent = totals.cta_clicks ?? 0;
+        if (uxFormDropoff) uxFormDropoff.textContent = totals.form_dropoff ?? 0;
+        if (uxChatLeads) uxChatLeads.textContent = totals.chat_lead_submits ?? 0;
+        if (uxSearchQueries) uxSearchQueries.textContent = totals.search_queries ?? 0;
+        if (uxFormCompletionRate) uxFormCompletionRate.textContent = `Form completion: ${conversion.form_completion_rate ?? 0}%`;
+        if (uxFormDropoffRate) uxFormDropoffRate.textContent = `Form drop-off: ${conversion.form_dropoff_rate ?? 0}%`;
+        if (uxChatLeadConversionRate) uxChatLeadConversionRate.textContent = `Chat lead conversion: ${conversion.chat_lead_conversion_rate ?? 0}%`;
+        if (uxCtaToQuoteRate) uxCtaToQuoteRate.textContent = `CTA→Quote rate: ${conversion.cta_to_quote_rate ?? 0}%`;
+        if (uxAbCtr) uxAbCtr.textContent = `A/B CTR: ${conversion.ab_ctr ?? 0}%`;
+
+        renderUxAbRows(ux.ab_rows || []);
+        renderUxDailyRows(ux.daily_rows || []);
+    }
+
+    function applyLiveSnapshot(data) {
+        if (!data || data.ok !== true) return;
+
+        const kpis = data.kpis || {};
+        const percentages = data.kpi_percentages || {};
+        if (kpiContactsWindow) kpiContactsWindow.textContent = kpis.contacts_window ?? 0;
+        if (kpiContactsTotal) kpiContactsTotal.textContent = `${kpis.contacts_total ?? 0} total records`;
+        if (kpiQuotesWindow) kpiQuotesWindow.textContent = kpis.quotes_window ?? 0;
+        if (kpiQuotesTotal) kpiQuotesTotal.textContent = `${kpis.quotes_total ?? 0} total records`;
+        if (kpiUnreadContacts) kpiUnreadContacts.textContent = kpis.contacts_unread ?? 0;
+        if (kpiNewQuotes) kpiNewQuotes.textContent = kpis.quotes_new ?? 0;
+        if (kpiContactsProgress) kpiContactsProgress.style.width = `${clampPercent(percentages.contacts_window)}%`;
+        if (kpiQuotesProgress) kpiQuotesProgress.style.width = `${clampPercent(percentages.quotes_window)}%`;
+        if (kpiUnreadProgress) kpiUnreadProgress.style.width = `${clampPercent(percentages.contacts_unread)}%`;
+        if (kpiNewQuotesProgress) kpiNewQuotesProgress.style.width = `${clampPercent(percentages.quotes_new)}%`;
+
+        const summary = data.sla_summary || {};
+        if (slaOverdue) slaOverdue.textContent = summary.overdue ?? 0;
+        if (sla1h) sla1h.textContent = summary.within_1h ?? 0;
+        if (sla4h) sla4h.textContent = summary.within_4h ?? 0;
+        if (sla24h) sla24h.textContent = summary.within_24h ?? 0;
+        if (slaPendingTotal) slaPendingTotal.textContent = summary.pending_total ?? 0;
+        renderSlaQueue(data.sla_queue || []);
+
+        const alertSummary = data.alert_summary || {};
+        if (alertCritical) alertCritical.textContent = alertSummary.critical ?? 0;
+        if (alertHigh) alertHigh.textContent = alertSummary.high ?? 0;
+        if (alertMedium) alertMedium.textContent = alertSummary.medium ?? 0;
+        if (alertTotal) alertTotal.textContent = alertSummary.total ?? 0;
+        renderAlertList(data.alerts || []);
+
+        const qualitySummary = data.quality_summary || {};
+        if (qualityTotal) qualityTotal.textContent = qualitySummary.total_issues ?? 0;
+        if (qualityDuplicate) qualityDuplicate.textContent = qualitySummary.duplicates ?? 0;
+        if (qualityInvalid) qualityInvalid.textContent = (qualitySummary.invalid_emails ?? 0) + (qualitySummary.invalid_phones ?? 0);
+        if (qualityStale) qualityStale.textContent = qualitySummary.stale_records ?? 0;
+        renderQualityList(data.quality_issues || []);
+
+        renderNotifications(data.notifications || {});
+        renderActivities(data.client_activities || []);
+
+        const funnel = data.funnel_analytics || {};
+        const overall = funnel.overall || {};
+        if (funnelOverallContacts) funnelOverallContacts.textContent = overall.contacts ?? 0;
+        if (funnelOverallQuotes) funnelOverallQuotes.textContent = overall.quotes ?? 0;
+        if (funnelOverallWon) funnelOverallWon.textContent = overall.won ?? 0;
+        if (funnelOverallLost) funnelOverallLost.textContent = overall.lost ?? 0;
+        if (funnelRateContactQuote) funnelRateContactQuote.textContent = `Contact→Quote: ${overall.contact_to_quote_rate ?? 0}%`;
+        if (funnelRateQuoteWon) funnelRateQuoteWon.textContent = `Quote→Won: ${overall.quote_to_won_rate ?? 0}%`;
+        if (funnelDropContactQuote) funnelDropContactQuote.textContent = `Drop (Contact→Quote): ${overall.drop_contact_to_quote ?? 0}`;
+        if (funnelDropQuoteWon) funnelDropQuoteWon.textContent = `Drop (Quote→Won): ${overall.drop_quote_to_won ?? 0}`;
+
+        renderFunnelRows(funnelServiceBody, funnel.service_rows || [], "No service funnel data.");
+        renderFunnelRows(funnelIndustryBody, funnel.industry_rows || [], "No industry funnel data.");
+
+        renderUxAnalytics(data.ux_analytics || {});
+    }
+
+    function setActiveTab(filter) {
+        activeType = filter;
+        if (activityHiddenInput) activityHiddenInput.value = filter;
+        tabs.forEach((btn) => btn.classList.toggle("active", btn.dataset.filter === filter));
+        applyActivityFilterAndSearch();
+    }
+
+    tabs.forEach((btn) => {
+        btn.addEventListener("click", () => setActiveTab(btn.dataset.filter || "all"));
+    });
+
+    function switchDashboardView(viewKey) {
+        if (!viewKey || viewKey === "overview") {
+            overviewBlocks.forEach((el) => el.classList.remove("mk-view-hidden"));
+            if (sectionPagesContainer) sectionPagesContainer.classList.add("mk-view-hidden");
+            return;
+        }
+
+        overviewBlocks.forEach((el) => el.classList.add("mk-view-hidden"));
+        if (sectionPagesContainer) {
+            sectionPagesContainer.classList.remove("mk-view-hidden");
+            sectionPagesContainer.classList.add("is-view-mode");
+        }
+
+        viewPanels.forEach((panel) => {
+            panel.classList.toggle("mk-view-hidden", panel.dataset.viewPanel !== viewKey);
+        });
+    }
+
+    sectionLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const requestedView = (link.dataset.view || "overview").trim();
+            const requestedFilter = (link.dataset.activityFilter || "").trim();
+
+            if (requestedFilter && ["all", "contact", "quote"].includes(requestedFilter)) {
+                setActiveTab(requestedFilter);
+            }
+
+            sectionLinks.forEach((item) => item.classList.remove("current"));
+            link.classList.add("current");
+            switchDashboardView(requestedView);
+        });
+    });
+
+    if (searchInput) {
+        searchInput.addEventListener("input", applyActivityFilterAndSearch);
+    }
+
+    function applyTrendVisibility() {
+        const showContacts = !toggleContacts || toggleContacts.checked;
+        const showQuotes = !toggleQuotes || toggleQuotes.checked;
+
+        document.querySelectorAll(".mk-bar.contacts").forEach((bar) => {
+            bar.style.display = showContacts ? "block" : "none";
+        });
+        document.querySelectorAll(".mk-bar.quotes").forEach((bar) => {
+            bar.style.display = showQuotes ? "block" : "none";
+        });
+    }
+
+    if (toggleContacts) toggleContacts.addEventListener("change", applyTrendVisibility);
+    if (toggleQuotes) toggleQuotes.addEventListener("change", applyTrendVisibility);
+
+    if (notificationBell) {
+        notificationBell.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleNotificationPanel();
+        });
+    }
+
+    if (notificationPanel) {
+        notificationPanel.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+    }
+
+    if (notificationList) {
+        notificationList.addEventListener("click", async (event) => {
+            const link = event.target.closest(".mk-notification-open");
+            if (!link) return;
+
+            event.preventDefault();
+            const notificationId = link.dataset.notificationId || "";
+            const destination = link.getAttribute("href") || "";
+
+            if (!notificationId || !destination) {
+                if (destination) window.location.assign(destination);
+                return;
+            }
+
+            try {
+                const response = await fetch(notificationReadEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie("csrftoken"),
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                    credentials: "same-origin",
+                    body: JSON.stringify({ id: notificationId }),
+                    keepalive: true,
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.ok) {
+                        renderNotifications(data.notifications || {}, { announce: false });
+                    }
+                }
+            } catch (error) {
+                console.warn("Notification mark-as-read failed", error);
+            } finally {
+                window.location.assign(destination);
+            }
+        });
+    }
+
+    document.addEventListener("click", (event) => {
+        if (!notificationPanel || !notificationBell || notificationPanel.hidden) return;
+        if (notificationPanel.contains(event.target) || notificationBell.contains(event.target)) return;
+        closeNotificationPanel();
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeNotificationPanel();
+        }
+    });
+
+    const refreshKey = "nexalix_dashboard_auto_refresh";
+    const pollMs = 15000;
+    let refreshTimer = null;
+    let liveFetchInFlight = false;
+
+    function buildLiveParams() {
+        const params = new URLSearchParams();
+        if (searchForm) {
+            const formData = new FormData(searchForm);
+            formData.forEach((value, key) => {
+                if (value !== null && String(value).trim() !== "") {
+                    params.set(key, String(value));
+                }
+            });
+        }
+        if (!params.get("period")) params.set("period", "7");
+        if (!params.get("role")) params.set("role", "all");
+        params.set("activity", activeType);
+        return params;
+    }
+
+    async function fetchLiveSnapshot() {
+        if (liveFetchInFlight) return;
+        liveFetchInFlight = true;
+        try {
+            const params = buildLiveParams();
+            const response = await fetch(`${liveEndpoint}?${params.toString()}`, {
+                method: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                credentials: "same-origin",
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            applyLiveSnapshot(data);
+            if (autoRefreshStatus) {
+                autoRefreshStatus.textContent = `Live updates on (every 15s). Last sync ${data.server_time || "now"}.`;
+            }
+        } catch (error) {
+            if (autoRefreshStatus) {
+                autoRefreshStatus.textContent = "Live updates on, but sync failed. Retrying...";
+            }
+            console.warn("Dashboard live sync failed", error);
+        } finally {
+            liveFetchInFlight = false;
+        }
+    }
+
+    function startAutoRefresh() {
+        if (refreshTimer) clearInterval(refreshTimer);
+        fetchLiveSnapshot();
+        refreshTimer = setInterval(fetchLiveSnapshot, pollMs);
+        if (autoRefreshStatus) autoRefreshStatus.textContent = "Live updates on (every 15s).";
+    }
+
+    function stopAutoRefresh() {
+        if (refreshTimer) clearInterval(refreshTimer);
+        refreshTimer = null;
+        if (autoRefreshStatus) autoRefreshStatus.textContent = "Live updates are off.";
+    }
+
+    if (autoRefreshToggle) {
+        const persistedValue = localStorage.getItem(refreshKey);
+        const persisted = persistedValue === null ? true : persistedValue === "1";
+        autoRefreshToggle.checked = persisted;
+        if (persistedValue === null) {
+            localStorage.setItem(refreshKey, "1");
+        }
+        if (persisted) startAutoRefresh();
+
+        autoRefreshToggle.addEventListener("change", () => {
+            const enabled = autoRefreshToggle.checked;
+            localStorage.setItem(refreshKey, enabled ? "1" : "0");
+            if (enabled) startAutoRefresh();
+            else stopAutoRefresh();
+        });
+    }
+
+    document.querySelectorAll("#kpiCards .mk-kpi[data-kpi-filter]").forEach((card) => {
+        card.addEventListener("click", () => {
+            setActiveTab(card.dataset.kpiFilter || "all");
+        });
+    });
+
+    document.querySelectorAll("#trendChart .mk-bar[data-day][data-kind]").forEach((bar) => {
+        bar.addEventListener("click", () => {
+            const kind = bar.dataset.kind || "all";
+            const day = bar.dataset.day || "";
+            if (activityHiddenInput) activityHiddenInput.value = kind;
+            if (dayHiddenInput) dayHiddenInput.value = day;
+            if (searchForm) {
+                searchForm.submit();
+                return;
+            }
+            setActiveTab(kind);
+        });
+    });
+
+    setActiveTab(activeType);
+    switchDashboardView("overview");
+    applyTrendVisibility();
+    if (!autoRefreshToggle) {
+        fetchLiveSnapshot();
+    }
+})();
+</script>
+{% endblock %}

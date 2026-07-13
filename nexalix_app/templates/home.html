@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ meta_title|default:'Consulting-Led Software, AI, and Digital Transformation | Nexalix Technologies' }}{% endblock %}
+{% block meta_description %}{{ meta_description|default:'Nexalix helps businesses design, build, and improve software, AI workflows, analytics systems, and digital operations that drive measurable growth.' }}{% endblock %}
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+{% include "includes/hero.html" %}
+{% include "includes/trust_strip.html" %}
+{% include "includes/services_section.html" %}
+{% include "includes/industries_section.html" %}
+{% include "includes/process_section.html" %}
+{% include "includes/case_studies_section.html" %}
+{% include "includes/technology_section.html" %}
+{% include "includes/testimonials_section.html" %}
+{% include "includes/final_cta.html" %}
+{% endblock %}

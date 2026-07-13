@@ -1,0 +1,35 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [ 
+    path('', views.home, name='home'),
+    path('home/', views.home, name='home'),
+    path('about/', views.about, name='about'),
+    path('services/', views.services, name='services'),
+    path('solutions/<slug:slug>/', views.solution_landing, name='solution_landing'),
+    path("services/<slug:slug>/", views.service_detail, name="service_detail"),
+    path('quote-generator/', views.quote_generator, name='quote_generator'),
+    path('industries/', views.industries, name='industries'),
+    path('how_we_work/', views.how_we_work, name='how_we_work'),
+    path('why_choose_us/', views.why_choose_us, name='why_choose_us'),
+    path('contact/', views.contact, name='contact'),
+    path('privacy/', views.privacy_policy, name='privacy_policy'),
+    path('terms/', views.terms_of_service, name='terms_of_service'),
+    path('updates/subscribe/', views.updates_subscribe, name='updates_subscribe'),
+    path("api/chatbot/message/", views.chatbot_message_api, name="chatbot_message_api"),
+    path("api/chatbot/lead/", views.chatbot_lead_api, name="chatbot_lead_api"),
+    path("api/ux/event/", views.ux_event_api, name="ux_event_api"),
+    
+   
+    path('case-studies/', views.case_studies_list, name='case_studies'),
+    path('case-studies/<slug:slug>/', views.case_study_detail, name='case_study_detail'),
+    # Service pages
+    path('web_dev/', views.web_dev, name='web_dev'),
+    path('mobile_app/', views.mobile_app, name='mobile_app'),
+    path('digital_marketing/', views.digital_marketing, name='digital_marketing'),
+    path('seo/', views.seo, name='seo'),
+    path('it_consult/', views.it_consult, name='it_consult'),
+    path('cloud/', views.cloud, name='cloud'),
+    path('syste_dev/', views.syste_dev, name='syste_dev'),  
+    path('ai_training/', views.ai_training, name='ai_training'),
+]

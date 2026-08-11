@@ -14,7 +14,10 @@ DEBUG = os.getenv("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    for host in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1"
+    ).split(",")
     if host.strip()
 ]
 
@@ -24,9 +27,8 @@ CSRF_TRUSTED_ORIGINS = [
     if origin.strip()
 ]
 
-# --------------------
 # APPLICATIONS
-# --------------------
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -37,9 +39,9 @@ INSTALLED_APPS = [
     "nexalix_app.apps.NexalixAppConfig",
 ]
 
-# --------------------
+
 # MIDDLEWARE
-# --------------------
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -55,13 +57,13 @@ if not DEBUG:
 
 ROOT_URLCONF = "nexalix_site.urls"
 
-# --------------------
+
 # TEMPLATES
-# --------------------
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  # ✅ allows project-level templates
+        "DIRS": [BASE_DIR / "templates"], 
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,9 +80,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "nexalix_site.wsgi.application"
 
-# --------------------
+
 # DATABASE
-# --------------------
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -96,9 +98,9 @@ if DATABASE_URL and dj_database_url:
         ssl_require=not DEBUG,
     )
 
-# --------------------
+
 # CACHE (Redis if available)
-# --------------------
+
 REDIS_URL = os.getenv("REDIS_URL", "").strip()
 CACHE_DEFAULT_TIMEOUT = int(os.getenv("CACHE_DEFAULT_TIMEOUT", "300"))
 
@@ -124,17 +126,17 @@ else:
         }
     }
 
-# --------------------
+
 # INTERNATIONALIZATION
-# --------------------
+
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = os.getenv("TIME_ZONE", "Africa/Nairobi")
 USE_I18N = True
 USE_TZ = True
 
-# --------------------
+
 # STATIC & MEDIA
-# --------------------
+
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "nexalix_app" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -170,9 +172,9 @@ if USE_CLOUDINARY_MEDIA and CLOUDINARY_URL:
         "SECURE": True,
     }
 
-# --------------------
+
 # EMAIL (REAL TIME SMTP)
-# --------------------
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
@@ -224,9 +226,9 @@ FOOTER_FACEBOOK_URL = os.getenv("FOOTER_FACEBOOK_URL", "").strip()
 FOOTER_INSTAGRAM_URL = os.getenv("FOOTER_INSTAGRAM_URL", "").strip()
 FOOTER_X_URL = os.getenv("FOOTER_X_URL", "").strip()
 
-# --------------------
+
 # CHATBOT SETTINGS
-# --------------------
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini").strip()
 OPENAI_CHAT_TEMPERATURE = float(os.getenv("OPENAI_CHAT_TEMPERATURE", "0.3"))
@@ -253,9 +255,9 @@ if not DEBUG:
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     }
 
-# --------------------
+
 # LOGGING
-# --------------------
+
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
 LOGGING = {

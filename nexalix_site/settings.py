@@ -16,8 +16,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         "ALLOWED_HOSTS",
-        "nexalix-fjjp.onrender.com",
-        "localhost,127.0.0.1"
+        "localhost,127.0.0.1,nexalix-fjjp.onrender.com"
     ).split(",")
     if host.strip()
 ]

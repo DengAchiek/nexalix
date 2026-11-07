@@ -21,11 +21,20 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+
+if RENDER_EXTERNAL_HOSTNAME:
+    render_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
 
 # APPLICATIONS
 
@@ -84,13 +93,13 @@ WSGI_APPLICATION = "nexalix_site.wsgi.application"
 # DATABASE
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL:
+if DATABASE_URL and dj_database_url:
+    database_url_scheme = DATABASE_URL.split(":", 1)[0].lower()
     DATABASES = {
         "default": dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=600,
-            ssl_require=not DEBUG,
+            ssl_require=not DEBUG and database_url_scheme in {"postgres", "postgresql"},
         )
     }
 else:

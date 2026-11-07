@@ -12,6 +12,7 @@ db.sqlite3
 env/
 ENV/
 .env/
+venv/
 env.bak/
 venv.bak/
 
